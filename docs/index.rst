@@ -11,13 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-Introduction
-------------
-
-
-Examples
---------
-
+    intro
 
 Indices and tables
 ==================
