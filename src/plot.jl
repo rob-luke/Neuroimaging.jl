@@ -3,6 +3,7 @@ using DSP: periodogram
 
 
 function plotChannelSpectrum( signal::Vector, fs::Real, titletext::String)
+    # Code taken from https://github.com/JayKickliter/Radio.jl/blob/ad49640f77aa5a4237a34871bbde6b64265021dc/src/Support/Graphics.jl
     spectrum = periodogram( signal )
     spectrum = 10*log10( spectrum.^2 )
     spectrum = fftshift( spectrum )
