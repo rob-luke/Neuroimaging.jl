@@ -1,6 +1,44 @@
 using DataFrames
 using DSP
 
+
+function filterEEG(signals::Array)
+
+    signals = convert(Array{Float64}, signals)
+
+    cutOff = 2
+    Wn = cutOff/(8192/2)
+    #=println("Cut off of $(cutOff) = $Wn ")=#
+
+    f = digitalfilter(Highpass(Wn), Butterworth(3))
+
+    chan = 1
+    while chan <= size(signals)[1]
+        signals[chan,:] = filt(f, vec(signals[chan,:]))
+        signals[chan,:] = fliplr(signals[chan,:])
+        signals[chan,:] = filt(f, vec(signals[chan,:]))
+        signals[chan,:] = fliplr(signals[chan,:])
+        chan = chan + 1
+    end
+
+    return(signals)
+end
+
+
+function rereference(signals::Array, refChan::Int=33)
+
+    chan = 1
+    while chan <= size(signals)[1]
+
+        signals[chan,:] = signals[chan,:] - signals[refChan,:]
+
+        chan = chan + 1
+    end
+
+    return signals
+end
+
+
 function extractEpochs(dats::Array, evtTab::Dict, verbose::Bool=false)
 
     epochIndex = DataFrame(Code = evtTab["code"], Index = evtTab["idx"]);
@@ -39,30 +77,6 @@ function extractEpochs(dats::Array, evtTab::Dict, verbose::Bool=false)
 end
 
 
-function filterEEG(signals::Array)
-
-    signals = convert(Array{Float64}, signals)
-
-    cutOff = 2
-    Wn = cutOff/(8192/2)
-    #=println("Cut off of $(cutOff) = $Wn ")=#
-
-    f = digitalfilter(Highpass(Wn), Butterworth(3))
-
-    chan = 1
-    while chan <= size(signals)[1]
-        signals[chan,:] = filt(f, vec(signals[chan,:]))
-        signals[chan,:] = fliplr(signals[chan,:])
-        signals[chan,:] = filt(f, vec(signals[chan,:]))
-        signals[chan,:] = fliplr(signals[chan,:])
-        chan = chan + 1
-    end
-
-    return(signals)
-
-end
-
-
 function epochs2sweeps(epochs::Array, epochsPerSweep::Int=4, verbose::Bool=false)
 
     epochsLen = size(epochs)[1]
@@ -92,21 +106,5 @@ function epochs2sweeps(epochs::Array, epochsPerSweep::Int=4, verbose::Bool=false
 
 
     return sweeps
-
-end
-
-
-function rereference(signals::Array, refChan::Int=33)
-
-    chan = 1
-    while chan <= size(signals)[1]
-
-        signals[chan,:] = signals[chan,:] - signals[refChan,:]
-
-        chan = chan + 1
-    end
-
-    return signals
-
 end
 
