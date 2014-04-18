@@ -85,7 +85,7 @@ function epochs2sweeps(epochs::Array, epochsPerSweep::Int=4, verbose::Bool=false
         sweepStart = (sweep-1)*(epochsPerSweep)+1
         sweepStop  = sweepStart + epochsPerSweep-1
 
-        sweeps[:,sweep,:] = reshape(epochs[:,sweepStart:sweepStop,:], (sweepLen, chansNum))
+        sweeps[:,sweep,:] = reshape(epochs[:,sweepStart:sweepStop,:], (sweepLen, 1, chansNum))
 
         sweep = sweep + 1
     end
