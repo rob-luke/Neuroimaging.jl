@@ -25,7 +25,7 @@ end
 
 function plotChannelTime( signal::Vector, fs::Real, titletext::String)
 
-    time = linspace( 1, length(signal)/fs, length(signal))
+    time = linspace( 0, length(signal)/fs, length(signal))
 
     time_plot = FramedPlot(
                             title = titletext,

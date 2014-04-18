@@ -2,9 +2,10 @@ module EEGjl
 
 export
     plotChannelTime,
-    plotChannelSpectrum
+    plotChannelSpectrum,
+    extractEpochs
 
 include("plot.jl")
-
+include("processing.jl")
 
 end
