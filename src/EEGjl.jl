@@ -1,7 +1,8 @@
 module EEGjl
 
 export
-    plotEEGSpectrum
+    plotChannelTime,
+    plotChannelSpectrum
 
 include("plot.jl")
 

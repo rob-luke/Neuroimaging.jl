@@ -2,19 +2,36 @@ using Winston
 using DSP: periodogram
 
 
-function plotEEGSpectrum( signal::Vector )
+function plotChannelSpectrum( signal::Vector, fs::Real, titletext::String)
     spectrum = periodogram( signal )
     spectrum = 10*log10( spectrum.^2 )
     spectrum = fftshift( spectrum )
+    spectrum = spectrum[length(spectrum)/2:end]
 
-    frequencies = linspace( -1, 1, length(spectrum) )
+    frequencies = linspace( 0, 1, length(spectrum) )*fs/2
 
     spectrum_plot = FramedPlot(
-                            title = "Spectrum",
-                            xlabel = "f",
-                            ylabel = "dB"
+                            title = titletext,
+                            xlabel = "Frequency (Hz)",
+                            ylabel = "Response (dB)"
                         )
     add(spectrum_plot, Curve( frequencies, spectrum ))
 
     return spectrum_plot
+end
+
+
+
+function plotChannelTime( signal::Vector, fs::Real, titletext::String)
+
+    time = linspace( 1, length(signal)/fs, length(signal))
+
+    time_plot = FramedPlot(
+                            title = titletext,
+                            xlabel = "Time (s)",
+                            ylabel = "Amplitude (uV)"
+                        )
+    add(time_plot, Curve( time, signal ))
+
+    return time_plot
 end
