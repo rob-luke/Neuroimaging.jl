@@ -2,25 +2,34 @@ using Winston
 using DSP: periodogram
 
 
-function plotChannelSpectrum( signal::Vector, fs::Real, titletext::String)
+function plotChannelSpectrum( signal::Vector, fs::Real, titletext::String, Fmin::Int=0, Fmax::Int=90, targetFreq::Float64=40.0391)
+
     # Code taken from https://github.com/JayKickliter/Radio.jl/blob/ad49640f77aa5a4237a34871bbde6b64265021dc/src/Support/Graphics.jl
     spectrum = periodogram( signal )
     spectrum = 10*log10( spectrum.^2 )
     spectrum = fftshift( spectrum )
-    spectrum = spectrum[length(spectrum)/2:end]
 
-    frequencies = linspace( 0, 1, length(spectrum) )*fs/2
+    frequencies = linspace( -1, 1, length(spectrum) )*fs/2
 
     spectrum_plot = FramedPlot(
                             title = titletext,
                             xlabel = "Frequency (Hz)",
-                            ylabel = "Response (dB)"
+                            ylabel = "Response (dB)",
+                            xrange = (Fmin, Fmax)
                         )
     add(spectrum_plot, Curve( frequencies, spectrum ))
 
-    return spectrum_plot
-end
+    targetFreqIdx = findfirst(abs(frequencies.-targetFreq) , minimum(abs(frequencies.-targetFreq)))+1
+    targetFreq    = frequencies[targetFreqIdx]
+    targetResults = spectrum[targetFreqIdx]
 
+    a = Points(targetFreq, targetResults, kind="circle", color="blue")
+    add(spectrum_plot, a)
+
+    return spectrum_plot
+
+
+end
 
 
 function plotChannelTime( signal::Vector, fs::Real, titletext::String)
