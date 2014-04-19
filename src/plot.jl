@@ -2,7 +2,7 @@ using Winston
 using DSP: periodogram
 
 
-function plotChannelSpectrum( signal::Vector, fs::Real, titletext::String, Fmin::Int=0, Fmax::Int=90, targetFreq::Float64=40.0391)
+function plotChannelSpectrum(signal::Vector, fs::Real; titletext::String="", Fmin::Int=0, Fmax::Int=90, targetFreq::Float64=40.0391)
 
     # Code adapted from https://github.com/JayKickliter/Radio.jl/blob/ad49640f77aa5a4237a34871bbde6b64265021dc/src/Support/Graphics.jl
     spectrum = periodogram( signal )
@@ -32,7 +32,7 @@ function plotChannelSpectrum( signal::Vector, fs::Real, titletext::String, Fmin:
 end
 
 
-function plotChannelTime( signal::Vector, fs::Real, titletext::String)
+function plotChannelTime(signal::Vector, fs::Real; titletext::String="")
 
     time = linspace(0,length(signal)/fs,length(signal))
 

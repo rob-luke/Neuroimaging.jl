@@ -25,7 +25,7 @@ function filterEEG(signals::Array)
 end
 
 
-function rereference(signals::Array, refChan::Int=33)
+function rereference(signals::Array, refChan::Int)
 
     chan = 1
     while chan <= size(signals)[1]
@@ -39,7 +39,7 @@ function rereference(signals::Array, refChan::Int=33)
 end
 
 
-function extractEpochs(dats::Array, evtTab::Dict, verbose::Bool=false)
+function extractEpochs(dats::Array, evtTab::Dict; verbose::Bool=false)
 
     epochIndex = DataFrame(Code = evtTab["code"], Index = evtTab["idx"]);
     epochIndex = epochIndex[epochIndex[:Code].==252,:]
@@ -77,7 +77,7 @@ function extractEpochs(dats::Array, evtTab::Dict, verbose::Bool=false)
 end
 
 
-function epochs2sweeps(epochs::Array, epochsPerSweep::Int=4, verbose::Bool=false)
+function epochs2sweeps(epochs::Array; epochsPerSweep::Int=4, verbose::Bool=false)
 
     epochsLen = size(epochs)[1]
     epochsNum = size(epochs)[2]
