@@ -2,7 +2,7 @@ using DataFrames
 using DSP
 
 
-function filterEEG(signals::Array)
+function proc_hp(signals::Array)
 
     signals = convert(Array{Float64}, signals)
 
@@ -25,7 +25,7 @@ function filterEEG(signals::Array)
 end
 
 
-function rereference(signals::Array, refChan::Int)
+function proc_rereference(signals::Array, refChan::Int)
 
     chan = 1
     while chan <= size(signals)[1]
@@ -39,7 +39,7 @@ function rereference(signals::Array, refChan::Int)
 end
 
 
-function extractEpochs(dats::Array, evtTab::Dict; verbose::Bool=false)
+function proc_epochs(dats::Array, evtTab::Dict; verbose::Bool=false)
 
     epochIndex = DataFrame(Code = evtTab["code"], Index = evtTab["idx"]);
     epochIndex = epochIndex[epochIndex[:Code].==252,:]
@@ -77,7 +77,7 @@ function extractEpochs(dats::Array, evtTab::Dict; verbose::Bool=false)
 end
 
 
-function epochs2sweeps(epochs::Array; epochsPerSweep::Int=4, verbose::Bool=false)
+function proc_sweeps(epochs::Array; epochsPerSweep::Int=4, verbose::Bool=false)
 
     epochsLen = size(epochs)[1]
     epochsNum = size(epochs)[2]
