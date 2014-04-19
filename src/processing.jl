@@ -2,15 +2,12 @@ using DataFrames
 using DSP
 
 
-function proc_hp(signals::Array)
+function proc_hp(signals::Array; cutOff::Number=2, order::Int=3, fs::Int=8192)
 
     signals = convert(Array{Float64}, signals)
 
-    cutOff = 2
-    Wn = cutOff/(8192/2)
-    #=println("Cut off of $(cutOff) = $Wn ")=#
-
-    f = digitalfilter(Highpass(Wn), Butterworth(3))
+    Wn = cutOff/(fs/2)
+    f = digitalfilter(Highpass(Wn), Butterworth(order))
 
     chan = 1
     while chan <= size(signals)[1]
@@ -18,7 +15,7 @@ function proc_hp(signals::Array)
         signals[chan,:] = fliplr(signals[chan,:])
         signals[chan,:] = filt(f, vec(signals[chan,:]))
         signals[chan,:] = fliplr(signals[chan,:])
-        chan = chan + 1
+        chan += 1
     end
 
     return(signals)
@@ -29,10 +26,8 @@ function proc_rereference(signals::Array, refChan::Int)
 
     chan = 1
     while chan <= size(signals)[1]
-
         signals[chan,:] = signals[chan,:] - signals[refChan,:]
-
-        chan = chan + 1
+        chan += 1
     end
 
     return signals
@@ -68,9 +63,9 @@ function proc_epochs(dats::Array, evtTab::Dict; verbose::Bool=false)
 
             epochs[:,epoch, chan] = vec(dats[chan, startLoc:endLoc])
 
-            epoch = epoch + 1
+            epoch += 1
         end
-        chan = chan + 1
+        chan += 1
     end
 
     return epochs
@@ -101,9 +96,8 @@ function proc_sweeps(epochs::Array; epochsPerSweep::Int=4, verbose::Bool=false)
 
         sweeps[:,sweep,:] = reshape(epochs[:,sweepStart:sweepStop,:], (sweepLen, 1, chansNum))
 
-        sweep = sweep + 1
+        sweep += 1
     end
-
 
     return sweeps
 end
