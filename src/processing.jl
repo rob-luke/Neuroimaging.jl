@@ -88,6 +88,35 @@ function proc_epochs(dats::Array, evtTab::Dict; verbose::Bool=false)
 end
 
 
+function proc_epoch_rejection(epochs::Array;
+                    rejectionMethod::String="peak2peak", verbose::Bool=false)
+
+    epochsLen = size(epochs)[1]
+    epochsNum = size(epochs)[2]
+    chansNum  = size(epochs)[3]
+
+    if rejectionMethod == "peak2peak"
+
+        peak2peak = Float64[]
+
+        epoch = 1
+        while epoch <= epochsNum
+
+            push!(peak2peak, maximum(epochs[:,epoch,:]) - minimum(epochs[:,epoch,:]))
+
+            epoch += 1
+        end
+
+        cutOff = sort(peak2peak)[floor(length(peak2peak)*0.9)]
+        epochs = epochs[:, peak2peak.<cutOff, :]
+
+    end
+
+    return epochs
+
+end
+
+
 function proc_sweeps(epochs::Array; epochsPerSweep::Int=4, verbose::Bool=false)
 
     epochsLen = size(epochs)[1]

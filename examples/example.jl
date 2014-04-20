@@ -2,10 +2,11 @@ using JBDF
 using EEGjl
 using Winston
 
-ChannelToAnalyse = 28;
+ChannelToAnalyse = 24;
+fname = "../data/Example_40Hz_SWN_70dB_R.bdf"
 
-dats, evtTab, trigChan, sysCodeChan = readBdf("../data/Example_40Hz_SWN_70dB_R.bdf")
-bdfInfo = readBdfHeader("../data/Example_40Hz_SWN_70dB_R.bdf");
+dats, evtTab, trigChan, sysCodeChan = readBdf(fname)
+bdfInfo = readBdfHeader(fname);
 ChanName = bdfInfo["chanLabels"][ChannelToAnalyse]
 
 dats = proc_hp(dats, verbose=true)
@@ -19,6 +20,8 @@ file(f, "Eg1-RawData.png", width=1200, height=600)
 
 epochs = proc_epochs(dats, evtTab, verbose=true)
 epochs = epochs[:,3:end,:]
+
+epochs = proc_epoch_rejection(epochs)
 
 sweeps = proc_sweeps(epochs, verbose=true)
 
