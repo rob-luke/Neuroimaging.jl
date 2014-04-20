@@ -13,8 +13,8 @@ function proc_hp(signals::Array; cutOff::Number=2,
 
     if verbose
         println("Highpass filtering $(size(signals)[1]) channels")
-        println("  Pass band > $(cutOff) Hz = $(Wn)")
-        p = Progress(size(signals)[1], 1, "  Filtering...", 50)
+        println("  Pass band > $(cutOff) Hz")
+        p = Progress(size(signals)[1], 1, "  Filtering... ", 50)
     end
 
     chan = 1
@@ -35,7 +35,7 @@ function proc_rereference(signals::Array, refChan::Int; verbose::Bool=false)
 
     if verbose
         println("Re referencing $(size(signals)[1]) channels")
-        p = Progress(size(signals)[1], 1, "  Rerefing... ", 50)
+        p = Progress(size(signals)[1], 1, "  Rerefing...  ", 50)
     end
 
     chan = 1
@@ -65,8 +65,7 @@ function proc_epochs(dats::Array, evtTab::Dict; verbose::Bool=false)
         println("Generating epochs for $(numChans) channels")
         println("  Epoch length is $(lenEpochs)")
         println("  Number of epochs is $(numEpochs)")
-        println("  Number of channels is $(numChans)")
-        p = Progress(numChans, 1, "  Epoching...", 50)
+        p = Progress(numChans, 1, "  Epoching...  ", 50)
     end
 
     chan = 1
@@ -96,14 +95,14 @@ function proc_sweeps(epochs::Array; epochsPerSweep::Int=4, verbose::Bool=false)
     chansNum  = size(epochs)[3]
 
     sweepLen = epochsLen * epochsPerSweep
-    sweepNum = floor(epochsNum / epochsPerSweep)
-    sweeps = zeros(Float64, (sweepLen, int(sweepNum), chansNum))
+    sweepNum = int(floor(epochsNum / epochsPerSweep))
+    sweeps = zeros(Float64, (sweepLen, sweepNum, chansNum))
 
     if verbose
         println("Generating $(sweepNum) sweeps")
-        println("  Frrom $(epochsNum) epochs of length $(epochsLen)")
+        println("  From $(epochsNum) epochs of length $(epochsLen)")
         println("  Creating $(sweepNum) sweeps of length $(sweepLen)")
-        p = Progress(int(sweepNum), 1, "  Sweeps...  ", 50)
+        p = Progress(sweepNum, 1, "  Sweeps...    ", 50)
     end
 
     sweep = 1
