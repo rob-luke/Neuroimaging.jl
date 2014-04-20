@@ -14,7 +14,7 @@ function plot_spectrum(signal::Vector, fs::Real; titletext::String="", Fmin::Int
 
     spectrum_plot = FramedPlot(
                             title = titletext,
-                            xlabel = "Frequency (Hz)",
+                            xlabel = "Normalized Frequency (x pi rad / sample)",
                             ylabel = "Response (dB)",
                             xrange = (Fmin, Fmax)
                         )
