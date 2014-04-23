@@ -6,6 +6,7 @@ export
     proc_epochs,
     proc_epoch_rejection,
     proc_sweeps,
+    proc_ftest,
     plot_spectrum,
     plot_timeseries
 

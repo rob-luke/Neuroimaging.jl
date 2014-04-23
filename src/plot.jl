@@ -2,30 +2,95 @@ using Winston
 using DSP: periodogram
 
 
-function plot_spectrum(signal::Vector, fs::Real; titletext::String="", Fmin::Int=0, Fmax::Int=90, targetFreq::Float64=40.0391)
-
-    # Code adapted from https://github.com/JayKickliter/Radio.jl/blob/ad49640f77aa5a4237a34871bbde6b64265021dc/src/Support/Graphics.jl
-    spectrum = periodogram( signal )
-    spectrum = 10*log10( spectrum.^2 )
-    spectrum = fftshift( spectrum )
-    spectrum = spectrum[size(signal)[1]/2+1:end]
-
-    frequencies = linspace(0,1,length(spectrum))*fs/2
+function plot_spectrum(signal::Vector,
+                        fs::Real;
+                        titletext::String="",
+                        Fmin::Int=0,
+                        Fmax::Int=90,
+                        targetFreq::Float64=0,
+                        dBPlot::Bool=true,
+                        noise_level::Number=0,
+                        signal_level::Number=0)
 
     spectrum_plot = FramedPlot(
-                            title = titletext,
-                            xlabel = "Frequency (Hz)",
-                            ylabel = "Response (dB)",
-                            xrange = (Fmin, Fmax)
-                        )
-    add(spectrum_plot, Curve( frequencies, spectrum ))
+                        title = titletext,
+                        xlabel = "Frequency (Hz)",
+                        xrange = (Fmin, Fmax))
 
-    targetFreqIdx = findfirst(abs(frequencies.-targetFreq) , minimum(abs(frequencies.-targetFreq)))
-    targetFreq    = frequencies[targetFreqIdx]
-    targetResults = spectrum[targetFreqIdx]
+    # Determine fft frequencies
+    signal_length = length(signal)
+    frequencies = linspace(0, 1, int(signal_length / 2 + 1))*fs/2
 
-    a = Points(targetFreq, targetResults, kind="circle", color="blue")
-    add(spectrum_plot, a)
+    # Calculate fft and convert to power
+    fftSweep = 2 / signal_length * fft(signal)
+    spectrum = abs(fftSweep[1:signal_length / 2 + 1])  # Amplitude
+    spectrum = spectrum.^2
+
+    # Want a log plot?
+    if dBPlot
+        spectrum = 10*log10( spectrum )
+        setattr(spectrum_plot, ylabel="Response Power (dB)")
+    else
+        setattr(spectrum_plot, ylabel="Response Power (uV^2)")
+    end
+
+    # Plot signal
+    p = Curve( frequencies, spectrum )
+    #=setattr(p, label="Spectrum")=#
+    add(spectrum_plot, p)
+
+    # Plot the noise level if requested
+    if noise_level != 0
+        if dBPlot
+            noise_level = 10*log10(noise_level)
+        end
+        #=n = Slope(0, (0,noise_level),=#
+            #=kind="dotted",=#
+            #=color="red")=#
+        n = Curve([0, targetFreq+2], [noise_level,noise_level],
+            kind="dotted",
+            color="red")
+        setattr(n, label="Noise")
+        add(spectrum_plot, n)
+    end
+
+    # Plot the signal level if requested
+    if signal_level != 0
+        if dBPlot
+            signal_level = 10*log10(signal_level)
+        end
+        #=s = Slope(0, (0,signal_level),=#
+            #=kind="dotted",=#
+            #=color="blue")=#
+        s = Curve([0, targetFreq],
+            [signal_level, signal_level],
+            color="blue",
+            kind="dotted")
+        setattr(s, label="Signal")
+        add(spectrum_plot, s)
+
+        targetFreqIdx = findfirst(abs(frequencies.-targetFreq) , minimum(abs(frequencies.-targetFreq)))
+        targetFreq    = frequencies[targetFreqIdx]
+        targetResults = spectrum[targetFreqIdx]
+
+        t = Points(targetFreq, targetResults, kind="circle", color="blue")
+        add(spectrum_plot, t)
+
+    end
+
+    if signal_level != 0 || noise_level != 0
+        if signal_level != 0 && noise_level != 0
+            l = Legend(.85, .9, {s,n})
+        elseif signal_level != 0
+            l = Legend(.85, .9, {s})
+        elseif noise_level != 0
+            l = Legend(.85, .9, {n})
+        end
+        add(spectrum_plot, l)
+    end
+
+
+
 
     return spectrum_plot
 
