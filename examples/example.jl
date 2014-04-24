@@ -2,7 +2,7 @@ using JBDF
 using EEGjl
 using Winston
 
-ChannelToAnalyse = 24;
+ChannelToAnalyse = 13;
 fname = "../data/Example_40Hz_SWN_70dB_R.bdf"
 
 dats, evtTab, trigChan, sysCodeChan = readBdf(fname)
@@ -23,10 +23,26 @@ epochs = epochs[:,3:end,:]
 
 epochs = proc_epoch_rejection(epochs)
 
-sweeps = proc_sweeps(epochs, verbose=true)
+sweeps = proc_sweeps(epochs, verbose=true, epochsPerSweep=32)
 
-sweeps = squeeze(mean(sweeps,2),2)
+meanSweeps = squeeze(mean(sweeps,2),2)
 
-singleChan = convert(Array{Float64}, vec(sweeps[:,ChannelToAnalyse]))
-f = plot_spectrum(singleChan, 8192, titletext=ChanName)
-file(f, "Eg1-SweepSpectrum.png", width=1200, height=600)
+ChannelToAnalyse = 1
+while ChannelToAnalyse <= 64
+
+    if ChannelToAnalyse == 48
+        ChannelToAnalyse += 1
+    end
+
+    ChanName = bdfInfo["chanLabels"][ChannelToAnalyse]
+    fResult, s, n = proc_ftest(sweeps, 40.0391, 8192, ChannelToAnalyse)
+    title = "Channel $(ChanName). SNR = $(fResult) dB"
+
+    singleChan = convert(Array{Float64}, vec(meanSweeps[:,ChannelToAnalyse]))
+
+    f = plot_spectrum(singleChan, 8192, titletext=title, dBPlot=true,
+        signal_level=s, noise_level=n, targetFreq=40.0391)
+    file(f, "Eg1-SweepSpectrum-Amp-$(ChannelToAnalyse).png", width=1200, height=600)
+
+    ChannelToAnalyse += 18
+end
