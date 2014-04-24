@@ -8,7 +8,8 @@ export
     proc_sweeps,
     proc_ftest,
     plot_spectrum,
-    plot_timeseries
+    plot_timeseries,
+    plot_timeseries_multichannel
 
 include("plot.jl")
 include("processing.jl")

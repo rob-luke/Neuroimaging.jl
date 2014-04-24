@@ -111,3 +111,24 @@ function plot_timeseries(signal::Vector, fs::Real; titletext::String="")
     return time_plot
 
 end
+
+
+function plot_timeseries_multichannel(signals::Array,
+                                      fs::Real;
+                                      titletext::String="",
+                                      channel_names::Dict)
+
+    time = linspace(0, size(signals)[1]/fs, size(signals)[1])
+
+    variances = var(signals,2)
+    mean_variance = mean(variances)
+
+    signals_plot = signals/mean_variance .+ [1:64]
+
+    time_plot = FramedPlot(title = titletext,
+                           xlabel = "Time (s)",
+                           ylabel = "Channel")
+
+
+    return time_plot
+end
