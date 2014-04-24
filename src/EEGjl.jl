@@ -9,9 +9,12 @@ export
     proc_ftest,
     plot_spectrum,
     plot_timeseries,
-    plot_timeseries_multichannel
+    plot_timeseries_multichannel,
+    read_bsa,
+    BSA
 
 include("plot.jl")
 include("processing.jl")
+include("read.jl")
 
 end
