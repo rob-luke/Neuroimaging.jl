@@ -116,9 +116,17 @@ end
 function plot_timeseries_multichannel(signals::Array,
                                       fs::Real;
                                       titletext::String="",
-                                      channel_names::Dict)
+                                      chanLabels::Array=[],
+                                      plot_points::Int=1024)
 
-    time = linspace(0, size(signals)[1]/fs, size(signals)[1])
+    total_time = size(signals)[2]/fs
+
+    fs = fs/plot_points
+
+    plot_points = floor(linspace(1, size(signals)[2], plot_points))
+    signals = signals[:, plot_points]
+
+    time = linspace(1, total_time, length(plot_points))
 
     variances = var(signals,2)
     mean_variance = mean(variances)
@@ -127,8 +135,17 @@ function plot_timeseries_multichannel(signals::Array,
 
     time_plot = FramedPlot(title = titletext,
                            xlabel = "Time (s)",
-                           ylabel = "Channel")
+                           ylabel = "Channels",
+                           yrange = (0, 65))
 
+    for chan in 1:64
+        add(time_plot, Curve( time, convert(Array{Float64}, vec(signals_plot[chan,:]))))
+    end
+
+    #=chanLabels = convert(Array{ASCIIString}, chanLabels[1:64])=#
+
+    setattr(time_plot.y1, draw_ticks=false, ticklabels=[""])
+    setattr(time_plot, xrange=(0, total_time))
 
     return time_plot
 end
