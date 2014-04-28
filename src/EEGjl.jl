@@ -13,7 +13,8 @@ export
     oplot_dipoles,
     read_bsa,
     Dipoles,
-    conv_bv2tal
+    conv_bv2tal,
+    conv_spm_mni2tal
 
 include("read.jl")
 include("plot.jl")
