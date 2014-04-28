@@ -15,7 +15,7 @@ type Dipoles
     size::Array
 end
 
-function read_bsa(fname::String; verbose::Bool=true)
+function read_bsa(fname::String; verbose::Bool=false)
 
     # Open file
     fid = open(fname, "r")
@@ -26,51 +26,45 @@ function read_bsa(fname::String; verbose::Bool=true)
     version           = version_line[1:separator-1]
     coordinate_system = version_line[separator+1:end-1]
 
+    # Create an empty dipole
+    bsa = Dipoles(version, coordinate_system,
+                    Float64[], Float64[], Float64[],
+                    Float64[], Float64[], Float64[],
+                    Float64[], Float64[], Float64[])
+
     # Read title line
     title_line = readline(fid)
     regexp = r"(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)"
     m = match(regexp, title_line)
 
-    # Create variables to fill
-    xloc  = Float64[]
-    yloc  = Float64[]
-    zloc  = Float64[]
-    xori  = Float64[]
-    yori  = Float64[]
-    zori  = Float64[]
-    color = Float64[]
-    state = Float64[]
-    size  = Float64[]
-
-
+    # Useless line
     line_line  = readline(fid)
 
-    if verbose
-        println("File    = $fname")
-        println("Version = $version")
-        println("Coords  = $coordinate_system")
-        println("$title_line")
-    end
-
+    # Read remaining dipoles
     while ~eof(fid)
         d = readline(fid)
         dm = match(regexp, d)
 
-        push!(xloc,  float (dm.captures[2]))
-        push!(yloc,  float (dm.captures[3]))
-        push!(zloc,  float (dm.captures[4]))
-        push!(xori,  float (dm.captures[5]))
-        push!(yori,  float (dm.captures[6]))
-        push!(zori,  float (dm.captures[7]))
-        push!(color, float (dm.captures[8]))
-        push!(state, float (dm.captures[9]))
-        push!(size,  float (dm.captures[10]))
+        push!(bsa.xloc,  float(dm.captures[2]))
+        push!(bsa.yloc,  float(dm.captures[3]))
+        push!(bsa.zloc,  float(dm.captures[4]))
+        push!(bsa.xori,  float(dm.captures[5]))
+        push!(bsa.yori,  float(dm.captures[6]))
+        push!(bsa.zori,  float(dm.captures[7]))
+        push!(bsa.color, float(dm.captures[8]))
+        push!(bsa.state, float(dm.captures[9]))
+        push!(bsa.size,  float(dm.captures[10]))
 
     end
 
     close(fid)
 
-    bsa = Dipoles(version, coordinate_system, xloc, yloc, zloc, xori, yori, zori, color, state, size)
+    if verbose
+        println("File    = $fname")
+        println("Version = $version")
+        println("Coords  = $coordinate_system")
+        println("Dipoles = $(length(bsa.xloc))")
+    end
 
     return bsa
 
