@@ -151,7 +151,7 @@ function plot_timeseries_multichannel(signals::Array,
 end
 
 
-function oplot_dipoles(existing_plot, dipoles; verbose::Bool=false)
+function oplot_dipoles(existing_plot, dipoles; verbose::Bool=false, color::String="red")
 
     # Extract existing plots
     back = existing_plot[1,1]
@@ -161,9 +161,9 @@ function oplot_dipoles(existing_plot, dipoles; verbose::Bool=false)
     # Points for each dipole
     for p in 1:length(dipoles.xloc)
 
-        add(back, Points(dipoles.xloc[p], dipoles.zloc[p], color="red"))
-        add(side, Points(dipoles.yloc[p], dipoles.zloc[p], color="red"))
-        add(top,  Points(dipoles.xloc[p], dipoles.yloc[p], color="red"))
+        add(back, Points(dipoles.xloc[p], dipoles.zloc[p], color=color, size=2, symbolkind="plus"))
+        add(side, Points(dipoles.yloc[p], dipoles.zloc[p], color=color, size=2, symbolkind="plus"))
+        add(top,  Points(dipoles.xloc[p], dipoles.yloc[p], color=color, size=2, symbolkind="plus"))
 
     end
 
