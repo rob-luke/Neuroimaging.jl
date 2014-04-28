@@ -154,23 +154,23 @@ end
 function oplot_dipoles(existing_plot, dipoles; verbose::Bool=false)
 
     # Extract existing plots
-    side = existing_plot[1,1]
-    top  = existing_plot[1,2]
-    back = existing_plot[2,1]
+    back = existing_plot[1,1]
+    side  = existing_plot[1,2]
+    top = existing_plot[2,1]
 
     # Points for each dipole
     for p in 1:length(dipoles.xloc)
 
-        add(side, Points(dipoles.xloc[p], -dipoles.yloc[p], color="red"))
-        add(top,  Points(dipoles.zloc[p], -dipoles.xloc[p], color="red"))
-        add(back, Points(dipoles.zloc[p], -dipoles.yloc[p], color="red"))
+        add(back, Points(dipoles.xloc[p], dipoles.zloc[p], color="red"))
+        add(side, Points(dipoles.yloc[p], dipoles.zloc[p], color="red"))
+        add(top,  Points(dipoles.xloc[p], dipoles.yloc[p], color="red"))
 
     end
 
     t = Table(2,2)
-    t[1,1] = side
-    t[1,2] = top
-    t[2,1] = back
+    t[1,1] = back
+    t[1,2] = side
+    t[2,1] = top
 
     return t
 
