@@ -12,10 +12,12 @@ export
     plot_timeseries_multichannel,
     oplot_dipoles,
     read_bsa,
-    Dipoles
+    Dipoles,
+    conv_bv2tal
 
+include("read.jl")
 include("plot.jl")
 include("processing.jl")
-include("read.jl")
+include("convert.jl")
 
 end
