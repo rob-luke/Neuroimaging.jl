@@ -10,8 +10,9 @@ export
     plot_spectrum,
     plot_timeseries,
     plot_timeseries_multichannel,
+    oplot_dipoles,
     read_bsa,
-    BSA
+    Dipoles
 
 include("plot.jl")
 include("processing.jl")
