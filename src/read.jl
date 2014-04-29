@@ -186,4 +186,6 @@ function read_dat(fname::String; verbose::Bool=false)
 
     close(fid)
 
+    return X, Y, Z, complete_data, sample_times
+
 end

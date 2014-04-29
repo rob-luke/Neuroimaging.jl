@@ -175,3 +175,65 @@ function oplot_dipoles(existing_plot, dipoles; verbose::Bool=false, color::Strin
     return t
 
 end
+
+
+function plot_dat(x, y, z, dat_data;
+                verbose::Bool=true,
+                threshold_ratio::Number=1/1000)
+
+    max_value = maximum(dat_data)
+    threshold = max_value * threshold_ratio
+
+    size_multiplier = 2 / max_value
+
+    back = FramedPlot(title = "Sources",
+                           xlabel = "X",
+                           ylabel = "Z")
+
+    side = FramedPlot(title = "Sources",
+                           xlabel = "Y",
+                           ylabel = "Z")
+
+    top = FramedPlot(title = "Sources",
+                           xlabel = "X",
+                           ylabel = "Y")
+
+
+    s = squeeze(maximum(dat_data,2),2)
+    for xidx = 1:length(x)
+        for zidx = 1:length(z)
+            if s[xidx,zidx] > threshold
+                add(back, Points(x[xidx], z[zidx], symbolkind="cross", size=s[xidx, zidx]*size_multiplier))
+            end
+        end
+    end
+    #=back = imagesc(s)=#
+    #=colormap("jet", 200)=#
+
+    s = squeeze(maximum(dat_data,1),1)
+    for yidx = 1:length(y)
+        for zidx = 1:length(z)
+            if s[yidx,zidx] > threshold
+                add(side, Points(y[yidx], z[zidx], symbolkind="cross", size=s[yidx, zidx]*size_multiplier))
+            end
+        end
+    end
+
+    s = squeeze(maximum(dat_data,3),3)
+    for xidx = 1:length(x)
+        for yidx = 1:length(y)
+            if s[xidx,yidx] > threshold
+                add(top, Points(x[xidx], y[yidx], symbolkind="cross", size=s[xidx, yidx]*size_multiplier))
+            end
+        end
+    end
+
+
+    t = Table(2,2)
+    t[1,1] = back
+    t[1,2] = side
+    t[2,1] = top
+
+    return t
+
+end
