@@ -69,3 +69,121 @@ function read_bsa(fname::String; verbose::Bool=false)
     return bsa
 
 end
+
+
+function read_dat(fname::String; verbose::Bool=false)
+
+    # File specs taken from https://github.com/fieldtrip/fieldtrip/blob/1cabb512c46cc70e5b734776f20cdc3c181243bd/external/besa/readBESAimage.m
+
+
+    println("Reading dat file = $fname")
+
+    # Open file
+    fid = open(fname, "r")
+
+    # Ensure we are reading version 2
+    version = readline(fid)
+    version = match(r"(\S+):(\d.\d)", version)
+    version = float(version.captures[2])
+    if version != 2
+        println("Unknown version!!")
+        return
+    end
+
+    # Header info
+    empty          = readline(fid)
+    data_file      = readline(fid)
+    condition      = readline(fid)
+    typeline       = readline(fid)
+
+    # Types of data that can be stored
+    if search(typeline, "Method") != 0:-1  # TODO: change to imatch
+        println("File type is Method")
+        image_type = typeline[21:end]
+        image_mode = "Time"
+        regularization = readline(fid)[21:end-1]
+        #=Latency=#  # TODO: Fix for latencies. See fieldtrip
+        #=Units=#
+        units          = readline(fid)[3:end-1]
+        if verbose
+            println("Regularisation = $regularization")
+            println("Units = $units")
+        end
+    elseif search(typeline, "MSBF") != 0:-1
+        println("Type not implemented yet")
+    elseif search(typeline, "MSPS") != 0:-1
+        println("Type not implemented yet")
+    elseif search(typeline, "Sens") != 0:-1
+        println("Type not implemented yet")
+    else
+        println("Unknown type")
+    end
+
+    empty       = readline(fid)
+    description = readline(fid)
+
+    # Read in the dimensions
+    regexp = r"[X-Z]:\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+(-?\d+)"
+    X = match(regexp, readline(fid))
+    X = linspace(float(X.captures[1]), float(X.captures[2]), int(X.captures[3]))
+    Y = match(regexp, readline(fid))
+    Y = linspace(float(Y.captures[1]), float(Y.captures[2]), int(Y.captures[3]))
+    Z = match(regexp, readline(fid))
+    Z = linspace(float(Z.captures[1]), float(Z.captures[2]), int(Z.captures[3]))
+
+    empty       = readline(fid)
+
+    # Variables to fill
+    t = 1
+    complete_data = Array(Float64, (length(X), length(Y), length(Z), t))
+    sample_times  = Float64[]
+
+    description = readline(fid)
+    if search(description, "Sample") != 0:-1
+
+        s = match(r"Sample \d+, (\d+.\d+) ms", description)
+        push!(sample_times, float(s.captures[1]))
+
+        file_still_going = true
+        while file_still_going
+
+            for z = 1:length(Z)
+                readline(fid)           # Z: z
+
+                for y = 1:length(Y)
+                    d = readline(fid)       # values
+
+                    for x = 1:length(X)
+                        complete_data[x, y, z, t] = float(d[(x-1)*13+1:(x-1)*13+11])
+                    end
+                end
+
+                readline(fid)           # blank or dashed
+
+            end
+
+            if eof(fid)
+                file_still_going = false
+            else
+
+                t += 1
+
+                s = readline(fid)               # Sample n, t.tt ms
+                s = match(r"Sample \d+, (\d+.\d+) ms", s)
+                push!(sample_times, float(s.captures[1]))
+
+                # There is no nice way to grow a multidimensional array
+                temp = complete_data
+                complete_data = Array(Float64, (length(X), length(Y), length(Z), t))
+                complete_data[:,:,:,1:t-1] = temp
+
+            end
+
+        end
+    else
+        println("Unsported file")
+    end
+
+    close(fid)
+
+end

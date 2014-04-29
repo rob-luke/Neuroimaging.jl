@@ -15,6 +15,7 @@ export
     Dipoles,
     conv_bv2tal,
     conv_spm_mni2tal
+    read_dat,
 
 include("read.jl")
 include("plot.jl")
