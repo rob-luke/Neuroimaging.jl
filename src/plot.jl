@@ -186,17 +186,17 @@ function plot_dat(x, y, z, dat_data;
 
     size_multiplier = 2 / max_value
 
-    back = FramedPlot(title = "Sources",
-                           xlabel = "X",
-                           ylabel = "Z")
+    back = FramedPlot(title = "Back",
+                           xlabel = "Left - Right",
+                           ylabel = "Inferior - Superior")
 
-    side = FramedPlot(title = "Sources",
-                           xlabel = "Y",
-                           ylabel = "Z")
+    side = FramedPlot(title = "Side",
+                           xlabel = "Posterior - Anterior",
+                           ylabel = "Inferior - Superior")
 
-    top = FramedPlot(title = "Sources",
-                           xlabel = "X",
-                           ylabel = "Y")
+    top = FramedPlot(title = "Top",
+                           xlabel = "Left - Right",
+                           ylabel = "Posterior - Anterior")
 
 
     s = squeeze(maximum(dat_data,2),2)
