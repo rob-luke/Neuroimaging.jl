@@ -1,18 +1,19 @@
 using EEGjl
 
-using Leadfield
-
 using Winston
 
-t = read_bsa("../data/Example.bsa", verbose=true)
+x, y, z, s, t = read_dat("../data/Example-40Hz.dat")
 
-Xcords, Ycords, Zcords = readSRF("/Users/rluke/Documents/GITs/Leadfield.jl/data/Default50Skin.srf", verbose=true)
+m = squeeze(mean(s,4),4)
 
-Xcords, Ycords, Zcords = conv_bv2tal(Xcords, Ycords, Zcords, verbose=true)
+p = plot_dat(x, y, z, m)
 
-p = plotSRF(Xcords, Ycords, Zcords)
-file(p, "test1.png", width=800, height=800)
+file(p, "Eg2-Sources.png", width=800, height=800)
 
-p = oplot_dipoles(p, t, verbose=true)
-file(p, "test2.png", width=800, height=800)
+t = read_bsa("../data/Example-40Hz.bsa", verbose=true)
+
+p = oplot_dipoles(p, t)
+
+file(p, "Eg2-Sources-w-dipoles.png", width=800, height=800)
+
 

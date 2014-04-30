@@ -3,7 +3,7 @@ using EEGjl
 using Winston
 
 ChannelToAnalyse = 13;
-fname = "../data/Example_40Hz_SWN_70dB_R.bdf"
+fname = "../data/Example-40Hz.bdf"
 
 dats, evtTab, trigChan, sysCodeChan = readBdf(fname)
 bdfInfo = readBdfHeader(fname);
@@ -45,7 +45,7 @@ while ChannelToAnalyse <= 64
 
     f = plot_spectrum(singleChan, 8192, titletext=title, dBPlot=true,
         signal_level=s, noise_level=n, targetFreq=40.0391)
-    file(f, "Eg1-SweepSpectrum-Amp-$(ChannelToAnalyse).png", width=1200, height=600)
+    file(f, "Eg1-SweepSpectrum-$(ChannelToAnalyse).png", width=1200, height=600)
 
-    ChannelToAnalyse += 18
+    ChannelToAnalyse += 99
 end
