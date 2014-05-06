@@ -154,12 +154,18 @@ end
 function oplot_dipoles(existing_plot, dipoles;
                         verbose::Bool=false,
                         color::String="red",
-                        symbolkind::String="filled circle")
+                        symbolkind::String="filled circle",
+                        ncols::Int=2)
+
+
+    # Generate table
+    nrows = int(ceil(3/ncols))
+    t = Table(nrows, ncols)
 
     # Extract existing plots
-    back = existing_plot[1,1]
+    back  = existing_plot[1,1]
     side  = existing_plot[1,2]
-    top = existing_plot[2,1]
+    top   = existing_plot[2,1]
 
     # Points for each dipole
     for p in 1:length(dipoles.xloc)
@@ -182,7 +188,8 @@ end
 
 function plot_dat(x, y, z, dat_data;
                 verbose::Bool=true,
-                threshold_ratio::Number=1/1000)
+                threshold_ratio::Number=1/1000,
+                ncols::Int=2)
 
     max_value = maximum(dat_data)
     threshold = max_value * threshold_ratio
@@ -231,12 +238,82 @@ function plot_dat(x, y, z, dat_data;
         end
     end
 
-
-    t = Table(2,2)
-    t[1,1] = back
-    t[1,2] = side
-    t[2,1] = top
+    t = _place_plots([back, side, top], ncols)
 
     return t
+end
 
+
+function _place_plots(plots::Array, ncols::Int)
+    #= Place plots in to table
+
+    Parameters
+    ----------
+    plots : Array{FramedPlot,1}
+        Plots to be placed in to a table
+
+    ncols : integer
+        Number of columns to make in the table
+
+    Returns
+    -------
+    t : Table
+        Winston table filled with framed plots
+
+    Usage
+    -----
+    p = _extract_plots(t)
+    t = _place_plots(p, 2)
+
+    =#
+
+    # Generate table
+    nrows = int(ceil(length(plots)/ncols))
+    t = Table(nrows, ncols)
+
+    # Fill table with plots
+    for idx = 1:length(plots)
+
+        row = int(ceil(idx/ ncols))
+        col = int(idx - (row-1)*ncols)
+
+        t[row, col] = plots[idx]
+
+    end
+
+    return t
+end
+
+
+function _extract_plots(t::Table)
+    #= Extract framed plots from a table
+
+    Parameters
+    ----------
+    t : Table
+        Winston table that may contain empty blocks
+
+    Returns
+    -------
+    plots : Array{FramedPlot,1}
+        Array containing framed plots
+
+    Usage
+    -----
+    t = _place_plots(p, 2)
+    p = _extract_plots(t)
+
+    =#
+
+    plots = FramedPlot[]
+
+    for r = 1:t.rows
+        for c = 1:t.cols
+            try                         # Required in case of partly filled table
+                push!(plots, t[r,c])
+            end
+        end
+    end
+
+    return plots
 end
