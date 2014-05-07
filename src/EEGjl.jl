@@ -16,7 +16,8 @@ export
     conv_bv2tal,
     conv_spm_mni2tal,
     read_dat,
-    plot_dat
+    plot_dat,
+    read_sfp
 
 include("read.jl")
 include("plot.jl")

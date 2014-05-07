@@ -189,3 +189,25 @@ function read_dat(fname::String; verbose::Bool=false)
     return X, Y, Z, complete_data, sample_times
 
 end
+
+
+function read_sfp(fname::String; verbose::Bool=false)
+
+
+    println("Reading dat file = $fname")
+
+    df = readtable("../data/BESA-MRI-Standard-Electrodes.sfp", header = false, separator = ' ')
+
+    label = df[:x1]
+    x     = df[:x2]
+    y     = df[:x3]
+    z     = df[:x4]
+
+    # Convert label to ascii and remove '
+    elec  = ASCIIString[]
+    for i = 1:length(label)
+        push!(elec, replace(label[i], "'", "" ))
+    end
+
+    return elec, x, y, z
+end
