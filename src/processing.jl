@@ -205,7 +205,7 @@ end
 function _find_frequency_idx(freq_array::Array, freq_of_interest::Number;
                                 verbose::Bool=false)
 
-    diff_array = abs(freq_array - freq_of_interest)
+    diff_array = abs(freq_array .- freq_of_interest)
     targetIdx  = findfirst(diff_array , minimum(diff_array))
 
     if verbose
