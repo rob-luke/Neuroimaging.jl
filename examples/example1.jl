@@ -2,11 +2,13 @@ using JBDF
 using EEGjl
 using Winston
 
-ChannelToAnalyse = 13;
+ChannelToAnalyse = 28;
 fname = "../data/Example-40Hz.bdf"
 
 dats, evtTab, trigChan, sysCodeChan = readBdf(fname)
-bdfInfo = readBdfHeader(fname);
+bdfInfo = readBdfHeader(fname)
+
+bdfInfo["chanLabels"] = channelNames_biosemi_1020(bdfInfo["chanLabels"], verbose=false)
 ChanName = bdfInfo["chanLabels"][ChannelToAnalyse]
 
 dats = proc_hp(dats, verbose=true)
@@ -45,7 +47,7 @@ while ChannelToAnalyse <= 64
 
     f = plot_spectrum(singleChan, 8192, titletext=title, dBPlot=true,
         signal_level=s, noise_level=n, targetFreq=40.0391)
-    file(f, "Eg1-SweepSpectrum-$(ChannelToAnalyse).png", width=1200, height=600)
+    file(f, "Eg1-SweepSpectrum-$(ChannelToAnalyse).pdf", width=1200, height=600)
 
-    ChannelToAnalyse += 99
+    ChannelToAnalyse += 9
 end

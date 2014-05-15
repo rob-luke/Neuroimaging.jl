@@ -148,6 +148,40 @@ function plot_timeseries_multichannel(signals::Array,
     setattr(time_plot, xrange=(0, total_time))
 
     return time_plot
+
+end
+
+
+function oplot(existing_plot, elec::Electrodes;
+                        verbose::Bool=false,
+                        color::String="red",
+                        symbolkind::String="filled circle",
+                        ncols::Int=2)
+
+    p = oplot(existing_plot, elec.xloc, elec.yloc, elec.zloc,
+        verbose=verbose, color=color, symbolkind=symbolkind, ncols=ncols)
+
+    return p
+
+end
+
+function oplot(existing_plot, x, y, z;
+                        verbose::Bool=false,
+                        color::String="red",
+                        symbolkind::String="filled circle",
+                        ncols::Int=2)
+
+    p = _extract_plots(existing_plot)
+
+    # Points for each dipole
+    for l in 1:length(x)
+        add(p[1], Points(x[l], z[l], color=color, size=1, symbolkind=symbolkind))
+        add(p[2], Points(y[l], z[l], color=color, size=1, symbolkind=symbolkind))
+        add(p[3], Points(x[l], y[l], color=color, size=1, symbolkind=symbolkind))
+    end
+
+    p = _place_plots(p, ncols)
+
 end
 
 

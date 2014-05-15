@@ -15,6 +15,16 @@ type Dipoles
     size::Array
 end
 
+type Electrodes
+    coord_system::String
+    kind::String
+    label::Array
+    xloc::Array
+    yloc::Array
+    zloc::Array
+end
+
+
 function read_bsa(fname::String; verbose::Bool=false)
 
     # Open file
@@ -193,21 +203,31 @@ end
 
 function read_sfp(fname::String; verbose::Bool=false)
 
-
-    println("Reading dat file = $fname")
-
-    df = readtable("../data/BESA-MRI-Standard-Electrodes.sfp", header = false, separator = ' ')
-
-    label = df[:x1]
-    x     = df[:x2]
-    y     = df[:x3]
-    z     = df[:x4]
-
-    # Convert label to ascii and remove '
-    elec  = ASCIIString[]
-    for i = 1:length(label)
-        push!(elec, replace(label[i], "'", "" ))
+    if verbose
+      println("Reading dat file = $fname")
     end
 
-    return elec, x, y, z
+    # Create an empty electrode set
+    elec = Electrodes("unknown", "EEG", String[], Float64[], Float64[], Float64[])
+
+    # Read file
+    df = readtable(fname, header = false, separator = ' ')
+
+    # Save locations
+    elec.xloc = df[:x2]
+    elec.yloc = df[:x3]
+    elec.zloc = df[:x4]
+
+    # Convert label to ascii and remove '
+    labels = df[:x1]
+    for i = 1:length(labels)
+        push!(elec.label, replace(labels[i], "'", "" ))
+    end
+
+    if verbose
+        println("Imported $(length(elec.xloc)) locations")
+        println("Imported $(length(elec.label)) labels")
+    end
+
+    return elec
 end
