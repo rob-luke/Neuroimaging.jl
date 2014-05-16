@@ -1,7 +1,7 @@
 # Processing functions
 #
 # proc_hp                    # High pass filter
-# proc_rereference           # Re reference
+# proc_reference           # Re reference
 # proc_epochs                # Extract epochs
 # proc_epoch_rejection       # Reject epochs
 # proc_sweeps                # Create sweeps
@@ -56,26 +56,46 @@ end
 #
 #######################################
 
-function proc_rereference(signals::Array,
-                          refChan::Int;
+# Pass in array to subtract from each channel
+function proc_reference(signals::Array,
+                          reference::Array;  # TODO: Make an array of generic floats
                           verbose::Bool=false)
 
-    if verbose
-        println("Re referencing $(size(signals)[1]) channels to channel $refChan")
-        p = Progress(size(signals)[1], 1, "  Rerefing...  ", 50)
-    end
+    if verbose; p = Progress(size(signals)[1], 1, "  Rerefing...  ", 50); end
 
-    chan = 1
-    while chan <= size(signals)[1]
-        signals[chan,:] = signals[chan,:] - signals[refChan,:]
+    for chan = 1:size(signals)[1]
+        signals[chan,:] = signals[chan,:] - reference
         if verbose; next!(p); end
-        chan += 1
     end
 
     return signals
 end
 
-function proc_rereference(signals::Array,
+# Pass in array of channels re reference to
+function proc_reference(signals::Array,
+                          refChan::Array{Int};
+                          verbose::Bool=false)
+
+    if verbose
+        if length(refChan) == 1
+            println("Re referencing $(size(signals)[1]) channels to channel $(refChan[1])")
+        else
+            println("Re referencing $(size(signals)[1]) channels to the mean of $(length(refChan)) channels")
+        end
+    end
+
+    reference_signal = mean(signals[refChan,:],1)
+
+    return proc_reference(signals, reference_signal, verbose=verbose)
+end
+
+# Rewrap as array
+function proc_reference(signals::Array, refChan::Int; verbose::Bool=false)
+    return proc_reference(signals, [refChan], verbose=verbose)
+end
+
+# Pass in name of channels to re reference to
+function proc_reference(signals::Array,
                           refChan::String,
                           chanNames::Array{String};
                           verbose::Bool=false)
@@ -84,13 +104,15 @@ function proc_rereference(signals::Array,
         println("Re referencing $(size(signals)[1]) channels to channel $refChan")
     end
 
-    refChan = findfirst(chanNames, refChan)
-
-    if refChan == 0
-        error("Requested channel is not in channels list")
+    if refChan == "car" || refChan == "average"
+        refChan = [1:size(signals)[1]]
+    else
+        refChan = findfirst(chanNames, refChan)
     end
 
-    return proc_rereference(signals, refChan, verbose=verbose)
+    if refChan == 0; error("Requested channel is not in the provided list of channels"); end
+
+    return proc_reference(signals, refChan, verbose=verbose)
 end
 
 

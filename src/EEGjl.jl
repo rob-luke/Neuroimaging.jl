@@ -2,7 +2,7 @@ module EEGjl
 
 export
     proc_hp,
-    proc_rereference,
+    proc_reference,
     proc_epochs,
     proc_epoch_rejection,
     proc_sweeps,
