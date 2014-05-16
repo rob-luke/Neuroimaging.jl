@@ -28,5 +28,6 @@ include("read.jl")
 include("plot.jl")
 include("processing.jl")
 include("convert.jl")
+include("biosemi.jl")
 
 end

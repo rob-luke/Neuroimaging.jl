@@ -31,10 +31,14 @@ function proc_hp(signals::Array; cutOff::Number=2,
 end
 
 
-function proc_rereference(signals::Array, refChan::Int; verbose::Bool=false)
+
+
+function proc_rereference(signals::Array,
+                          refChan::Int;
+                          verbose::Bool=false)
 
     if verbose
-        println("Re referencing $(size(signals)[1]) channels")
+        println("Re referencing $(size(signals)[1]) channels to channel $refChan")
         p = Progress(size(signals)[1], 1, "  Rerefing...  ", 50)
     end
 
@@ -46,6 +50,24 @@ function proc_rereference(signals::Array, refChan::Int; verbose::Bool=false)
     end
 
     return signals
+end
+
+function proc_rereference(signals::Array,
+                          refChan::String,
+                          chanNames::Array{String};
+                          verbose::Bool=false)
+
+    if verbose
+        println("Re referencing $(size(signals)[1]) channels to channel $refChan")
+    end
+
+    refChan = findfirst(chanNames, refChan)
+
+    if refChan == 0
+        error("Requested channel is not in channels list")
+    end
+
+    return proc_rereference(signals, refChan, verbose=verbose)
 end
 
 

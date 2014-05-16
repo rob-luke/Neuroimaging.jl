@@ -14,7 +14,7 @@ ChanName = bdfInfo["chanLabels"][ChannelToAnalyse]
 dats = proc_hp(dats, verbose=true)
 
 println("Referencing to $(bdfInfo["chanLabels"][48])")
-dats = proc_rereference(dats, 48, verbose=true)
+dats = proc_rereference(dats, "Cz", bdfInfo["chanLabels"], verbose=true)
 
 t = plot_timeseries_multichannel(dats[:, 3*8192:end], 8192, chanLabels=bdfInfo["chanLabels"])
 file(t, "Eg1-AllChannels.png", width=1200, height=600)
