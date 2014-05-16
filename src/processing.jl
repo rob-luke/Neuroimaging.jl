@@ -1,7 +1,26 @@
+# Processing functions
+#
+# proc_hp                    # High pass filter
+# proc_rereference           # Re reference
+# proc_epochs                # Extract epochs
+# proc_epoch_rejection       # Reject epochs
+# proc_sweeps                # Create sweeps
+# proc_ftest                 # F test
+#
+# _find_frequency_idx
+#
+
+
 using DataFrames
 using DSP
 using ProgressMeter
 
+
+#######################################
+#
+# High pass filter
+#
+#######################################
 
 function proc_hp(signals::Array; cutOff::Number=2,
                    order::Int=3, fs::Int=8192, verbose::Bool=false)
@@ -31,7 +50,11 @@ function proc_hp(signals::Array; cutOff::Number=2,
 end
 
 
-
+#######################################
+#
+# Re reference
+#
+#######################################
 
 function proc_rereference(signals::Array,
                           refChan::Int;
@@ -70,6 +93,12 @@ function proc_rereference(signals::Array,
     return proc_rereference(signals, refChan, verbose=verbose)
 end
 
+
+#######################################
+#
+# Extract epochs
+#
+#######################################
 
 function proc_epochs(dats::Array, evtTab::Dict; verbose::Bool=false)
 
@@ -110,6 +139,12 @@ function proc_epochs(dats::Array, evtTab::Dict; verbose::Bool=false)
 end
 
 
+#######################################
+#
+# Reject epochs
+#
+#######################################
+
 function proc_epoch_rejection(epochs::Array;
                     rejectionMethod::String="peak2peak", verbose::Bool=false)
 
@@ -135,9 +170,14 @@ function proc_epoch_rejection(epochs::Array;
     end
 
     return epochs
-
 end
 
+
+#######################################
+#
+# Create sweeps
+#
+#######################################
 
 function proc_sweeps(epochs::Array; epochsPerSweep::Int=4, verbose::Bool=false)
 
@@ -172,6 +212,12 @@ function proc_sweeps(epochs::Array; epochsPerSweep::Int=4, verbose::Bool=false)
     return sweeps
 end
 
+
+#######################################
+#
+# F test
+#
+#######################################
 
 function proc_ftest(sweeps::Array, freq_of_interest::Number, fs::Number,
                     chan::Int; verbose::Bool=false, side_freq::Number=2)
@@ -220,9 +266,14 @@ function proc_ftest(sweeps::Array, freq_of_interest::Number, fs::Number,
     end
 
     return snrDb, signal_power, noise_power
-
 end
 
+
+#######################################
+#
+# Helper functions
+#
+#######################################
 
 function _find_frequency_idx(freq_array::Array, freq_of_interest::Number;
                                 verbose::Bool=false)

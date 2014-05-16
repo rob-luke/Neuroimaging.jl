@@ -1,4 +1,14 @@
-using Winston
+# Read files
+#
+# Dipoles
+# Electrodes
+#
+# read_bsa
+# read_dat
+# read_sfp
+#
+
+
 using DataFrames
 
 type Dipoles
@@ -24,6 +34,12 @@ type Electrodes
     zloc::Array
 end
 
+
+#######################################
+#
+# Read BSA file
+#
+#######################################
 
 function read_bsa(fname::String; verbose::Bool=false)
 
@@ -77,9 +93,14 @@ function read_bsa(fname::String; verbose::Bool=false)
     end
 
     return bsa
-
 end
 
+
+#######################################
+#
+# Read dat file
+#
+#######################################
 
 function read_dat(fname::String; verbose::Bool=false)
 
@@ -197,9 +218,14 @@ function read_dat(fname::String; verbose::Bool=false)
     close(fid)
 
     return X, Y, Z, complete_data, sample_times
-
 end
 
+
+#######################################
+#
+# Read sfp file
+#
+#######################################
 
 function read_sfp(fname::String; verbose::Bool=false)
 

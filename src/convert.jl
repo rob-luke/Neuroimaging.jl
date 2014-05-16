@@ -1,3 +1,15 @@
+# Convert things
+#
+# conv_bv2tal
+# conv_spm_mni2tal
+#
+
+
+#######################################
+#
+# Convert brain vision to talairach
+#
+#######################################
 
 function conv_bv2tal(Xbv::Array, Ybv::Array, Zbv::Array; verbose::Bool=false, offset::Number=128)
 
@@ -12,6 +24,12 @@ function conv_bv2tal(Xbv::Array, Ybv::Array, Zbv::Array; verbose::Bool=false, of
     return X, Y, Z
 end
 
+
+#######################################
+#
+# Convert MNI to talairach
+#
+#######################################
 
 function conv_spm_mni2tal(Xspm::Array, Yspm::Array, Zspm::Array; verbose::Bool=false)
 
@@ -48,7 +66,6 @@ function conv_spm_mni2tal(Xspm::Array, Yspm::Array, Zspm::Array; verbose::Bool=f
     end
 
     return X, Y, Z
-
 end
 
 function conv_spm_mni2tal(elec::Electrodes; verbose::Bool=false)
@@ -60,7 +77,6 @@ function conv_spm_mni2tal(elec::Electrodes; verbose::Bool=false)
     elecNew.coord_system = "Talairach"
 
     return elecNew
-
 end
 
 

@@ -1,6 +1,26 @@
+# Plot information
+#
+# plot_spectrum
+# plot_timeseries
+# plot_timeseries_multichannel
+# oplot
+# oplot_dipoles
+# plot_dat
+#
+# _place_plots
+# _extract_plots
+#
+
+
 using Winston
 using DSP: periodogram
 
+
+#######################################
+#
+# Plot spectrum of signal
+#
+#######################################
 
 function plot_spectrum(signal::Vector,
                         fs::Real;
@@ -89,13 +109,15 @@ function plot_spectrum(signal::Vector,
         add(spectrum_plot, l)
     end
 
-
-
-
     return spectrum_plot
-
 end
 
+
+#######################################
+#
+# Plot time series
+#
+#######################################
 
 function plot_timeseries(signal::Vector, fs::Real; titletext::String="")
 
@@ -109,9 +131,14 @@ function plot_timeseries(signal::Vector, fs::Real; titletext::String="")
     add(time_plot, Curve( time, signal ))
 
     return time_plot
-
 end
 
+
+#######################################
+#
+# Plot time series (multichannel)
+#
+#######################################
 
 function plot_timeseries_multichannel(signals::Array,
                                       fs::Real;
@@ -148,9 +175,14 @@ function plot_timeseries_multichannel(signals::Array,
     setattr(time_plot, xrange=(0, total_time))
 
     return time_plot
-
 end
 
+
+#######################################
+#
+# Plot over existing plot
+#
+#######################################
 
 function oplot(existing_plot, elec::Electrodes;
                         verbose::Bool=false,
@@ -162,7 +194,6 @@ function oplot(existing_plot, elec::Electrodes;
         verbose=verbose, color=color, symbolkind=symbolkind, ncols=ncols)
 
     return p
-
 end
 
 function oplot(existing_plot, x, y, z;
@@ -181,16 +212,20 @@ function oplot(existing_plot, x, y, z;
     end
 
     p = _place_plots(p, ncols)
-
 end
 
+
+#######################################
+#
+# Plot over existing plot (dipoles)
+#
+#######################################
 
 function oplot_dipoles(existing_plot, dipoles;
                         verbose::Bool=false,
                         color::String="red",
                         symbolkind::String="filled circle",
                         ncols::Int=2)
-
 
     # Generate table
     nrows = int(ceil(3/ncols))
@@ -216,9 +251,14 @@ function oplot_dipoles(existing_plot, dipoles;
     t[2,1] = top
 
     return t
-
 end
 
+
+#######################################
+#
+# Plot dat file
+#
+#######################################
 
 function plot_dat(x, y, z, dat_data;
                 verbose::Bool=true,
@@ -277,6 +317,12 @@ function plot_dat(x, y, z, dat_data;
     return t
 end
 
+
+#######################################
+#
+# Helper functions
+#
+#######################################
 
 function _place_plots(plots::Array, ncols::Int)
     #= Place plots in to table

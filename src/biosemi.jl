@@ -1,3 +1,14 @@
+# Deal with BIOSEMI issues
+#
+# channelNames_biosemi_1020
+#
+
+
+#######################################
+#
+# Change biosemi labels to 1020
+#
+#######################################
 
 function channelNames_biosemi_1020(original::String; verbose::Bool=false)
 
@@ -84,7 +95,6 @@ function channelNames_biosemi_1020(original::String; verbose::Bool=false)
     end
 
     return converted
-
 end
 
 function channelNames_biosemi_1020(original::Array{String}; verbose::Bool=false)
@@ -100,5 +110,4 @@ function channelNames_biosemi_1020(original::Array{String}; verbose::Bool=false)
     end
 
     return converted
-
 end
