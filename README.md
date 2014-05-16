@@ -68,4 +68,4 @@ sweeps = squeeze(mean(sweeps,2),2)
 f = plot_spectrum(singleChan, 8192, titletext=ChanName)
 ```
 
-![timeseries](/examples/Eg1-SweepSpectrum.png)
+![timeseries](/examples/Eg1-SweepSpectrum-52.png)
