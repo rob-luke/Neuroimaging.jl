@@ -47,7 +47,7 @@ while ChannelToAnalyse <= 64
 
     f = plot_spectrum(singleChan, 8192, titletext=title, dBPlot=true,
         signal_level=s, noise_level=n, targetFreq=40.0391)
-    file(f, "Eg1-SweepSpectrum-$(ChannelToAnalyse).pdf", width=1200, height=600)
+    file(f, "Eg1-SweepSpectrum-$(ChannelToAnalyse).png", width=1200, height=600)
 
     ChannelToAnalyse += 99
 end
