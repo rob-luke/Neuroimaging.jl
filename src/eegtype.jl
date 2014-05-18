@@ -35,9 +35,9 @@ function read_EEG(fname::String; verbose::Bool=false)
 end
 
 
-function proc_hp(eeg::EEG; cutOff::Number=2, verbose::Bool=false)
+function proc_hp(eeg::EEG; cutOff::Number=2, order::Int=3, verbose::Bool=false)
 
-    eeg.data, f = proc_hp(eeg.data, fs=eeg.header["sampRate"][1], verbose=verbose)
+    eeg.data, f = proc_hp(eeg.data, cutOff=cutOff, order=order, fs=eeg.header["sampRate"][1], verbose=verbose)
 
     # Save the filter settings as a unique key in the processing dict
     # This allows for applying multiple filters and tracking them all
