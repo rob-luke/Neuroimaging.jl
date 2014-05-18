@@ -46,7 +46,7 @@ function proc_hp(signals::Array; cutOff::Number=2,
         chan += 1
     end
 
-    return(signals)
+    return signals, f
 end
 
 
