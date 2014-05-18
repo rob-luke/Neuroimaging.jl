@@ -18,9 +18,12 @@ export
     plot_dat,
     read_sfp,
     oplot,
-    channelNames_biosemi_1020
+    channelNames_biosemi_1020,
+    read_EEG
+
 
 export
+    EEG,
     Electrodes,
     Dipoles
 
@@ -29,5 +32,6 @@ include("plot.jl")
 include("processing.jl")
 include("convert.jl")
 include("biosemi.jl")
+include("eegtype.jl")
 
 end
