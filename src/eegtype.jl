@@ -50,6 +50,16 @@ function proc_hp(eeg::EEG; cutOff::Number=2, order::Int=3, verbose::Bool=false)
     end
     merge!(eeg.processing, [key => f])
 
+    # Remove adaptation period
+    t = 3   #TODO: pass in as an argument?
+    eeg.data = eeg.data[:, t*8192:end-t*8192]
+    eeg.triggers["idx"] = eeg.triggers["idx"] .- t*8192
+    # And ensure the triggers are still in sync
+    to_keep = find(eeg.triggers["idx"] .>= 0)
+    eeg.triggers["idx"]  = eeg.triggers["idx"][to_keep]
+    eeg.triggers["dur"]  = eeg.triggers["dur"][to_keep]
+    eeg.triggers["code"] = eeg.triggers["code"][to_keep]
+
     return eeg
  end
 
