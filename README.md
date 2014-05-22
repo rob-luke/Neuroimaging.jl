@@ -8,6 +8,7 @@ Process EEG files in Julia.
 Package is not ready for distribution yet.
 
 Requires:
+- JBDF
 - Winston
 - DSP
 - DataFrames
@@ -20,30 +21,34 @@ Requires:
 Import raw data using [JBDF](https://github.com/sam81/JBDF.jl).
 
 ```
-dats, evtTab, trigChan, sysCodeChan = readBdf("../data/example.bdf")
-bdfInfo = readBdfHeader("../data/example.bdf")
+s = read_EEG("../data/example.bdf", verbose=true)
+
+>>>> Imported 64 EEG channels
 ```
 
 Remove DC offset and re reference data to cz
 
 ```
-dats = proc_hp(dats, verbose=true)
+s = proc_hp(s, verbose=true)
 
->>>Highpass filtering 64 channels
->>>  Pass band > 2 Hz = 0.00048828125
->>>  Filtering...100%|##################################################| Time: 0:00:28
+>>> Highpass filtering 64 channels
+>>>   Pass band > 2 Hz
+>>>   Filtering... 100%|##################################################| Time: 0:00:26
   
-  
-dats = proc_rereference(dats, 48, verbose=true)
+s = proc_reference(s, "average", verbose=true)
 
->>>Re referencing 64 channels
->>>  Rerefing... 100%|##################################################| Time: 0:00:09
+>>> Re referencing 64 channels to channel average
+>>> Re referencing 64 channels to the mean of 64 channels
+>>>   Rerefing...  100%|##################################################| Time: 0:00:06
 
+p = plot_timeseries(s, "Cz")
 
-f = plot_timeseries(singleChan, 8192, titletext=ChanName)
+p = plot_timeseries(s)
+
 ```
 
 ![timeseries](/examples/Eg1-RawData.png)
+![timeseries](/examples/Eg1-AllChannels.png)
 
 Generate epochs, combine to average sweeps and plot the spectrum
 
@@ -56,8 +61,11 @@ epochs = proc_epochs(dats, evtTab, verbose=true)
 >>>  Number of channels is 64
 >>>  Epoching...100%|##################################################| Time: 0:00:05
 
+epochs = proc_epoch_rejection(epochs)
+
 
 sweeps = proc_sweeps(epochs, verbose=true)
+
 >>>Generating 75.0 sweeps
 >>>  From 300 epochs of length 8388
 >>>  Creating 75.0 sweeps of length 33552
