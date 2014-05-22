@@ -52,3 +52,13 @@ function proc_hp(eeg::EEG; cutOff::Number=2, order::Int=3, verbose::Bool=false)
 
     return eeg
  end
+
+
+function proc_reference(eeg::EEG, refChan::String; verbose::Bool=false)
+
+    eeg.data = proc_reference(eeg.data, refChan, eeg.labels, verbose=verbose)
+
+    return eeg
+end
+
+
