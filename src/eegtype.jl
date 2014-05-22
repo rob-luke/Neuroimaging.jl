@@ -53,7 +53,7 @@ function proc_hp(eeg::EEG; cutOff::Number=2, order::Int=3, verbose::Bool=false)
     # Remove adaptation period
     t = 3   #TODO: pass in as an argument?
     eeg.data = eeg.data[:, t*8192:end-t*8192]
-    eeg.triggers["idx"] = eeg.triggers["idx"] .- t*8192
+    eeg.triggers["idx"] = eeg.triggers["idx"] .- 2*t*8192
     # And ensure the triggers are still in sync
     to_keep = find(eeg.triggers["idx"] .>= 0)
     eeg.triggers["idx"]  = eeg.triggers["idx"][to_keep]
@@ -72,3 +72,20 @@ function proc_reference(eeg::EEG, refChan::String; verbose::Bool=false)
 end
 
 
+# Plot whole all data
+function plot_timeseries(eeg::EEG; titletext::String="")
+
+    p = plot_timeseries(eeg.data, eeg.header["sampRate"][1], titletext=titletext)
+
+    return p
+end
+
+# Plot a single channel
+function plot_timeseries(eeg::EEG, chanName::String; titletext::String="")
+
+    idx = findfirst(eeg.labels, chanName)
+
+    p = plot_timeseries(vec(eeg.data[idx,:]), eeg.header["sampRate"][1], titletext=titletext)
+
+    return p
+end
