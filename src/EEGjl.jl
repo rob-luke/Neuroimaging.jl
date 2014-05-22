@@ -9,7 +9,7 @@ export
     proc_ftest,
     plot_spectrum,
     plot_timeseries,
-    plot_timeseries_multichannel,
+    #=plot_timeseries_multichannel,=#
     oplot_dipoles,
     read_bsa,
     conv_bv2tal,

@@ -119,6 +119,7 @@ end
 #
 #######################################
 
+# Single channel passed in as vector
 function plot_timeseries(signal::Vector, fs::Real; titletext::String="")
 
     time = linspace(0,length(signal)/fs,length(signal))
@@ -134,17 +135,12 @@ function plot_timeseries(signal::Vector, fs::Real; titletext::String="")
 end
 
 
-#######################################
-#
-# Plot time series (multichannel)
-#
-#######################################
-
-function plot_timeseries_multichannel(signals::Array,
-                                      fs::Real;
-                                      titletext::String="",
-                                      chanLabels::Array=[],
-                                      plot_points::Int=1024)
+# Multiple channels passed in as an array
+function plot_timeseries(signals::Array,
+                         fs::Real;
+                         titletext::String="",
+                         chanLabels::Array=[],
+                         plot_points::Int=1024)
 
     total_time = size(signals)[2]/fs
 
