@@ -26,54 +26,63 @@ s = read_EEG("../data/example.bdf", verbose=true)
 >>>> Imported 64 EEG channels
 ```
 
-Remove DC offset and re reference data to cz
+The following input ...
+```{julia}
+using EEGjl
+using Winston
 
-```
+fname = "../data/Example-40Hz.bdf"
+
+s = read_EEG(fname, verbose=true)
+
 s = proc_hp(s, verbose=true)
 
->>> Highpass filtering 64 channels
->>>   Pass band > 2 Hz
->>>   Filtering... 100%|##################################################| Time: 0:00:26
-  
 s = proc_reference(s, "average", verbose=true)
 
->>> Re referencing 64 channels to channel average
->>> Re referencing 64 channels to the mean of 64 channels
->>>   Rerefing...  100%|##################################################| Time: 0:00:06
+    p = plot_timeseries(s, "Cz")
+    file(p, "Eg1-RawData.png", width=1200, height=600)
 
-p = plot_timeseries(s, "Cz")
+    p = plot_timeseries(s)
+    file(p, "Eg1-AllChannels.png", width=1200, height=800)
 
-p = plot_timeseries(s)
+s = extract_epochs(s, verbose=true)
+
+s = create_sweeps(s, epochsPerSweep=32, verbose=true)
+
+s = ftest(s, 40.0391, verbose=true)
+
+    p = plot_spectrum(s, "T8", targetFreq=40.0391)
+    file(p, "Eg1-SweepSpectrum-52.png", width=1200, height=800)
 
 ```
+
+outputs...
+
+
+```{julia}
+
+Converting EEG channel names
+Imported 64 EEG channels
+Highpass filtering 64 channels
+  Pass band > 2 Hz
+  Filtering... 100%|##################################################| Time: 0:00:15
+Re referencing 64 channels to channel average
+Re referencing 64 channels to the mean of 64 channels
+  Rerefing...  100%|##################################################| Time: 0:00:04
+Generating epochs for 64 channels
+  Epoch length is 8388
+  Number of epochs is 290
+  Epoching...  100%|##################################################| Time: 0:00:02
+Generating 9 sweeps
+  From 290 epochs of length 8388
+  Creating 9 sweeps of length 268416
+  Sweeps...    100%|##################################################| Time: 0:00:01
+Calculating F statistic on 64 channels
+  F-test...    100%|##################################################| Time: 0:00:30
+
+```
+
 
 ![timeseries](/examples/Eg1-RawData.png)
 ![timeseries](/examples/Eg1-AllChannels.png)
-
-Generate epochs, combine to average sweeps and plot the spectrum
-
-```
-epochs = proc_epochs(dats, evtTab, verbose=true)
-
->>>Generating epochs for 64 channels
->>>  Epoch length is 8388
->>>  Number of epochs is 302
->>>  Number of channels is 64
->>>  Epoching...100%|##################################################| Time: 0:00:05
-
-epochs = proc_epoch_rejection(epochs)
-
-
-sweeps = proc_sweeps(epochs, verbose=true)
-
->>>Generating 75.0 sweeps
->>>  From 300 epochs of length 8388
->>>  Creating 75.0 sweeps of length 33552
->>>  Sweeps...  100%|##################################################| Time: 0:00:03
-
-
-sweeps = squeeze(mean(sweeps,2),2)
-f = plot_spectrum(singleChan, 8192, titletext=ChanName)
-```
-
 ![timeseries](/examples/Eg1-SweepSpectrum-52.png)
