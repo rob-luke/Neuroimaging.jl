@@ -76,7 +76,7 @@ end
 
 function extract_epochs(eeg::EEG; verbose::Bool=false)
 
-    merge!(eeg.processing, ["epochs" => proc_epochs(eeg.data, eeg.triggers, verbose=verbose)])
+    merge!(eeg.processing, ["epochs" => extract_epochs(eeg.data, eeg.triggers, verbose=verbose)])
 
     #=eeg.processing["epochs"] = eeg.processing["epochs"][:,3:end,:]=#
 
@@ -87,7 +87,7 @@ end
 function create_sweeps(eeg::EEG; epochsPerSweep::Int=4, verbose::Bool=false)
 
     merge!(eeg.processing, 
-        ["sweeps" => proc_sweeps(eeg.processing["epochs"], epochsPerSweep = epochsPerSweep, verbose = verbose)])
+        ["sweeps" => create_sweeps(eeg.processing["epochs"], epochsPerSweep = epochsPerSweep, verbose = verbose)])
 
     return eeg
 end

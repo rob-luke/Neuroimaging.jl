@@ -132,7 +132,7 @@ end
 #
 #######################################
 
-function proc_epochs(dats::Array, evtTab::Dict; verbose::Bool=false)
+function extract_epochs(dats::Array, evtTab::Dict; verbose::Bool=false)
 
     epochIndex = DataFrame(Code = evtTab["code"], Index = evtTab["idx"]);
     epochIndex = epochIndex[epochIndex[:Code].==252,:]
@@ -211,7 +211,7 @@ end
 #
 #######################################
 
-function proc_sweeps(epochs::Array; epochsPerSweep::Int=4, verbose::Bool=false)
+function create_sweeps(epochs::Array; epochsPerSweep::Int=4, verbose::Bool=false)
 
     epochsLen = size(epochs)[1]
     epochsNum = size(epochs)[2]
