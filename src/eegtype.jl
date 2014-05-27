@@ -17,7 +17,7 @@ function read_EEG(fname::String; verbose::Bool=false)
     bdfInfo = readBdfHeader(fname)
 
     # Place in type
-    eeg = EEG(dats, bdfInfo["chanLabels"], evtTab, bdfInfo, Dict())
+    eeg = EEG(dats', bdfInfo["chanLabels"], evtTab, bdfInfo, Dict())
 
     # Tidy channel names if required
     if bdfInfo["chanLabels"][1] == "A1"
@@ -28,7 +28,7 @@ function read_EEG(fname::String; verbose::Bool=false)
     end
 
     if verbose
-        println("Imported $(size(eeg.data)[1]) EEG channels")
+        println("Imported $(size(eeg.data)[end]) EEG channels")
     end
 
     return eeg
@@ -52,7 +52,7 @@ function proc_hp(eeg::EEG; cutOff::Number=2, order::Int=3, verbose::Bool=false)
 
     # Remove adaptation period
     t = 3   #TODO: pass in as an argument?
-    eeg.data = eeg.data[:, t*8192:end-t*8192]
+    eeg.data = eeg.data[t*8192:end-t*8192, :]
     eeg.triggers["idx"] = eeg.triggers["idx"] .- 2*t*8192
     # And ensure the triggers are still in sync
     to_keep = find(eeg.triggers["idx"] .>= 0)
@@ -85,7 +85,7 @@ function plot_timeseries(eeg::EEG, chanName::String; titletext::String="")
 
     idx = findfirst(eeg.labels, chanName)
 
-    p = plot_timeseries(vec(eeg.data[idx,:]), eeg.header["sampRate"][1], titletext=titletext)
+    p = plot_timeseries(vec(eeg.data[:, idx]), eeg.header["sampRate"][1], titletext=titletext)
 
     return p
 end

@@ -142,27 +142,26 @@ function plot_timeseries(signals::Array,
                          chanLabels::Array=[],
                          plot_points::Int=1024)
 
-    total_time = size(signals)[2]/fs
+    total_time = size(signals)[1]/fs
 
     fs = fs/plot_points
 
-    plot_points = floor(linspace(1, size(signals)[2], plot_points))
-    signals = signals[:, plot_points]
+    plot_points = floor(linspace(1, size(signals)[1], plot_points))
+    signals = signals[plot_points, :]
 
     time = linspace(1, total_time, length(plot_points))
 
-    variances = var(signals,2)
+    variances = var(signals,1)
     mean_variance = mean(variances)
-
-    signals_plot = signals/mean_variance .+ [1:64]
 
     time_plot = FramedPlot(title = titletext,
                            xlabel = "Time (s)",
                            ylabel = "Channels",
                            yrange = (0, 65))
 
-    for chan in 1:64
-        add(time_plot, Curve( time, convert(Array{Float64}, vec(signals_plot[chan,:]))))
+    for chan in 1:size(signals)[end]
+        # Variance is set to 1, each channel is offset but 1 from the previous
+        add(time_plot, Curve( time, convert(Array{Float64}, vec(signals[:, chan] / mean_variance .+ chan))))
     end
 
     #=chanLabels = convert(Array{ASCIIString}, chanLabels[1:64])=#

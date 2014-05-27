@@ -32,24 +32,24 @@ function proc_hp(signals::Array; cutOff::Number=2,
     f = digitalfilter(Highpass(Wn), Butterworth(order))
 
     if verbose
-        println("Highpass filtering $(size(signals)[1]) channels")
+        println("Highpass filtering $(size(signals)[end]) channels")
         println("  Pass band > $(cutOff) Hz")
-        p = Progress(size(signals)[1], 1, "  Filtering... ", 50)
+        p = Progress(size(signals)[end], 1, "  Filtering... ", 50)
     end
 
     chan = 1
-    while chan <= size(signals)[1]
-        signals[chan,:] = filt(f, vec(signals[chan,:]))
-        signals[chan,:] = fliplr(signals[chan,:])
-        signals[chan,:] = filt(f, vec(signals[chan,:]))
-        signals[chan,:] = fliplr(signals[chan,:])
+    while chan <= size(signals)[end]
+        signals[:, chan] = filt(f, vec(signals[:, chan]))
+        signals[:, chan] = fliplr(signals[:, chan])
+        signals[:, chan] = filt(f, vec(signals[:, chan]))
+        signals[:, chan] = fliplr(signals[:, chan])
         if verbose; next!(p); end
         chan += 1
     end
 
+
     return signals, f
 end
-
 
 
 ##########################################
@@ -63,10 +63,10 @@ function remove_template(signals::Array,
                         reference::Array;  # TODO: Make an array of generic floats
                         verbose::Bool=false)
 
-    if verbose; p = Progress(size(signals)[1], 1, "  Rerefing...  ", 50); end
+    if verbose; p = Progress(size(signals)[end], 1, "  Rerefing...  ", 50); end
 
-    for chan = 1:size(signals)[1]
-        signals[chan,:] = signals[chan,:] - reference
+    for chan = 1:size(signals)[end]
+        signals[:, chan] = signals[:, chan] - reference
         if verbose; next!(p); end
     end
 
@@ -88,13 +88,13 @@ function proc_reference(signals::Array,
 
     if verbose
         if length(refChan) == 1
-            println("Re referencing $(size(signals)[1]) channels to channel $(refChan[1])")
+            println("Re referencing $(size(signals)[end]) channels to channel $(refChan[1])")
         else
-            println("Re referencing $(size(signals)[1]) channels to the mean of $(length(refChan)) channels")
+            println("Re referencing $(size(signals)[end]) channels to the mean of $(length(refChan)) channels")
         end
     end
 
-    reference_signal = mean(signals[refChan,:],1)
+    reference_signal = mean(signals[:, refChan],2)
 
     return remove_template(signals, reference_signal, verbose=verbose)
 end
@@ -111,11 +111,11 @@ function proc_reference(signals::Array,
                           verbose::Bool=false)
 
     if verbose
-        println("Re referencing $(size(signals)[1]) channels to channel $refChan")
+        println("Re referencing $(size(signals)[end]) channels to channel $refChan")
     end
 
     if refChan == "car" || refChan == "average"
-        refChan = [1:size(signals)[1]]
+        refChan = [1:size(signals)[end]]
     else
         refChan = findfirst(chanNames, refChan)
     end
@@ -141,7 +141,7 @@ function proc_epochs(dats::Array, evtTab::Dict; verbose::Bool=false)
 
     numEpochs = size(epochIndex)[1] - 1
     lenEpochs = minimum(diff(epochIndex[:Index]))
-    numChans  = size(dats)[1]
+    numChans  = size(dats)[end]
     epochs = zeros(Float64, (lenEpochs, numEpochs, numChans))
 
     if verbose
@@ -159,7 +159,7 @@ function proc_epochs(dats::Array, evtTab::Dict; verbose::Bool=false)
             startLoc = epochIndex[:Index][epoch]
             endLoc   = startLoc + lenEpochs - 1
 
-            epochs[:,epoch, chan] = vec(dats[chan, startLoc:endLoc])
+            epochs[:,epoch, chan] = vec(dats[startLoc:endLoc, chan])
 
             epoch += 1
         end
