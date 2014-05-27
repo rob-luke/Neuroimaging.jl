@@ -1,9 +1,6 @@
 using EEGjl
 using Winston
 
-using EEGjl
-using Winston
-
 fname = "../data/Example-40Hz.bdf"
 
 s = read_EEG(fname, verbose=true)
@@ -12,13 +9,15 @@ s = proc_hp(s, verbose=true)
 
 s = proc_reference(s, "average", verbose=true)
 
-p = plot_timeseries(s, "Cz")
+    p = plot_timeseries(s, "Cz")
+    file(p, "Eg1-RawData.png", width=1200, height=600)
 
-file(p, "Eg1-RawData.png", width=1200, height=600)
+    p = plot_timeseries(s)
+    file(p, "Eg1-AllChannels.png", width=1200, height=800)
 
-p = plot_timeseries(s)
+s = extract_epochs(s, verbose=true)
 
-file(p, "Eg1-AllChannels.png", width=1200, height=800)
+s = create_sweeps(s, epochsPerSweep=32, verbose=true)
 
 
 ###########
@@ -27,15 +26,7 @@ file(p, "Eg1-AllChannels.png", width=1200, height=800)
 #
 ###########
 
-
-epochs = proc_epochs(s.data, s.triggers, verbose=true)
-epochs = epochs[:,3:end,:]
-
-epochs = proc_epoch_rejection(epochs)
-
-sweeps = proc_sweeps(epochs, verbose=true, epochsPerSweep=32)
-
-meanSweeps = squeeze(mean(sweeps,2),2)
+meanSweeps = squeeze(mean(s.processing["sweeps"], 2), 2)
 
 ChannelToAnalyse = 52
 
@@ -49,7 +40,7 @@ while ChannelToAnalyse <= 64
 
     println("Processing channel $ChannelToAnalyse")
 
-    fResult, s, n = proc_ftest(sweeps, 40.0391, 8192, ChannelToAnalyse)
+    fResult, s, n = proc_ftest(s.processing["sweeps"], 40.0391, 8192, ChannelToAnalyse)
     title = "Channel $(ChanName). SNR = $(round(fResult,2)) dB"
 
     singleChan = convert(Array{Float64}, vec(meanSweeps[:,ChannelToAnalyse]))

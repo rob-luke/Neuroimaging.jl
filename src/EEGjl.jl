@@ -5,6 +5,8 @@ export
     remove_template,
     proc_reference,
     proc_epochs,
+    extract_epochs,
+    create_sweeps,
     proc_epoch_rejection,
     proc_sweeps,
     proc_ftest,
