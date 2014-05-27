@@ -7,7 +7,7 @@ export
     extract_epochs,
     create_sweeps,
     proc_epoch_rejection,
-    proc_ftest,
+    ftest,
     plot_spectrum,
     plot_timeseries,
     oplot_dipoles,

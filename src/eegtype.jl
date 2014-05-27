@@ -95,6 +95,41 @@ end
 
 #######################################
 #
+# Statistics
+#
+#######################################
+
+function ftest(eeg::EEG, freq_of_interest::Number; verbose::Bool=false, side_freq::Number=2)
+
+    snr_result = Array(Float64, (1,size(eeg.data)[end]))
+    signal     = Array(Float64, (1,size(eeg.data)[end]))
+    noise      = Array(Float64, (1,size(eeg.data)[end]))
+
+    if verbose
+        println("Calculating F statistic on $(size(eeg.data)[end]) channels")
+        p = Progress(size(eeg.data)[end], 1, "  F-test...    ", 50)
+    end
+
+    for chan = 1:size(eeg.data)[end]
+    
+        snr_result[chan], signal[chan], noise[chan] = ftest(eeg.processing["sweeps"], freq_of_interest,
+                                                            eeg.header["sampRate"][1], chan)
+
+        if verbose; next!(p); end
+    end
+
+    results = ["SNRdB" => snr_result, "signal_power" => signal, "noise_power" => noise,
+               "frequency" => freq_of_interest, "bin" => side_freq]
+
+    merge!(eeg.processing, [string("ftest-",freq_of_interest) => results])
+
+    return eeg
+end
+
+
+
+#######################################
+#
 # Plotting
 #
 #######################################
@@ -119,3 +154,54 @@ function plot_timeseries(eeg::EEG, chanName::String; titletext::String="")
 end
 
 
+function plot_spectrum(eeg::EEG, chan::Int; targetFreq::Number=0)
+
+    channel_name = eeg.labels[chan]
+
+    # If F test has been run then report those values
+    if targetFreq != 0
+        try
+            result_snr = round(eeg.processing[string("ftest-", targetFreq)]["SNRdB"][chan], 2)
+            title  = "Channel $(channel_name). SNR = $(result_snr) dB"
+            noise  = eeg.processing[string("ftest-", targetFreq)]["noise_power"][chan]
+            signal = eeg.processing[string("ftest-", targetFreq)]["signal_power"][chan]
+        catch
+            println("!! Frequency you requested statistics for was not available. Did you calculate it?")
+            title  = "Channel $(channel_name)"
+            noise  = 0
+            signal = 0
+        end
+    else # You didn't ask for a specific frequency to look at
+        title  = "Channel $(channel_name)"
+        noise  = 0
+        signal = 0
+    end
+
+    p = plot_spectrum(convert(Array{Float64}, vec(mean(eeg.processing["sweeps"], 2)[:,chan])),
+                        eeg.header["sampRate"][1];
+                        titletext=title, targetFreq = targetFreq,
+                        noise_level = noise, signal_level = signal)
+
+    return p
+end
+
+function plot_spectrum(eeg::EEG, chan::String; targetFreq::Number=0)
+
+    return plot_spectrum(eeg, findfirst(eeg.labels, chan), targetFreq=targetFreq)
+end
+
+
+#######################################
+#
+# Helper functions
+#
+#######################################
+
+
+function _decode_processing_name(name::String)
+
+    known_processes = ["filter, ftest, sweeps, epochs"]
+
+
+
+end

@@ -251,8 +251,10 @@ end
 #
 #######################################
 
-function proc_ftest(sweeps::Array, freq_of_interest::Number, fs::Number,
+function ftest(sweeps::Array, freq_of_interest::Number, fs::Number,
                     chan::Int; verbose::Bool=false, side_freq::Number=2)
+
+    #TODO: Change to take only single channel of sweeps
 
     sweeps   = squeeze(mean(sweeps,2),2)
     sweepLen = size(sweeps)[1]
