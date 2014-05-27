@@ -1,7 +1,8 @@
 # Processing functions
 #
 # proc_hp                    # High pass filter
-# proc_reference           # Re reference
+# remove_template            # Removes a template signal from each channel
+# proc_reference             # Re reference
 # proc_epochs                # Extract epochs
 # proc_epoch_rejection       # Reject epochs
 # proc_sweeps                # Create sweeps
@@ -50,16 +51,17 @@ function proc_hp(signals::Array; cutOff::Number=2,
 end
 
 
-#######################################
+
+##########################################
 #
-# Re reference
+# Remove template signal from all channels
 #
-#######################################
+##########################################
 
 # Pass in array to subtract from each channel
-function proc_reference(signals::Array,
-                          reference::Array;  # TODO: Make an array of generic floats
-                          verbose::Bool=false)
+function remove_template(signals::Array,
+                        reference::Array;  # TODO: Make an array of generic floats
+                        verbose::Bool=false)
 
     if verbose; p = Progress(size(signals)[1], 1, "  Rerefing...  ", 50); end
 
@@ -70,6 +72,14 @@ function proc_reference(signals::Array,
 
     return signals
 end
+
+
+#######################################
+#
+# Re reference
+#
+#######################################
+
 
 # Pass in array of channels re reference to
 function proc_reference(signals::Array,
@@ -86,7 +96,7 @@ function proc_reference(signals::Array,
 
     reference_signal = mean(signals[refChan,:],1)
 
-    return proc_reference(signals, reference_signal, verbose=verbose)
+    return remove_template(signals, reference_signal, verbose=verbose)
 end
 
 # Rewrap as array
