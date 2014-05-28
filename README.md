@@ -85,4 +85,4 @@ Calculating F statistic on 64 channels
 
 ![timeseries](/examples/Eg1-RawData.png)
 ![timeseries](/examples/Eg1-AllChannels.png)
-![timeseries](/examples/Eg1-SweepSpectrum-52.png)
+![timeseries](/examples/Eg1-SweepSpectrum-T8.png)
