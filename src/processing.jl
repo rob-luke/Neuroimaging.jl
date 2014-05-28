@@ -251,11 +251,11 @@ end
 #
 #######################################
 
-function ftest(sweeps::Array, freq_of_interest::Number, fs::Number,
-                    chan::Int; verbose::Bool=false, side_freq::Number=2)
+function ftest(sweeps::Array, freq_of_interest::Number, fs::Number, chan::Int;
+               verbose::Bool=false, side_freq::Number=2, used_filter::ZPKFilter=[])
 
     #TODO: Change to take only single channel of sweeps
-    #TODO: Needs to take in to account distortion from filtering
+    #TODO: Don't treat harmonic frequencies as noise
 
     sweeps   = squeeze(mean(sweeps,2),2)
     sweepLen = size(sweeps)[1]
@@ -276,9 +276,26 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number,
         println("Bins below = $(idx - idx_Low) and above = $(idx_High - idx)")
     end
 
+    # Calculate amplitude at each frequency
     signal      = squeeze(sweeps[:, chan], 2)
     fftSweep    = 2 / sweepLen * fft(signal)
     spectrum    = fftSweep[1:sweepLen / 2 + 1]
+
+    # Compensate for filter response
+    try
+        h, f = response(used_filter, frequencies, fs)
+
+        filter_compensation = Array(Float64, size(f))
+        for freq=1:length(f)
+            filter_compensation[freq] = abs(h[freq])*abs(h[freq])
+        end
+
+        spectrum = spectrum ./ filter_compensation
+    catch
+        if verbose
+            println("Not incorporating filter response")
+        end
+    end
 
     signal_power = abs( spectrum[idx] )^2
 
