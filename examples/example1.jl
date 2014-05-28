@@ -5,10 +5,10 @@ fname = "../data/Example-40Hz.bdf"
 
 s = read_EEG(fname, verbose=true)
 
-s = proc_hp(s, cutOff=2, order=4, verbose=true)
+s = proc_hp(s, cutOff=2, verbose=true)
 
     p = plot_filter_response(s.processing["filter1"], 8192)
-    file(p, "Eg1-Filter.png", width=1200, height=600)
+    file(p, "Eg1-Filter.png", width=1200, height=800)
 
 s = proc_reference(s, "average", verbose=true)
 

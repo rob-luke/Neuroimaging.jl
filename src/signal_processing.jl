@@ -21,7 +21,7 @@ function response(zpk_filter::ZPKFilter, w::Number)
 end
 
 # Digital filter frequency response for frequencies in radians per sample
-function response(zpk_filter, w::Array)
+function response(zpk_filter::ZPKFilter, w::Array)
 
     h = Array(Complex, size(f))
 
@@ -62,20 +62,23 @@ function plot_filter_response(zpk_filter::ZPKFilter, fs::Integer;
               lower::Number=1, upper::Number=30, sample_points::Int=1024)
 
     frequencies = linspace(lower, upper, 1024)
-
     h, f = response(zpk_filter, frequencies, fs)
-
     magnitude_dB = 20*log10(convert(Array{Float64}, abs(h)))
+    phase_response = (360/(2*pi))*unwrap(convert(Array{Float64}, angle(h)))
 
-    p = plot(f, magnitude_dB)
+    mag_plot = FramedPlot(
+         title="Filter Response",
+         ylabel="Magnitude (dB)")
+    add(mag_plot, Curve(frequencies, magnitude_dB, color="black"))
 
-    xlabel("Frequency (Hz)")
-    ylabel("Magnitude (dB)")
-    title("Filter Response")
+    phase_plot = FramedPlot(
+         xlabel="Frequency (Hz)",
+         ylabel="Phase (degrees)")
+    add(phase_plot, Curve(frequencies, phase_response, color="black"))
 
-    #=display_range = maximum(magnitude_dB) - minimum(magnitude_dB)=#
-    #=add(p, Curve(f, (display_range/2)/pi.*convert(Array{Float64},=#
-                        #=angle(h)).-(display_range/2), color="red", kind="dotted"))=#
+    t = Table(2,1)
+    t[1,1] = mag_plot
+    t[2,1] = phase_plot
 
-    return p
+    return t
 end

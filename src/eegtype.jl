@@ -112,8 +112,9 @@ function ftest(eeg::EEG, freq_of_interest::Number; verbose::Bool=false, side_fre
 
     for chan = 1:size(eeg.data)[end]
     
-        snr_result[chan], signal[chan], noise[chan] = ftest(eeg.processing["sweeps"], freq_of_interest,
-                                                            eeg.header["sampRate"][1], chan)
+        snr_result[chan], signal[chan], noise[chan] = ftest(eeg.processing["sweeps"],  freq_of_interest,
+                                                            eeg.header["sampRate"][1], chan,
+                                                            used_filter=eeg.processing["filter1"])
 
         if verbose; next!(p); end
     end
