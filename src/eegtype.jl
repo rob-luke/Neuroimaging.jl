@@ -112,15 +112,21 @@ function ftest(eeg::EEG, freq_of_interest::Number; verbose::Bool=false, side_fre
 
     for chan = 1:size(eeg.data)[end]
     
-        snr_result[chan], signal[chan], noise[chan] = ftest(eeg.processing["sweeps"],  freq_of_interest,
-                                                            eeg.header["sampRate"][1], chan,
-                                                            used_filter=eeg.processing["filter1"])
+        snr_result[chan], signal[chan], noise[chan] = ftest(eeg.processing["sweeps"][:,:,chan],  
+                                                            freq_of_interest,
+                                                            eeg.header["sampRate"][1],
+                                                            verbose     = false,
+                                                            side_freq   = side_freq,
+                                                            used_filter = eeg.processing["filter1"])
 
         if verbose; next!(p); end
     end
 
-    results = ["SNRdB" => snr_result, "signal_power" => signal, "noise_power" => noise,
-               "frequency" => freq_of_interest, "bin" => side_freq]
+    results = [ "SNRdB" => snr_result,
+                "signal_power" => signal,
+                "noise_power" => noise,
+                "frequency" => freq_of_interest,
+                "bin" => side_freq]
 
     merge!(eeg.processing, [string("ftest-",freq_of_interest) => results])
 

@@ -251,34 +251,22 @@ end
 #
 #######################################
 
-function ftest(sweeps::Array, freq_of_interest::Number, fs::Number, chan::Int;
+function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
                verbose::Bool=false, side_freq::Number=2, used_filter::ZPKFilter=[])
 
-    #TODO: Change to take only single channel of sweeps
     #TODO: Don't treat harmonic frequencies as noise
 
-    sweeps   = squeeze(mean(sweeps,2),2)
-    sweepLen = size(sweeps)[1]
-    chansNum = size(sweeps)[2]
+    average_sweep = squeeze(mean(sweeps,2),2)
+    sweepLen      = size(average_sweep)[1]
 
+    # Determine frequencies of interest
     frequencies = linspace(0, 1, int(sweepLen / 2 + 1))*fs/2
     idx      = _find_frequency_idx(frequencies, freq_of_interest)
     idx_Low  = _find_frequency_idx(frequencies, freq_of_interest - side_freq)
     idx_High = _find_frequency_idx(frequencies, freq_of_interest + side_freq)
 
-    if verbose
-        println("Frequencies = [$(freq_of_interest), ",
-                               "$(freq_of_interest - side_freq), ",
-                               "$(freq_of_interest + side_freq)]")
-        println("Indicies    = [$(idx), ",
-                               "$(idx_Low), ",
-                               "$(idx_High)]")
-        println("Bins below = $(idx - idx_Low) and above = $(idx_High - idx)")
-    end
-
     # Calculate amplitude at each frequency
-    signal      = squeeze(sweeps[:, chan], 2)
-    fftSweep    = 2 / sweepLen * fft(signal)
+    fftSweep    = 2 / sweepLen * fft(average_sweep)
     spectrum    = fftSweep[1:sweepLen / 2 + 1]
 
     # Compensate for filter response
@@ -308,9 +296,15 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number, chan::Int;
     snrDb = 10 * log10(snr)
 
     if verbose
+        println("Frequencies = [$(freq_of_interest), ",
+                               "$(freq_of_interest - side_freq), ",
+                               "$(freq_of_interest + side_freq)]")
+        println("Indicies    = [$(idx), ",
+                               "$(idx_Low), ",
+                               "$(idx_High)]")
+        println("Bins below = $(idx - idx_Low) and above = $(idx_High - idx)")
         #Approx correct compared to matlab. Slight differences
         println(" ")
-        println("Channel = $(chan)")
         println("Signal  = $(signal_power)")
         println("Noise   = $(noise_power)")
         println("SNR     = $(snr)")
