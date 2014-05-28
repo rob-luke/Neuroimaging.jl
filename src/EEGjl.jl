@@ -1,6 +1,9 @@
 module EEGjl
 
+# Functions
 export
+    read_EEG,
+    channelNames_biosemi_1020,
     proc_hp,
     remove_template,
     proc_reference,
@@ -17,11 +20,14 @@ export
     read_dat,
     plot_dat,
     read_sfp,
-    oplot,
-    channelNames_biosemi_1020,
-    read_EEG
+    oplot
 
+# Testing ground
+export
+    response,
+    plot_filter_response
 
+# Types
 export
     EEG,
     Electrodes,
@@ -33,5 +39,6 @@ include("processing.jl")
 include("convert.jl")
 include("biosemi.jl")
 include("eegtype.jl")
+include("signal_processing.jl")
 
 end
