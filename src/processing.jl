@@ -15,6 +15,7 @@
 using DataFrames
 using DSP
 using ProgressMeter
+using Distributions
 
 
 #######################################
@@ -285,14 +286,21 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
         end
     end
 
+    # Determine signal power
     signal_power = abs( spectrum[idx] )^2
 
+    # Determine noise power
     noise_bins_Low  = spectrum[idx_Low : idx-1]
-    noise_bins_High = spectrum[idx+1 : idx_High]
-    noise_bins = abs([noise_bins_Low[:], noise_bins_High[:]])
-    noise_power = sum(noise_bins .^2) / length(noise_bins)
+    noise_bins_High = spectrum[idx+1   : idx_High]
+    noise_bins      = abs([noise_bins_Low[:], noise_bins_High[:]])
+    noise_power     = sum(noise_bins .^2) / length(noise_bins)
 
-    snr = signal_power / noise_power
+    # Calculate statistic
+    continuous_distribution = FDist(2, 2*length(noise_bins))
+    statistic = ccdf(continuous_distribution, signal_power / noise_power)
+
+    # Return SNR
+    snr = (signal_power / noise_power)
     snrDb = 10 * log10(snr)
 
     if verbose
@@ -309,9 +317,10 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
         println("Noise   = $(noise_power)")
         println("SNR     = $(snr)")
         println("SNR dB  = $(snrDb)")
+        println("Statistic = $(statistic)")
     end
 
-    return snrDb, signal_power, noise_power
+    return snrDb, signal_power, noise_power, statistic
 end
 
 

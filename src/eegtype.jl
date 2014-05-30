@@ -104,6 +104,7 @@ function ftest(eeg::EEG, freq_of_interest::Number; verbose::Bool=false, side_fre
     snr_result = Array(Float64, (1,size(eeg.data)[end]))
     signal     = Array(Float64, (1,size(eeg.data)[end]))
     noise      = Array(Float64, (1,size(eeg.data)[end]))
+    statistic  = Array(Float64, (1,size(eeg.data)[end]))
 
     if verbose
         println("Calculating F statistic on $(size(eeg.data)[end]) channels")
@@ -122,11 +123,12 @@ function ftest(eeg::EEG, freq_of_interest::Number; verbose::Bool=false, side_fre
         if verbose; next!(p); end
     end
 
-    results = [ "SNRdB" => snr_result,
+    results = [ "SNRdB"        => snr_result,
                 "signal_power" => signal,
-                "noise_power" => noise,
-                "frequency" => freq_of_interest,
-                "bin" => side_freq]
+                "noise_power"  => noise,
+                "statistic"    => statistic,
+                "frequency"    => freq_of_interest,
+                "bins"         => side_freq]
 
     merge!(eeg.processing, [string("ftest-",freq_of_interest) => results])
 
