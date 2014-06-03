@@ -1,7 +1,7 @@
 using JBDF
 
 
-type EEG
+type ASSR
     data::Array
     labels::Array{String}
     triggers::Dict
@@ -17,25 +17,25 @@ function read_EEG(fname::String; verbose::Bool=false)
     bdfInfo = readBdfHeader(fname)
 
     # Place in type
-    eeg = EEG(dats', bdfInfo["chanLabels"], evtTab, bdfInfo, Dict())
+    eeg = ASSR(dats', bdfInfo["chanLabels"], evtTab, bdfInfo, Dict())
 
     # Tidy channel names if required
     if bdfInfo["chanLabels"][1] == "A1"
         if verbose
-            println("Converting EEG channel names")
+            println("Converting ASSR channel names")
         end
         eeg.labels = channelNames_biosemi_1020(eeg.labels)
     end
 
     if verbose
-        println("Imported $(size(eeg.data)[end]) EEG channels")
+        println("Imported $(size(eeg.data)[end]) ASSR channels")
     end
 
     return eeg
 end
 
 
-function proc_hp(eeg::EEG; cutOff::Number=2, order::Int=3, verbose::Bool=false)
+function proc_hp(eeg::ASSR; cutOff::Number=2, order::Int=3, verbose::Bool=false)
 
     eeg.data, f = proc_hp(eeg.data, cutOff=cutOff, order=order, fs=eeg.header["sampRate"][1], verbose=verbose)
 
@@ -64,7 +64,7 @@ function proc_hp(eeg::EEG; cutOff::Number=2, order::Int=3, verbose::Bool=false)
  end
 
 
-function proc_reference(eeg::EEG, refChan::String; verbose::Bool=false)
+function proc_reference(eeg::ASSR, refChan::String; verbose::Bool=false)
 
     eeg.data = proc_reference(eeg.data, refChan, eeg.labels, verbose=verbose)
 
@@ -74,7 +74,7 @@ function proc_reference(eeg::EEG, refChan::String; verbose::Bool=false)
 end
 
 
-function extract_epochs(eeg::EEG; verbose::Bool=false)
+function extract_epochs(eeg::ASSR; verbose::Bool=false)
 
     merge!(eeg.processing, ["epochs" => extract_epochs(eeg.data, eeg.triggers, verbose=verbose)])
 
@@ -84,7 +84,7 @@ function extract_epochs(eeg::EEG; verbose::Bool=false)
 end
 
 
-function create_sweeps(eeg::EEG; epochsPerSweep::Int=4, verbose::Bool=false)
+function create_sweeps(eeg::ASSR; epochsPerSweep::Int=4, verbose::Bool=false)
 
     merge!(eeg.processing, 
         ["sweeps" => create_sweeps(eeg.processing["epochs"], epochsPerSweep = epochsPerSweep, verbose = verbose)])
@@ -99,7 +99,7 @@ end
 #
 #######################################
 
-function ftest(eeg::EEG, freq_of_interest::Number; verbose::Bool=false, side_freq::Number=2)
+function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_freq::Number=2)
 
     snr_result = Array(Float64, (1,size(eeg.data)[end]))
     signal     = Array(Float64, (1,size(eeg.data)[end]))
@@ -145,7 +145,7 @@ end
 
 
 # Plot whole all data
-function plot_timeseries(eeg::EEG; titletext::String="")
+function plot_timeseries(eeg::ASSR; titletext::String="")
 
     p = plot_timeseries(eeg.data, eeg.header["sampRate"][1], titletext=titletext)
 
@@ -153,7 +153,7 @@ function plot_timeseries(eeg::EEG; titletext::String="")
 end
 
 # Plot a single channel
-function plot_timeseries(eeg::EEG, chanName::String; titletext::String="")
+function plot_timeseries(eeg::ASSR, chanName::String; titletext::String="")
 
     idx = findfirst(eeg.labels, chanName)
 
@@ -163,7 +163,7 @@ function plot_timeseries(eeg::EEG, chanName::String; titletext::String="")
 end
 
 
-function plot_spectrum(eeg::EEG, chan::Int; targetFreq::Number=0)
+function plot_spectrum(eeg::ASSR, chan::Int; targetFreq::Number=0)
 
     channel_name = eeg.labels[chan]
 
@@ -194,7 +194,7 @@ function plot_spectrum(eeg::EEG, chan::Int; targetFreq::Number=0)
     return p
 end
 
-function plot_spectrum(eeg::EEG, chan::String; targetFreq::Number=0)
+function plot_spectrum(eeg::ASSR, chan::String; targetFreq::Number=0)
 
     return plot_spectrum(eeg, findfirst(eeg.labels, chan), targetFreq=targetFreq)
 end

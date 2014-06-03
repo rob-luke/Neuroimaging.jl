@@ -3,19 +3,21 @@ using Winston           # For plotting filter response
 using Polynomial        # For the polyval function
 
 
+
 # Digital filter frequency response for frequency in radians per sample
-function response(zpk_filter::ZPKFilter, w::Number)
-
-    # Port of https://github.com/scipy/scipy/blob/v0.13.0/scipy/signal/filter_design.py#L153
-
-    tff = convert(TFFilter, zpk_filter)
-
-    a = tff.a
-    b = tff.b
+function response(tff::TFFilter, w::Number)
 
     zml = exp(-im * w)
+    h = polyval(tff.b, zml) / polyval(tff.a, zml)
 
-    h = polyval(b, zml) / polyval(a, zml)
+    return h, w
+
+end
+
+function response(zpk_filter::ZPKFilter, w::Number)
+
+    tff = convert(TFFilter, zpk_filter)
+    h, w = response(tff, w)
 
     return h, w
 end
@@ -24,7 +26,6 @@ end
 function response(zpk_filter::ZPKFilter, w::Array)
 
     h = Array(Complex, size(f))
-
     for i = 1:length(w)
         h[i], w[i] = response(zpk_filter, w[i])
     end

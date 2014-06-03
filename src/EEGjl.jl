@@ -29,7 +29,7 @@ export
 
 # Types
 export
-    EEG,
+    ASSR,
     Electrodes,
     Dipoles
 
@@ -38,7 +38,7 @@ include("plot.jl")
 include("processing.jl")
 include("convert.jl")
 include("biosemi.jl")
-include("eegtype.jl")
+include("ASSR_type.jl")
 include("signal_processing.jl")
 
 end
