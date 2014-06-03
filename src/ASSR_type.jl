@@ -16,19 +16,23 @@ function read_EEG(fname::String; verbose::Bool=false)
     dats, evtTab, trigChan, sysCodeChan = readBdf(fname)
     bdfInfo = readBdfHeader(fname)
 
+    if verbose
+        println("Imported $(size(dats)[1]) ASSR channels")
+    end
+
     # Place in type
     eeg = ASSR(dats', bdfInfo["chanLabels"], evtTab, bdfInfo, Dict())
 
     # Tidy channel names if required
     if bdfInfo["chanLabels"][1] == "A1"
         if verbose
-            println("Converting ASSR channel names")
+            println("  Converting names from BIOSEMI to 10-20")
         end
         eeg.labels = channelNames_biosemi_1020(eeg.labels)
     end
 
     if verbose
-        println("Imported $(size(eeg.data)[end]) ASSR channels")
+        println("")
     end
 
     return eeg
@@ -60,6 +64,10 @@ function proc_hp(eeg::ASSR; cutOff::Number=2, order::Int=3, verbose::Bool=false)
     eeg.triggers["dur"]  = eeg.triggers["dur"][to_keep]
     eeg.triggers["code"] = eeg.triggers["code"][to_keep]
 
+    if verbose
+        println("")
+    end
+
     return eeg
  end
 
@@ -70,6 +78,10 @@ function proc_reference(eeg::ASSR, refChan::String; verbose::Bool=false)
 
     #TODO: Record the reference channel somewhere
 
+    if verbose
+        println("")
+    end
+
     return eeg
 end
 
@@ -78,7 +90,9 @@ function extract_epochs(eeg::ASSR; verbose::Bool=false)
 
     merge!(eeg.processing, ["epochs" => extract_epochs(eeg.data, eeg.triggers, verbose=verbose)])
 
-    #=eeg.processing["epochs"] = eeg.processing["epochs"][:,3:end,:]=#
+    if verbose
+        println("")
+    end
 
     return eeg
 end
@@ -86,8 +100,12 @@ end
 
 function create_sweeps(eeg::ASSR; epochsPerSweep::Int=4, verbose::Bool=false)
 
-    merge!(eeg.processing, 
+    merge!(eeg.processing,
         ["sweeps" => create_sweeps(eeg.processing["epochs"], epochsPerSweep = epochsPerSweep, verbose = verbose)])
+
+    if verbose
+        println("")
+    end
 
     return eeg
 end
@@ -112,8 +130,8 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
     end
 
     for chan = 1:size(eeg.data)[end]
-    
-        snr_result[chan], signal[chan], noise[chan] = ftest(eeg.processing["sweeps"][:,:,chan],  
+
+        snr_result[chan], signal[chan], noise[chan] = ftest(eeg.processing["sweeps"][:,:,chan],
                                                             freq_of_interest,
                                                             eeg.header["sampRate"][1],
                                                             verbose     = false,
@@ -131,6 +149,10 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
                 "bins"         => side_freq]
 
     merge!(eeg.processing, [string("ftest-",freq_of_interest) => results])
+
+    if verbose
+        println("")
+    end
 
     return eeg
 end
@@ -210,7 +232,5 @@ end
 function _decode_processing_name(name::String)
 
     known_processes = ["filter, ftest, sweeps, epochs"]
-
-
 
 end

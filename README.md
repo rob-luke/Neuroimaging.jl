@@ -61,24 +61,29 @@ outputs...
 
 ```{julia}
 
-Converting EEG channel names
-Imported 64 EEG channels
+Imported 64 ASSR channels
+  Converting names from BIOSEMI to 10-20
+
 Highpass filtering 64 channels
   Pass band > 2 Hz
   Filtering... 100%|##################################################| Time: 0:00:15
+
 Re referencing 64 channels to channel average
 Re referencing 64 channels to the mean of 64 channels
-  Rerefing...  100%|##################################################| Time: 0:00:04
+  Rerefing...  100%|##################################################| Time: 0:00:03
+
 Generating epochs for 64 channels
   Epoch length is 8388
   Number of epochs is 290
   Epoching...  100%|##################################################| Time: 0:00:02
+
 Generating 9 sweeps
   From 290 epochs of length 8388
   Creating 9 sweeps of length 268416
-  Sweeps...    100%|##################################################| Time: 0:00:01
+  Sweeps...    100%|##################################################| Time: 0:00:03
+
 Calculating F statistic on 64 channels
-  F-test...    100%|##################################################| Time: 0:00:30
+  F-test...    100%|##################################################| Time: 0:01:23
 
 ```
 
