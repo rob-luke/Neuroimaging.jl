@@ -84,8 +84,8 @@ end
 
 # Pass in array of channels re reference to
 function proc_reference(signals::Array,
-                          refChan::Array{Int};
-                          verbose::Bool=false)
+                        refChan::Array{Int};
+                        verbose::Bool=false)
 
     if verbose
         if length(refChan) == 1
@@ -107,18 +107,20 @@ end
 
 # Pass in name of channels to re reference to
 function proc_reference(signals::Array,
-                          refChan::String,
-                          chanNames::Array{String};
-                          verbose::Bool=false)
+                        refChan::Union(String, Array{ASCIIString}),
+                        chanNames::Array{String};
+                        verbose::Bool=false)
 
     if verbose
-        println("Re referencing $(size(signals)[end]) channels to channel $refChan")
+        println("Re referencing $(size(signals)[end]) channels to channel $(append_strings(refChan))")
     end
 
     if refChan == "car" || refChan == "average"
         refChan = [1:size(signals)[end]]
-    else
+    elseif length(refChan) == 1
         refChan = findfirst(chanNames, refChan)
+    elseif length(refChan) > 1
+        refChan = [findfirst(chanNames, i) for i = refChan]
     end
 
     if refChan == 0; error("Requested channel is not in the provided list of channels"); end
@@ -253,7 +255,7 @@ end
 #######################################
 
 function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
-               verbose::Bool=false, side_freq::Number=2, used_filter::ZPKFilter=[])
+               verbose::Bool=false, side_freq::Number=2, used_filter=nothing)
 
     #TODO: Don't treat harmonic frequencies as noise
 
@@ -271,7 +273,7 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
     spectrum    = fftSweep[1:sweepLen / 2 + 1]
 
     # Compensate for filter response
-    try
+    if !(used_filter == nothing)
         h, f = response(used_filter, frequencies, fs)
 
         filter_compensation = Array(Float64, size(f))
@@ -280,7 +282,7 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
         end
 
         spectrum = spectrum ./ filter_compensation
-    catch
+    else
         if verbose
             println("Not incorporating filter response")
         end

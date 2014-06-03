@@ -33,6 +33,10 @@ export
     Electrodes,
     Dipoles
 
+# Helper functions
+export
+    append_strings
+
 include("read.jl")
 include("plot.jl")
 include("processing.jl")

@@ -7,6 +7,8 @@ type ASSR
     triggers::Dict
     header::Dict
     processing::Dict
+    modulation_frequency::Number
+    reference_channel::String
 end
 
 
@@ -21,7 +23,7 @@ function read_EEG(fname::String; verbose::Bool=false)
     end
 
     # Place in type
-    eeg = ASSR(dats', bdfInfo["chanLabels"], evtTab, bdfInfo, Dict())
+    eeg = ASSR(dats', bdfInfo["chanLabels"], evtTab, bdfInfo, Dict(), NaN, "Raw")
 
     # Tidy channel names if required
     if bdfInfo["chanLabels"][1] == "A1"
@@ -72,11 +74,15 @@ function proc_hp(eeg::ASSR; cutOff::Number=2, order::Int=3, verbose::Bool=false)
  end
 
 
-function proc_reference(eeg::ASSR, refChan::String; verbose::Bool=false)
+function proc_reference(eeg::ASSR, refChan; verbose::Bool=false)
 
     eeg.data = proc_reference(eeg.data, refChan, eeg.labels, verbose=verbose)
 
-    #TODO: Record the reference channel somewhere
+    if isa(refChan, Array)
+        refChan = append_strings(refChan)
+    end
+
+    eeg.reference_channel = refChan
 
     if verbose
         println("")
@@ -124,6 +130,15 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
     noise      = Array(Float64, (1,size(eeg.data)[end]))
     statistic  = Array(Float64, (1,size(eeg.data)[end]))
 
+    # Extract required information
+    fs = eeg.header["sampRate"][1]
+
+    if haskey(eeg.processing, "filter1")
+        used_filter = eeg.processing["filter1"]
+    else
+        used_filter = nothing
+    end
+
     if verbose
         println("Calculating F statistic on $(size(eeg.data)[end]) channels")
         p = Progress(size(eeg.data)[end], 1, "  F-test...    ", 50)
@@ -133,11 +148,10 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
 
         snr_result[chan], signal[chan], noise[chan] = ftest(eeg.processing["sweeps"][:,:,chan],
                                                             freq_of_interest,
-                                                            eeg.header["sampRate"][1],
+                                                            fs,
                                                             verbose     = false,
                                                             side_freq   = side_freq,
-                                                            used_filter = eeg.processing["filter1"])
-
+                                                            used_filter = used_filter)
         if verbose; next!(p); end
     end
 
@@ -233,4 +247,23 @@ function _decode_processing_name(name::String)
 
     known_processes = ["filter, ftest, sweeps, epochs"]
 
+end
+
+
+function append_strings(strings::Array{ASCIIString}; separator::String=" ")
+
+    newString = strings[1]
+    if length(strings) > 1
+        for n = 2:length(strings)
+            newString = string(newString, separator, strings[n])
+        end
+    end
+
+    return newString
+end
+
+
+function append_strings(strings::String; separator::String=" ")
+
+    return strings
 end
