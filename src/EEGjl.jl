@@ -25,7 +25,8 @@ export
 # Testing ground
 export
     response,
-    plot_filter_response
+    plot_filter_response,
+    import_headmodel
 
 # Types
 export
@@ -42,7 +43,8 @@ include("plot.jl")
 include("processing.jl")
 include("convert.jl")
 include("biosemi.jl")
-include("ASSR_type.jl")
 include("signal_processing.jl")
+include("type_ASSR.jl")
+include("type_Leadfield.jl")
 
 end
