@@ -61,7 +61,7 @@ s = ftest(s, 40.0391, verbose=true)
 outputs...
 
 
-```{julia}
+```
 
 Imported 64 ASSR channels
   Converting names from BIOSEMI to 10-20
