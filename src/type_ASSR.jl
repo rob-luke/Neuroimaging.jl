@@ -1,4 +1,5 @@
 using JBDF
+using DataFrames
 
 
 type ASSR
@@ -129,6 +130,9 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
     signal     = Array(Float64, (1,size(eeg.data)[end]))
     noise      = Array(Float64, (1,size(eeg.data)[end]))
     statistic  = Array(Float64, (1,size(eeg.data)[end]))
+    label      = Array(String,  (1,size(eeg.data)[end]))
+    frequency  = Array(Float64, (1,size(eeg.data)[end]))
+    bins       = Array(Float64, (1,size(eeg.data)[end]))
 
     # Extract required information
     fs = eeg.header["sampRate"][1]
@@ -152,6 +156,9 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
                                                             verbose     = false,
                                                             side_freq   = side_freq,
                                                             used_filter = used_filter)
+        label[chan] = eeg.labels[chan]
+        frequency[chan] = freq_of_interest
+        bins[chan] = side_freq #TODO: fix
         if verbose; next!(p); end
     end
 
@@ -159,8 +166,25 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
                 "signal_power" => signal,
                 "noise_power"  => noise,
                 "statistic"    => statistic,
-                "frequency"    => freq_of_interest,
-                "bins"         => side_freq]
+                "frequency"    => frequency,
+                "bins"         => bins,
+                "label"        => label]
+
+    snr_result = @data(vec(snr_result))
+    signal     = @data(vec(signal))
+    noise      = @data(vec(noise))
+    statistic  = @data(vec(statistic))
+    label      = @data(vec(label))
+    frequency  = @data(vec(frequency))
+    bins       = @data(vec(bins))
+
+    results = DataFrame( SNRdB = snr_result,
+                         signal_power = signal,
+                         noise_power  = noise,
+                         statistic = statistic,
+                         label = label,
+                         frequency = frequency,
+                         bins = bins)
 
     merge!(eeg.processing, [string("ftest-",freq_of_interest) => results])
 

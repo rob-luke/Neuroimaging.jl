@@ -20,7 +20,8 @@ export
     read_dat,
     plot_dat,
     read_sfp,
-    oplot
+    oplot,
+    save_results
 
 # Testing ground
 export
@@ -46,5 +47,6 @@ include("biosemi.jl")
 include("signal_processing.jl")
 include("type_ASSR.jl")
 include("type_Leadfield.jl")
+include("export.jl")
 
 end
