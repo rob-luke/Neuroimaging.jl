@@ -26,22 +26,24 @@ export
 # Testing ground
 export
     response,
-    plot_filter_response,
-    import_headmodel
+    plot_filter_response
+    #=import_headmodel=#
 
 # Types
 export
     ASSR,
     Electrodes,
-    Dipoles,
-    Coordinates,
-        SPM,
-        BrainVision,
-        Talairach
+    Dipoles
+    #=Coordinates,=#
+        #=SPM,=#
+        #=BrainVision,=#
+        #=Talairach=#
 
 # Helper functions
 export
-    append_strings
+    append_strings,
+    new_processing_key,
+    find_keys_containing
 
 include("read.jl")
 include("plot.jl")
@@ -50,9 +52,9 @@ include("convert.jl")
 include("biosemi.jl")
 include("signal_processing.jl")
 include("type_ASSR.jl")
-include("type_Leadfield.jl")
-include("export.jl")
-include("spatial_coordinates.jl")
+#=include("type_Leadfield.jl")=#
+include("helper.jl")
+#=include("spatial_coordinates.jl")=#
 
 
 end

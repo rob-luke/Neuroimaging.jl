@@ -10,6 +10,7 @@ type ASSR
     processing::Dict
     modulation_frequency::Number
     reference_channel::String
+    file_name::String
 end
 
 
@@ -24,7 +25,7 @@ function read_EEG(fname::String; verbose::Bool=false)
     end
 
     # Place in type
-    eeg = ASSR(dats', bdfInfo["chanLabels"], evtTab, bdfInfo, Dict(), NaN, "Raw")
+    eeg = ASSR(dats', bdfInfo["chanLabels"], evtTab, bdfInfo, Dict(), NaN, "Raw", fname)
 
     # Tidy channel names if required
     if bdfInfo["chanLabels"][1] == "A1"
@@ -48,14 +49,8 @@ function proc_hp(eeg::ASSR; cutOff::Number=2, order::Int=3, verbose::Bool=false)
 
     # Save the filter settings as a unique key in the processing dict
     # This allows for applying multiple filters and tracking them all
-    key_name = "filter"
-    key_numb = 1
-    key = string(key_name, key_numb)
-    while haskey(eeg.processing, key)
-        key_numb += 1
-        key = string(key_name, key_numb)
-    end
-    merge!(eeg.processing, [key => f])
+    key_name = new_processing_key(eeg.processing, "filter")
+    merge!(eeg.processing, [key_name => f])
 
     # Remove adaptation period
     t = 3   #TODO: pass in as an argument?
@@ -126,17 +121,13 @@ end
 
 function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_freq::Number=2)
 
-    snr_result = Array(Float64, (1,size(eeg.data)[end]))
-    signal     = Array(Float64, (1,size(eeg.data)[end]))
-    noise      = Array(Float64, (1,size(eeg.data)[end]))
-    statistic  = Array(Float64, (1,size(eeg.data)[end]))
-    label      = Array(String,  (1,size(eeg.data)[end]))
-    frequency  = Array(Float64, (1,size(eeg.data)[end]))
-    bins       = Array(Float64, (1,size(eeg.data)[end]))
+    result = DataFrame(Subject=[], Frequency=[], Electrode=[], SignalPower=[], NoisePower=[], SNR=[], SNRdB=[],
+                       Statistic=[], Significant=[], NoiseHz=[], Analysis=[])
 
     # Extract required information
     fs = eeg.header["sampRate"][1]
 
+    # TODO: Account for multiple applied filters
     if haskey(eeg.processing, "filter1")
         used_filter = eeg.processing["filter1"]
     else
@@ -144,49 +135,27 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
     end
 
     if verbose
-        println("Calculating F statistic on $(size(eeg.data)[end]) channels")
+        println("Calculating F statistic on $(size(eeg.data)[end]) channels at $freq_of_interest Hz")
         p = Progress(size(eeg.data)[end], 1, "  F-test...    ", 50)
     end
 
     for chan = 1:size(eeg.data)[end]
 
-        snr_result[chan], signal[chan], noise[chan] = ftest(eeg.processing["sweeps"][:,:,chan],
-                                                            freq_of_interest,
-                                                            fs,
-                                                            verbose     = false,
-                                                            side_freq   = side_freq,
-                                                            used_filter = used_filter)
-        label[chan] = eeg.labels[chan]
-        frequency[chan] = freq_of_interest
-        bins[chan] = side_freq #TODO: fix
+        snrDb, signal, noise, statistic = ftest(eeg.processing["sweeps"][:,:,chan], freq_of_interest, fs,
+                                                verbose = false, side_freq = side_freq, used_filter = used_filter)
+
+        new_result = DataFrame(Subject = "Unknown", Frequency = freq_of_interest, Electrode = eeg.labels[chan],
+                               SignalPower = signal, NoisePower = noise, SNR = 10^(snrDb/10), SNRdB = snrDb,
+                               Statistic = statistic, Significant = statistic<0.05, NoiseHz = side_freq,
+                               Analysis="ftest")
+
+        result = rbind(result, new_result)
+
         if verbose; next!(p); end
     end
 
-    results = [ "SNRdB"        => snr_result,
-                "signal_power" => signal,
-                "noise_power"  => noise,
-                "statistic"    => statistic,
-                "frequency"    => frequency,
-                "bins"         => bins,
-                "label"        => label]
-
-    snr_result = @data(vec(snr_result))
-    signal     = @data(vec(signal))
-    noise      = @data(vec(noise))
-    statistic  = @data(vec(statistic))
-    label      = @data(vec(label))
-    frequency  = @data(vec(frequency))
-    bins       = @data(vec(bins))
-
-    results = DataFrame( SNRdB = snr_result,
-                         signal_power = signal,
-                         noise_power  = noise,
-                         statistic = statistic,
-                         label = label,
-                         frequency = frequency,
-                         bins = bins)
-
-    merge!(eeg.processing, [string("ftest-",freq_of_interest) => results])
+    key_name = new_processing_key(eeg.processing, "ftest")
+    merge!(eeg.processing, [key_name => result])
 
     if verbose
         println("")
@@ -196,6 +165,28 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
 end
 
 
+function save_results(results::ASSR, fname::String; verbose::Bool=true)
+
+    # Rename to save space
+    results = results.processing
+
+    # Index of keys to be exported
+    result_idx = find_keys_containing(results, "ftest")
+
+    if length(result_idx) > 0
+
+        to_save = get(results, collect(keys(results))[result_idx[1]], 0)
+
+        if length(result_idx) > 1
+            for k = result_idx[2:end]
+                result_data = get(results, collect(keys(results))[k], 0)
+                to_save = rbind(to_save, result_data)
+            end
+        end
+
+    writetable(fname, to_save)
+    end
+end
 
 #######################################
 #
@@ -227,20 +218,22 @@ function plot_spectrum(eeg::ASSR, chan::Int; targetFreq::Number=0)
 
     channel_name = eeg.labels[chan]
 
-    # If F test has been run then report those values
-    if targetFreq != 0
-        try
-            result_snr = round(eeg.processing[string("ftest-", targetFreq)]["SNRdB"][chan], 2)
+    # Check through the processing to see if we have done a statistical test at target frequency
+    signal = nothing
+    result_idx = find_keys_containing(eeg.processing, "ftest")
+
+    for r = 1:length(result_idx)
+        result = get(eeg.processing, collect(keys(eeg.processing))[result_idx[r]], 0)
+        if result[:Frequency][1] == targetFreq
+
+            result_snr = result[:SNRdB][chan]
+            signal = result[:SignalPower][chan]
+            noise  = result[:NoisePower][chan]
             title  = "Channel $(channel_name). SNR = $(result_snr) dB"
-            noise  = eeg.processing[string("ftest-", targetFreq)]["noise_power"][chan]
-            signal = eeg.processing[string("ftest-", targetFreq)]["signal_power"][chan]
-        catch
-            println("!! Frequency you requested statistics for was not available. Did you calculate it?")
-            title  = "Channel $(channel_name)"
-            noise  = 0
-            signal = 0
         end
-    else # You didn't ask for a specific frequency to look at
+    end
+
+    if signal == nothing
         title  = "Channel $(channel_name)"
         noise  = 0
         signal = 0
@@ -259,35 +252,3 @@ function plot_spectrum(eeg::ASSR, chan::String; targetFreq::Number=0)
     return plot_spectrum(eeg, findfirst(eeg.labels, chan), targetFreq=targetFreq)
 end
 
-
-#######################################
-#
-# Helper functions
-#
-#######################################
-
-
-function _decode_processing_name(name::String)
-
-    known_processes = ["filter, ftest, sweeps, epochs"]
-
-end
-
-
-function append_strings(strings::Array{ASCIIString}; separator::String=" ")
-
-    newString = strings[1]
-    if length(strings) > 1
-        for n = 2:length(strings)
-            newString = string(newString, separator, strings[n])
-        end
-    end
-
-    return newString
-end
-
-
-function append_strings(strings::String; separator::String=" ")
-
-    return strings
-end
