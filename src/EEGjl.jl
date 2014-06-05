@@ -33,7 +33,11 @@ export
 export
     ASSR,
     Electrodes,
-    Dipoles
+    Dipoles,
+    Coordinates,
+        SPM,
+        BrainVision,
+        Talairach
 
 # Helper functions
 export
@@ -48,5 +52,7 @@ include("signal_processing.jl")
 include("type_ASSR.jl")
 include("type_Leadfield.jl")
 include("export.jl")
+include("spatial_coordinates.jl")
+
 
 end
