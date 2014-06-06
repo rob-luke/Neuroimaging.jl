@@ -10,6 +10,7 @@ type ASSR
     processing::Dict
     modulation_frequency::Number
     reference_channel::String
+    file_path::String
     file_name::String
 end
 
@@ -24,8 +25,10 @@ function read_EEG(fname::String; verbose::Bool=false)
         println("Imported $(size(dats)[1]) ASSR channels")
     end
 
+    filepath, filename, ext = fileparts(fname)
+
     # Place in type
-    eeg = ASSR(dats', bdfInfo["chanLabels"], evtTab, bdfInfo, Dict(), NaN, "Raw", fname)
+    eeg = ASSR(dats', bdfInfo["chanLabels"], evtTab, bdfInfo, Dict(), NaN, "Raw", filepath, filename)
 
     # Tidy channel names if required
     if bdfInfo["chanLabels"][1] == "A1"
@@ -165,7 +168,9 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
 end
 
 
-function save_results(results::ASSR, fname::String; verbose::Bool=true)
+function save_results(results::ASSR; name_extension::String="", verbose::Bool=true)
+
+    file_name = string(results.file_name, name_extension, ".csv")
 
     # Rename to save space
     results = results.processing
@@ -184,7 +189,7 @@ function save_results(results::ASSR, fname::String; verbose::Bool=true)
             end
         end
 
-    writetable(fname, to_save)
+    writetable(file_name, to_save)
     end
 end
 
