@@ -43,7 +43,8 @@ export
 export
     append_strings,
     new_processing_key,
-    find_keys_containing
+    find_keys_containing,
+    fileparts
 
 include("read.jl")
 include("plot.jl")

@@ -47,3 +47,18 @@ function find_keys_containing(d, partial_key::String)
     valid_keys = [beginswith(i, partial_key) for i = collect(keys(d))]
     findin(valid_keys, true)
 end
+
+
+function fileparts(fname::String)
+
+    separators = sort(unique([search(fname, '/', i) for i = 1:length(fname)]))
+    pathname = fname[1:last(separators)]
+
+    extension  = last(sort(unique([search(fname, '.', i) for i = 1:length(fname)])))
+
+    filename = fname[last(separators)+1:extension-1]
+
+    extension  = fname[extension+1:end]
+
+    return pathname, filename, extension
+end
