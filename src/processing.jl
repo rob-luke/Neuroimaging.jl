@@ -111,21 +111,22 @@ function proc_reference(signals::Array,
                         chanNames::Array{String};
                         verbose::Bool=false)
 
-    if verbose
-        println("Re referencing $(size(signals)[end]) channels to channel $(append_strings(refChan))")
-    end
 
     if refChan == "car" || refChan == "average"
-        refChan = [1:size(signals)[end]]
-    elseif length(refChan) == 1
-        refChan = findfirst(chanNames, refChan)
-    elseif length(refChan) > 1
-        refChan = [findfirst(chanNames, i) for i = refChan]
+        refChan_Idx = [1:size(signals)[end]]
+    elseif isa(refChan, String)
+        refChan_Idx = findfirst(chanNames, refChan)
+    elseif (isa(refChan, Array))
+        refChan_Idx = [findfirst(chanNames, i) for i = refChan]
+    end
+
+    if verbose
+        println("Re referencing $(size(signals)[end]) channels to channel $(append_strings(chanNames[refChan_Idx])) = $refChan_Idx ")
     end
 
     if refChan == 0; error("Requested channel is not in the provided list of channels"); end
 
-    return proc_reference(signals, refChan, verbose=verbose)
+    return proc_reference(signals, refChan_Idx, verbose=verbose)
 end
 
 
