@@ -146,7 +146,7 @@ function extract_epochs(dats::Array, evtTab::Dict; verbose::Bool=false)
     numEpochs = size(epochIndex)[1] - 1
     lenEpochs = minimum(diff(epochIndex[:Index]))
     numChans  = size(dats)[end]
-    epochs = zeros(Float64, (lenEpochs, numEpochs, numChans))
+    epochs = zeros(Float64, (int(lenEpochs), int(numEpochs), int(numChans)))
 
     if verbose
         println("Generating epochs for $(numChans) channels")
