@@ -1,8 +1,8 @@
-module EEGjl
+module EEG
 
 # Functions
 export
-    read_EEG,
+    read_ASSR,
     channelNames_biosemi_1020,
     proc_hp,
     remove_template,

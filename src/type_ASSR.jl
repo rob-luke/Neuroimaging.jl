@@ -15,7 +15,7 @@ type ASSR
 end
 
 
-function read_EEG(fname::String; verbose::Bool=false)
+function read_ASSR(fname::String; verbose::Bool=false)
 
     # Import using JBDF
     dats, evtTab, trigChan, sysCodeChan = readBdf(fname)
