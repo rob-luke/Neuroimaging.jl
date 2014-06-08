@@ -26,7 +26,8 @@ export
 # Testing ground
 export
     response,
-    plot_filter_response
+    plot_filter_response,
+    remove_channel!
     #=import_headmodel=#
 
 # Types

@@ -21,14 +21,15 @@ function read_ASSR(fname::String; verbose::Bool=false)
     dats, evtTab, trigChan, sysCodeChan = readBdf(fname)
     bdfInfo = readBdfHeader(fname)
 
-    if verbose
-        println("Imported $(size(dats)[1]) ASSR channels")
-    end
-
     filepath, filename, ext = fileparts(fname)
 
     # Place in type
     eeg = ASSR(dats', bdfInfo["chanLabels"], evtTab, bdfInfo, Dict(), NaN, "Raw", filepath, filename)
+
+    if verbose
+        println("Imported $(size(dats)[1]) ASSR channels")
+        println("  Info: $(eeg.header["subjID"]), $(eeg.header["startDate"]), $(eeg.header["startTime"])")
+    end
 
     # Tidy channel names if required
     if bdfInfo["chanLabels"][1] == "A1"
@@ -40,6 +41,72 @@ function read_ASSR(fname::String; verbose::Bool=false)
 
     if verbose
         println("")
+    end
+
+    return eeg
+end
+
+
+function remove_channel!(eeg::ASSR, channel_idx::Int; verbose::Bool=false)
+
+    if verbose
+        println("Removing channel $channel_idx")
+    end
+
+    keep_idx = [1:size(eeg.data)[end]]
+    splice!(keep_idx, channel_idx)
+
+    eeg.data = eeg.data[:, keep_idx]
+
+    eeg.labels = eeg.labels[keep_idx]
+
+    # Remove header info that is for each channel
+    eeg.header["sampRate"]    = eeg.header["sampRate"][keep_idx]
+    eeg.header["physMin"]     = eeg.header["physMin"][keep_idx]
+    eeg.header["nSampRec"]    = eeg.header["nSampRec"][keep_idx]
+    eeg.header["prefilt"]     = eeg.header["prefilt"][keep_idx]
+    eeg.header["reserved"]    = eeg.header["reserved"][keep_idx]
+    eeg.header["chanLabels"]  = eeg.header["chanLabels"][keep_idx]
+    eeg.header["physMax"]     = eeg.header["physMax"][keep_idx]
+    eeg.header["transducer"]  = eeg.header["transducer"][keep_idx]
+    eeg.header["physDim"]     = eeg.header["physDim"][keep_idx]
+    eeg.header["digMax"]      = eeg.header["digMax"][keep_idx]
+    eeg.header["digMin"]      = eeg.header["digMin"][keep_idx]
+    eeg.header["scaleFactor"] = eeg.header["scaleFactor"][keep_idx]
+
+    return eeg
+end
+
+function remove_channel!(eeg::ASSR, channel_idxs::AbstractVector; verbose::Bool=false)
+
+    if verbose
+        println("Removing channels $channel_idxs")
+    end
+
+    for channel = channel_idxs
+        eeg = remove_channel!(eeg, channel, verbose=verbose)
+    end
+
+    return eeg
+end
+
+function remove_channel!(eeg::ASSR, channel_name::String; verbose::Bool=false)
+
+    if verbose
+        println("Removing channel $channel_name")
+    end
+
+    remove_channel!(eeg, findfirst(eeg.labels, channel_name), verbose=verbose)
+end
+
+function remove_channel!(eeg::ASSR, channel_names::Array{ASCIIString}; verbose::Bool=false)
+
+    if verbose
+        println("Removing channels $(append_strings(channel_names))")
+    end
+
+    for channel = channel_names
+        eeg = remove_channel!(eeg, channel, verbose=verbose)
     end
 
     return eeg
