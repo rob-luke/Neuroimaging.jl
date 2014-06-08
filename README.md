@@ -2,6 +2,7 @@
 
 Process EEG files in Julia.  
 **This package is not ready for distribution yet.**
+Pkg.clone("git://github.com/codles/EEG.jl.git")
 
 This package includes low level processing functions (filtering, referencing, statistics etc).  
 It also includes a type for each type of EEG recording (ASSR, ABR etc) and wrapper functions to process these files using the lower level functions.
