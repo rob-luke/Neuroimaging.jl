@@ -4,7 +4,6 @@ using DataFrames
 
 type ASSR
     data::Array
-    labels::Array{String}
     triggers::Dict
     header::Dict
     processing::Dict
@@ -24,7 +23,7 @@ function read_ASSR(fname::String; verbose::Bool=false)
     filepath, filename, ext = fileparts(fname)
 
     # Place in type
-    eeg = ASSR(dats', bdfInfo["chanLabels"], evtTab, bdfInfo, Dict(), NaN, "Raw", filepath, filename)
+    eeg = ASSR(dats', evtTab, bdfInfo, Dict(), NaN, "Raw", filepath, filename)
 
     if verbose
         println("Imported $(size(dats)[1]) ASSR channels")
@@ -36,12 +35,42 @@ function read_ASSR(fname::String; verbose::Bool=false)
         if verbose
             println("  Converting names from BIOSEMI to 10-20")
         end
-        eeg.labels = channelNames_biosemi_1020(eeg.labels)
+        eeg.header["chanLabels"] = channelNames_biosemi_1020(eeg.header["chanLabels"])
     end
 
     if verbose
         println("")
     end
+
+    return eeg
+end
+
+
+function add_channel(eeg::ASSR, data::Array, chanLabels::ASCIIString; verbose::Bool=false,
+                     sampRate::Int=0,        physMin::Int=0,          physMax::Int=0,
+                     digMax::Int=0,          digMin::Int=0,           nSampRec::Int=0,
+                     prefilt::String="",     reserved::String="",     physDim::String="",
+                     transducer::String="")
+
+    if verbose
+        println("Adding channel $name")
+    end
+
+    eeg.data = hcat(eeg.data, data)
+
+    push!(eeg.header["sampRate"], sampRate == 0 ? eeg.header["sampRate"][1] : sampRate)
+    push!(eeg.header["physMin"],  physMin  == 0 ? eeg.header["physMin"][1]  : physMin)
+    push!(eeg.header["physMax"],  physMax  == 0 ? eeg.header["physMax"][1]  : physMax)
+    push!(eeg.header["digMax"],   digMax   == 0 ? eeg.header["digMax"][1]   : digMax)
+    push!(eeg.header["digMin"],   digMin   == 0 ? eeg.header["digMin"][1]   : digMin)
+    push!(eeg.header["nSampRec"], nSampRec == 0 ? eeg.header["nSampRec"][1] : nSampRec)
+
+    push!(eeg.header["prefilt"],    prefilt    == "" ? eeg.header["prefilt"][1]    : prefilt)
+    push!(eeg.header["reserved"],   reserved   == "" ? eeg.header["reserved"][1]   : reserved)
+    push!(eeg.header["chanLabels"], chanLabels == "" ? eeg.header["chanLabels"][1] : chanLabels)
+    push!(eeg.header["transducer"], transducer == "" ? eeg.header["transducer"][1] : transducer)
+    push!(eeg.header["physDim"],    physDim    == "" ? eeg.header["physDim"][1]    : physDim)
+
 
     return eeg
 end
@@ -58,16 +87,15 @@ function remove_channel!(eeg::ASSR, channel_idx::Int; verbose::Bool=false)
 
     eeg.data = eeg.data[:, keep_idx]
 
-    eeg.labels = eeg.labels[keep_idx]
-
     # Remove header info that is for each channel
+    # TODO: Put in loop
     eeg.header["sampRate"]    = eeg.header["sampRate"][keep_idx]
     eeg.header["physMin"]     = eeg.header["physMin"][keep_idx]
+    eeg.header["physMax"]     = eeg.header["physMax"][keep_idx]
     eeg.header["nSampRec"]    = eeg.header["nSampRec"][keep_idx]
     eeg.header["prefilt"]     = eeg.header["prefilt"][keep_idx]
     eeg.header["reserved"]    = eeg.header["reserved"][keep_idx]
     eeg.header["chanLabels"]  = eeg.header["chanLabels"][keep_idx]
-    eeg.header["physMax"]     = eeg.header["physMax"][keep_idx]
     eeg.header["transducer"]  = eeg.header["transducer"][keep_idx]
     eeg.header["physDim"]     = eeg.header["physDim"][keep_idx]
     eeg.header["digMax"]      = eeg.header["digMax"][keep_idx]
@@ -81,10 +109,15 @@ function remove_channel!(eeg::ASSR, channel_idxs::AbstractVector; verbose::Bool=
 
     if verbose
         println("Removing channels $channel_idxs")
+        p = Progress(size(channel_idxs)[end], 1, "  Removing... ", 50)
     end
 
+    # Remove channels with highest index first so other indicies arent altered
+    channel_idxs = sort([channel_idxs], rev=true)
+
     for channel = channel_idxs
-        eeg = remove_channel!(eeg, channel, verbose=verbose)
+        eeg = remove_channel!(eeg, channel, verbose=false)
+        if verbose; next!(p); end
     end
 
     return eeg
@@ -96,21 +129,27 @@ function remove_channel!(eeg::ASSR, channel_name::String; verbose::Bool=false)
         println("Removing channel $channel_name")
     end
 
-    remove_channel!(eeg, findfirst(eeg.labels, channel_name), verbose=verbose)
+    remove_channel!(eeg, findfirst(eeg.header["chanLabels"], channel_name), verbose=verbose)
 end
 
 function remove_channel!(eeg::ASSR, channel_names::Array{ASCIIString}; verbose::Bool=false)
 
     if verbose
         println("Removing channels $(append_strings(channel_names))")
+        p = Progress(size(channel_names)[end], 1, "  Removing... ", 50)
     end
 
     for channel = channel_names
-        eeg = remove_channel!(eeg, channel, verbose=verbose)
+        eeg = remove_channel!(eeg, channel, verbose=false)
+        if verbose; next!(p); end
     end
 
     return eeg
 end
+
+
+
+
 
 
 function proc_hp(eeg::ASSR; cutOff::Number=2, order::Int=3, verbose::Bool=false)
@@ -142,7 +181,7 @@ function proc_hp(eeg::ASSR; cutOff::Number=2, order::Int=3, verbose::Bool=false)
 
 function proc_reference(eeg::ASSR, refChan; verbose::Bool=false)
 
-    eeg.data = proc_reference(eeg.data, refChan, eeg.labels, verbose=verbose)
+    eeg.data = proc_reference(eeg.data, refChan, eeg.header["chanLabels"], verbose=verbose)
 
     if isa(refChan, Array)
         refChan = append_strings(refChan)
@@ -214,7 +253,7 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
         snrDb, signal, noise, statistic = ftest(eeg.processing["sweeps"][:,:,chan], freq_of_interest, fs,
                                                 verbose = false, side_freq = side_freq, used_filter = used_filter)
 
-        new_result = DataFrame(Subject = "Unknown", Frequency = freq_of_interest, Electrode = eeg.labels[chan],
+        new_result = DataFrame(Subject = "Unknown", Frequency = freq_of_interest, Electrode = eeg.header["chanLabels"][chan],
                                SignalPower = signal, NoisePower = noise, SNR = 10^(snrDb/10), SNRdB = snrDb,
                                Statistic = statistic, Significant = statistic<0.05, NoiseHz = side_freq,
                                Analysis="ftest")
@@ -278,7 +317,7 @@ end
 # Plot a single channel
 function plot_timeseries(eeg::ASSR, chanName::String; titletext::String="")
 
-    idx = findfirst(eeg.labels, chanName)
+    idx = findfirst(eeg.header["chanLabels"], chanName)
 
     p = plot_timeseries(vec(eeg.data[:, idx]), eeg.header["sampRate"][1], titletext=titletext)
 
@@ -288,7 +327,7 @@ end
 
 function plot_spectrum(eeg::ASSR, chan::Int; targetFreq::Number=0)
 
-    channel_name = eeg.labels[chan]
+    channel_name = eeg.header["chanLabels"][chan]
 
     # Check through the processing to see if we have done a statistical test at target frequency
     signal = nothing
@@ -321,6 +360,6 @@ end
 
 function plot_spectrum(eeg::ASSR, chan::String; targetFreq::Number=0)
 
-    return plot_spectrum(eeg, findfirst(eeg.labels, chan), targetFreq=targetFreq)
+    return plot_spectrum(eeg, findfirst(eeg.header["chanLabels"], chan), targetFreq=targetFreq)
 end
 

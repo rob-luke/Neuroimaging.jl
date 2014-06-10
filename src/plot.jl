@@ -157,7 +157,7 @@ function plot_timeseries(signals::Array,
     time_plot = FramedPlot(title = titletext,
                            xlabel = "Time (s)",
                            ylabel = "Channels",
-                           yrange = (0, 65))
+                           yrange = (0, size(signals)[end]+1))
 
     for chan in 1:size(signals)[end]
         # Variance is set to 1, each channel is offset but 1 from the previous

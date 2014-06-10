@@ -27,7 +27,8 @@ export
 export
     response,
     plot_filter_response,
-    remove_channel!
+    remove_channel!,
+    add_channel
     #=import_headmodel=#
 
 # Types
