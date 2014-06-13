@@ -49,8 +49,8 @@ export
     #=plot_spectrum,=#
     #=plot_timeseries,=#
     #=oplot_dipoles=#
-#=include("signal_processing.jl")=#
 #=include("plot.jl")=#
+include("signal_processing.jl")
 
 include("read.jl")
 include("processing.jl")

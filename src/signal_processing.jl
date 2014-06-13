@@ -1,5 +1,4 @@
 using DSP               # For filter types and conversion
-using Winston           # For plotting filter response
 using Polynomial        # For the polyval function
 
 

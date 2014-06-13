@@ -47,7 +47,7 @@ function read_ASSR(fname::Union(String, IO); verbose::Bool=false)
 
     if verbose
         println("  Imported $(size(dats)[1]) ASSR channels")
-        println("  Info: $(eeg.header["subjID"]), $(eeg.header["startDate"]), $(eeg.header["startTime"])")
+        println("  Info: $(eeg.modulation_frequency)Hz, $(eeg.header["subjID"]), $(eeg.header["startDate"]), $(eeg.header["startTime"])")
     end
 
     # Tidy channel names if required
