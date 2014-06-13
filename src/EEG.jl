@@ -11,16 +11,11 @@ export
     create_sweeps,
     proc_epoch_rejection,
     ftest,
-    plot_spectrum,
-    plot_timeseries,
-    oplot_dipoles,
     read_bsa,
     conv_bv2tal,
     conv_spm_mni2tal,
     read_dat,
-    plot_dat,
     read_sfp,
-    oplot,
     save_results
 
 # Testing ground
@@ -48,15 +43,22 @@ export
     find_keys_containing,
     fileparts
 
+# requires Winston
+#=export=#
+    #=oplot,=#
+    #=plot_spectrum,=#
+    #=plot_timeseries,=#
+    #=oplot_dipoles=#
+#=include("signal_processing.jl")=#
+#=include("plot.jl")=#
+
 include("read.jl")
-include("plot.jl")
 include("processing.jl")
 include("convert.jl")
 include("biosemi.jl")
-include("signal_processing.jl")
 include("type_ASSR.jl")
-#=include("type_Leadfield.jl")=#
 include("helper.jl")
+#=include("type_Leadfield.jl")=#
 #=include("spatial_coordinates.jl")=#
 
 
