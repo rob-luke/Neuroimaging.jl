@@ -1,5 +1,6 @@
 using JBDF
 using DataFrames
+using MAT
 
 
 type ASSR
@@ -8,13 +9,18 @@ type ASSR
     header::Dict
     processing::Dict
     modulation_frequency::Number
+    amplitude::Number
     reference_channel::String
     file_path::String
     file_name::String
 end
 
 
-function read_ASSR(fname::String; verbose::Bool=false)
+function read_ASSR(fname::Union(String, IO); verbose::Bool=false)
+
+    if verbose
+        println("Importing file $fname")
+    end
 
     # Import using JBDF
     dats, evtTab, trigChan, sysCodeChan = readBdf(fname)
@@ -22,11 +28,25 @@ function read_ASSR(fname::String; verbose::Bool=false)
 
     filepath, filename, ext = fileparts(fname)
 
+    # Check if matching mat file exists
+    mat_path = string(filepath, filename, ".mat")
+    if isreadable(mat_path)
+        rba = matread(mat_path)
+        modulation_frequency = rba["properties"]["stimulation_properties"]["stimulus_1"]["rounded_modulation_frequency"]
+        amplitude = rba["properties"]["stimulation_properties"]["stimulus_1"]["amplitude"]
+        if verbose
+            println("  Imported matching .mat file")
+        end
+    else
+        modulation_frequency = nothing
+        amplitude = nothing
+    end
+
     # Place in type
-    eeg = ASSR(dats', evtTab, bdfInfo, Dict(), NaN, "Raw", filepath, filename)
+    eeg = ASSR(dats', evtTab, bdfInfo, Dict(), modulation_frequency, amplitude, "Raw", filepath, filename)
 
     if verbose
-        println("Imported $(size(dats)[1]) ASSR channels")
+        println("  Imported $(size(dats)[1]) ASSR channels")
         println("  Info: $(eeg.header["subjID"]), $(eeg.header["startDate"]), $(eeg.header["startTime"])")
     end
 
@@ -228,10 +248,19 @@ end
 #
 #######################################
 
+function ftest(eeg::ASSR; verbose::Bool=false, side_freq::Number=2)
+
+    eeg = ftest(eeg, eeg.modulation_frequency-1, verbose=verbose, side_freq=side_freq)
+    eeg = ftest(eeg, eeg.modulation_frequency,   verbose=verbose, side_freq=side_freq)
+    eeg = ftest(eeg, eeg.modulation_frequency+1, verbose=verbose, side_freq=side_freq)
+
+end
+
 function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_freq::Number=2)
 
     result = DataFrame(Subject=[], Frequency=[], Electrode=[], SignalPower=[], NoisePower=[], SNR=[], SNRdB=[],
-                       Statistic=[], Significant=[], NoiseHz=[], Analysis=[])
+                       Statistic=[], Significant=[], NoiseHz=[], Analysis=[], ModulationFrequency=[],
+                       PresentationAmplitude=[])
 
     # Extract required information
     fs = eeg.header["sampRate"][1]
@@ -256,7 +285,8 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
         new_result = DataFrame(Subject = "Unknown", Frequency = freq_of_interest, Electrode = eeg.header["chanLabels"][chan],
                                SignalPower = signal, NoisePower = noise, SNR = 10^(snrDb/10), SNRdB = snrDb,
                                Statistic = statistic, Significant = statistic<0.05, NoiseHz = side_freq,
-                               Analysis="ftest")
+                               Analysis="ftest", ModulationFrequency = eeg.modulation_frequency,
+                               PresentationAmplitude = eeg.amplitude)
 
         result = rbind(result, new_result)
 
@@ -274,12 +304,12 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
 end
 
 
-function save_results(results::ASSR; name_extension::String="", verbose::Bool=true)
+function save_results(eeg::ASSR; name_extension::String="", verbose::Bool=true)
 
-    file_name = string(results.file_name, name_extension, ".csv")
+    file_name = string(eeg.file_name, name_extension, ".csv")
 
     # Rename to save space
-    results = results.processing
+    results = eeg.processing
 
     # Index of keys to be exported
     result_idx = find_keys_containing(results, "ftest")
@@ -297,6 +327,12 @@ function save_results(results::ASSR; name_extension::String="", verbose::Bool=tr
 
     writetable(file_name, to_save)
     end
+
+    if verbose
+        println("File saved to $file_name")
+    end
+
+    return eeg
 end
 
 #######################################
