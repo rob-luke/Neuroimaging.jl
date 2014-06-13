@@ -38,12 +38,14 @@ function read_ASSR(fname::Union(String, IO); verbose::Bool=false)
             println("  Imported matching .mat file")
         end
     else
-        modulation_frequency = nothing
-        amplitude = nothing
+        modulation_frequency = NaN
+        amplitude = NaN
     end
 
     # Place in type
     eeg = ASSR(dats', evtTab, bdfInfo, Dict(), modulation_frequency, amplitude, "Raw", filepath, filename)
+
+    remove_channel!(eeg, "Status", verbose=true)
 
     if verbose
         println("  Imported $(size(dats)[1]) ASSR channels")
@@ -103,7 +105,9 @@ function remove_channel!(eeg::ASSR, channel_idx::Int; verbose::Bool=false)
     end
 
     keep_idx = [1:size(eeg.data)[end]]
-    splice!(keep_idx, channel_idx)
+    try
+        splice!(keep_idx, channel_idx)
+    end
 
     eeg.data = eeg.data[:, keep_idx]
 
@@ -121,6 +125,7 @@ function remove_channel!(eeg::ASSR, channel_idx::Int; verbose::Bool=false)
     eeg.header["digMax"]      = eeg.header["digMax"][keep_idx]
     eeg.header["digMin"]      = eeg.header["digMin"][keep_idx]
     eeg.header["scaleFactor"] = eeg.header["scaleFactor"][keep_idx]
+
 
     return eeg
 end
