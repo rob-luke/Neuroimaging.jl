@@ -69,23 +69,24 @@ end
 
 
 function add_channel(eeg::ASSR, data::Array, chanLabels::ASCIIString; verbose::Bool=false,
-                     sampRate::Int=0,        physMin::Int=0,          physMax::Int=0,
+                     sampRate::Int=0,        physMin::Int=0,          physMax::Int=0, scaleFactor::Int=0,
                      digMax::Int=0,          digMin::Int=0,           nSampRec::Int=0,
                      prefilt::String="",     reserved::String="",     physDim::String="",
                      transducer::String="")
 
     if verbose
-        println("Adding channel $name")
+        println("Adding channel $chanLabels")
     end
 
     eeg.data = hcat(eeg.data, data)
 
-    push!(eeg.header["sampRate"], sampRate == 0 ? eeg.header["sampRate"][1] : sampRate)
-    push!(eeg.header["physMin"],  physMin  == 0 ? eeg.header["physMin"][1]  : physMin)
-    push!(eeg.header["physMax"],  physMax  == 0 ? eeg.header["physMax"][1]  : physMax)
-    push!(eeg.header["digMax"],   digMax   == 0 ? eeg.header["digMax"][1]   : digMax)
-    push!(eeg.header["digMin"],   digMin   == 0 ? eeg.header["digMin"][1]   : digMin)
-    push!(eeg.header["nSampRec"], nSampRec == 0 ? eeg.header["nSampRec"][1] : nSampRec)
+    push!(eeg.header["sampRate"],    sampRate    == 0 ? eeg.header["sampRate"][1]    : sampRate)
+    push!(eeg.header["physMin"],     physMin     == 0 ? eeg.header["physMin"][1]     : physMin)
+    push!(eeg.header["physMax"],     physMax     == 0 ? eeg.header["physMax"][1]     : physMax)
+    push!(eeg.header["digMax"],      digMax      == 0 ? eeg.header["digMax"][1]      : digMax)
+    push!(eeg.header["digMin"],      digMin      == 0 ? eeg.header["digMin"][1]      : digMin)
+    push!(eeg.header["nSampRec"],    nSampRec    == 0 ? eeg.header["nSampRec"][1]    : nSampRec)
+    push!(eeg.header["scaleFactor"], scaleFactor == 0 ? eeg.header["scaleFactor"][1] : scaleFactor)
 
     push!(eeg.header["prefilt"],    prefilt    == "" ? eeg.header["prefilt"][1]    : prefilt)
     push!(eeg.header["reserved"],   reserved   == "" ? eeg.header["reserved"][1]   : reserved)
@@ -173,6 +174,19 @@ function remove_channel!(eeg::ASSR, channel_names::Array{ASCIIString}; verbose::
 end
 
 
+function merge_channels(eeg::ASSR, merge_Chans::Array{ASCIIString}, new_name::String; verbose::Bool=false)
+
+    keep_idxs = [findfirst(eeg.header["chanLabels"], i) for i = merge_Chans]
+    keep_idxs = int(keep_idxs)
+
+    if verbose
+        println("Merging channels $(append_strings(vec(eeg.header["chanLabels"][keep_idxs,:])))")
+        println("Merging channels $(keep_idxs)")
+    end
+
+    eeg = add_channel(eeg, mean(eeg.data[:,keep_idxs], 2), new_name, verbose=verbose)
+    
+end
 
 
 

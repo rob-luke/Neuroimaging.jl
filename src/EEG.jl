@@ -16,7 +16,8 @@ export
     conv_spm_mni2tal,
     read_dat,
     read_sfp,
-    save_results
+    save_results,
+    merge_channels
 
 # Testing ground
 export

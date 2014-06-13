@@ -5,7 +5,7 @@
 #######################################
 
 
-function append_strings(strings::Array{ASCIIString}; separator::String=" ")
+function append_strings(strings::Union(Array{String}, Array{ASCIIString}); separator::String=" ")
 
     newString = strings[1]
     if length(strings) > 1
