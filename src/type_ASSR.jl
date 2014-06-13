@@ -253,6 +253,9 @@ function ftest(eeg::ASSR; verbose::Bool=false, side_freq::Number=2)
     eeg = ftest(eeg, eeg.modulation_frequency-1, verbose=verbose, side_freq=side_freq)
     eeg = ftest(eeg, eeg.modulation_frequency,   verbose=verbose, side_freq=side_freq)
     eeg = ftest(eeg, eeg.modulation_frequency+1, verbose=verbose, side_freq=side_freq)
+    eeg = ftest(eeg, eeg.modulation_frequency*2, verbose=verbose, side_freq=side_freq)
+    eeg = ftest(eeg, eeg.modulation_frequency*3, verbose=verbose, side_freq=side_freq)
+    eeg = ftest(eeg, eeg.modulation_frequency*4, verbose=verbose, side_freq=side_freq)
 
 end
 
