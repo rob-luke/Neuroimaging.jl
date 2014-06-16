@@ -23,10 +23,11 @@ function read_ASSR(fname::Union(String, IO); verbose::Bool=false)
     end
 
     # Import using JBDF
+    fname2 = copy(fname)
     dats, evtTab, trigChan, sysCodeChan = readBdf(fname)
-    bdfInfo = readBdfHeader(fname)
+    bdfInfo = readBdfHeader(fname2)
 
-    filepath, filename, ext = fileparts(fname)
+    filepath, filename, ext = fileparts(bdfInfo["fileName"])
 
     # Check if matching mat file exists
     mat_path = string(filepath, filename, ".mat")
