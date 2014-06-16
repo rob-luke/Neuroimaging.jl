@@ -429,3 +429,19 @@ function plot_spectrum(eeg::ASSR, chan::String; targetFreq::Number=0)
     return plot_spectrum(eeg, findfirst(eeg.header["chanLabels"], chan), targetFreq=targetFreq)
 end
 
+
+#######################################
+#
+# Helper functions
+#
+#######################################
+
+
+function assr_frequency(rounded_freq::Number; stimulation_sample_rate::Number=32000,
+                        stimulation_frames_per_epoch::Number=32768)
+
+    round(rounded_freq/(stimulation_sample_rate / stimulation_frames_per_epoch)) *
+                                                                stimulation_sample_rate / stimulation_frames_per_epoch
+end
+
+
