@@ -51,6 +51,12 @@ end
 
 function fileparts(fname::String)
 
+    if fname==""
+        pathname = ""
+        filename = ""
+        extension = ""
+    else
+
     separators = sort(unique([search(fname, '/', i) for i = 1:length(fname)]))
     pathname = fname[1:last(separators)]
 
@@ -59,6 +65,7 @@ function fileparts(fname::String)
     filename = fname[last(separators)+1:extension-1]
 
     extension  = fname[extension+1:end]
+end
 
     return pathname, filename, extension
 end
