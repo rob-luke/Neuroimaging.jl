@@ -326,6 +326,13 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
     return eeg
 end
 
+function ftest(eeg::ASSR, freq_of_interest::Array; verbose::Bool=false, side_freq::Number=2)
+
+    for f = freq_of_interest
+        eeg = ftest(eeg, f, vebose=verbose, side_freq=side_freq)
+    end
+end
+
 
 function save_results(eeg::ASSR; name_extension::String="", verbose::Bool=true)
 
