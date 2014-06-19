@@ -5,7 +5,7 @@ using MAT
 
 type ASSR
     data::Array
-    triggers::Dict
+    triggers::Dict   #TODO: Change to events
     header::Dict
     processing::Dict
     modulation_frequency::Number
@@ -13,6 +13,8 @@ type ASSR
     reference_channel::String
     file_path::String
     file_name::String
+    sysCodeChan
+    trigChan          #TODO: Change to tiggers
 end
 
 
@@ -44,7 +46,7 @@ function read_ASSR(fname::Union(String, IO); verbose::Bool=false)
     end
 
     # Place in type
-    eeg = ASSR(dats', evtTab, bdfInfo, Dict(), modulation_frequency, amplitude, "Raw", filepath, filename)
+    eeg = ASSR(dats', evtTab, bdfInfo, Dict(), modulation_frequency, amplitude, "Raw", filepath, filename, sysCodeChan, trigChan)
 
     remove_channel!(eeg, "Status", verbose=true)
 
@@ -94,6 +96,26 @@ function add_channel(eeg::ASSR, data::Array, chanLabels::ASCIIString; verbose::B
     push!(eeg.header["chanLabels"], chanLabels == "" ? eeg.header["chanLabels"][1] : chanLabels)
     push!(eeg.header["transducer"], transducer == "" ? eeg.header["transducer"][1] : transducer)
     push!(eeg.header["physDim"],    physDim    == "" ? eeg.header["physDim"][1]    : physDim)
+
+
+    return eeg
+end
+
+function trim_ASSR(eeg::ASSR, stop::Int; start::Int=1, verbose::Bool=false)
+
+    if verbose
+        println("Trimming $(size(eeg.data)[end]) channels between $start and $stop")
+    end
+
+    eeg.data = eeg.data[start:stop,:]
+    eeg.sysCodeChan = eeg.sysCodeChan[start:stop]
+    eeg.trigChan = eeg.trigChan[start:stop]
+
+
+    to_keep = find(eeg.triggers["idx"] .<= stop)
+    eeg.triggers["idx"]  = eeg.triggers["idx"][to_keep]
+    eeg.triggers["dur"]  = eeg.triggers["dur"][to_keep]
+    eeg.triggers["code"] = eeg.triggers["code"][to_keep]
 
 
     return eeg
@@ -186,7 +208,6 @@ function merge_channels(eeg::ASSR, merge_Chans::Array{ASCIIString}, new_name::St
     end
 
     eeg = add_channel(eeg, mean(eeg.data[:,keep_idxs], 2), new_name, verbose=verbose)
-    
 end
 
 
@@ -210,6 +231,8 @@ function proc_hp(eeg::ASSR; cutOff::Number=2, order::Int=3, verbose::Bool=false)
     eeg.triggers["idx"]  = eeg.triggers["idx"][to_keep]
     eeg.triggers["dur"]  = eeg.triggers["dur"][to_keep]
     eeg.triggers["code"] = eeg.triggers["code"][to_keep]
+    # Remove sysCode
+    eeg.sysCodeChan = eeg.sysCodeChan[t*8192:end-t*8192]
 
     if verbose
         println("")
@@ -262,6 +285,19 @@ function create_sweeps(eeg::ASSR; epochsPerSweep::Int=4, verbose::Bool=false)
 end
 
 
+function write_ASSR(eeg::ASSR, fname::String; verbose::Bool=true)
+
+    if verbose
+        println("Saving $(size(eeg.data)[end]) channels to $fname")
+    end
+
+    writeBdf(fname, eeg.data', eeg.trigChan, eeg.sysCodeChan, eeg.header["sampRate"][1],
+        startDate=eeg.header["startDate"], startTime=eeg.header["startTime"],
+        chanLabels=eeg.header["chanLabels"] )
+
+end
+
+
 #######################################
 #
 # Statistics
@@ -277,6 +313,7 @@ function ftest(eeg::ASSR; verbose::Bool=false, side_freq::Number=2)
     eeg = ftest(eeg, eeg.modulation_frequency*3, verbose=verbose, side_freq=side_freq)
     eeg = ftest(eeg, eeg.modulation_frequency*4, verbose=verbose, side_freq=side_freq)
 
+    return eeg
 end
 
 function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_freq::Number=2)
@@ -329,8 +366,9 @@ end
 function ftest(eeg::ASSR, freq_of_interest::Array; verbose::Bool=false, side_freq::Number=2)
 
     for f = freq_of_interest
-        eeg = ftest(eeg, f, vebose=verbose, side_freq=side_freq)
+        eeg = ftest(eeg, f, verbose=verbose, side_freq=side_freq)
     end
+    return eeg
 end
 
 

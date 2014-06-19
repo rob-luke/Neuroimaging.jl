@@ -25,7 +25,9 @@ export
     plot_filter_response,
     remove_channel!,
     add_channel,
-    assr_frequency
+    assr_frequency,
+    trim_ASSR,
+    write_ASSR
     #=import_headmodel=#
 
 # Types
