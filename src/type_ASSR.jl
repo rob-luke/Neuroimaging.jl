@@ -1,6 +1,7 @@
 using JBDF
 using DataFrames
 using MAT
+using Winston
 
 
 type ASSR
@@ -466,6 +467,56 @@ function plot_spectrum(eeg::ASSR, chan::String; targetFreq::Number=0)
 
     return plot_spectrum(eeg, findfirst(eeg.header["chanLabels"], chan), targetFreq=targetFreq)
 end
+
+
+function ASSR_spectrogram(eeg::ASSR, channel::Int, lower::Number, upper::Number;
+                          seconds::Int=32, verbose::Bool=false)
+
+    fs = eeg.header["sampRate"][channel]
+
+    spec = spectrogram(vec(eeg.data[:, channel]), seconds*fs)
+
+    xrange = linspace(minimum(spec.time)./ fs, maximum(spec.time)./ fs, length(spec.time))
+    yrange = linspace(minimum(spec.freq).* fs, maximum(spec.freq).* fs, length(spec.freq));
+
+    y = [findfirst(yrange, upper):-1:findfirst(yrange, lower)]
+    yrange = yrange[y]
+
+    yrange_ends = (minimum(yrange), maximum(yrange))
+    xrange_ends = (minimum(xrange), maximum(xrange))
+
+    i = imagesc(xrange_ends, yrange_ends, 10*log10(spec.power[y, :]))
+    xlabel("Time (s)")
+    ylabel("Frequency (Hz)")
+    title(string(eeg.header["chanLabels"][channel], " Spectrogram"))
+
+    power = spec.power[y, :]
+
+    # This is not correct!!!!
+    # TODO: fix
+    response_power = mean(power, 2)
+    noise = std(power, 2)
+    snr = 10*log10(response_power ./ noise)
+
+    s = plot(snr, yrange)
+    ylim(maximum(yrange), minimum(yrange))
+    xlabel("SNR (dB)")
+    title(string(eeg.header["chanLabels"][channel], " SNR"))
+
+    t2 = Table(1, 2)
+    t2[1,1] = i
+    t2[1,2] = s
+
+    return t2
+end
+
+function ASSR_spectrogram(eeg::ASSR, channel::String, lower::Number, upper::Number;
+                          seconds::Int=32, verbose::Bool=false)
+
+
+    ASSR_spectrogram(eeg, findfirst(eeg.header["chanLabels"], channel), lower, upper, seconds=seconds, verbose=verbose)
+end
+
 
 
 #######################################

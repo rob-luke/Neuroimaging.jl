@@ -27,7 +27,8 @@ export
     add_channel,
     assr_frequency,
     trim_ASSR,
-    write_ASSR
+    write_ASSR,
+    ASSR_spectrogram
     #=import_headmodel=#
 
 # Types
