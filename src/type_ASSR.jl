@@ -1,4 +1,4 @@
-using JBDF
+using BDF
 using DataFrames
 using MAT
 using Winston

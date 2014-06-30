@@ -11,7 +11,7 @@ It also includes a type for each type of EEG recording (ASSR, ABR etc) and wrapp
 ## Installation
 
 Requires:
-- JBDF
+- BDF
 - DSP
 - Winston
 - DataFrames
