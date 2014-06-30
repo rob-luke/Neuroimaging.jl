@@ -275,7 +275,7 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
 
     # Compensate for filter response
     if !(used_filter == nothing)
-        h, f = response(used_filter, frequencies, fs)
+        h, f = freqz(used_filter, frequencies, fs)
 
         filter_compensation = Array(Float64, size(f))
         for freq=1:length(f)
