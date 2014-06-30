@@ -275,10 +275,10 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
 
     # Compensate for filter response
     if !(used_filter == nothing)
-        h, f = freqz(used_filter, frequencies, fs)
+        h = freqz(used_filter, frequencies, fs)
 
-        filter_compensation = Array(Float64, size(f))
-        for freq=1:length(f)
+        filter_compensation = Array(Float64, size(frequencies))
+        for freq=1:length(frequencies)
             filter_compensation[freq] = abs(h[freq])*abs(h[freq])
         end
 
