@@ -1,5 +1,7 @@
 # EEGjl
 
+[![Build Status](https://travis-ci.org/codles/EEG.jl.svg?branch=master)](https://travis-ci.org/codles/EEG.jl)
+
 Process EEG files in Julia.  
 **This package is not ready for distribution yet.**
 Pkg.clone("git://github.com/codles/EEG.jl.git")
