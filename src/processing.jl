@@ -48,7 +48,6 @@ function proc_hp(signals::Array; cutOff::Number=2,
         chan += 1
     end
 
-
     return signals, f
 end
 
@@ -313,7 +312,7 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
         println("Indicies    = [$(idx), ",
                                "$(idx_Low), ",
                                "$(idx_High)]")
-        println("Bins below = $(idx - idx_Low) and above = $(idx_High - idx)")
+        println("Bins below = $(idx - idx_Low-1) and above = $(idx_High - idx-1)")
         #Approx correct compared to matlab. Slight differences
         println(" ")
         println("Signal  = $(signal_power)")

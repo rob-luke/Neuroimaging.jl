@@ -214,7 +214,7 @@ end
 
 
 
-function proc_hp(eeg::ASSR; cutOff::Number=2, order::Int=3, verbose::Bool=false)
+function proc_hp(eeg::ASSR; cutOff::Number=2, order::Int=3, verbose::Bool=false, t::Int=3)
 
     eeg.data, f = proc_hp(eeg.data, cutOff=cutOff, order=order, fs=eeg.header["sampRate"][1], verbose=verbose)
 
@@ -224,7 +224,6 @@ function proc_hp(eeg::ASSR; cutOff::Number=2, order::Int=3, verbose::Bool=false)
     merge!(eeg.processing, [key_name => f])
 
     # Remove adaptation period
-    t = 3   #TODO: pass in as an argument?
     eeg.data = eeg.data[t*8192:end-t*8192, :]
     eeg.triggers["idx"] = eeg.triggers["idx"] .- 2*t*8192
     # And ensure the triggers are still in sync
@@ -334,7 +333,7 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
     end
 
     if verbose
-        println("Calculating F statistic on $(size(eeg.data)[end]) channels at $freq_of_interest Hz")
+        println("Calculating F statistic on $(size(eeg.data)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
         p = Progress(size(eeg.data)[end], 1, "  F-test...    ", 50)
     end
 
