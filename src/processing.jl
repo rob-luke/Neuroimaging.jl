@@ -41,9 +41,9 @@ function proc_hp(signals::Array; cutOff::Number=2,
     chan = 1
     while chan <= size(signals)[end]
         signals[:, chan] = filt(f, vec(signals[:, chan]))
-        signals[:, chan] = fliplr(signals[:, chan])
+        signals[:, chan] = flipud(signals[:, chan])
         signals[:, chan] = filt(f, vec(signals[:, chan]))
-        signals[:, chan] = fliplr(signals[:, chan])
+        signals[:, chan] = flipud(signals[:, chan])
         if verbose; next!(p); end
         chan += 1
     end
