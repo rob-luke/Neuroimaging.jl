@@ -4,7 +4,8 @@ using Base.Test
 # Tollerances to known truth are quite loose now.
 # Plan to tighten them up once all functions are known to generally work
 
-fname = "./data/test.bdf"
+#=fname = "./data/test.bdf"=#
+fname = joinpath(dirname(@__FILE__), "data", "test.bdf")
 
 s = read_ASSR(fname, verbose=true)
 
