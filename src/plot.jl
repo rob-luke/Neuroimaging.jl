@@ -315,6 +315,122 @@ end
 
 #######################################
 #
+# Type ASSR
+#
+#######################################
+
+
+# Plot whole all data
+function plot_timeseries(eeg::ASSR; titletext::String="")
+
+    p = plot_timeseries(eeg.data, eeg.header["sampRate"][1], titletext=titletext)
+
+    return p
+end
+
+# Plot a single channel
+function plot_timeseries(eeg::ASSR, chanName::String; titletext::String="")
+
+    idx = findfirst(eeg.header["chanLabels"], chanName)
+
+    p = plot_timeseries(vec(eeg.data[:, idx]), eeg.header["sampRate"][1], titletext=titletext)
+
+    return p
+end
+
+
+function plot_spectrum(eeg::ASSR, chan::Int; targetFreq::Number=0)
+
+    channel_name = eeg.header["chanLabels"][chan]
+
+    # Check through the processing to see if we have done a statistical test at target frequency
+    signal = nothing
+    result_idx = find_keys_containing(eeg.processing, "ftest")
+
+    for r = 1:length(result_idx)
+        result = get(eeg.processing, collect(keys(eeg.processing))[result_idx[r]], 0)
+        if result[:Frequency][1] == targetFreq
+
+            result_snr = result[:SNRdB][chan]
+            signal = result[:SignalPower][chan]
+            noise  = result[:NoisePower][chan]
+            title  = "Channel $(channel_name). SNR = $(result_snr) dB"
+        end
+    end
+
+    if signal == nothing
+        title  = "Channel $(channel_name)"
+        noise  = 0
+        signal = 0
+    end
+
+    p = plot_spectrum(convert(Array{Float64}, vec(mean(eeg.processing["sweeps"], 2)[:,chan])),
+                        eeg.header["sampRate"][1];
+                        titletext=title, targetFreq = targetFreq,
+                        noise_level = noise, signal_level = signal)
+
+    return p
+end
+
+function plot_spectrum(eeg::ASSR, chan::String; targetFreq::Number=0)
+
+    return plot_spectrum(eeg, findfirst(eeg.header["chanLabels"], chan), targetFreq=targetFreq)
+end
+
+
+function ASSR_spectrogram(eeg::ASSR, channel::Int, lower::Number, upper::Number;
+                          seconds::Int=32, verbose::Bool=false)
+
+    fs = eeg.header["sampRate"][channel]
+
+    spec = spectrogram(vec(eeg.data[:, channel]), seconds*fs)
+
+    xrange = linspace(minimum(spec.time)./ fs, maximum(spec.time)./ fs, length(spec.time))
+    yrange = linspace(minimum(spec.freq).* fs, maximum(spec.freq).* fs, length(spec.freq));
+
+    y = [findfirst(yrange, upper):-1:findfirst(yrange, lower)]
+    yrange = yrange[y]
+
+    yrange_ends = (minimum(yrange), maximum(yrange))
+    xrange_ends = (minimum(xrange), maximum(xrange))
+
+    i = imagesc(xrange_ends, yrange_ends, 10*log10(spec.power[y, :]))
+    xlabel("Time (s)")
+    ylabel("Frequency (Hz)")
+    title(string(eeg.header["chanLabels"][channel], " Spectrogram"))
+
+    power = spec.power[y, :]
+
+    # This is not correct!!!!
+    # TODO: fix
+    response_power = mean(power, 2)
+    noise = std(power, 2)
+    snr = 10*log10(response_power ./ noise)
+
+    s = plot(snr, yrange)
+    ylim(maximum(yrange), minimum(yrange))
+    xlabel("SNR (dB)")
+    title(string(eeg.header["chanLabels"][channel], " SNR"))
+
+    t2 = Table(1, 2)
+    t2[1,1] = i
+    t2[1,2] = s
+
+    return t2
+end
+
+function ASSR_spectrogram(eeg::ASSR, channel::String, lower::Number, upper::Number;
+                          seconds::Int=32, verbose::Bool=false)
+
+
+    ASSR_spectrogram(eeg, findfirst(eeg.header["chanLabels"], channel), lower, upper, seconds=seconds, verbose=verbose)
+end
+
+
+
+
+#######################################
+#
 # Helper functions
 #
 #######################################
