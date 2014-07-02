@@ -26,8 +26,8 @@ function read_ASSR(fname::Union(String, IO); verbose::Bool=false)
 
     # Import using JBDF
     fname2 = copy(fname)
-    dats, evtTab, trigChan, sysCodeChan = readBdf(fname)
-    bdfInfo = readBdfHeader(fname2)
+    dats, evtTab, trigChan, sysCodeChan = readBDF(fname)
+    bdfInfo = readBDFHeader(fname)
 
     filepath, filename, ext = fileparts(bdfInfo["fileName"])
 
@@ -290,7 +290,7 @@ function write_ASSR(eeg::ASSR, fname::String; verbose::Bool=true)
         println("Saving $(size(eeg.data)[end]) channels to $fname")
     end
 
-    writeBdf(fname, eeg.data', eeg.trigChan, eeg.sysCodeChan, eeg.header["sampRate"][1],
+    writeBDF(fname, eeg.data', eeg.trigChan, eeg.sysCodeChan, eeg.header["sampRate"][1],
         startDate=eeg.header["startDate"], startTime=eeg.header["startTime"],
         chanLabels=eeg.header["chanLabels"] )
 
