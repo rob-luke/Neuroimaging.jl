@@ -7,9 +7,6 @@ export
     proc_hp,
     remove_template,
     proc_reference,
-    extract_epochs,
-    create_sweeps,
-    proc_epoch_rejection,
     read_bsa,
     conv_bv2tal,
     conv_spm_mni2tal,
@@ -23,6 +20,12 @@ export
     ftest
 include("statistics.jl")
 
+# Epochs
+export
+    extract_epochs,
+    proc_epoch_rejection,
+    create_sweeps
+include("epochs.jl")
 
 # Testing ground
 export
