@@ -10,7 +10,6 @@ export
     extract_epochs,
     create_sweeps,
     proc_epoch_rejection,
-    ftest,
     read_bsa,
     conv_bv2tal,
     conv_spm_mni2tal,
@@ -18,6 +17,12 @@ export
     read_sfp,
     save_results,
     merge_channels
+
+# Statistics
+export
+    ftest
+include("statistics.jl")
+
 
 # Testing ground
 export
