@@ -25,14 +25,6 @@ type Dipoles
     size::Array
 end
 
-type Electrodes
-    coord_system::String
-    kind::String
-    label::Array
-    xloc::Array
-    yloc::Array
-    zloc::Array
-end
 
 
 #######################################

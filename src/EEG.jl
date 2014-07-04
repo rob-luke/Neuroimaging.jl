@@ -44,6 +44,15 @@ export
 include("type_ASSR.jl")
 
 
+# Electrodes
+export
+    Electrodes,
+        show,
+        match_sensors,
+        readELP
+include("sensors.jl")
+
+
 # Type
 export
     Electrodes,
