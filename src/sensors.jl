@@ -66,6 +66,9 @@ end
 
 
 function readELP(fname::String; verbose::Bool=false)
+    # Read elp file
+    #
+    # This does not work yet, need to convert to 3d coord system
 
     if verbose
       println("Reading dat file = $fname")

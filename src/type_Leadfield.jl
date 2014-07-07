@@ -11,10 +11,12 @@ type HeadModel
 end
 
 
-function import_headmodel(srf_file::String, elec_file::String, loc_file::String, lft_file::String; verbose=false)
+function import_headmodel(srfX::
+
+
+function import_headmodel(elec_file::String, loc_file::String, lft_file::String; verbose=false)
 
     if verbose
-        println("Surface   data in file $srf_file")
         println("Electrode data in file $elec_file")
         println("Location  data in file $loc_file")
         println("Leadfield data in file $lft_file")
