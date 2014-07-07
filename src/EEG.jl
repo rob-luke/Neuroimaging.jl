@@ -10,7 +10,8 @@ export
     conv_bv2tal,
     conv_spm_mni2tal,
     read_dat,
-    read_sfp
+    read_sfp,
+    gfp
 
 # Statistics
 export
@@ -81,9 +82,9 @@ export
     oplot,
     plot_spectrum,
     plot_timeseries,
-    oplot_dipoles
-    ASSR_spectrogram
-    plot_filter_response,
+    oplot_dipoles,
+    ASSR_spectrogram,
+    plot_filter_response
 include("plot.jl")
 
 include("read.jl")
