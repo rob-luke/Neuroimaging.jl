@@ -52,6 +52,11 @@ export
         readELP
 include("sensors.jl")
 
+# Source analysis
+export
+    beamformer_lcmv,
+    plot_dat
+include("source_analysis.jl")
 
 # Type
 export
