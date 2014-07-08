@@ -11,7 +11,7 @@
 #
 #######################################
 
-function conv_bv2tal(Xbv::Array, Ybv::Array, Zbv::Array; verbose::Bool=false, offset::Number=128)
+function conv_bv2tal(Xbv::Union(AbstractArray, Number), Ybv::Union(AbstractArray, Number), Zbv::Union(AbstractArray, Number); verbose::Bool=false, offset::Number=128)
 
     X = -Zbv .+ offset
     Y = -Xbv .+ offset
@@ -31,7 +31,7 @@ end
 #
 #######################################
 
-function conv_spm_mni2tal(Xspm::Array, Yspm::Array, Zspm::Array; verbose::Bool=false)
+function conv_spm_mni2tal(Xspm::Union(AbstractArray, Number), Yspm::Union(AbstractArray, Number), Zspm::Union(AbstractArray, Number); verbose::Bool=false)
 
     # Convert MNI ICMB152 coordinates as used in spm99 to talairach
     # http://www3.interscience.wiley.com/cgi-bin/abstract/114104479/ABSTRACT
