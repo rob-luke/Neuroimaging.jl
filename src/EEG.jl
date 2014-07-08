@@ -78,14 +78,14 @@ export
     fileparts
 
 # requires Winston
-export
-    oplot,
-    plot_spectrum,
-    plot_timeseries,
-    oplot_dipoles,
-    ASSR_spectrogram,
-    plot_filter_response
-include("plot.jl")
+#=export=#
+    #=oplot,=#
+    #=plot_spectrum,=#
+    #=plot_timeseries,=#
+    #=oplot_dipoles,=#
+    #=ASSR_spectrogram,=#
+    #=plot_filter_response=#
+#=include("plot.jl")=#
 
 include("read.jl")
 include("processing.jl")
