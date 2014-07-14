@@ -334,6 +334,21 @@ function plot_dat(dat_data;
 
 end
 
+function plot_dat(dat_data::Array{FloatingPoint, 3};
+                verbose::Bool=true,
+                threshold_ratio::Number=1/1000,
+                ncols::Int=2)
+
+
+    x = 1:size(dat_data)[1]
+    y = 1:size(dat_data)[2]
+    z = 1:size(dat_data)[3]
+
+    plot_dat(x, y, z, dat_data, verbose=verbose, threshold_ratio=threshold_ratio, ncols=ncols)
+end
+
+
+
 #######################################
 #
 # Type ASSR
