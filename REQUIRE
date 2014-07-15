@@ -4,4 +4,5 @@ DataFrames
 ProgressMeter
 Distributions
 MAT
+NumericExtensions
 # Winston
