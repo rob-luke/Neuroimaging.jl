@@ -64,11 +64,13 @@ include("source_analysis.jl")
 # Type
 export
     Electrodes,
-    Dipoles
-    #=Coordinates,=#
-        #=SPM,=#
-        #=BrainVision,=#
-        #=Talairach=#
+    Dipoles,
+    Coordinate,
+        SPM,
+        BrainVision,
+        Talairach,
+        convert
+include("spatial_coordinates.jl")
 
 # Helper functions
 export
@@ -94,7 +96,6 @@ include("biosemi.jl")
 include("helper.jl")
 include("signal_processing.jl")
 #=include("type_Leadfield.jl")=#
-#=include("spatial_coordinates.jl")=#
 
 
 end
