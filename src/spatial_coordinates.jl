@@ -25,6 +25,8 @@ end
 #
 #######################################
 
+import Base.convert
+
 function convert(::Type{Talairach}, l::BrainVision)
 
     x, y, z = conv_bv2tal(l.x, l.y, l.z, verbose=true)
