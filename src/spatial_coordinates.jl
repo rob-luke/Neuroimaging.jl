@@ -2,9 +2,9 @@
 abstract Coordinate
 
 type BrainVision <: Coordinate
-    x::AbstractVector
-    y::AbstractVector
-    z::AbstractVector
+    x::Number
+    y::Number
+    z::Number
 end
 
 type Talairach <: Coordinate
@@ -14,6 +14,12 @@ type Talairach <: Coordinate
 end
 
 type SPM <: Coordinate
+    x::Number
+    y::Number
+    z::Number
+end
+
+type UnknownCoordinate <: Coordinate
     x::Number
     y::Number
     z::Number
