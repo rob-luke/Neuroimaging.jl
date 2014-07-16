@@ -99,7 +99,7 @@ function read_dat(fname::String; verbose::Bool=false)
     # File specs taken from https://github.com/fieldtrip/fieldtrip/blob/1cabb512c46cc70e5b734776f20cdc3c181243bd/external/besa/readBESAimage.m
 
 
-    println("Reading dat file = $fname")
+    if verbose; println("Reading dat file = $fname"); end
 
     # Open file
     fid = open(fname, "r")
@@ -121,7 +121,7 @@ function read_dat(fname::String; verbose::Bool=false)
 
     # Types of data that can be stored
     if search(typeline, "Method") != 0:-1  # TODO: change to imatch
-        println("File type is Method")
+        if verbose; println("File type is Method"); end
         image_type = typeline[21:end]
         image_mode = "Time"
         regularization = readline(fid)[21:end-1]
