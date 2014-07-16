@@ -15,6 +15,7 @@
 using Winston
 using DSP: periodogram
 
+import Winston.oplot
 
 #######################################
 #
@@ -249,6 +250,39 @@ function oplot_dipoles(existing_plot, dipoles;
 end
 
 
+function oplot(existing_plot::Table, loc::Coordinate;
+                        verbose::Bool=false,
+                        color::String="red",
+                        symbolkind::String="filled circle",
+                        ncols::Int=2)
+
+    # Generate table
+    nrows = int(ceil(3/ncols))
+    t = Table(nrows, ncols)
+
+    # Extract existing plots
+    back  = existing_plot[1,1]
+    side  = existing_plot[1,2]
+    top   = existing_plot[2,1]
+
+    # Points for each dipole
+    for p in 1:length(loc.x)
+
+        add(back, Points(loc.x[p], loc.z[p], color=color, size=1, symbolkind=symbolkind))
+        add(side, Points(loc.y[p], loc.z[p], color=color, size=1, symbolkind=symbolkind))
+        add(top,  Points(loc.x[p], loc.y[p], color=color, size=1, symbolkind=symbolkind))
+
+    end
+
+    t = Table(2,2)
+    t[1,1] = back
+    t[1,2] = side
+    t[2,1] = top
+
+    return t
+end
+
+
 #######################################
 #
 # Plot dat file
@@ -312,6 +346,14 @@ function plot_dat(x, y, z, dat_data;
     return t
 end
 
+function plot_dat(dat_data;
+                verbose::Bool=true,
+                threshold_ratio::Number=1/1000,
+                ncols::Int=2)
+
+    plot_dat(1:size(dat_data,1), 1:size(dat_data,2), 1:size(dat_data,3), dat_data, verbose=verbose, threshold_ratio=threshold_ratio, ncols=ncols)
+
+end
 
 #######################################
 #
