@@ -53,13 +53,6 @@ export
         readELP
 include("sensors.jl")
 
-# Source analysis
-export
-    beamformer_lcmv,
-    find_dipoles
-include("source_analysis.jl")
-
-
 
 # Type
 export
@@ -73,12 +66,22 @@ export
         convert
 include("spatial_coordinates.jl")
 
+
+# Source analysis
+export
+    beamformer_lcmv,
+    find_dipoles,
+    best_dipole
+include("source_analysis.jl")
+
+
 # Helper functions
 export
     append_strings,
     new_processing_key,
     find_keys_containing,
     fileparts
+
 
 # requires Winston
 #=export=#
@@ -88,11 +91,13 @@ export
     #=oplot_dipoles,=#
     #=ASSR_spectrogram,=#
     #=plot_filter_response=#
-include("plot.jl")
+#=include("plot.jl")=#
 #=export=#
     #=plot_dat,=#
     #=oplot=#
 #=include("source_analysis.jl")=#
+
+
 
 include("read.jl")
 include("processing.jl")

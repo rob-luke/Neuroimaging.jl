@@ -142,3 +142,56 @@ function find_dipoles(s::Array{Float64, 4}; window::Number=6,
 
     find_dipoles(s, x=x, y=y, z=z, t=t, verbose=verbose, debug=debug)
 end
+
+
+
+#######################################
+#
+# Find the best dipoles from selection
+#
+#######################################
+
+#
+# Euclidean distance for coordinates and dipoles
+#
+
+import Distance.euclidean
+function euclidean(a::Coordinate, b::Dipole)
+    euclidean([a.x, a.y, a.z], [b.x, b.y, b.z])
+end
+
+
+#
+# Determine the best dipole
+# Takes the largest sized dipole within set distance from reference coordinates
+#
+
+function best_dipole(ref::Coordinate, dips::Array{Dipole}; maxdist::Number=30, verbose::Bool=true)
+
+    if verbose; println("Calculating best dipole for $(length(dips)) dipoles"); end
+
+    # Find all dipoles within distance
+    dists = [euclidean(ref, dip) for dip=dips]
+    valid_dist = dists .< maxdist
+
+    if sum(valid_dist) >= 2
+        # Valid dipoles exist find the largest one
+        sizes = [dip.size for dip =dips]
+        bestdip = maximum(sizes[valid_dist])
+        dip = dips[find(sizes .== bestdip)]
+        if verbose; print("$(sum(valid_dist)) dipoles within $(maxdist)mm. "); end
+    elseif sum(valid_dist) == 1
+        # Return the one valid dipole
+        dip = dips[find(valid_dist)]
+        if verbose; print("Only one dipole within $(maxdist)mm. "); end
+    else
+        # No dipoles within distance
+        # Take the closest
+        bestdip = minimum(dists)
+        dip = dips[find(dists .== bestdip)]
+        if verbose; print("No dipole within $(maxdist)mm. "); end
+    end
+    println("Best = $(euclidean(ref, dip[1]))")
+
+    return dip[1]
+end
