@@ -1,4 +1,17 @@
+using MinMaxFilter
 
+type Dipole
+    coord_system::String
+    x::Number
+    y::Number
+    z::Number
+    xori::Number
+    yori::Number
+    zori::Number
+    color::Number
+    state::Number
+    size::Number
+end
 
 
 #######################################
@@ -78,4 +91,54 @@ function beamformer_lcmv_actual(C_x::Array, H::Array, Q::Array; N=64, debug::Boo
 end
 
 
+#######################################
+#
+# Find dipoles in source data
+#
+# Use local maxima as dipoles
+#
+#######################################
 
+
+function find_dipoles(s::Array{FloatingPoint, 3}; window::Number=6,
+                      x=1:size(s,1), y=1:size(s,2),
+                      z=1:size(s,3), t=1:size(s,4),
+                      verbose::Bool=false, debug::Bool=false)
+
+    minval, maxval = minmax_filter(s, window, verbose=false)
+
+    # Find the positions matching the maxima
+    matching = s[2:size(maxval)[1]+1, 2:size(maxval)[2]+1, 2:size(maxval)[3]+1]
+    matching = matching .== maxval
+
+    # dipoles are defined as maxima locations and within 90% of the maximum
+    peaks = maxval[matching]
+    peaks = peaks[peaks .>= 0.1 * maximum(peaks)]
+
+    dips = Array(Dipole, (1,length(peaks)))
+    for l = 1:length(peaks)
+        xidx, yidx, zidx = ind2sub(size(s), find(s .== peaks[l]))
+
+        dips[l] = Dipole("Unknown", x[xidx[1]], y[yidx[1]], z[zidx[1]],
+                         0, 0, 0, 0, 0,
+                         peaks[l])
+
+    end
+
+    return dips
+end
+
+
+function find_dipoles(s::Array{Float64, 4}; window::Number=6,
+                      x=1:size(s,1), y=1:size(s,2),
+                      z=1:size(s,3), t=1:size(s,4),
+                      verbose::Bool=false, debug::Bool=false)
+
+    # Fob of the time dimension
+    # TODO: take 4d max
+    s = squeeze(maximum(s,4),4)
+
+    s = convert(Array{FloatingPoint}, s)
+
+    find_dipoles(s, x=x, y=y, z=z, t=t, verbose=verbose, debug=debug)
+end

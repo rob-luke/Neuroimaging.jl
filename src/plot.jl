@@ -217,11 +217,12 @@ end
 #
 #######################################
 
-function oplot_dipoles(existing_plot, dipoles;
+function oplot_dipoles(existing_plot, x, y, z;
                         verbose::Bool=false,
                         color::String="red",
                         symbolkind::String="filled circle",
-                        ncols::Int=2)
+                        ncols::Int=2,
+                        size::Number=1)
 
     # Generate table
     nrows = int(ceil(3/ncols))
@@ -233,11 +234,11 @@ function oplot_dipoles(existing_plot, dipoles;
     top   = existing_plot[2,1]
 
     # Points for each dipole
-    for p in 1:length(dipoles.xloc)
+    for p in 1:length(x)
 
-        add(back, Points(dipoles.xloc[p], dipoles.zloc[p], color=color, size=1, symbolkind=symbolkind))
-        add(side, Points(dipoles.yloc[p], dipoles.zloc[p], color=color, size=1, symbolkind=symbolkind))
-        add(top,  Points(dipoles.xloc[p], dipoles.yloc[p], color=color, size=1, symbolkind=symbolkind))
+        add(back, Points(x[p], z[p], color=color, size=size, symbolkind=symbolkind))
+        add(side, Points(y[p], z[p], color=color, size=size, symbolkind=symbolkind))
+        add(top,  Points(x[p], y[p], color=color, size=size, symbolkind=symbolkind))
 
     end
 
@@ -250,36 +251,13 @@ function oplot_dipoles(existing_plot, dipoles;
 end
 
 
-function oplot(existing_plot::Table, loc::Coordinate;
+function oplot(existing_plot::Table, dip::Union(Dipole, Coordinate);
                         verbose::Bool=false,
                         color::String="red",
                         symbolkind::String="filled circle",
-                        ncols::Int=2)
+                        ncols::Int=2, size::Number=dip.size)
 
-    # Generate table
-    nrows = int(ceil(3/ncols))
-    t = Table(nrows, ncols)
-
-    # Extract existing plots
-    back  = existing_plot[1,1]
-    side  = existing_plot[1,2]
-    top   = existing_plot[2,1]
-
-    # Points for each dipole
-    for p in 1:length(loc.x)
-
-        add(back, Points(loc.x[p], loc.z[p], color=color, size=1, symbolkind=symbolkind))
-        add(side, Points(loc.y[p], loc.z[p], color=color, size=1, symbolkind=symbolkind))
-        add(top,  Points(loc.x[p], loc.y[p], color=color, size=1, symbolkind=symbolkind))
-
-    end
-
-    t = Table(2,2)
-    t[1,1] = back
-    t[1,2] = side
-    t[2,1] = top
-
-    return t
+    oplot_dipoles(existing_plot, dip.x, dip.y, dip.z, verbose=verbose, color=color, symbolkind=symbolkind, ncols=ncols, size=size)
 end
 
 

@@ -56,7 +56,7 @@ include("sensors.jl")
 # Source analysis
 export
     beamformer_lcmv,
-    plot_dat
+    find_dipoles
 include("source_analysis.jl")
 
 
@@ -65,6 +65,7 @@ include("source_analysis.jl")
 export
     Electrodes,
     Dipoles,
+    Dipole,
     Coordinate,
         SPM,
         BrainVision,
@@ -87,7 +88,11 @@ export
     #=oplot_dipoles,=#
     #=ASSR_spectrogram,=#
     #=plot_filter_response=#
-#=include("plot.jl")=#
+include("plot.jl")
+#=export=#
+    #=plot_dat,=#
+    #=oplot=#
+#=include("source_analysis.jl")=#
 
 include("read.jl")
 include("processing.jl")
