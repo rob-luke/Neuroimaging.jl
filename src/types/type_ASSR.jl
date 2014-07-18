@@ -241,9 +241,9 @@ function highpass_filter(eeg::ASSR; cutOff::Number=2, order::Int=3, verbose::Boo
  end
 
 
-function proc_reference(eeg::ASSR, refChan; verbose::Bool=false)
+function rereference(eeg::ASSR, refChan; verbose::Bool=false)
 
-    eeg.data = proc_reference(eeg.data, refChan, eeg.header["chanLabels"], verbose=verbose)
+    eeg.data = rereference(eeg.data, refChan, eeg.header["chanLabels"], verbose=verbose)
 
     if isa(refChan, Array)
         refChan = append_strings(refChan)

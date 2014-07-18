@@ -18,7 +18,7 @@ s = highpass_filter(s, cutOff=2, order=1, verbose=true, t=1)
 @test_approx_eq_eps maximum(s.data[:,1])  189.5628662109  2
 @test_approx_eq_eps minimum(s.data[:,1]) -231.6254425049  2
 
-s = proc_reference(s, "Cz", verbose=true)
+s = rereference(s, "Cz", verbose=true)
 
 s = extract_epochs(s, verbose=true)
 

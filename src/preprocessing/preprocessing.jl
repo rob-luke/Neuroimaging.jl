@@ -2,7 +2,7 @@
 #
 # highpass_filter                    # High pass filter
 # remove_template            # Removes a template signal from each channel
-# proc_reference             # Re reference
+# rereference             # Re reference
 # proc_epochs                # Extract epochs
 # proc_epoch_rejection       # Reject epochs
 # proc_sweeps                # Create sweeps
@@ -82,7 +82,7 @@ end
 
 
 # Pass in array of channels re reference to
-function proc_reference(signals::Array,
+function rereference(signals::Array,
                         refChan::Array{Int};
                         verbose::Bool=false)
 
@@ -100,12 +100,12 @@ function proc_reference(signals::Array,
 end
 
 # Rewrap as array
-function proc_reference(signals::Array, refChan::Int; verbose::Bool=false)
-    return proc_reference(signals, [refChan], verbose=verbose)
+function rereference(signals::Array, refChan::Int; verbose::Bool=false)
+    return rereference(signals, [refChan], verbose=verbose)
 end
 
 # Pass in name of channels to re reference to
-function proc_reference(signals::Array,
+function rereference(signals::Array,
                         refChan::Union(String, Array{ASCIIString}),
                         chanNames::Array{String};
                         verbose::Bool=false)
@@ -125,7 +125,7 @@ function proc_reference(signals::Array,
 
     if refChan == 0; error("Requested channel is not in the provided list of channels"); end
 
-    return proc_reference(signals, refChan_Idx, verbose=verbose)
+    return rereference(signals, refChan_Idx, verbose=verbose)
 end
 
 
