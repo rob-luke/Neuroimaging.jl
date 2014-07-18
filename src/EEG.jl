@@ -16,7 +16,7 @@ include("read_write/read.jl")
 #
 export
     channelNames_biosemi_1020,
-    proc_hp,                            # highpass_filter
+    highpass_filter,                            # highpass_filter
     remove_template,
     proc_reference                      # rereference
 include("preprocessing/preprocessing.jl")
@@ -54,7 +54,7 @@ export
     assr_frequency,
     save_results,
     write_ASSR,
-        proc_hp,
+        highpass_filter,
         proc_reference,
         merge_channels,
         extract_epochs,

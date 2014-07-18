@@ -12,7 +12,7 @@ s = read_ASSR(fname, verbose=true)
 @test_approx_eq_eps maximum(s.data[:,1])  189.5628662109 1
 @test_approx_eq_eps minimum(s.data[:,1]) -231.6254425049 1
 
-s = proc_hp(s, cutOff=2, order=1, verbose=true, t=1)
+s = highpass_filter(s, cutOff=2, order=1, verbose=true, t=1)
 #TODO: Make zero phase filter correctly account for transient period
 
 @test_approx_eq_eps maximum(s.data[:,1])  189.5628662109  2

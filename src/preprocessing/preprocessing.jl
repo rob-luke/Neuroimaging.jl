@@ -1,6 +1,6 @@
 # Processing functions
 #
-# proc_hp                    # High pass filter
+# highpass_filter                    # High pass filter
 # remove_template            # Removes a template signal from each channel
 # proc_reference             # Re reference
 # proc_epochs                # Extract epochs
@@ -24,8 +24,8 @@ using Distributions
 #
 #######################################
 
-function proc_hp(signals::Array; cutOff::Number=2,
-                   order::Int=3, fs::Int=8192, verbose::Bool=false)
+function highpass_filter(signals::Array; cutOff::Number=2,
+                         order::Int=3, fs::Int=8192, verbose::Bool=false)
 
     signals = convert(Array{Float64}, signals)
 

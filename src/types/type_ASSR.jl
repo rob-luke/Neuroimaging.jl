@@ -213,9 +213,9 @@ end
 
 
 
-function proc_hp(eeg::ASSR; cutOff::Number=2, order::Int=3, verbose::Bool=false, t::Int=3)
+function highpass_filter(eeg::ASSR; cutOff::Number=2, order::Int=3, verbose::Bool=false, t::Int=3)
 
-    eeg.data, f = proc_hp(eeg.data, cutOff=cutOff, order=order, fs=eeg.header["sampRate"][1], verbose=verbose)
+    eeg.data, f = highpass_filter(eeg.data, cutOff=cutOff, order=order, fs=eeg.header["sampRate"][1], verbose=verbose)
 
     # Save the filter settings as a unique key in the processing dict
     # This allows for applying multiple filters and tracking them all
