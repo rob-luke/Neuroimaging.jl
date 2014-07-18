@@ -65,35 +65,3 @@ function match_sensors(lf::Array, lf_labels::Array{String}, labels::Array{String
 end
 
 
-function readELP(fname::String; verbose::Bool=false)
-    # Read elp file
-    #
-    # This does not work yet, need to convert to 3d coord system
-
-    if verbose
-      println("Reading dat file = $fname")
-    end
-
-    # Create an empty electrode set
-    elec = Electrodes("unknown", "EEG", String[], Float64[], Float64[], Float64[])
-
-    # Read file
-    df = readtable(fname, header = false, separator = ' ')
-
-    # Save locations
-    elec.xloc = df[:x2]  #TODO: Fix elp locations to 3d
-    elec.yloc = df[:x3]
-
-    # Convert label to ascii and remove '
-    labels = df[:x1]
-    for i = 1:length(labels)
-        push!(elec.label, replace(labels[i], "'", "" ))
-    end
-
-    if verbose
-        println("Imported $(length(elec.xloc)) locations")
-        println("Imported $(length(elec.label)) labels")
-    end
-
-    return elec
-end

@@ -1,8 +1,5 @@
 # Read files
 #
-# Dipoles
-# Electrodes
-#
 # read_bsa
 # read_dat
 # read_sfp
@@ -10,21 +7,6 @@
 
 
 using DataFrames
-
-type Dipoles
-    version::String
-    coord_system::String
-    xloc::Array
-    yloc::Array
-    zloc::Array
-    xori::Array
-    yori::Array
-    zori::Array
-    color::Array
-    state::Array
-    size::Array
-end
-
 
 
 #######################################
@@ -45,7 +27,7 @@ function read_bsa(fname::String; verbose::Bool=false)
     coordinate_system = version_line[separator+1:end-1]
 
     # Create an empty dipole
-    bsa = Dipoles(version, coordinate_system,
+    bsa = Dipole(version, coordinate_system,
                     Float64[], Float64[], Float64[],
                     Float64[], Float64[], Float64[],
                     Float64[], Float64[], Float64[])
@@ -235,6 +217,48 @@ function read_sfp(fname::String; verbose::Bool=false)
     elec.xloc = df[:x2]
     elec.yloc = df[:x3]
     elec.zloc = df[:x4]
+
+    # Convert label to ascii and remove '
+    labels = df[:x1]
+    for i = 1:length(labels)
+        push!(elec.label, replace(labels[i], "'", "" ))
+    end
+
+    if verbose
+        println("Imported $(length(elec.xloc)) locations")
+        println("Imported $(length(elec.label)) labels")
+    end
+
+    return elec
+end
+
+
+#######################################
+#
+# Read elp file
+#
+#######################################
+
+function read_elp(fname::String; verbose::Bool=false)
+    # Read elp file
+    #
+    # This does not work yet, need to convert to 3d coord system
+
+    error("Reading ELPs has not been validated")
+
+    if verbose
+      println("Reading dat file = $fname")
+    end
+
+    # Create an empty electrode set
+    elec = Electrodes("unknown", "EEG", String[], Float64[], Float64[], Float64[])
+
+    # Read file
+    df = readtable(fname, header = false, separator = ' ')
+
+    # Save locations
+    elec.xloc = df[:x2]  #TODO: Fix elp locations to 3d
+    elec.yloc = df[:x3]
 
     # Convert label to ascii and remove '
     labels = df[:x1]

@@ -1,22 +1,44 @@
 module EEG
 
-# Functions
+
+#
+# File type reading and writing
+#
+export
+    read_bsa,
+    read_dat,
+    read_sfp,
+    read_elp
+include("read/read.jl")
+
+
+#
+# Pre-processing
+#
 export
     channelNames_biosemi_1020,
     proc_hp,
     remove_template,
-    proc_reference,
-    read_bsa,
-    conv_bv2tal,
-    conv_spm_mni2tal,
-    read_dat,
-    read_sfp,
-    gfp
+    proc_reference
 
+
+
+
+#
 # Statistics
+#
+
 export
     ftest
 include("statistics.jl")
+
+
+# Functions
+export
+    conv_bv2tal,
+    conv_spm_mni2tal,
+    gfp
+
 
 # Epochs
 export
@@ -49,8 +71,7 @@ include("type_ASSR.jl")
 export
     Electrodes,
         show,
-        match_sensors,
-        readELP
+        match_sensors
 include("sensors.jl")
 
 
