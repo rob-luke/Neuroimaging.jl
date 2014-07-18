@@ -11,6 +11,20 @@ This package includes low level processing functions (filtering, referencing, st
 It also includes a type for each type of EEG recording (ASSR, ABR etc) and wrapper functions to process these files using the lower level functions.
 
 
+## Functions
+
+Currently there are function for the following processes on raw data and ASSR types
+
+#### Preprocessing
+- filtering  
+- re-referencing
+- epoch and sweep extraction
+- epoch rejection based on peak to peak amplitudes
+
+#### Statistics
+- ftest
+
+
 ## Installation
 
 Requires:
