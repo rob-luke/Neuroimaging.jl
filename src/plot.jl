@@ -270,12 +270,13 @@ end
 function plot_dat(x, y, z, dat_data;
                 verbose::Bool=true,
                 threshold_ratio::Number=1/1000,
-                ncols::Int=2)
+                ncols::Int=2,
+                max_size::Number=2)
 
     max_value = maximum(dat_data)
     threshold = max_value * threshold_ratio
 
-    size_multiplier = 2 / max_value
+    size_multiplier = max_size / max_value
 
     back = FramedPlot(title = "Back",
                            xlabel = "Left - Right",
