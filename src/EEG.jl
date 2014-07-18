@@ -9,7 +9,7 @@ export
     read_dat,
     read_sfp,
     read_elp
-include("read/read.jl")
+include("read_write/read.jl")
 
 
 #
@@ -21,7 +21,7 @@ export
     remove_template,
     proc_reference
 
-
+include("processing.jl")
 
 
 #
@@ -103,16 +103,19 @@ export
 include("source_analysis/dipoles.jl")
 
 
-
+#
 # Helper functions
+#
 export
     append_strings,
     new_processing_key,
     find_keys_containing,
     fileparts
 
-
-# requires Winston
+#
+# Plotting functions
+# Requires Winston and is disabled until it works on travis-ci
+#
 #=export=#
     #=oplot,=#
     #=plot_spectrum,=#
@@ -127,8 +130,6 @@ export
 
 
 
-include("read.jl")
-include("processing.jl")
 include("convert.jl")
 include("biosemi.jl")
 include("helper.jl")
