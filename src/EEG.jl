@@ -1,6 +1,5 @@
 module EEG
 
-
 #
 # File type reading and writing
 #
@@ -17,79 +16,69 @@ include("read_write/read.jl")
 #
 export
     channelNames_biosemi_1020,
-    proc_hp,
+    proc_hp,                            # highpass_filter
     remove_template,
-    proc_reference
+    proc_reference                      # rereference
+include("preprocessing/preprocessing.jl")
+include("preprocessing/biosemi.jl")
 
-include("processing.jl")
+
+#
+# Epochs
+#
+export
+    extract_epochs,
+    proc_epoch_rejection,               # epoch_rejection
+    create_sweeps
+include("epochs.jl")
 
 
 #
 # Statistics
 #
-
 export
-    ftest
+    ftest,
+    gfp                                 # move
 include("statistics.jl")
 
 
-# Functions
-export
-    conv_bv2tal,
-    conv_spm_mni2tal,
-    gfp
-
-
-# Epochs
-export
-    extract_epochs,
-    proc_epoch_rejection,
-    create_sweeps
-include("epochs.jl")
-
-# Testing ground
-
-# ASSR type
+#
+# Type - ASSR
+#
 export
     ASSR,
-        read_ASSR,
-        trim_ASSR,
-        remove_channel!,
-        add_channel,
-        assr_frequency,
-        save_results,
-        write_ASSR,
-            proc_hp,                # Also defined for ASSRs
-            proc_reference,
-            merge_channels,
-            extract_epochs,
-            create_sweeps
-include("type_ASSR.jl")
+    read_ASSR,
+    trim_ASSR,
+    remove_channel!,
+    add_channel,
+    assr_frequency,
+    save_results,
+    write_ASSR,
+        proc_hp,
+        proc_reference,
+        merge_channels,
+        extract_epochs,
+        create_sweeps
+include("types/type_ASSR.jl")
 
 
-# Electrodes
+#
+# Source analysis
+#
 export
     Electrodes,
         show,
         match_sensors
 include("sensors.jl")
 
-
-# Type
-export
-    Electrodes,
-    Dipoles
-
-#
-# Source analysis
-#
-
 export
     Coordinate,
         SPM,
         BrainVision,
         Talairach,
-    convert
+    convert,
+    conv_bv2tal,
+    conv_spm_mni2tal
 include("source_analysis/spatial_coordinates.jl")
 
 export
@@ -111,6 +100,8 @@ export
     new_processing_key,
     find_keys_containing,
     fileparts
+include("helper.jl")
+
 
 #
 # Plotting functions
@@ -127,14 +118,5 @@ export
 #=export=#
     #=plot_dat,=#
     #=oplot=#
-
-
-
-include("convert.jl")
-include("biosemi.jl")
-include("helper.jl")
-include("signal_processing.jl")
-#=include("type_Leadfield.jl")=#
-
 
 end

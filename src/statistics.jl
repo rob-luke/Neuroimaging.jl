@@ -77,3 +77,39 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
 
     return snrDb, signal_power, noise_power, statistic
 end
+
+
+#######################################
+#
+# Global field power
+#
+#######################################
+
+function gfp(x::Array; verbose::Bool=false)
+
+    samples, sensors = size(x)
+
+    if verbose
+        println("Computing global field power for $sensors sensors and $samples samples")
+        p = Progress(samples, 1, "  Global FP...  ", 50)
+    end
+
+    result = zeros(samples,1)
+
+    for sample = 1:samples
+        u = squeeze(x[sample,:],1) .- mean(x[sample,:])
+        sumsqdif = 0
+        for sensor = 1:sensors
+            for sensor2 = 1:sensors
+                sumsqdif += (u[sensor] - u[sensor2])^2
+            end
+        end
+        result[sample] = sqrt(sumsqdif / (2*length(samples)))
+        if verbose; next!(p); end
+    end
+
+    return result
+end
+
+
+
