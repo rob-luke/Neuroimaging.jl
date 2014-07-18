@@ -57,22 +57,30 @@ include("sensors.jl")
 # Type
 export
     Electrodes,
-    Dipoles,
-    Dipole,
+    Dipoles
+
+#
+# Source analysis
+#
+
+export
     Coordinate,
         SPM,
         BrainVision,
         Talairach,
-        convert
-include("spatial_coordinates.jl")
+    convert
+include("source_analysis/spatial_coordinates.jl")
 
-
-# Source analysis
 export
-    beamformer_lcmv,
+    beamformer_lcmv
+include("source_analysis/beamformers.jl")
+
+export
+    Dipole,
     find_dipoles,
     best_dipole
-include("source_analysis.jl")
+include("source_analysis/dipoles.jl")
+
 
 
 # Helper functions
@@ -95,7 +103,6 @@ export
 #=export=#
     #=plot_dat,=#
     #=oplot=#
-#=include("source_analysis.jl")=#
 
 
 
