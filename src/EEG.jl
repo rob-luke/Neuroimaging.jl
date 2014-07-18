@@ -18,7 +18,7 @@ export
     channelNames_biosemi_1020,
     highpass_filter,
     remove_template,
-    rereference                      # rereference
+    rereference
 include("preprocessing/preprocessing.jl")
 include("preprocessing/biosemi.jl")
 
@@ -28,7 +28,7 @@ include("preprocessing/biosemi.jl")
 #
 export
     extract_epochs,
-    proc_epoch_rejection,               # epoch_rejection
+    epoch_rejection,               # epoch_rejection
     create_sweeps
 include("epochs.jl")
 

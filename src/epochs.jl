@@ -51,7 +51,7 @@ end
 #
 #######################################
 
-function proc_epoch_rejection(epochs::Array;
+function epoch_rejection(epochs::Array;
                     rejectionMethod::String="peak2peak", verbose::Bool=false)
 
     epochsLen = size(epochs)[1]

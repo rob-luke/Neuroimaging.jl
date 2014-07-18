@@ -4,7 +4,6 @@
 # remove_template            # Removes a template signal from each channel
 # rereference             # Re reference
 # proc_epochs                # Extract epochs
-# proc_epoch_rejection       # Reject epochs
 # proc_sweeps                # Create sweeps
 # proc_ftest                 # F test
 #
