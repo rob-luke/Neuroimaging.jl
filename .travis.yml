@@ -15,6 +15,7 @@ before_install:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
 script:
   - julia -e 'Pkg.clone("https://github.com/codles/MinMaxFilter.jl.git")'
+  - julia -e 'Pkg.add("DSP"); Pkg.checkout("DSP")'
   - julia -e 'Pkg.init(); Pkg.clone(pwd()); Pkg.test("EEG")'
   - julia --code-coverage ./test/runtests.jl
 after_success:
