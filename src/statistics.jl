@@ -79,6 +79,31 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
 end
 
 
+# Calculates the spectrum for ftest and plotting
+function _ftest_spectrum(sweep::Union(Array{FloatingPoint,1}, Array{FloatingPoint,2}); ref::Int=0)
+    # First dimension is samples, second dimension if existing is channels
+
+    sweepLen      = size(sweep)[1]
+
+    # Calculate amplitude sweepe at each frequency along first dimension
+    fftSweep    = 2 / sweepLen * fft(sweep, 1)
+    spectrum    = fftSweep[1:sweepLen / 2 + 1, :]
+
+    if ref > 0
+        refspec = spectrum[:,ref]
+        for i = 1:size(spectrum)[2]
+            spectrum[:,i] = spectrum[:,i] - refspec
+        end
+    end
+
+    return spectrum
+end
+
+function _ftest_spectrum(sweeps::Array{FloatingPoint,3};ref=1); _ftest_spectrum(squeeze(mean(sweeps,2),2),ref=ref); end
+function _ftest_spectrum(s::Array{Float32}; ref=1); _ftest_spectrum(convert(Array{FloatingPoint}, s), ref=ref); end
+function _ftest_spectrum(s::Array{Float64}; ref=1); _ftest_spectrum(convert(Array{FloatingPoint}, s), ref=ref); end
+
+
 #######################################
 #
 # Global field power
