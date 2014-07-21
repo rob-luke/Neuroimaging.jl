@@ -9,9 +9,9 @@
 function extract_epochs(dats::Array, evtTab::Dict; verbose::Bool=false)
 
     epochIndex = DataFrame(Code = evtTab["code"], Index = evtTab["idx"]);
-    epochIndex = epochIndex[epochIndex[:Code].==252,:]
-    epochIndex = epochIndex[epochIndex[:Code].==252,:]
-    epochIndex = epochIndex[2:end,:]
+    epochIndex[:Code] = epochIndex[:Code] - 252
+    epochIndex = epochIndex[epochIndex[:Code].>0,:]
+    epochIndex = epochIndex
 
     numEpochs = size(epochIndex)[1] - 1
     lenEpochs = minimum(diff(epochIndex[:Index]))
