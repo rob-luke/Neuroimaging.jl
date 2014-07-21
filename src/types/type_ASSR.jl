@@ -317,10 +317,6 @@ end
 
 function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_freq::Number=2)
 
-    result = DataFrame(Subject=[], Frequency=[], Electrode=[], SignalPower=[], NoisePower=[], SNR=[], SNRdB=[],
-                       Statistic=[], Significant=[], NoiseHz=[], Analysis=[], ModulationFrequency=[],
-                       PresentationAmplitude=[])
-
     # Extract required information
     fs = eeg.header["sampRate"][1]
 
@@ -336,21 +332,24 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
         p = Progress(size(eeg.data)[end], 1, "  F-test...    ", 50)
     end
 
-    for chan = 1:size(eeg.data)[end]
+    snrDb, signal, noise, statistic = ftest(eeg.processing["sweeps"], freq_of_interest, fs,
+                                            verbose = false, side_freq = side_freq, used_filter = used_filter)
 
-        snrDb, signal, noise, statistic = ftest(eeg.processing["sweeps"][:,:,chan], freq_of_interest, fs,
-                                                verbose = false, side_freq = side_freq, used_filter = used_filter)
-
-        new_result = DataFrame(Subject = "Unknown", Frequency = freq_of_interest, Electrode = eeg.header["chanLabels"][chan],
-                               SignalPower = signal, NoisePower = noise, SNR = 10^(snrDb/10), SNRdB = snrDb,
-                               Statistic = statistic, Significant = statistic<0.05, NoiseHz = side_freq,
-                               Analysis="ftest", ModulationFrequency = eeg.modulation_frequency,
-                               PresentationAmplitude = eeg.amplitude)
-
-        result = rbind(result, new_result)
-
-        if verbose; next!(p); end
-    end
+    result = DataFrame(
+                        Electrode = eeg.header["chanLabels"],
+                        SignalPower = vec(signal),
+                        NoisePower = vec(noise),
+                        SNR = vec(10.^(snrDb/10)),
+                        SNRdB = vec(snrDb),
+                        Statistic = vec(statistic),
+                        Significant = vec(statistic.<0.05),
+                        Subject = "Unknown",
+                        Analysis="ftest",
+                        NoiseHz = side_freq,
+                        Frequency = freq_of_interest,
+                        ModulationFrequency = eeg.modulation_frequency,
+                        PresentationAmplitude = eeg.amplitude
+                        )
 
     key_name = new_processing_key(eeg.processing, "ftest")
     merge!(eeg.processing, [key_name => result])

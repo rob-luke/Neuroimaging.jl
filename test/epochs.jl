@@ -24,3 +24,6 @@ close(filen)
 
 @test_approx_eq_eps matlab_sweeps[:,1:6] julia_result 0.0001
 
+println()
+println("!! Epoch test passed !!")
+println()
