@@ -3,4 +3,4 @@ using Base.Test
 
 include("epochs.jl")
 include("convert.jl")
-#=include("ftest.jl")=#
+include("ftest.jl")
