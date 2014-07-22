@@ -91,6 +91,11 @@ export
     best_dipole
 include("source_analysis/dipoles.jl")
 
+export
+    match_leadfield
+include("source_analysis/leadfield.jl")
+
+
 
 #
 # Helper functions
