@@ -14,7 +14,7 @@ using Distance
 #
 
 
-function match_leadfield(l::leadfield, s::ASSR; verbose::Bool=true)
+function match_leadfield(l::leadfield, s::ASSR; verbose::Bool=false)
 
     if verbose; println("Matching leadfield to ASSR"); end
 
@@ -32,7 +32,7 @@ end
 
 
 # Find the index in the leadfield that is closest to specified location
-function find_location(l::leadfield, x::Number, y::Number, z::Number, verbose::Bool=true)
+function find_location(l::leadfield, x::Number, y::Number, z::Number; verbose::Bool=false)
 
     if verbose; println("Find location ($x, $y, $z) in $(size(l.L,1)) sources"); end
 
@@ -45,3 +45,6 @@ function find_location(l::leadfield, x::Number, y::Number, z::Number, verbose::B
     return idx
 end
 
+function find_location(l::leadfield, d::Union(Dipole, Coordinate); verbose::Bool=false)
+    find_location(l, d.x, d.y, d.z, verbose=verbose)
+end
