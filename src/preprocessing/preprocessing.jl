@@ -1,11 +1,8 @@
 # Processing functions
 #
-# highpass_filter                    # High pass filter
+# highpass_filter            # High pass filter
 # remove_template            # Removes a template signal from each channel
-# rereference             # Re reference
-# proc_epochs                # Extract epochs
-# proc_sweeps                # Create sweeps
-# proc_ftest                 # F test
+# rereference                # Re reference
 #
 # _find_frequency_idx
 #
@@ -37,15 +34,7 @@ function highpass_filter(signals::Array; cutOff::Number=2,
         p = Progress(size(signals)[end], 1, "  Filtering... ", 50)
     end
 
-    chan = 1
-    while chan <= size(signals)[end]
-        signals[:, chan] = filt(f, vec(signals[:, chan]))
-        signals[:, chan] = flipud(signals[:, chan])
-        signals[:, chan] = filt(f, vec(signals[:, chan]))
-        signals[:, chan] = flipud(signals[:, chan])
-        if verbose; next!(p); end
-        chan += 1
-    end
+    signals = filtfilt(f, signals)
 
     return signals, f
 end
