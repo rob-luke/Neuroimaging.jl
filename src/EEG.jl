@@ -92,7 +92,8 @@ export
 include("source_analysis/dipoles.jl")
 
 export
-    match_leadfield
+    match_leadfield,
+    find_location
 include("source_analysis/leadfield.jl")
 
 
