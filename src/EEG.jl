@@ -96,6 +96,10 @@ export
     find_location
 include("source_analysis/leadfield.jl")
 
+export
+    project
+include("source_analysis/projection.jl")
+
 
 
 #
