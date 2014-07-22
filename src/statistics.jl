@@ -76,7 +76,7 @@ end
 
 
 # Calculates the spectrum for ftest and plotting
-function _ftest_spectrum(sweep::Union(Array{FloatingPoint,1}, Array{FloatingPoint,2}); ref::Int=0)
+function _ftest_spectrum(sweep::Union(Array{Float64,1}, Array{Float64,2}); ref::Int=0)
     # First dimension is samples, second dimension if existing is channels
 
     sweepLen      = size(sweep)[1]
@@ -95,9 +95,9 @@ function _ftest_spectrum(sweep::Union(Array{FloatingPoint,1}, Array{FloatingPoin
     return spectrum
 end
 
-function _ftest_spectrum(sweeps::Array{FloatingPoint,3};ref=0); _ftest_spectrum(squeeze(mean(sweeps,2),2),ref=ref); end
-function _ftest_spectrum(s::Array{Float32}; ref=0); _ftest_spectrum(convert(Array{FloatingPoint}, s), ref=ref); end
-function _ftest_spectrum(s::Array{Float64}; ref=0); _ftest_spectrum(convert(Array{FloatingPoint}, s), ref=ref); end
+function _ftest_spectrum(sweeps::Array{Float64,3};ref=0); _ftest_spectrum(squeeze(mean(sweeps,2),2),ref=ref); end
+#=function _ftest_spectrum(s::Array{Float32}; ref=0); _ftest_spectrum(convert(Array{FloatingPoint}, s), ref=ref); end=#
+#=function _ftest_spectrum(s::Array{Float64}; ref=0); _ftest_spectrum(convert(Array{FloatingPoint}, s), ref=ref); end=#
 
 
 #######################################
