@@ -48,7 +48,7 @@ function read_ASSR(fname::Union(String, IO); verbose::Bool=false)
     # Place in type
     eeg = ASSR(dats', evtTab, bdfInfo, Dict(), modulation_frequency, amplitude, "Raw", filepath, filename, sysCodeChan, trigChan)
 
-    remove_channel!(eeg, "Status", verbose=true)
+    remove_channel!(eeg, "Status", verbose=verbose)
 
     if verbose
         println("  Imported $(size(dats)[1]) ASSR channels")

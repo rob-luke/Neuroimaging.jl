@@ -108,7 +108,7 @@ end
 # Takes the largest sized dipole within set distance from reference coordinates
 #
 
-function best_dipole(ref::Coordinate, dips::Array{Dipole}; maxdist::Number=30, verbose::Bool=true)
+function best_dipole(ref::Coordinate, dips::Array{Dipole}; maxdist::Number=30, verbose::Bool=false)
 
     if verbose; println("Calculating best dipole for $(length(dips)) dipoles"); end
 
@@ -133,7 +133,7 @@ function best_dipole(ref::Coordinate, dips::Array{Dipole}; maxdist::Number=30, v
         dip = dips[find(dists .== bestdip)]
         if verbose; print("No dipole within $(maxdist)mm. "); end
     end
-    println("Best = $(euclidean(ref, dip[1]))")
+    if verbose; println("Best = $(euclidean(ref, dip[1]))"); end
 
     return dip[1]
 end
