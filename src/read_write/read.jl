@@ -15,7 +15,7 @@ using DataFrames
 #
 #######################################
 
-function read_bsa(fname::String; verbose::Bool=false)
+function read_bsa(fname::String)
 
     # Open file
     fid = open(fname, "r")
@@ -59,12 +59,10 @@ function read_bsa(fname::String; verbose::Bool=false)
 
     close(fid)
 
-    if verbose
-        println("File    = $fname")
-        println("Version = $version")
-        println("Coords  = $coordinate_system")
-        println("Dipoles = $(length(bsa.xloc))")
-    end
+    info("BSA file imported: $fname")
+    debug("Version = $version")
+    debug("Coords  = $coordinate_system")
+    debug("Dipoles = $(length(bsa.xloc))")
 
     return bsa
 end
@@ -76,12 +74,12 @@ end
 #
 #######################################
 
-function read_dat(fname::String; verbose::Bool=false)
+function read_dat(fname::String)
 
     # File specs taken from https://github.com/fieldtrip/fieldtrip/blob/1cabb512c46cc70e5b734776f20cdc3c181243bd/external/besa/readBESAimage.m
 
 
-    if verbose; println("Reading dat file = $fname"); end
+    info("Reading dat file = $fname")
 
     # Open file
     fid = open(fname, "r")
@@ -91,7 +89,7 @@ function read_dat(fname::String; verbose::Bool=false)
     version = match(r"(\S+):(\d.\d)", version)
     version = float(version.captures[2])
     if version != 2
-        println("Unknown version!!")
+        warning("Unknown dat file version!!")
         return
     end
 
@@ -103,25 +101,23 @@ function read_dat(fname::String; verbose::Bool=false)
 
     # Types of data that can be stored
     if search(typeline, "Method") != 0:-1  # TODO: change to imatch
-        if verbose; println("File type is Method"); end
+        debug("File type is Method")
         image_type = typeline[21:end]
         image_mode = "Time"
         regularization = readline(fid)[21:end-1]
         #=Latency=#  # TODO: Fix for latencies. See fieldtrip
         #=Units=#
         units          = readline(fid)[3:end-1]
-        if verbose
-            println("Regularisation = $regularization")
-            println("Units = $units")
-        end
+        debug("Regularisation = $regularization")
+        debug("Units = $units")
     elseif search(typeline, "MSBF") != 0:-1
-        println("Type not implemented yet")
+        warning("Type not implemented yet")
     elseif search(typeline, "MSPS") != 0:-1
-        println("Type not implemented yet")
+        warning("Type not implemented yet")
     elseif search(typeline, "Sens") != 0:-1
-        println("Type not implemented yet")
+        warning("Type not implemented yet")
     else
-        println("Unknown type")
+        warning("Unknown type")
     end
 
     empty       = readline(fid)
@@ -186,7 +182,7 @@ function read_dat(fname::String; verbose::Bool=false)
 
         end
     else
-        println("Unsported file")
+        warning("Unsported file")
     end
 
     close(fid)
@@ -201,11 +197,9 @@ end
 #
 #######################################
 
-function read_sfp(fname::String; verbose::Bool=false)
+function read_sfp(fname::String)
 
-    if verbose
-      println("Reading dat file = $fname")
-    end
+    info("Reading dat file = $fname")
 
     # Create an empty electrode set
     elec = Electrodes("unknown", "EEG", String[], Float64[], Float64[], Float64[])
@@ -224,10 +218,8 @@ function read_sfp(fname::String; verbose::Bool=false)
         push!(elec.label, replace(labels[i], "'", "" ))
     end
 
-    if verbose
-        println("Imported $(length(elec.xloc)) locations")
-        println("Imported $(length(elec.label)) labels")
-    end
+    debug("Imported $(length(elec.xloc)) locations")
+    debug("Imported $(length(elec.label)) labels")
 
     return elec
 end
@@ -239,16 +231,14 @@ end
 #
 #######################################
 
-function read_elp(fname::String; verbose::Bool=false)
+function read_elp(fname::String)
     # Read elp file
     #
     # This does not work yet, need to convert to 3d coord system
 
     error("Reading ELPs has not been validated")
 
-    if verbose
-      println("Reading dat file = $fname")
-    end
+    info("Reading elp file = $fname")
 
     # Create an empty electrode set
     elec = Electrodes("unknown", "EEG", String[], Float64[], Float64[], Float64[])
@@ -266,10 +256,8 @@ function read_elp(fname::String; verbose::Bool=false)
         push!(elec.label, replace(labels[i], "'", "" ))
     end
 
-    if verbose
-        println("Imported $(length(elec.xloc)) locations")
-        println("Imported $(length(elec.label)) labels")
-    end
+    debug("Imported $(length(elec.xloc)) locations")
+    debug("Imported $(length(elec.label)) labels")
 
     return elec
 end

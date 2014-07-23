@@ -18,11 +18,9 @@ type ASSR
 end
 
 
-function read_ASSR(fname::Union(String, IO); verbose::Bool=false)
+function read_ASSR(fname::Union(String, IO))
 
-    if verbose
-        println("Importing file $fname")
-    end
+    info("Importing file $fname")
 
     # Import using JBDF
     fname2 = copy(fname)
@@ -37,9 +35,7 @@ function read_ASSR(fname::Union(String, IO); verbose::Bool=false)
         rba = matread(mat_path)
         modulation_frequency = rba["properties"]["stimulation_properties"]["stimulus_1"]["rounded_modulation_frequency"]
         amplitude = rba["properties"]["stimulation_properties"]["stimulus_1"]["amplitude"]
-        if verbose
-            println("  Imported matching .mat file")
-        end
+        info("Imported matching .mat file")
     else
         modulation_frequency = NaN
         amplitude = NaN
@@ -48,38 +44,28 @@ function read_ASSR(fname::Union(String, IO); verbose::Bool=false)
     # Place in type
     eeg = ASSR(dats', evtTab, bdfInfo, Dict(), modulation_frequency, amplitude, "Raw", filepath, filename, sysCodeChan, trigChan)
 
-    remove_channel!(eeg, "Status", verbose=verbose)
+    remove_channel!(eeg, "Status")
 
-    if verbose
-        println("  Imported $(size(dats)[1]) ASSR channels")
-        println("  Info: $(eeg.modulation_frequency)Hz, $(eeg.header["subjID"]), $(eeg.header["startDate"]), $(eeg.header["startTime"])")
-    end
+    debug("  Imported $(size(dats)[1]) ASSR channels")
+    debug("  Info: $(eeg.modulation_frequency)Hz, $(eeg.header["subjID"]), $(eeg.header["startDate"]), $(eeg.header["startTime"])")
 
     # Tidy channel names if required
     if bdfInfo["chanLabels"][1] == "A1"
-        if verbose
-            println("  Converting names from BIOSEMI to 10-20")
-        end
+        debug("  Converting names from BIOSEMI to 10-20")
         eeg.header["chanLabels"] = channelNames_biosemi_1020(eeg.header["chanLabels"])
-    end
-
-    if verbose
-        println("")
     end
 
     return eeg
 end
 
 
-function add_channel(eeg::ASSR, data::Array, chanLabels::ASCIIString; verbose::Bool=false,
+function add_channel(eeg::ASSR, data::Array, chanLabels::ASCIIString;
                      sampRate::Int=0,        physMin::Int=0,          physMax::Int=0, scaleFactor::Int=0,
                      digMax::Int=0,          digMin::Int=0,           nSampRec::Int=0,
                      prefilt::String="",     reserved::String="",     physDim::String="",
                      transducer::String="")
 
-    if verbose
-        println("Adding channel $chanLabels")
-    end
+    info("Adding channel $chanLabels")
 
     eeg.data = hcat(eeg.data, data)
 
@@ -101,11 +87,9 @@ function add_channel(eeg::ASSR, data::Array, chanLabels::ASCIIString; verbose::B
     return eeg
 end
 
-function trim_ASSR(eeg::ASSR, stop::Int; start::Int=1, verbose::Bool=false)
+function trim_ASSR(eeg::ASSR, stop::Int; start::Int=1)
 
-    if verbose
-        println("Trimming $(size(eeg.data)[end]) channels between $start and $stop")
-    end
+    info("Trimming $(size(eeg.data)[end]) channels between $start and $stop")
 
     eeg.data = eeg.data[start:stop,:]
     eeg.sysCodeChan = eeg.sysCodeChan[start:stop]
@@ -117,16 +101,13 @@ function trim_ASSR(eeg::ASSR, stop::Int; start::Int=1, verbose::Bool=false)
     eeg.triggers["dur"]  = eeg.triggers["dur"][to_keep]
     eeg.triggers["code"] = eeg.triggers["code"][to_keep]
 
-
     return eeg
 end
 
 
-function remove_channel!(eeg::ASSR, channel_idx::Int; verbose::Bool=false)
+function remove_channel!(eeg::ASSR, channel_idx::Int)
 
-    if verbose
-        println("Removing channel $channel_idx")
-    end
+    info("Removing channel $channel_idx")
 
     keep_idx = [1:size(eeg.data)[end]]
     try
@@ -154,68 +135,56 @@ function remove_channel!(eeg::ASSR, channel_idx::Int; verbose::Bool=false)
     return eeg
 end
 
-function remove_channel!(eeg::ASSR, channel_idxs::AbstractVector; verbose::Bool=false)
+function remove_channel!(eeg::ASSR, channel_idxs::AbstractVector)
 
-    if verbose
-        println("Removing channels $channel_idxs")
-        p = Progress(size(channel_idxs)[end], 1, "  Removing... ", 50)
-    end
+    info("Removing channels $channel_idxs")
 
     # Remove channels with highest index first so other indicies arent altered
     channel_idxs = sort([channel_idxs], rev=true)
 
     for channel = channel_idxs
-        eeg = remove_channel!(eeg, channel, verbose=false)
-        if verbose; next!(p); end
+        eeg = remove_channel!(eeg, channel)
     end
 
     return eeg
 end
 
-function remove_channel!(eeg::ASSR, channel_name::String; verbose::Bool=false)
+function remove_channel!(eeg::ASSR, channel_name::String)
 
-    if verbose
-        println("Removing channel $channel_name")
-    end
+    info("Removing channel $channel_name")
 
-    remove_channel!(eeg, findfirst(eeg.header["chanLabels"], channel_name), verbose=verbose)
+    remove_channel!(eeg, findfirst(eeg.header["chanLabels"], channel_name))
 end
 
-function remove_channel!(eeg::ASSR, channel_names::Array{ASCIIString}; verbose::Bool=false)
+function remove_channel!(eeg::ASSR, channel_names::Array{ASCIIString})
 
-    if verbose
-        println("Removing channels $(append_strings(channel_names))")
-        p = Progress(size(channel_names)[end], 1, "  Removing... ", 50)
-    end
+    info("Removing channels $(append_strings(channel_names))")
 
     for channel = channel_names
-        eeg = remove_channel!(eeg, channel, verbose=false)
-        if verbose; next!(p); end
+        eeg = remove_channel!(eeg, channel)
     end
 
     return eeg
 end
 
 
-function merge_channels(eeg::ASSR, merge_Chans::Array{ASCIIString}, new_name::String; verbose::Bool=false)
+function merge_channels(eeg::ASSR, merge_Chans::Array{ASCIIString}, new_name::String)
 
     keep_idxs = [findfirst(eeg.header["chanLabels"], i) for i = merge_Chans]
     keep_idxs = int(keep_idxs)
 
-    if verbose
-        println("Merging channels $(append_strings(vec(eeg.header["chanLabels"][keep_idxs,:])))")
-        println("Merging channels $(keep_idxs)")
-    end
+    info("Merging channels $(append_strings(vec(eeg.header["chanLabels"][keep_idxs,:])))")
+    info("Merging channels $(keep_idxs)")
 
-    eeg = add_channel(eeg, mean(eeg.data[:,keep_idxs], 2), new_name, verbose=verbose)
+    eeg = add_channel(eeg, mean(eeg.data[:,keep_idxs], 2), new_name)
 end
 
 
 
 
-function highpass_filter(eeg::ASSR; cutOff::Number=2, order::Int=3, verbose::Bool=false, t::Int=3)
+function highpass_filter(eeg::ASSR; cutOff::Number=2, order::Int=3, t::Int=3)
 
-    eeg.data, f = highpass_filter(eeg.data, cutOff=cutOff, order=order, fs=eeg.header["sampRate"][1], verbose=verbose)
+    eeg.data, f = highpass_filter(eeg.data, cutOff=cutOff, order=order, fs=eeg.header["sampRate"][1])
 
     # Save the filter settings as a unique key in the processing dict
     # This allows for applying multiple filters and tracking them all
@@ -233,17 +202,13 @@ function highpass_filter(eeg::ASSR; cutOff::Number=2, order::Int=3, verbose::Boo
     # Remove sysCode
     eeg.sysCodeChan = eeg.sysCodeChan[t*8192:end-t*8192]
 
-    if verbose
-        println("")
-    end
-
     return eeg
  end
 
 
-function rereference(eeg::ASSR, refChan; verbose::Bool=false)
+function rereference(eeg::ASSR, refChan)
 
-    eeg.data = rereference(eeg.data, refChan, eeg.header["chanLabels"], verbose=verbose)
+    eeg.data = rereference(eeg.data, refChan, eeg.header["chanLabels"])
 
     if isa(refChan, Array)
         refChan = append_strings(refChan)
@@ -251,44 +216,31 @@ function rereference(eeg::ASSR, refChan; verbose::Bool=false)
 
     eeg.reference_channel = refChan
 
-    if verbose
-        println("")
-    end
+    return eeg
+end
+
+
+function extract_epochs(eeg::ASSR)
+
+    merge!(eeg.processing, ["epochs" => extract_epochs(eeg.data, eeg.triggers)])
+
 
     return eeg
 end
 
 
-function extract_epochs(eeg::ASSR; verbose::Bool=false)
-
-    merge!(eeg.processing, ["epochs" => extract_epochs(eeg.data, eeg.triggers, verbose=verbose)])
-
-    if verbose
-        println("")
-    end
-
-    return eeg
-end
-
-
-function create_sweeps(eeg::ASSR; epochsPerSweep::Int=4, verbose::Bool=false)
+function create_sweeps(eeg::ASSR; epochsPerSweep::Int=4)
 
     merge!(eeg.processing,
-        ["sweeps" => create_sweeps(eeg.processing["epochs"], epochsPerSweep = epochsPerSweep, verbose = verbose)])
-
-    if verbose
-        println("")
-    end
+        ["sweeps" => create_sweeps(eeg.processing["epochs"], epochsPerSweep = epochsPerSweep)])
 
     return eeg
 end
 
 
-function write_ASSR(eeg::ASSR, fname::String; verbose::Bool=true)
+function write_ASSR(eeg::ASSR, fname::String)
 
-    if verbose
-        println("Saving $(size(eeg.data)[end]) channels to $fname")
-    end
+    info("Saving $(size(eeg.data)[end]) channels to $fname")
 
     writeBDF(fname, eeg.data', eeg.trigChan, eeg.sysCodeChan, eeg.header["sampRate"][1],
         startDate=eeg.header["startDate"], startTime=eeg.header["startTime"],
@@ -303,19 +255,19 @@ end
 #
 #######################################
 
-function ftest(eeg::ASSR; verbose::Bool=false, side_freq::Number=2)
+function ftest(eeg::ASSR; side_freq::Number=2)
 
-    eeg = ftest(eeg, eeg.modulation_frequency-1, verbose=verbose, side_freq=side_freq)
-    eeg = ftest(eeg, eeg.modulation_frequency,   verbose=verbose, side_freq=side_freq)
-    eeg = ftest(eeg, eeg.modulation_frequency+1, verbose=verbose, side_freq=side_freq)
-    eeg = ftest(eeg, eeg.modulation_frequency*2, verbose=verbose, side_freq=side_freq)
-    eeg = ftest(eeg, eeg.modulation_frequency*3, verbose=verbose, side_freq=side_freq)
-    eeg = ftest(eeg, eeg.modulation_frequency*4, verbose=verbose, side_freq=side_freq)
+    eeg = ftest(eeg, eeg.modulation_frequency-1, side_freq=side_freq)
+    eeg = ftest(eeg, eeg.modulation_frequency,   side_freq=side_freq)
+    eeg = ftest(eeg, eeg.modulation_frequency+1, side_freq=side_freq)
+    eeg = ftest(eeg, eeg.modulation_frequency*2, side_freq=side_freq)
+    eeg = ftest(eeg, eeg.modulation_frequency*3, side_freq=side_freq)
+    eeg = ftest(eeg, eeg.modulation_frequency*4, side_freq=side_freq)
 
     return eeg
 end
 
-function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_freq::Number=2)
+function ftest(eeg::ASSR, freq_of_interest::Number; side_freq::Number=2)
 
     # Extract required information
     fs = eeg.header["sampRate"][1]
@@ -327,13 +279,10 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
         used_filter = nothing
     end
 
-    if verbose
-        println("Calculating F statistic on $(size(eeg.data)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
-        p = Progress(size(eeg.data)[end], 1, "  F-test...    ", 50)
-    end
+    info("Calculating F statistic on $(size(eeg.data)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
 
     snrDb, signal, noise, statistic = ftest(eeg.processing["sweeps"], freq_of_interest, fs,
-                                            verbose = false, side_freq = side_freq, used_filter = used_filter)
+                                            side_freq = side_freq, used_filter = used_filter)
 
     result = DataFrame(
                         Electrode = eeg.header["chanLabels"],
@@ -354,23 +303,19 @@ function ftest(eeg::ASSR, freq_of_interest::Number; verbose::Bool=false, side_fr
     key_name = new_processing_key(eeg.processing, "ftest")
     merge!(eeg.processing, [key_name => result])
 
-    if verbose
-        println("")
-    end
-
     return eeg
 end
 
-function ftest(eeg::ASSR, freq_of_interest::Array; verbose::Bool=false, side_freq::Number=2)
+function ftest(eeg::ASSR, freq_of_interest::Array; side_freq::Number=2)
 
     for f = freq_of_interest
-        eeg = ftest(eeg, f, verbose=verbose, side_freq=side_freq)
+        eeg = ftest(eeg, f, side_freq=side_freq)
     end
     return eeg
 end
 
 
-function save_results(eeg::ASSR; name_extension::String="", verbose::Bool=true)
+function save_results(eeg::ASSR; name_extension::String="")
 
     file_name = string(eeg.file_name, name_extension, ".csv")
 
@@ -394,9 +339,7 @@ function save_results(eeg::ASSR; name_extension::String="", verbose::Bool=true)
     writetable(file_name, to_save)
     end
 
-    if verbose
-        println("File saved to $file_name")
-    end
+    info("File saved to $file_name")
 
     return eeg
 end

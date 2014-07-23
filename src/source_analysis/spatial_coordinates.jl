@@ -36,7 +36,7 @@ import Base.convert
 
 function convert(::Type{Talairach}, l::BrainVision)
 
-    x, y, z = conv_bv2tal(l.x, l.y, l.z, verbose=true)
+    x, y, z = conv_bv2tal(l.x, l.y, l.z)
 
     Talairach(x, y, z)
 end
@@ -44,7 +44,7 @@ end
 
 function convert(::Type{Talairach}, l::SPM)
 
-    x, y, z = conv_spm_mni2tal(l.x, l.y, l.z, verbose=false)
+    x, y, z = conv_spm_mni2tal(l.x, l.y, l.z)
 
     Talairach(x[1], y[1], z[1])
 end
@@ -57,15 +57,13 @@ end
 #
 #######################################
 
-function conv_bv2tal(Xbv::Union(AbstractArray, Number), Ybv::Union(AbstractArray, Number), Zbv::Union(AbstractArray, Number); verbose::Bool=false, offset::Number=128)
+function conv_bv2tal(Xbv::Union(AbstractArray, Number), Ybv::Union(AbstractArray, Number), Zbv::Union(AbstractArray, Number); offset::Number=128)
 
     X = -Zbv .+ offset
     Y = -Xbv .+ offset
     Z = -Ybv .+ offset
 
-    if verbose
-        println("Converted $(length(Xbv)) coordinates to talairach space from BV")
-    end
+    info("Converted $(length(Xbv)) coordinates to talairach space from BV")
 
     return X, Y, Z
 end
@@ -77,7 +75,7 @@ end
 #
 #######################################
 
-function conv_spm_mni2tal(Xspm::Union(AbstractArray, Number), Yspm::Union(AbstractArray, Number), Zspm::Union(AbstractArray, Number); verbose::Bool=false)
+function conv_spm_mni2tal(Xspm::Union(AbstractArray, Number), Yspm::Union(AbstractArray, Number), Zspm::Union(AbstractArray, Number))
 
     # Convert MNI ICMB152 coordinates as used in spm99 to talairach
     # http://www3.interscience.wiley.com/cgi-bin/abstract/114104479/ABSTRACT
@@ -99,19 +97,17 @@ function conv_spm_mni2tal(Xspm::Union(AbstractArray, Number), Yspm::Union(Abstra
     Y = inpoints[2, :]'
     Z = inpoints[3, :]'
 
-    if verbose
-        println("Converted $(length(X)) coordinates to talairach space from SPM MNI")
-    end
+    info("Converted $(length(X)) coordinates to talairach space from SPM MNI")
 
     return X, Y, Z
 end
 
 
-function conv_spm_mni2tal(elec::Electrodes; verbose::Bool=false)
+function conv_spm_mni2tal(elec::Electrodes)
 
     elecNew = elec
 
-    elecNew.xloc, elecNew.yloc, elecNew.zloc = conv_spm_mni2tal(elec.xloc, elec.yloc, elec.zloc, verbose=verbose)
+    elecNew.xloc, elecNew.yloc, elecNew.zloc = conv_spm_mni2tal(elec.xloc, elec.yloc, elec.zloc)
 
     elecNew.coord_system = "Talairach"
 

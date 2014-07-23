@@ -7,8 +7,7 @@
 #
 #######################################
 
-function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
-               verbose::Bool=false, side_freq::Number=2, used_filter=nothing)
+function ftest(sweeps::Array, freq_of_interest::Number, fs::Number; side_freq::Number=2, used_filter=nothing)
 
     #TODO: Don't treat harmonic frequencies as noise
 
@@ -32,9 +31,7 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
 
         spectrum = spectrum ./ filter_compensation
     else
-        if verbose
-            println("Not incorporating filter response")
-        end
+        debug("Not incorporating filter response in F test")
     end
 
     # Determine signal power
@@ -56,20 +53,18 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
     continuous_distribution = FDist(2, 2*size(noise_bins,1))
     statistic = ccdf(continuous_distribution, snr)
 
-    if verbose
-        println("Frequencies = [$(freq_of_interest - side_freq), ",
-                               "$(freq_of_interest), ",
-                               "$(freq_of_interest + side_freq)]")
-        println("Indicies    = [$(minimum(noise_idxs)), ",
-                               "$(idx), ",
-                               "$(maximum(noise_idxs))]")
-        println("Noise bins  = $(size(noise_bins,1))")
-        println("Signal  = $(signal_power)")
-        println("Noise   = $(noise_power)")
-        println("SNR     = $(snr)")
-        println("SNR dB  = $(snrDb)")
-        println("Stat    = $(statistic)")
-    end
+    debug("Frequencies = [$(freq_of_interest - side_freq), ",
+                           "$(freq_of_interest), ",
+                           "$(freq_of_interest + side_freq)]")
+    debug("Indicies    = [$(minimum(noise_idxs)), ",
+                           "$(idx), ",
+                           "$(maximum(noise_idxs))]")
+    debug("Noise bins  = $(size(noise_bins,1))")
+    debug("Signal  = $(signal_power)")
+    debug("Noise   = $(noise_power)")
+    debug("SNR     = $(snr)")
+    debug("SNR dB  = $(snrDb)")
+    debug("Stat    = $(statistic)")
 
     return snrDb, signal_power, noise_power, statistic
 end
@@ -106,14 +101,11 @@ function _ftest_spectrum(sweeps::Array{Float64,3};ref=0); _ftest_spectrum(squeez
 #
 #######################################
 
-function gfp(x::Array; verbose::Bool=false)
+function gfp(x::Array)
 
     samples, sensors = size(x)
 
-    if verbose
-        println("Computing global field power for $sensors sensors and $samples samples")
-        p = Progress(samples, 1, "  Global FP...  ", 50)
-    end
+    info("Computing global field power for $sensors sensors and $samples samples")
 
     result = zeros(samples,1)
 
@@ -126,7 +118,6 @@ function gfp(x::Array; verbose::Bool=false)
             end
         end
         result[sample] = sqrt(sumsqdif / (2*length(samples)))
-        if verbose; next!(p); end
     end
 
     return result

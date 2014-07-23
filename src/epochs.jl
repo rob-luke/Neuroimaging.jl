@@ -6,7 +6,7 @@
 #
 #######################################
 
-function extract_epochs(dats::Array, evtTab::Dict; verbose::Bool=false)
+function extract_epochs(dats::Array, evtTab::Dict)
 
     epochIndex = DataFrame(Code = evtTab["code"], Index = evtTab["idx"]);
     epochIndex[:Code] = epochIndex[:Code] - 252
@@ -17,13 +17,6 @@ function extract_epochs(dats::Array, evtTab::Dict; verbose::Bool=false)
     lenEpochs = minimum(diff(epochIndex[:Index]))
     numChans  = size(dats)[end]
     epochs = zeros(Float64, (int(lenEpochs), int(numEpochs), int(numChans)))
-
-    if verbose
-        println("Generating epochs for $(numChans) channels")
-        println("  Epoch length is $(lenEpochs)")
-        println("  Number of epochs is $(numEpochs)")
-        p = Progress(numChans, 1, "  Epoching...  ", 50)
-    end
 
     chan = 1
     while chan <= numChans
@@ -37,9 +30,10 @@ function extract_epochs(dats::Array, evtTab::Dict; verbose::Bool=false)
 
             epoch += 1
         end
-        if verbose; next!(p); end
         chan += 1
     end
+
+    info("Generated $numEpochs epochs of length $lenEpochs for $numChans channels")
 
     return epochs
 end
@@ -51,12 +45,13 @@ end
 #
 #######################################
 
-function epoch_rejection(epochs::Array;
-                    rejectionMethod::String="peak2peak", verbose::Bool=false)
+function epoch_rejection(epochs::Array; rejectionMethod::String="peak2peak", cutOff::Number=0.9)
 
     epochsLen = size(epochs)[1]
     epochsNum = size(epochs)[2]
     chansNum  = size(epochs)[3]
+
+    info("Rejected $((1-cutOff)*100) of epochs")
 
     if rejectionMethod == "peak2peak"
 
@@ -70,7 +65,7 @@ function epoch_rejection(epochs::Array;
             epoch += 1
         end
 
-        cutOff = sort(peak2peak)[floor(length(peak2peak)*0.9)]
+        cutOff = sort(peak2peak)[floor(length(peak2peak)*cutOff)]
         epochs = epochs[:, peak2peak.<cutOff, :]
 
     end
@@ -85,7 +80,7 @@ end
 #
 #######################################
 
-function create_sweeps(epochs::Array; epochsPerSweep::Int=4, verbose::Bool=false)
+function create_sweeps(epochs::Array; epochsPerSweep::Int=4)
 
     epochsLen = size(epochs)[1]
     epochsNum = size(epochs)[2]
@@ -95,25 +90,18 @@ function create_sweeps(epochs::Array; epochsPerSweep::Int=4, verbose::Bool=false
     sweepNum = int(floor(epochsNum / epochsPerSweep))
     sweeps = zeros(Float64, (sweepLen, sweepNum, chansNum))
 
-    if verbose
-        println("Generating $(sweepNum) sweeps")
-        println("  From $(epochsNum) epochs of length $(epochsLen)")
-        println("  Creating $(sweepNum) sweeps of length $(sweepLen)")
-        p = Progress(sweepNum, 1, "  Sweeps...    ", 50)
-    end
-
     sweep = 1
     while sweep <= sweepNum
 
         sweepStart = (sweep-1)*(epochsPerSweep)+1
         sweepStop  = sweepStart + epochsPerSweep-1
 
-        sweeps[:,sweep,:] = reshape(epochs[:,sweepStart:sweepStop,:],
-                                                (sweepLen, 1, chansNum))
+        sweeps[:,sweep,:] = reshape(epochs[:,sweepStart:sweepStop,:], (sweepLen, 1, chansNum))
 
-        if verbose; next!(p); end
         sweep += 1
     end
+
+    info("Generated $sweepNum sweeps of length $sweepLen for $chansNum channels")
 
     return sweeps
 end

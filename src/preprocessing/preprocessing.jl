@@ -21,18 +21,14 @@ using Distributions
 #######################################
 
 function highpass_filter(signals::Array; cutOff::Number=2,
-                         order::Int=3, fs::Int=8192, verbose::Bool=false)
+                         order::Int=3, fs::Int=8192)
 
     signals = convert(Array{Float64}, signals)
 
     Wn = cutOff/(fs/2)
     f = digitalfilter(Highpass(Wn), Butterworth(order))
 
-    if verbose
-        println("Highpass filtering $(size(signals)[end]) channels")
-        println("  Pass band > $(cutOff) Hz")
-        p = Progress(size(signals)[end], 1, "  Filtering... ", 50)
-    end
+    info("Highpass filtering $(size(signals)[end]) channels.  Pass band > $(cutOff) Hz")
 
     signals = filtfilt(f, signals)
 
@@ -48,14 +44,11 @@ end
 
 # Pass in array to subtract from each channel
 function remove_template(signals::Array,
-                        reference::Array;  # TODO: Make an array of generic floats
-                        verbose::Bool=false)
+                        reference::Array)
 
-    if verbose; p = Progress(size(signals)[end], 1, "  Rerefing...  ", 50); end
 
     for chan = 1:size(signals)[end]
         signals[:, chan] = signals[:, chan] - reference
-        if verbose; next!(p); end
     end
 
     return signals
@@ -71,32 +64,24 @@ end
 
 # Pass in array of channels re reference to
 function rereference(signals::Array,
-                        refChan::Array{Int};
-                        verbose::Bool=false)
+                        refChan::Array{Int})
 
-    if verbose
-        if length(refChan) == 1
-            println("Re referencing $(size(signals)[end]) channels to channel $(refChan[1])")
-        else
-            println("Re referencing $(size(signals)[end]) channels to the mean of $(length(refChan)) channels")
-        end
-    end
+    info("Re referencing $(size(signals)[end]) channels to channel $refChan")
 
     reference_signal = mean(signals[:, refChan],2)
 
-    return remove_template(signals, reference_signal, verbose=verbose)
+    return remove_template(signals, reference_signal)
 end
 
 # Rewrap as array
-function rereference(signals::Array, refChan::Int; verbose::Bool=false)
-    return rereference(signals, [refChan], verbose=verbose)
+function rereference(signals::Array, refChan::Int)
+    return rereference(signals, [refChan])
 end
 
 # Pass in name of channels to re reference to
 function rereference(signals::Array,
                         refChan::Union(String, Array{ASCIIString}),
-                        chanNames::Array{String};
-                        verbose::Bool=false)
+                        chanNames::Array{String})
 
 
     if refChan == "car" || refChan == "average"
@@ -107,13 +92,11 @@ function rereference(signals::Array,
         refChan_Idx = [findfirst(chanNames, i) for i = refChan]
     end
 
-    if verbose
-        println("Re referencing $(size(signals)[end]) channels to channel $(append_strings(chanNames[refChan_Idx])) = $refChan_Idx ")
-    end
+    info("Re referencing $(size(signals)[end]) channels to channel $(append_strings(chanNames[refChan_Idx])) = $refChan_Idx ")
 
     if refChan == 0; error("Requested channel is not in the provided list of channels"); end
 
-    return rereference(signals, refChan_Idx, verbose=verbose)
+    return rereference(signals, refChan_Idx)
 end
 
 
@@ -123,15 +106,12 @@ end
 #
 #######################################
 
-function _find_frequency_idx(freq_array::Array, freq_of_interest::Number;
-                                verbose::Bool=false)
+function _find_frequency_idx(freq_array::Array, freq_of_interest::Number)
 
     diff_array = abs(freq_array .- freq_of_interest)
     targetIdx  = findfirst(diff_array , minimum(diff_array))
 
-    if verbose
-        println("Frequency index is $(targetIdx) is $(freq_array[targetIdx]) Hz")
-    end
+    debug("Frequency index is $(targetIdx) is $(freq_array[targetIdx]) Hz")
 
     return targetIdx
 end

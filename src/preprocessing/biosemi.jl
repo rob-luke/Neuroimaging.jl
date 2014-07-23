@@ -10,7 +10,7 @@
 #
 #######################################
 
-function channelNames_biosemi_1020(original::String; verbose::Bool=false)
+function channelNames_biosemi_1020(original::String)
 
     if length(original) == 2
         original = join((original[1], "0", original[2]))
@@ -90,23 +90,19 @@ function channelNames_biosemi_1020(original::String; verbose::Bool=false)
 
     converted = biosemi_1020[idx+size(biosemi_1020)[1]]
 
-    if verbose
-        println(" $original converted to $converted")
-    end
+    debug(" $original converted to $converted")
 
     return converted
 end
 
-function channelNames_biosemi_1020(original::Array{String}; verbose::Bool=false)
+function channelNames_biosemi_1020(original::Array{String})
 
     converted = Array(String, size(original))
 
-    if verbose
-        println("Converting $(length(original)) channels")
-    end
+    info("Converting $(length(original)) channels")
 
     for i = 1:length(original)
-        converted[i] = channelNames_biosemi_1020(original[i], verbose=verbose)
+        converted[i] = channelNames_biosemi_1020(original[i])
     end
 
     return converted

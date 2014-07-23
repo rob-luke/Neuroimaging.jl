@@ -181,19 +181,16 @@ end
 #######################################
 
 function oplot(existing_plot, elec::Electrodes;
-                        verbose::Bool=false,
                         color::String="red",
                         symbolkind::String="filled circle",
                         ncols::Int=2)
 
-    p = oplot(existing_plot, elec.xloc, elec.yloc, elec.zloc,
-        verbose=verbose, color=color, symbolkind=symbolkind, ncols=ncols)
+    p = oplot(existing_plot, elec.xloc, elec.yloc, elec.zloc, color=color, symbolkind=symbolkind, ncols=ncols)
 
     return p
 end
 
 function oplot(existing_plot, x, y, z;
-                        verbose::Bool=false,
                         color::String="red",
                         symbolkind::String="filled circle",
                         ncols::Int=2)
@@ -218,7 +215,6 @@ end
 #######################################
 
 function oplot_dipoles(existing_plot, x, y, z;
-                        verbose::Bool=false,
                         color::String="red",
                         symbolkind::String="filled circle",
                         ncols::Int=2,
@@ -252,12 +248,11 @@ end
 
 
 function oplot(existing_plot::Table, dip::Union(Dipole, Coordinate);
-                        verbose::Bool=false,
                         color::String="red",
                         symbolkind::String="filled circle",
                         ncols::Int=2, size::Number=dip.size)
 
-    oplot_dipoles(existing_plot, dip.x, dip.y, dip.z, verbose=verbose, color=color, symbolkind=symbolkind, ncols=ncols, size=size)
+    oplot_dipoles(existing_plot, dip.x, dip.y, dip.z, color=color, symbolkind=symbolkind, ncols=ncols, size=size)
 end
 
 
@@ -268,7 +263,6 @@ end
 #######################################
 
 function plot_dat(x, y, z, dat_data;
-                verbose::Bool=true,
                 threshold_ratio::Number=1/1000,
                 ncols::Int=2,
                 max_size::Number=2)
@@ -326,16 +320,14 @@ function plot_dat(x, y, z, dat_data;
 end
 
 function plot_dat(dat_data;
-                verbose::Bool=true,
                 threshold_ratio::Number=1/1000,
                 ncols::Int=2)
 
-    plot_dat(1:size(dat_data,1), 1:size(dat_data,2), 1:size(dat_data,3), dat_data, verbose=verbose, threshold_ratio=threshold_ratio, ncols=ncols)
+    plot_dat(1:size(dat_data,1), 1:size(dat_data,2), 1:size(dat_data,3), dat_data,  threshold_ratio=threshold_ratio, ncols=ncols)
 
 end
 
 function plot_dat(dat_data::Array{FloatingPoint, 3};
-                verbose::Bool=true,
                 threshold_ratio::Number=1/1000,
                 ncols::Int=2)
 
@@ -344,7 +336,7 @@ function plot_dat(dat_data::Array{FloatingPoint, 3};
     y = 1:size(dat_data)[2]
     z = 1:size(dat_data)[3]
 
-    plot_dat(x, y, z, dat_data, verbose=verbose, threshold_ratio=threshold_ratio, ncols=ncols)
+    plot_dat(x, y, z, dat_data, threshold_ratio=threshold_ratio, ncols=ncols)
 end
 
 
@@ -414,8 +406,7 @@ function plot_spectrum(eeg::ASSR, chan::String; targetFreq::Number=0)
 end
 
 
-function ASSR_spectrogram(eeg::ASSR, channel::Int, lower::Number, upper::Number;
-                          seconds::Int=32, verbose::Bool=false)
+function ASSR_spectrogram(eeg::ASSR, channel::Int, lower::Number, upper::Number; seconds::Int=32)
 
     fs = eeg.header["sampRate"][channel]
 
@@ -455,11 +446,10 @@ function ASSR_spectrogram(eeg::ASSR, channel::Int, lower::Number, upper::Number;
     return t2
 end
 
-function ASSR_spectrogram(eeg::ASSR, channel::String, lower::Number, upper::Number;
-                          seconds::Int=32, verbose::Bool=false)
+function ASSR_spectrogram(eeg::ASSR, channel::String, lower::Number, upper::Number; seconds::Int=32)
 
 
-    ASSR_spectrogram(eeg, findfirst(eeg.header["chanLabels"], channel), lower, upper, seconds=seconds, verbose=verbose)
+    ASSR_spectrogram(eeg, findfirst(eeg.header["chanLabels"], channel), lower, upper, seconds=seconds)
 end
 
 

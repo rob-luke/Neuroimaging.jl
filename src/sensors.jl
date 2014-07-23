@@ -16,18 +16,16 @@ function show(elec::Electrodes)
 end
 
 
-function match_sensors(sens::Electrodes, labels::Array{String}; verbose::Bool=false)
+function match_sensors(sens::Electrodes, labels::Array{String})
     # Match a set of electrodes to those provided
     #
-    # usage: lf, valid = match_sensors(electrodes, sensor_labels, verbose=true)
+    # usage: lf, valid = match_sensors(electrodes, sensor_labels)
 
     valid_idx = Int[]
     for label = labels
         matched_idx = findfirst(sens.label, label)
         if matched_idx != 0; push!(valid_idx, matched_idx); end
-        #=if verbose=#
-            #=println("Label $label matched to $( matched_idx == 0 ? "!! nothing !!" : sens.label[matched_idx])")=#
-        #=end=#
+        debug("Label $label matched to $( matched_idx == 0 ? "!! nothing !!" : sens.label[matched_idx])")
     end
 
     sens.label = sens.label[valid_idx]
@@ -39,24 +37,19 @@ function match_sensors(sens::Electrodes, labels::Array{String}; verbose::Bool=fa
 end
 
 
-function match_sensors(lf::Array, lf_labels::Array{String}, labels::Array{String}; verbose::Bool=false)
+function match_sensors(lf::Array, lf_labels::Array{String}, labels::Array{String})
     # Match the sensors in a leadfield array to those provided
     #
-    # usage: lf, valid = match_sensors(leadfield, leadfield_labels, sensor_labels, verbose=true)
-
+    # usage: lf, valid = match_sensors(leadfield, leadfield_labels, sensor_labels)
 
     valid_idx = Int[]
     for label = labels
         matched_idx = findfirst(lf_labels, label)
         if matched_idx != 0; push!(valid_idx, matched_idx); end
-        #=if verbose=#
-            #=println("Label $label matched to $( matched_idx == 0 ? "!! nothing !!" : lf_labels[matched_idx])")=#
-        #=end=#
+        debug("Label $label matched to $( matched_idx == 0 ? "!! nothing !!" : lf_labels[matched_idx])")
     end
 
-    if verbose
-        println("Leadfield had $(length(lf_labels)) channels, now has $(length(valid_idx)) channels")
-    end
+    info("Leadfield had $(length(lf_labels)) channels, now has $(length(valid_idx)) channels")
 
     lf = lf[:,:,valid_idx]
     lf_labels = lf_labels[valid_idx]

@@ -1,5 +1,7 @@
 module EEG
 
+using Logging
+
 #
 # File type reading and writing
 #
