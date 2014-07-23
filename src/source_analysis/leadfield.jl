@@ -1,17 +1,16 @@
-using Leadfield
 using Distance
 
 #
 # leadfield is defined in another module
 #
-# type leadfield
-#     L::Array
-#     x::Vector
-#     y::Vector
-#     z::Vector
-#     sensors::Array{String}
-# end
-#
+type leadfield
+    L::Array
+    x::Vector
+    y::Vector
+    z::Vector
+    sensors::Array{String}
+end
+
 
 
 function match_leadfield(l::leadfield, s::ASSR; verbose::Bool=false)
