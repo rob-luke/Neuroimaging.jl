@@ -25,7 +25,7 @@ s = ftest(s, 19.5, side_freq=2.5)
 
 s = rereference(s, "car")
 
-println(s.header["chanLabels"])
+s = highpass_filter(s, cutOff=2, order=1)
 
 remove_channel!(s, ["Cz", "_4Hz_SWN_70dB_R", "20Hz_SWN_70dB_R", "10Hz_SWN_70dB_R", "80Hz_SWN_70dB_R"])
 
@@ -35,7 +35,7 @@ s = create_sweeps(s, epochsPerSweep=4)
 
 s = ftest(s, 40.0391, side_freq=2.5)
 
-@test_approx_eq_eps s.processing["ftest2"][:SNRdB] [3.2812] 0.001
+@test_approx_eq_eps s.processing["ftest2"][:SNRdB] [3.2826] 0.002
 
 println()
 println("!! F test passed !!")

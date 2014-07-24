@@ -191,17 +191,6 @@ function highpass_filter(eeg::ASSR; cutOff::Number=2, order::Int=3, t::Int=3)
     key_name = new_processing_key(eeg.processing, "filter")
     merge!(eeg.processing, [key_name => f])
 
-    # Remove adaptation period
-    eeg.data = eeg.data[t*8192:end-t*8192, :]
-    eeg.triggers["idx"] = eeg.triggers["idx"] .- 2*t*8192
-    # And ensure the triggers are still in sync
-    to_keep = find(eeg.triggers["idx"] .>= 0)
-    eeg.triggers["idx"]  = eeg.triggers["idx"][to_keep]
-    eeg.triggers["dur"]  = eeg.triggers["dur"][to_keep]
-    eeg.triggers["code"] = eeg.triggers["code"][to_keep]
-    # Remove sysCode
-    eeg.sysCodeChan = eeg.sysCodeChan[t*8192:end-t*8192]
-
     return eeg
  end
 
