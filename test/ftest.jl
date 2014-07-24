@@ -35,11 +35,13 @@ s = extract_epochs(s)
 
 s = create_sweeps(s, epochsPerSweep=4)
 
-s = ftest(s, 40.0391, side_freq=2.5)
+s = ftest(s, [40.0391, 20], side_freq=2.5)
 
 @test_approx_eq_eps s.processing["ftest2"][:SNRdB] [3.2826] 0.002  #TODO tighten tolerance here. filter seems issue
 
-s = trim_ASSR(s, 10)
+s = trim_ASSR(s, 10)  # TODO add test
+
+s = save_results(s)
 
 println()
 println("!! F test passed !!")

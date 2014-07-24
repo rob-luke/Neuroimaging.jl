@@ -274,7 +274,7 @@ function ftest(eeg::ASSR, freq_of_interest::Number; side_freq::Number=2)
                                             side_freq = side_freq, used_filter = used_filter)
 
     result = DataFrame(
-                        Electrode = eeg.header["chanLabels"],
+                        Electrode = copy(eeg.header["chanLabels"]),
                         SignalPower = vec(signal),
                         NoisePower = vec(noise),
                         SNR = vec(10.^(snrDb/10)),
@@ -285,8 +285,8 @@ function ftest(eeg::ASSR, freq_of_interest::Number; side_freq::Number=2)
                         Analysis="ftest",
                         NoiseHz = side_freq,
                         Frequency = freq_of_interest,
-                        ModulationFrequency = eeg.modulation_frequency,
-                        PresentationAmplitude = eeg.amplitude
+                        ModulationFrequency = copy(eeg.modulation_frequency),
+                        PresentationAmplitude = copy(eeg.amplitude)
                         )
 
     key_name = new_processing_key(eeg.processing, "ftest")
