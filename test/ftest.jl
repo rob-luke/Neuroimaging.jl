@@ -29,7 +29,10 @@ s = highpass_filter(s, cutOff=2, order=1)
 
 s = add_channel(s, s.data[:,4], "testchan")
 
-remove_channel!(s, ["Cz", "_4Hz_SWN_70dB_R", "20Hz_SWN_70dB_R", "10Hz_SWN_70dB_R", "80Hz_SWN_70dB_R", "40Hz_SWN_70dB_R"])
+remove_channel!(s, "_4Hz_SWN_70dB_R")
+remove_channel!(s, 3)
+remove_channel!(s, ["Cz", "_4Hz_SWN_70dB_R", "panda", "20Hz_SWN_70dB_R", "10Hz_SWN_70dB_R", "80Hz_SWN_70dB_R", "40Hz_SWN_70dB_R"])
+remove_channel!(s, "turtle")
 
 s = extract_epochs(s)
 

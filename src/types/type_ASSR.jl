@@ -105,68 +105,52 @@ function trim_ASSR(eeg::ASSR, stop::Int; start::Int=1)
 end
 
 
-function remove_channel!(eeg::ASSR, channel_idx::Int)
 
-    info("Removing channel $channel_idx")
+#######################################
+#
+# Remove channels
+#
+#######################################
+
+function remove_channel!(eeg::ASSR, channel_idx::Array{Int})
+
+    channel_idx = channel_idx[channel_idx .!= 0]
+
+    info("Removing channel(s) $channel_idx")
 
     keep_idx = [1:size(eeg.data)[end]]
-    try
-        splice!(keep_idx, channel_idx)
+    for c = sort(channel_idx, rev=true)
+        try
+            splice!(keep_idx, c)
+        end
     end
 
     eeg.data = eeg.data[:, keep_idx]
 
-    # Remove header info that is for each channel
-    # TODO: Put in loop
-    eeg.header["sampRate"]    = eeg.header["sampRate"][keep_idx]
-    eeg.header["physMin"]     = eeg.header["physMin"][keep_idx]
-    eeg.header["physMax"]     = eeg.header["physMax"][keep_idx]
-    eeg.header["nSampRec"]    = eeg.header["nSampRec"][keep_idx]
-    eeg.header["prefilt"]     = eeg.header["prefilt"][keep_idx]
-    eeg.header["reserved"]    = eeg.header["reserved"][keep_idx]
-    eeg.header["chanLabels"]  = eeg.header["chanLabels"][keep_idx]
-    eeg.header["transducer"]  = eeg.header["transducer"][keep_idx]
-    eeg.header["physDim"]     = eeg.header["physDim"][keep_idx]
-    eeg.header["digMax"]      = eeg.header["digMax"][keep_idx]
-    eeg.header["digMin"]      = eeg.header["digMin"][keep_idx]
-    eeg.header["scaleFactor"] = eeg.header["scaleFactor"][keep_idx]
-
-
-    return eeg
-end
-
-function remove_channel!(eeg::ASSR, channel_idxs::AbstractVector)
-
-    info("Removing channels $channel_idxs")
-
-    # Remove channels with highest index first so other indicies arent altered
-    channel_idxs = sort([channel_idxs], rev=true)
-
-    for channel = channel_idxs
-        eeg = remove_channel!(eeg, channel)
+    # Remove header info
+    for key = ["sampRate", "physMin", "physMax", "nSampRec", "prefilt", "reserved", "chanLabels", "transducer",
+               "physDim", "digMax", "digMin", "scaleFactor"]
+        eeg.header[key]    = eeg.header[key][keep_idx]
     end
-
-    return eeg
-end
-
-function remove_channel!(eeg::ASSR, channel_name::String)
-
-    info("Removing channel $channel_name")
-
-    remove_channel!(eeg, findfirst(eeg.header["chanLabels"], channel_name))
 end
 
 function remove_channel!(eeg::ASSR, channel_names::Array{ASCIIString})
 
-    info("Removing channels $(append_strings(channel_names))")
+    info("Removing channel(s) $(append_strings(channel_names))")
 
-    for channel = channel_names
-        eeg = remove_channel!(eeg, channel)
-    end
-
-    return eeg
+    remove_channel!(eeg, int([findfirst(eeg.header["chanLabels"], c) for c=channel_names]))
 end
 
+function remove_channel!(eeg::ASSR, channel_name::Union(String, Int))
+    remove_channel!(eeg, [channel_name])
+end
+
+
+#######################################
+#
+# Merge channels
+#
+#######################################
 
 function merge_channels(eeg::ASSR, merge_Chans::Array{ASCIIString}, new_name::String)
 
