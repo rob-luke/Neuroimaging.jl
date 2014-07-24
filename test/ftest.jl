@@ -23,6 +23,20 @@ s = ftest(s, 19.5, side_freq=2.5)
 
 @test_approx_eq_eps s.processing["ftest1"][:SNRdB] [NaN, -1.2386, 0.5514, -1.5537, -2.7541, -6.7079] 0.001
 
+s = rereference(s, "car")
+
+println(s.header["chanLabels"])
+
+remove_channel!(s, ["Cz", "_4Hz_SWN_70dB_R", "20Hz_SWN_70dB_R", "10Hz_SWN_70dB_R", "80Hz_SWN_70dB_R"])
+
+s = extract_epochs(s)
+
+s = create_sweeps(s, epochsPerSweep=4)
+
+s = ftest(s, 40.0391, side_freq=2.5)
+
+@test_approx_eq_eps s.processing["ftest2"][:SNRdB] [3.2812] 0.001
+
 println()
 println("!! F test passed !!")
 println()
