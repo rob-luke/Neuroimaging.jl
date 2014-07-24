@@ -27,7 +27,9 @@ s = rereference(s, "car")
 
 s = highpass_filter(s, cutOff=2, order=1)
 
-remove_channel!(s, ["Cz", "_4Hz_SWN_70dB_R", "20Hz_SWN_70dB_R", "10Hz_SWN_70dB_R", "80Hz_SWN_70dB_R"])
+s = add_channel(s, s.data[:,4], "testchan")
+
+remove_channel!(s, ["Cz", "_4Hz_SWN_70dB_R", "20Hz_SWN_70dB_R", "10Hz_SWN_70dB_R", "80Hz_SWN_70dB_R", "40Hz_SWN_70dB_R"])
 
 s = extract_epochs(s)
 
@@ -35,7 +37,9 @@ s = create_sweeps(s, epochsPerSweep=4)
 
 s = ftest(s, 40.0391, side_freq=2.5)
 
-@test_approx_eq_eps s.processing["ftest2"][:SNRdB] [3.2826] 0.002
+@test_approx_eq_eps s.processing["ftest2"][:SNRdB] [3.2826] 0.002  #TODO tighten tolerance here. filter seems issue
+
+s = trim_ASSR(s, 10)
 
 println()
 println("!! F test passed !!")
