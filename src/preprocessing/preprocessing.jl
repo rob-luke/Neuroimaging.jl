@@ -29,6 +29,7 @@ function highpass_filter(signals::Array; cutOff::Number=2,
     f = digitalfilter(Highpass(Wn), Butterworth(order))
 
     info("Highpass filtering $(size(signals)[end]) channels.  Pass band > $(cutOff) Hz")
+    debug("Filter order = $order, fs = $fs, Wn = $Wn")
 
     signals = filtfilt(f, signals)
 

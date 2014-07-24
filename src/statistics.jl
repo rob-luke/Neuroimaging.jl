@@ -30,6 +30,7 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number; side_freq::N
         end
 
         spectrum = spectrum ./ filter_compensation
+        debug("Accounted for filter response in F test spectrum estimation")
     else
         debug("Not incorporating filter response in F test")
     end
