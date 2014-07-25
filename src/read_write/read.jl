@@ -88,8 +88,9 @@ function read_dat(fname::String)
     version = readline(fid)
     version = match(r"(\S+):(\d.\d)", version)
     version = float(version.captures[2])
+    debug("version = $version")
     if version != 2
-        warning("Unknown dat file version!!")
+        warn("Unknown dat file version!!")
         return
     end
 
@@ -111,13 +112,13 @@ function read_dat(fname::String)
         debug("Regularisation = $regularization")
         debug("Units = $units")
     elseif search(typeline, "MSBF") != 0:-1
-        warning("Type not implemented yet")
+        warn("Type not implemented yet")
     elseif search(typeline, "MSPS") != 0:-1
-        warning("Type not implemented yet")
+        warn("Type not implemented yet")
     elseif search(typeline, "Sens") != 0:-1
-        warning("Type not implemented yet")
+        warn("Type not implemented yet")
     else
-        warning("Unknown type")
+        warn("Unknown type")
     end
 
     empty       = readline(fid)
@@ -182,7 +183,7 @@ function read_dat(fname::String)
 
         end
     else
-        warning("Unsported file")
+        warn("Unsported file")
     end
 
     close(fid)

@@ -9,8 +9,10 @@ export
     read_bsa,
     read_dat,
     read_sfp,
-    read_elp
+    read_elp,
+    write_dat
 include("read_write/read.jl")
+include("read_write/write.jl")
 
 
 #
