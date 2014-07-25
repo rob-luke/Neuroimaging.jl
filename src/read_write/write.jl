@@ -1,8 +1,8 @@
 
 
 function write_dat(fname::String,
-                   X::Array{Float64,1}, Y::Array{Float64,1}, Z::Array{Float64,1},
-                   S::Array{Float64,4}, T::Array{Float64,1};
+                   X::AbstractVector, Y::AbstractVector, Z::AbstractVector,
+                   S::Array{Float64,4}, T::AbstractVector;
                    data_file::String="NA", condition::String="NA", method::String="NA", regularization::String="NA",
                    units::String="NA")
 
