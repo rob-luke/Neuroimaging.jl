@@ -1,7 +1,6 @@
 using EEG
 using Base.Test
 using Logging
-using Winston
 
 Logging.configure(level=DEBUG)
 
