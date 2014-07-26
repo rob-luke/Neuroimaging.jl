@@ -1,6 +1,7 @@
 using BDF
 using DataFrames
 using MAT
+using TextPlots
 
 
 type ASSR
@@ -98,7 +99,7 @@ function trim_ASSR(eeg::ASSR, stop::Int; start::Int=1)
 
     to_keep = find(eeg.triggers["idx"] .<= stop)
     eeg.triggers["idx"]  = eeg.triggers["idx"][to_keep]
-    eeg.triggers["dur"]  = eeg.triggers["dur"][to_keep]
+    #=eeg.triggers["dur"]  = eeg.triggers["dur"][to_keep]=#
     eeg.triggers["code"] = eeg.triggers["code"][to_keep]
 
     return eeg
@@ -192,6 +193,58 @@ function rereference(eeg::ASSR, refChan)
     return eeg
 end
 
+
+#######################################
+#
+# Add triggers for more epochs
+#
+#######################################
+
+function add_triggers(a::ASSR, mod_freq::Number; cycle_per_epoch::Int=1)
+
+    info("Adding triggers to reduce to $cycle_per_epoch cycle.")
+
+    # Extract current triggers
+    epochIndex = DataFrame(Code = a.triggers["code"], Index = a.triggers["idx"]);
+    epochIndex[:Code] = epochIndex[:Code] - 252
+    epochIndex = epochIndex[epochIndex[:Code].>0,:]
+
+    # Existing epochs
+    existing_epoch_length   = maximum(diff(epochIndex[:Index]))     # samples
+    existing_epoch_length_s = existing_epoch_length / a.header["sampRate"][1]
+
+    # New epochs
+    new_epoch_length_s = cycle_per_epoch / mod_freq
+    new_epochs_num     = round(existing_epoch_length_s / new_epoch_length_s) - 2
+    new_epoch_times    = [1:new_epochs_num]*new_epoch_length_s
+    new_epoch_indx     = [0, round(new_epoch_times * a.header["sampRate"][1])]
+
+    debug("new epoch length = $new_epoch_length_s")
+    debug("num epochs       = $new_epochs_num")
+    debug("max time         = $(maximum(new_epoch_times))")
+
+    debug("was $(length(epochIndex[:Index])) indices")
+
+    # Place new epoch indices
+    new_indx = epochIndex[:Index][1:end-1] .+ new_epoch_indx'
+    new_indx = reshape(new_indx', length(new_indx), 1)[1:end-1]
+
+    debug("now $(length(new_indx)) indices")
+
+    # Place in dict
+    # Will wipe old info
+    new_code = int(ones(1, length(new_indx))) .+ 252
+    a.triggers = ["idx" => vec(int(new_indx)'), "code" => vec(new_code)]
+
+    return a
+end
+
+
+#######################################
+#
+# Extract epochs
+#
+#######################################
 
 function extract_epochs(eeg::ASSR)
 

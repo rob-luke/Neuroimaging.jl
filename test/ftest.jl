@@ -1,5 +1,9 @@
 using EEG
 using Base.Test
+using Logging
+using Winston
+
+Logging.configure(level=DEBUG)
 
 fname = joinpath(dirname(@__FILE__), "data", "test.bdf")
 
@@ -42,9 +46,19 @@ s = ftest(s, [40.0391, 20], side_freq=2.5)
 
 @test_approx_eq_eps s.processing["ftest2"][:SNRdB] [3.2826] 0.002  #TODO tighten tolerance here. filter seems issue
 
-s = trim_ASSR(s, 10)  # TODO add test
-
 s = save_results(s)
+
+s = add_triggers(s, 40.0391, cycle_per_epoch=3)
+
+s = extract_epochs(s)
+
+a, b, c = size(s.processing["epochs"])
+
+@test a == 613
+@test b == 362
+@test c == 1
+
+s = trim_ASSR(s, 10)  # TODO add test
 
 println()
 println("!! F test passed !!")

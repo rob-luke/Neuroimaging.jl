@@ -53,6 +53,7 @@ export
     ASSR,
     read_ASSR,
     trim_ASSR,
+    add_triggers,
     remove_channel!,
     add_channel,
     assr_frequency,
