@@ -1,7 +1,6 @@
 using BDF
 using DataFrames
 using MAT
-using TextPlots
 
 
 type ASSR
