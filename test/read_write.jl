@@ -4,6 +4,28 @@ using Base.Test
 
 Logging.configure(level=DEBUG)
 
+
+#
+# Test avr files
+#
+
+fname = joinpath(dirname(@__FILE__), "data", "test.avr")
+sname = joinpath(dirname(@__FILE__), "data", "same.avr")
+
+a, b = read_avr(fname)
+
+write_avr(sname, a, b, 8192)
+
+a2, b2 = read_avr(sname)
+
+@test a==a2
+@test b==b2
+
+
+#
+# Test dat files
+#
+
 fname = joinpath(dirname(@__FILE__), "data", "test.dat")
 sname = joinpath(dirname(@__FILE__), "data", "same.dat")
 

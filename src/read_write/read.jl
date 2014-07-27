@@ -11,6 +11,49 @@ using DataFrames
 
 #######################################
 #
+# Read AVR file
+#
+#######################################
+
+function read_avr(fname::String)
+
+    info("Reading avr file: $fname")
+
+    fid = open(fname, "r")
+
+    # Header line
+    regexp = r"Npts= (\d*)\s+TSB= ([-+]?[0-9]*\.?[0-9]+)\s+DI= ([-+]?[0-9]*\.?[0-9]+)\s+SB= ([-+]?[0-9]*\.?[0-9]+)\s+SC= ([-+]?[0-9]*\.?[0-9]+)\s+Nchan= (\d*)"
+    m     = match(regexp, readline(fid))
+    Npts  = m.captures[1]
+    TSB   = m.captures[2]
+    DI    = m.captures[3]
+    SB    = m.captures[4]
+    SC    = m.captures[5]
+    Nchan = m.captures[6]
+
+    # Channel line
+    regexp = r"(\w+)"
+    chanNames      = matchall(regexp, readline(fid))
+
+    # data
+    data = Array(FloatingPoint, (int(ascii(Npts)), int(ascii(Nchan))))
+
+    Nchan = int(ascii(Nchan))
+    for c = 1:Nchan
+        d = matchall(r"([-+]?[0-9]*\.?[0-9]+)", readline(fid))
+        for n = 1:int(ascii(Npts))
+            data[n,c] = float(ascii(d[n]))
+        end
+    end
+
+    close(fid)
+
+    return data, chanNames
+end
+
+
+#######################################
+#
 # Read BSA file
 #
 #######################################
