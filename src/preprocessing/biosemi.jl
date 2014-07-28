@@ -99,7 +99,7 @@ function channelNames_biosemi_1020(original::Array{String})
 
     converted = Array(String, size(original))
 
-    info("Converting $(length(original)) channels")
+    info("Fixing channel names of $(length(original)) channels")
 
     for i = 1:length(original)
         converted[i] = channelNames_biosemi_1020(original[i])

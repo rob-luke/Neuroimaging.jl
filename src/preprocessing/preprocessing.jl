@@ -67,7 +67,8 @@ end
 function rereference(signals::Array,
                         refChan::Array{Int})
 
-    info("Re referencing $(size(signals)[end]) channels to channel $refChan")
+    info("Re referencing $(size(signals)[end]) channels to $(length(refChan)) channels")
+    debug("Reference channels = $refChan")
 
     reference_signal = mean(signals[:, refChan],2)
 
@@ -93,7 +94,8 @@ function rereference(signals::Array,
         refChan_Idx = [findfirst(chanNames, i) for i = refChan]
     end
 
-    info("Re referencing $(size(signals)[end]) channels to channel $(append_strings(chanNames[refChan_Idx])) = $refChan_Idx ")
+    info("Re referencing $(size(signals)[end]) channels to $(length(refChan_Idx)) channels.")
+    debug("Reference channels = $refChan")
 
     if refChan == 0; error("Requested channel is not in the provided list of channels"); end
 

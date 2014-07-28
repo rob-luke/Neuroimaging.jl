@@ -51,7 +51,7 @@ function epoch_rejection(epochs::Array; rejectionMethod::String="peak2peak", cut
     epochsNum = size(epochs)[2]
     chansNum  = size(epochs)[3]
 
-    info("Rejected $((1-cutOff)*100) of epochs")
+    info("Rejected $(round((1-cutOff)*100)) of epochs")
 
     if rejectionMethod == "peak2peak"
 
