@@ -35,7 +35,8 @@ include("preprocessing/biosemi.jl")
 export
     extract_epochs,
     epoch_rejection,
-    create_sweeps
+    create_sweeps,
+    average_epochs
 include("epochs.jl")
 
 

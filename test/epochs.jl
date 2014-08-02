@@ -15,7 +15,7 @@ fname = joinpath(dirname(@__FILE__), "data", "test.bdf")
 s = read_ASSR(fname)
 s = extract_epochs(s)
 s = create_sweeps(s; epochsPerSweep=4)
-julia_result = squeeze(mean(s.processing["sweeps"],2),2)
+julia_result = average_epochs(s.processing["sweeps"])
 
 # MATLAB
 filen = matopen(joinpath(dirname(@__FILE__), "data", "sweeps.mat"))
