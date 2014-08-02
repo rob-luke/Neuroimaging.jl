@@ -238,6 +238,9 @@ function add_triggers(a::ASSR, mod_freq::Number; cycle_per_epoch::Int=1)
     return a
 end
 
+function add_triggers(a::ASSR; cycle_per_epoch::Int=1)
+    add_triggers(a, a.modulation_frequency, cycle_per_epoch=cycle_per_epoch)
+end
 
 #######################################
 #
