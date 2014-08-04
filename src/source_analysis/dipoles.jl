@@ -96,7 +96,7 @@ end
 #
 
 import Distance.euclidean
-function euclidean(a::Coordinate, b::Dipole)
+function euclidean(a::Union(Coordinate, Dipole), b::Union(Coordinate, Dipole))
     euclidean([a.x, a.y, a.z], [b.x, b.y, b.z])
 end
 
