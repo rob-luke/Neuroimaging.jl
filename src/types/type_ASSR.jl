@@ -164,11 +164,18 @@ function merge_channels(eeg::ASSR, merge_Chans::Array{ASCIIString}, new_name::St
 end
 
 
+#######################################
+#
+# filtering
+#
+#######################################
 
 
 function highpass_filter(eeg::ASSR; cutOff::Number=2, order::Int=3, t::Int=3)
 
     eeg.data, f = highpass_filter(eeg.data, cutOff=cutOff, order=order, fs=eeg.header["sampRate"][1])
+
+    debug("At modulation frequency mag = $(abs(freqz(f, eeg.modulation_frequency, 8192)))")
 
     # Save the filter settings as a unique key in the processing dict
     # This allows for applying multiple filters and tracking them all
