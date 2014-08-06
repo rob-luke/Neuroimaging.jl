@@ -214,10 +214,12 @@ function add_triggers(a::ASSR, mod_freq::Number; cycle_per_epoch::Int=1)
     epochIndex = DataFrame(Code = a.triggers["code"], Index = a.triggers["idx"]);
     epochIndex[:Code] = epochIndex[:Code] - 252
     epochIndex = epochIndex[epochIndex[:Code].>0,:]
+    debug("Existing epochs: $(length(epochIndex))")
 
     # Existing epochs
     existing_epoch_length   = maximum(diff(epochIndex[:Index]))     # samples
     existing_epoch_length_s = existing_epoch_length / a.header["sampRate"][1]
+    debug("Existing epoch length: $(existing_epoch_length_s)s")
 
     # New epochs
     new_epoch_length_s = cycle_per_epoch / mod_freq
