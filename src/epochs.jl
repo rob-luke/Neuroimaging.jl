@@ -13,11 +13,11 @@ function extract_epochs(dats::Array, evtTab::Dict)
     if findfirst(epochIndex[:Code], -4) > 0
         debug("Epochs for CI file")
         epochIndex = epochIndex[epochIndex[:Code].==-4,:]
+        epochIndex = epochIndex[2:end,:] # Often the first trigger is rubbish
     else
         debug("Epochs for NH file")
         epochIndex = epochIndex[epochIndex[:Code].>0,:]
     end
-    epochIndex = epochIndex[2:end,:] # Often the first trigger is rubbish
 
     numEpochs = size(epochIndex)[1] - 1
     lenEpochs = minimum(diff(epochIndex[:Index]))
