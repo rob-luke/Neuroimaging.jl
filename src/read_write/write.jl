@@ -1,4 +1,9 @@
 
+#######################################
+#
+# Write dat file
+#
+#######################################
 
 function write_dat(fname::String,
                    X::AbstractVector, Y::AbstractVector, Z::AbstractVector,
@@ -49,7 +54,36 @@ function write_dat(fname::String,
 end
 
 
-function write_avr(fname::String, data::Array, chanNames::Array, fs::Int)
+function prepare_dat(d::Vector, x::Vector, y::Vector, z::Vector)
+    #
+    # Convert vector format source results to 3d array used in dat files
+    #
+    # Usage: x, y, z, s = prepare_dat(d, x, y, z)
+    #
+
+    X = [sort(unique(x))]
+    Y = [sort(unique(y))]
+    Z = [sort(unique(z))]
+
+    info("Converting $(size(d)) sources to dat file format with size $(length(X)) x $(length(Y)) x $(length(Z))")
+
+    S = zeros(length(X), length(Y), length(Z), 1)
+
+    for n = 1:length(d)
+        S[findfirst(X, x[n]), findfirst(Y, y[n]), findfirst(Z, z[n]), 1] = d[n]
+    end
+
+    return X, Y, Z, S
+end
+
+
+#######################################
+#
+# Write avr file
+#
+#######################################
+
+function write_avr(fname::String, data::Array, chanNames::Array, fs::Number)
 
     info("Saving avr to $fname")
 
