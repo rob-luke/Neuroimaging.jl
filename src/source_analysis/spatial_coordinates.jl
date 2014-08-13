@@ -78,7 +78,7 @@ end
 function conv_spm_mni2tal(Xspm::Union(AbstractArray, Number), Yspm::Union(AbstractArray, Number), Zspm::Union(AbstractArray, Number))
 
     # Convert MNI ICMB152 coordinates as used in spm99 to talairach
-    # http://www3.interscience.wiley.com/cgi-bin/abstract/114104479/ABSTRACT
+    # http://onlinelibrary.wiley.com/doi/10.1002/hbm.20345/abstract
     # Port of http://www.brainmap.org/icbm2tal/icbm_spm2tal.m
 
     inpoints = [Xspm Yspm Zspm]'
