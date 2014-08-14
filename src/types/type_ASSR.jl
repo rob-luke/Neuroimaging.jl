@@ -154,11 +154,18 @@ end
 
 function merge_channels(eeg::ASSR, merge_Chans::Array{ASCIIString}, new_name::String)
 
+    debug("Total origin channels: $(length(eeg.header["chanLabels"]))")
+
     keep_idxs = [findfirst(eeg.header["chanLabels"], i) for i = merge_Chans]
     keep_idxs = int(keep_idxs)
 
+    if sum(keep_idxs .== 0) > 0
+        warn("Could not merge channels as don't exist: $(append_strings(vec(merge_Chans[keep_idxs .== 0])))")
+        keep_idxs = keep_idxs[keep_idxs .> 0]
+    end
+
     info("Merging channels $(append_strings(vec(eeg.header["chanLabels"][keep_idxs,:])))")
-    info("Merging channels $(keep_idxs)")
+    debug("Merging channels $keep_idxs")
 
     eeg = add_channel(eeg, mean(eeg.data[:,keep_idxs], 2), new_name)
 end
