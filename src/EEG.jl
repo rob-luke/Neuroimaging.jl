@@ -12,6 +12,7 @@ export
     read_sfp,
     read_elp,
     write_dat,
+    prepare_dat,
     write_avr
 include("read_write/read.jl")
 include("read_write/write.jl")
