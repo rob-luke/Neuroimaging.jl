@@ -292,19 +292,19 @@ end
 #
 #######################################
 
-function ftest(eeg::ASSR; side_freq::Number=2)
+function ftest(eeg::ASSR; side_freq::Number=2, subject::String="Unknown")
 
-    eeg = ftest(eeg, eeg.modulation_frequency-1, side_freq=side_freq)
-    eeg = ftest(eeg, eeg.modulation_frequency,   side_freq=side_freq)
-    eeg = ftest(eeg, eeg.modulation_frequency+1, side_freq=side_freq)
-    eeg = ftest(eeg, eeg.modulation_frequency*2, side_freq=side_freq)
-    eeg = ftest(eeg, eeg.modulation_frequency*3, side_freq=side_freq)
-    eeg = ftest(eeg, eeg.modulation_frequency*4, side_freq=side_freq)
+    eeg = ftest(eeg, eeg.modulation_frequency-1, side_freq=side_freq, subject=subject)
+    eeg = ftest(eeg, eeg.modulation_frequency,   side_freq=side_freq, subject=subject)
+    eeg = ftest(eeg, eeg.modulation_frequency+1, side_freq=side_freq, subject=subject)
+    eeg = ftest(eeg, eeg.modulation_frequency*2, side_freq=side_freq, subject=subject)
+    eeg = ftest(eeg, eeg.modulation_frequency*3, side_freq=side_freq, subject=subject)
+    eeg = ftest(eeg, eeg.modulation_frequency*4, side_freq=side_freq, subject=subject)
 
     return eeg
 end
 
-function ftest(eeg::ASSR, freq_of_interest::Number; side_freq::Number=2)
+function ftest(eeg::ASSR, freq_of_interest::Number; side_freq::Number=2, subject::String="Unknown")
 
     # Extract required information
     fs = eeg.header["sampRate"][1]
@@ -329,7 +329,7 @@ function ftest(eeg::ASSR, freq_of_interest::Number; side_freq::Number=2)
                         SNRdB = vec(snrDb),
                         Statistic = vec(statistic),
                         Significant = vec(statistic.<0.05),
-                        Subject = "Unknown",
+                        Subject = subject,
                         Analysis="ftest",
                         NoiseHz = side_freq,
                         Frequency = freq_of_interest,
@@ -343,10 +343,10 @@ function ftest(eeg::ASSR, freq_of_interest::Number; side_freq::Number=2)
     return eeg
 end
 
-function ftest(eeg::ASSR, freq_of_interest::Array; side_freq::Number=2)
+function ftest(eeg::ASSR, freq_of_interest::Array; side_freq::Number=2, subject::String="Unknown")
 
     for f = freq_of_interest
-        eeg = ftest(eeg, f, side_freq=side_freq)
+        eeg = ftest(eeg, f, side_freq=side_freq, subject=subject)
     end
     return eeg
 end
