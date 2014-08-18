@@ -24,6 +24,7 @@ include("read_write/write.jl")
 export
     channelNames_biosemi_1020,
     highpass_filter,
+    lowpass_filter,
     remove_template,
     rereference
 include("preprocessing/preprocessing.jl")

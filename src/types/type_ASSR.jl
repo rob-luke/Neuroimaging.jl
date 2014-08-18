@@ -184,14 +184,32 @@ function highpass_filter(eeg::ASSR; cutOff::Number=2, order::Int=3, t::Int=3)
 
     debug("At modulation frequency mag = $(abs(freqz(f, eeg.modulation_frequency, 8192)))")
 
-    # Save the filter settings as a unique key in the processing dict
-    # This allows for applying multiple filters and tracking them all
     key_name = new_processing_key(eeg.processing, "filter")
     merge!(eeg.processing, [key_name => f])
 
     return eeg
  end
 
+
+function lowpass_filter(eeg::ASSR; cutOff::Number=150, order::Int=3, t::Int=3)
+
+    eeg.data, f = lowpass_filter(eeg.data, cutOff=cutOff, order=order, fs=eeg.header["sampRate"][1])
+
+    debug("At modulation frequency mag = $(abs(freqz(f, eeg.modulation_frequency, 8192)))")
+
+    key_name = new_processing_key(eeg.processing, "filter")
+    merge!(eeg.processing, [key_name => f])
+
+    return eeg
+ end
+
+
+
+#######################################
+#
+# filtering
+#
+#######################################
 
 function rereference(eeg::ASSR, refChan)
 

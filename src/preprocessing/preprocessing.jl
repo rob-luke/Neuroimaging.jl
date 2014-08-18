@@ -1,12 +1,3 @@
-# Processing functions
-#
-# highpass_filter            # High pass filter
-# remove_template            # Removes a template signal from each channel
-# rereference                # Re reference
-#
-# _find_frequency_idx
-#
-
 
 using DataFrames
 using DSP
@@ -29,6 +20,29 @@ function highpass_filter(signals::Array; cutOff::Number=2,
     f = digitalfilter(Highpass(Wn), Butterworth(order))
 
     info("Highpass filtering $(size(signals)[end]) channels.  Pass band > $(cutOff) Hz")
+    debug("Filter order = $order, fs = $fs, Wn = $Wn")
+
+    signals = filtfilt(f, signals)
+
+    return signals, f
+end
+
+
+#######################################
+#
+# Low pass filter
+#
+#######################################
+
+function lowpass_filter(signals::Array; cutOff::Number=2,
+                         order::Int=3, fs::Int=8192)
+
+    signals = convert(Array{Float64}, signals)
+
+    Wn = cutOff/(fs/2)
+    f = digitalfilter(Lowpass(Wn), Butterworth(order))
+
+    info("Lowpass filtering $(size(signals)[end]) channels.  Pass band < $(cutOff) Hz")
     debug("Filter order = $order, fs = $fs, Wn = $Wn")
 
     signals = filtfilt(f, signals)
