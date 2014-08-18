@@ -18,6 +18,12 @@ type ASSR
 end
 
 
+#######################################
+#
+# Read ASSR
+#
+#######################################
+
 function read_ASSR(fname::Union(String, IO))
 
     info("Importing file $fname")
@@ -59,58 +65,41 @@ function read_ASSR(fname::Union(String, IO))
 end
 
 
+#######################################
+#
+# Modify ASSR
+#
+#######################################
+
 function add_channel(eeg::ASSR, data::Array, chanLabels::ASCIIString;
-                     sampRate::Int=0,        physMin::Int=0,          physMax::Int=0, scaleFactor::Int=0,
-                     digMax::Int=0,          digMin::Int=0,           nSampRec::Int=0,
-                     prefilt::String="",     reserved::String="",     physDim::String="",
-                     transducer::String="")
+                     sampRate::Number=eeg.header["sampRate"][1],     scaleFactor::Number=eeg.header["scaleFactor"][1],
+                     physMin::Number=eeg.header["physMin"][1],       physMax::Number=eeg.header["physMax"][1],
+                     digMin::Number=eeg.header["digMin"][1],         digMax::Number=eeg.header["digMax"][1],
+                     nSampRec::Number=eeg.header["nSampRec"][1],     prefilt::String=eeg.header["prefilt"][1],
+                     reserved::String=eeg.header["reserved"][1],     physDim::String=eeg.header["physDim"][1],
+                     transducer::String=eeg.header["transducer"][1])
 
     info("Adding channel $chanLabels")
 
     eeg.data = hcat(eeg.data, data)
 
-    push!(eeg.header["sampRate"],    sampRate    == 0 ? eeg.header["sampRate"][1]    : sampRate)
-    push!(eeg.header["physMin"],     physMin     == 0 ? eeg.header["physMin"][1]     : physMin)
-    push!(eeg.header["physMax"],     physMax     == 0 ? eeg.header["physMax"][1]     : physMax)
-    push!(eeg.header["digMax"],      digMax      == 0 ? eeg.header["digMax"][1]      : digMax)
-    push!(eeg.header["digMin"],      digMin      == 0 ? eeg.header["digMin"][1]      : digMin)
-    push!(eeg.header["nSampRec"],    nSampRec    == 0 ? eeg.header["nSampRec"][1]    : nSampRec)
-    push!(eeg.header["scaleFactor"], scaleFactor == 0 ? eeg.header["scaleFactor"][1] : scaleFactor)
+    push!(eeg.header["sampRate"],    sampRate)
+    push!(eeg.header["physMin"],     physMin)
+    push!(eeg.header["physMax"],     physMax)
+    push!(eeg.header["digMax"],      digMax)
+    push!(eeg.header["digMin"],      digMin)
+    push!(eeg.header["nSampRec"],    nSampRec)
+    push!(eeg.header["scaleFactor"], scaleFactor)
 
-    push!(eeg.header["prefilt"],    prefilt    == "" ? eeg.header["prefilt"][1]    : prefilt)
-    push!(eeg.header["reserved"],   reserved   == "" ? eeg.header["reserved"][1]   : reserved)
-    push!(eeg.header["chanLabels"], chanLabels == "" ? eeg.header["chanLabels"][1] : chanLabels)
-    push!(eeg.header["transducer"], transducer == "" ? eeg.header["transducer"][1] : transducer)
-    push!(eeg.header["physDim"],    physDim    == "" ? eeg.header["physDim"][1]    : physDim)
-
-
-    return eeg
-end
-
-function trim_ASSR(eeg::ASSR, stop::Int; start::Int=1)
-
-    info("Trimming $(size(eeg.data)[end]) channels between $start and $stop")
-
-    eeg.data = eeg.data[start:stop,:]
-    eeg.sysCodeChan = eeg.sysCodeChan[start:stop]
-    eeg.trigChan = eeg.trigChan[start:stop]
-
-
-    to_keep = find(eeg.triggers["idx"] .<= stop)
-    eeg.triggers["idx"]  = eeg.triggers["idx"][to_keep]
-    #=eeg.triggers["dur"]  = eeg.triggers["dur"][to_keep]=#
-    eeg.triggers["code"] = eeg.triggers["code"][to_keep]
+    push!(eeg.header["prefilt"],    prefilt)
+    push!(eeg.header["reserved"],   reserved)
+    push!(eeg.header["chanLabels"], chanLabels)
+    push!(eeg.header["transducer"], transducer)
+    push!(eeg.header["physDim"],    physDim)
 
     return eeg
 end
 
-
-
-#######################################
-#
-# Remove channels
-#
-#######################################
 
 function remove_channel!(eeg::ASSR, channel_idx::Array{Int})
 
@@ -146,6 +135,24 @@ function remove_channel!(eeg::ASSR, channel_name::Union(String, Int))
 end
 
 
+function trim_ASSR(eeg::ASSR, stop::Int; start::Int=1)
+
+    info("Trimming $(size(eeg.data)[end]) channels between $start and $stop")
+
+    eeg.data = eeg.data[start:stop,:]
+    eeg.sysCodeChan = eeg.sysCodeChan[start:stop]
+    eeg.trigChan = eeg.trigChan[start:stop]
+
+
+    to_keep = find(eeg.triggers["idx"] .<= stop)
+    eeg.triggers["idx"]  = eeg.triggers["idx"][to_keep]
+    #=eeg.triggers["dur"]  = eeg.triggers["dur"][to_keep]=#
+    eeg.triggers["code"] = eeg.triggers["code"][to_keep]
+
+    return eeg
+end
+
+
 #######################################
 #
 # Merge channels
@@ -173,7 +180,7 @@ end
 
 #######################################
 #
-# filtering
+# Filtering
 #
 #######################################
 
