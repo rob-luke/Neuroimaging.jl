@@ -301,14 +301,7 @@ end
 
 function ftest(eeg::ASSR; side_freq::Number=2, subject::String="Unknown")
 
-    eeg = ftest(eeg, eeg.modulation_frequency-1, side_freq=side_freq, subject=subject)
-    eeg = ftest(eeg, eeg.modulation_frequency,   side_freq=side_freq, subject=subject)
-    eeg = ftest(eeg, eeg.modulation_frequency+1, side_freq=side_freq, subject=subject)
-    eeg = ftest(eeg, eeg.modulation_frequency*2, side_freq=side_freq, subject=subject)
-    eeg = ftest(eeg, eeg.modulation_frequency*3, side_freq=side_freq, subject=subject)
-    eeg = ftest(eeg, eeg.modulation_frequency*4, side_freq=side_freq, subject=subject)
-
-    return eeg
+    ftest(eeg, eeg.modulation_frequency,   side_freq=side_freq, subject=subject)
 end
 
 function ftest(eeg::ASSR, freq_of_interest::Number; side_freq::Number=2, subject::String="Unknown")
