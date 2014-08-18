@@ -256,15 +256,28 @@ end
 #
 #######################################
 
-function add_triggers(a::ASSR, mod_freq::Number; cycle_per_epoch::Int=1)
+
+function add_triggers(a::ASSR;
+                      cycle_per_epoch::Int=1, remove_first::Int=0, max_epochs::Number=Inf)
+
+    add_triggers(a, a.modulation_frequency, cycle_per_epoch=cycle_per_epoch)
+end
+
+
+function add_triggers(a::ASSR, mod_freq::Float64;
+                      cycle_per_epoch::Int=1, remove_first::Int=0, max_epochs::Number=Inf)
+
+
+    epochIndex = _clean_epoch_index(a, remove_first=remove_first, max_epochs=max_epochs)
+
+    add_triggers(a, a.modulation_frequency, epochIndex, cycle_per_epoch=cycle_per_epoch)
+end
+
+
+function add_triggers(a::ASSR, mod_freq::Number, epochIndex;
+                      cycle_per_epoch::Int=1, max_epochs::Number=Inf)
 
     info("Adding triggers to reduce to $cycle_per_epoch cycle.")
-
-    # Extract current triggers
-    epochIndex = DataFrame(Code = a.triggers["code"], Index = a.triggers["idx"]);
-    epochIndex[:Code] = epochIndex[:Code] - 252
-    epochIndex = epochIndex[epochIndex[:Code].>0,:]
-    debug("Existing epochs: $(length(epochIndex))")
 
     # Existing epochs
     existing_epoch_length   = maximum(diff(epochIndex[:Index]))     # samples
@@ -297,9 +310,48 @@ function add_triggers(a::ASSR, mod_freq::Number; cycle_per_epoch::Int=1)
     return a
 end
 
-function add_triggers(a::ASSR; cycle_per_epoch::Int=1)
-    add_triggers(a, a.modulation_frequency, cycle_per_epoch=cycle_per_epoch)
+
+function _clean_epoch_index(a::ASSR; remove_first::Int=0, max_epochs::Number=Inf, valid_indices::Array{Int}=[1, 2])
+
+    # Make in to data frame for easy management
+    epochIndex = DataFrame(Code = a.triggers["code"], Index = a.triggers["idx"]);
+
+    # Make the codes more readable
+    epochIndex[:Code] = epochIndex[:Code] - 252
+
+    # Check for not valid indices and throw a warning
+    if sum([in(i, [0, valid_indices]) for i = epochIndex[:Code]]) != length(epochIndex[:Code])
+        non_valid = !convert(Array{Bool}, [in(i, [0, valid_indices]) for i = epochIndex[:Code]])
+        non_valid = unique(epochIndex[:Code][non_valid])
+        warn("File contains non valid triggers: $non_valid")
+        debug(epochIndex)
+    end
+
+    # Just take valid indices
+    valid = convert(Array{Bool}, vec([in(i, valid_indices) for i = epochIndex[:Code]]))
+    epochIndex = epochIndex[ valid , : ]
+
+    # How long are the indices
+    epochIndex[:Length] = [0, diff(epochIndex[:Index])]
+
+    # Trim values if requested
+    epochIndex = epochIndex[remove_first+1:end,:]                                  # Often the first trigger is rubbish
+    epochIndex = epochIndex[1:minimum([max_epochs, length(epochIndex[:Index])]),:] # If there is rubbish at the end
+
+    # Sanity check
+    if std(epochIndex[:Length]) > 1
+        warn("Your epoch lengths vary too much")
+        warn("Length: median=$(median(epochIndex[:Length])) sd=$(std(epochIndex[:Length])) min=$(minimum(epochIndex[:Length]))")
+        debug(epochIndex)
+    end
+
+    debug("Existing epochs: $(length(epochIndex[:Index]))")
+
+    return epochIndex
 end
+
+
+
 
 #######################################
 #
