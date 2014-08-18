@@ -178,31 +178,49 @@ end
 #######################################
 
 
-function highpass_filter(eeg::ASSR; cutOff::Number=2, order::Int=3, t::Int=3)
+function highpass_filter(eeg::ASSR; cutOff::Number=2, order::Int=3, tolerance::Number=0.01)
 
     eeg.data, f = highpass_filter(eeg.data, cutOff=cutOff, order=order, fs=eeg.header["sampRate"][1])
 
-    debug("At modulation frequency mag = $(abs(freqz(f, eeg.modulation_frequency, 8192)))")
+    _filter_check(f, eeg.modulation_frequency, eeg.header["sampRate"][1], tolerance)
 
-    key_name = new_processing_key(eeg.processing, "filter")
-    merge!(eeg.processing, [key_name => f])
-
-    return eeg
+    return _append_filter(eeg, f)
  end
 
 
-function lowpass_filter(eeg::ASSR; cutOff::Number=150, order::Int=3, t::Int=3)
+function lowpass_filter(eeg::ASSR; cutOff::Number=150, order::Int=3, tolerance::Number=0.01)
 
     eeg.data, f = lowpass_filter(eeg.data, cutOff=cutOff, order=order, fs=eeg.header["sampRate"][1])
 
-    debug("At modulation frequency mag = $(abs(freqz(f, eeg.modulation_frequency, 8192)))")
+    _filter_check(f, eeg.modulation_frequency, eeg.header["sampRate"][1], tolerance)
+
+    return _append_filter(eeg, f)
+ end
+
+
+function _filter_check(f::Filter, mod_freq::Number, fs::Number, tolerance::Number)
+    #
+    # Ensure that the filter does not alter the modulation frequency greater than a set tolerance
+    #
+
+    mod_change = abs(freqz(f, mod_freq, fs))
+    if mod_change > 1 + tolerance || mod_change < 1 - tolerance
+        warn("Filtering has modified modulation frequency greater than set tolerance: $mod_change")
+    end
+    debug("Filter magnitude at modulation frequency: $(mod_change)")
+end
+
+
+function _append_filter(eeg::ASSR, f::Filter; name::String="filter")
+    #
+    # Put the filter information in the ASSR processing structure
+    #
 
     key_name = new_processing_key(eeg.processing, "filter")
     merge!(eeg.processing, [key_name => f])
 
     return eeg
- end
-
+end
 
 
 #######################################
