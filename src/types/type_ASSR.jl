@@ -264,13 +264,13 @@ function add_triggers(a::ASSR;
 end
 
 
-function add_triggers(a::ASSR, mod_freq::Float64;
+function add_triggers(a::ASSR, mod_freq::Number;
                       cycle_per_epoch::Int=1, remove_first::Int=0, max_epochs::Number=Inf)
 
 
     epochIndex = _clean_epoch_index(a, remove_first=remove_first, max_epochs=max_epochs)
 
-    add_triggers(a, a.modulation_frequency, epochIndex, cycle_per_epoch=cycle_per_epoch)
+    add_triggers(a, mod_freq, epochIndex, cycle_per_epoch=cycle_per_epoch)
 end
 
 
@@ -339,9 +339,9 @@ function _clean_epoch_index(a::ASSR; remove_first::Int=0, max_epochs::Number=Inf
     epochIndex = epochIndex[1:minimum([max_epochs, length(epochIndex[:Index])]),:] # If there is rubbish at the end
 
     # Sanity check
-    if std(epochIndex[:Length]) > 1
+    if std(epochIndex[:Length][2:end]) > 1
         warn("Your epoch lengths vary too much")
-        warn("Length: median=$(median(epochIndex[:Length])) sd=$(std(epochIndex[:Length])) min=$(minimum(epochIndex[:Length]))")
+        warn("Length: median=$(median(epochIndex[:Length][2:end])) sd=$(std(epochIndex[:Length][2:end])) min=$(minimum(epochIndex[:Length][2:end]))")
         debug(epochIndex)
     end
 
