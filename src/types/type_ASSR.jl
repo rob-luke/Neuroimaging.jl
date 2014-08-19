@@ -24,11 +24,11 @@ end
 #
 #######################################
 
-function read_ASSR(fname::Union(String, IO))
+function read_ASSR(fname::Union(String, IO); kwargs...)
 
     info("Importing file $fname")
 
-    # Import using JBDF
+    # Import using BDF.jl
     fname2 = copy(fname)
     dats, evtTab, trigChan, sysCodeChan = readBDF(fname)
     bdfInfo = readBDFHeader(fname)
@@ -38,17 +38,18 @@ function read_ASSR(fname::Union(String, IO))
     # Check if matching mat file exists
     mat_path = string(filepath, filename, ".mat")
     if isreadable(mat_path)
-        rba = matread(mat_path)
+        rba                  = matread(mat_path)
         modulation_frequency = rba["properties"]["stimulation_properties"]["stimulus_1"]["rounded_modulation_frequency"]
-        amplitude = rba["properties"]["stimulation_properties"]["stimulus_1"]["amplitude"]
+        amplitude            = rba["properties"]["stimulation_properties"]["stimulus_1"]["amplitude"]
         info("Imported matching .mat file")
     else
         modulation_frequency = NaN
-        amplitude = NaN
+        amplitude            = NaN
     end
 
     # Place in type
-    eeg = ASSR(dats', evtTab, bdfInfo, Dict(), modulation_frequency, amplitude, "Raw", filepath, filename, sysCodeChan, trigChan)
+    eeg = ASSR(dats', evtTab, bdfInfo, Dict(),
+               modulation_frequency, amplitude, "Raw", filepath, filename, sysCodeChan, trigChan)
 
     remove_channel!(eeg, "Status")
 
@@ -61,10 +62,67 @@ function read_ASSR(fname::Union(String, IO))
         eeg.header["chanLabels"] = channelNames_biosemi_1020(eeg.header["chanLabels"])
     end
 
+    # Clean epoch index
+    eeg = _clean_epoch_index(eeg; kwargs...)
+
     return eeg
 end
 
 
+function _clean_epoch_index(a::ASSR; valid_indices::Array{Int}=[1, 2],
+                            min_epoch_length::Int=0, max_epoch_length::Number=Inf,
+                            remove_first::Int=0, max_epochs::Number=Inf, kwargs...)
+
+    info("Cleaning trigger information")
+
+    # Make in to data frame for easy management
+    epochIndex = DataFrame(Code = a.triggers["code"], Index = a.triggers["idx"]);
+
+    # Make the codes more readable
+    epochIndex[:Code] = epochIndex[:Code] - 252
+
+    # Check for not valid indices and throw a warning
+    if sum([in(i, [0, valid_indices]) for i = epochIndex[:Code]]) != length(epochIndex[:Code])
+        non_valid = !convert(Array{Bool}, [in(i, [0, valid_indices]) for i = epochIndex[:Code]])
+        non_valid = unique(epochIndex[:Code][non_valid])
+        warn("File contains non valid triggers: $non_valid")
+        debug(epochIndex)
+    end
+    # Just take valid indices
+    valid = convert(Array{Bool}, vec([in(i, valid_indices) for i = epochIndex[:Code]]))
+    epochIndex = epochIndex[ valid , : ]
+
+    # How long are the indices
+    epochIndex[:Length] = [0, diff(epochIndex[:Index])]
+
+    # Trim values if requested
+    epochIndex = epochIndex[remove_first+1:end,:]
+    epochIndex = epochIndex[1:minimum([max_epochs, length(epochIndex[:Index])]),:]
+
+    # Throw out epochs that are too short
+    if min_epoch_length > 0
+        epochIndex[:valid_length] = epochIndex[:Length] .> min_epoch_length
+        warn("Removed $(sum(!epochIndex[:valid_length])) triggers < length $(min_epoch_length)")
+        epochIndex = epochIndex[epochIndex[:valid_length], :]
+    end
+    if max_epoch_length < Inf
+        epochIndex[:valid_length] = epochIndex[:Length] .< max_epoch_length
+        warn("Removed $(sum(!epochIndex[:valid_length])) triggers > length $(max_epoch_length)")
+        epochIndex = epochIndex[epochIndex[:valid_length], :]
+    end
+
+    # Sanity check
+    if std(epochIndex[:Length][2:end]) > 1
+        warn("Your epoch lengths vary too much")
+        warn(string("Length: median=$(median(epochIndex[:Length][2:end])) sd=$(std(epochIndex[:Length][2:end])) ",
+              "min=$(minimum(epochIndex[:Length][2:end]))"))
+        debug(epochIndex)
+    end
+
+    a.triggers = ["idx" => vec(int(epochIndex[:Index])'), "code" => vec(epochIndex[:Code] .+ 252)]
+
+    return a
+end
 #######################################
 #
 # Modify ASSR
@@ -269,7 +327,8 @@ function add_triggers(a::ASSR, mod_freq::Number; kwargs...)
 
     debug("Adding triggers to reduce ASSR. Using $(mod_freq)Hz")
 
-    epochIndex = _clean_epoch_index(a; kwargs...)
+    epochIndex = DataFrame(Code = a.triggers["code"], Index = a.triggers["idx"]);
+    epochIndex[:Code] = epochIndex[:Code] - 252
 
     add_triggers(a, mod_freq, epochIndex; kwargs...)
 end
@@ -307,63 +366,6 @@ function add_triggers(a::ASSR, mod_freq::Number, epochIndex; cycle_per_epoch::In
 end
 
 
-function _clean_epoch_index(a::ASSR; valid_indices::Array{Int}=[1, 2],
-                            min_epoch_length::Int=0, max_epoch_length::Number=Inf,
-                            remove_first::Int=0, max_epochs::Number=Inf, kwargs...)
-
-    # Make in to data frame for easy management
-    epochIndex = DataFrame(Code = a.triggers["code"], Index = a.triggers["idx"]);
-
-    # Make the codes more readable
-    epochIndex[:Code] = epochIndex[:Code] - 252
-
-    # Check for not valid indices and throw a warning
-    if sum([in(i, [0, valid_indices]) for i = epochIndex[:Code]]) != length(epochIndex[:Code])
-        non_valid = !convert(Array{Bool}, [in(i, [0, valid_indices]) for i = epochIndex[:Code]])
-        non_valid = unique(epochIndex[:Code][non_valid])
-        warn("File contains non valid triggers: $non_valid")
-        debug(epochIndex)
-    end
-
-    # Just take valid indices
-    valid = convert(Array{Bool}, vec([in(i, valid_indices) for i = epochIndex[:Code]]))
-    epochIndex = epochIndex[ valid , : ]
-
-    # How long are the indices
-    epochIndex[:Length] = [0, diff(epochIndex[:Index])]
-
-    # Trim values if requested
-    epochIndex = epochIndex[remove_first+1:end,:]                                  # Often the first trigger is rubbish
-    epochIndex = epochIndex[1:minimum([max_epochs, length(epochIndex[:Index])]),:] # If there is rubbish at the end
-
-    # Throw out epochs that are too short
-    if min_epoch_length > 0
-        epochIndex[:valid_length] = epochIndex[:Length] .> min_epoch_length
-        warn("Removed $(sum(!epochIndex[:valid_length])) triggers < length $(min_epoch_length)")
-        epochIndex = epochIndex[epochIndex[:valid_length], :]
-    end
-    if max_epoch_length < Inf
-        epochIndex[:valid_length] = epochIndex[:Length] .< max_epoch_length
-        warn("Removed $(sum(!epochIndex[:valid_length])) triggers > length $(max_epoch_length)")
-        epochIndex = epochIndex[epochIndex[:valid_length], :]
-    end
-
-
-
-    # Sanity check
-    if std(epochIndex[:Length][2:end]) > 1
-        warn("Your epoch lengths vary too much")
-        warn("Length: median=$(median(epochIndex[:Length][2:end])) sd=$(std(epochIndex[:Length][2:end])) min=$(minimum(epochIndex[:Length][2:end]))")
-        debug(epochIndex)
-    end
-
-    debug("Existing epochs: $(length(epochIndex[:Index]))")
-
-    return epochIndex
-end
-
-
-
 
 #######################################
 #
@@ -375,15 +377,13 @@ function extract_epochs(eeg::ASSR)
 
     merge!(eeg.processing, ["epochs" => extract_epochs(eeg.data, eeg.triggers)])
 
-
     return eeg
 end
 
 
 function create_sweeps(eeg::ASSR; epochsPerSweep::Int=4)
 
-    merge!(eeg.processing,
-        ["sweeps" => create_sweeps(eeg.processing["epochs"], epochsPerSweep = epochsPerSweep)])
+    merge!(eeg.processing, ["sweeps" => create_sweeps(eeg.processing["epochs"], epochsPerSweep = epochsPerSweep)])
 
     return eeg
 end
