@@ -257,27 +257,27 @@ end
 #######################################
 
 
-function add_triggers(a::ASSR;
-                      cycle_per_epoch::Int=1, remove_first::Int=0, max_epochs::Number=Inf)
+function add_triggers(a::ASSR; kwargs...)
 
-    add_triggers(a, a.modulation_frequency, cycle_per_epoch=cycle_per_epoch)
+    debug("Adding triggers to reduce ASSR. Using ASSR modulation frequency")
+
+    add_triggers(a, a.modulation_frequency; kwargs...)
 end
 
 
-function add_triggers(a::ASSR, mod_freq::Number;
-                      cycle_per_epoch::Int=1, remove_first::Int=0, max_epochs::Number=Inf)
+function add_triggers(a::ASSR, mod_freq::Number; kwargs...)
 
+    debug("Adding triggers to reduce ASSR. Using $(mod_freq)Hz")
 
-    epochIndex = _clean_epoch_index(a, remove_first=remove_first, max_epochs=max_epochs)
+    epochIndex = _clean_epoch_index(a; kwargs...)
 
-    add_triggers(a, mod_freq, epochIndex, cycle_per_epoch=cycle_per_epoch)
+    add_triggers(a, mod_freq, epochIndex; kwargs...)
 end
 
 
-function add_triggers(a::ASSR, mod_freq::Number, epochIndex;
-                      cycle_per_epoch::Int=1, max_epochs::Number=Inf)
+function add_triggers(a::ASSR, mod_freq::Number, epochIndex; cycle_per_epoch::Int=1, args...)
 
-    info("Adding triggers to reduce to $cycle_per_epoch cycle.")
+    info("Adding triggers to reduce ASSR. Reducing $(mod_freq)Hz to $cycle_per_epoch cycle(s).")
 
     # Existing epochs
     existing_epoch_length   = maximum(diff(epochIndex[:Index]))     # samples
@@ -289,18 +289,14 @@ function add_triggers(a::ASSR, mod_freq::Number, epochIndex;
     new_epochs_num     = round(existing_epoch_length_s / new_epoch_length_s) - 2
     new_epoch_times    = [1:new_epochs_num]*new_epoch_length_s
     new_epoch_indx     = [0, round(new_epoch_times * a.header["sampRate"][1])]
-
-    debug("new epoch length = $new_epoch_length_s")
-    debug("num epochs       = $new_epochs_num")
-    debug("max time         = $(maximum(new_epoch_times))")
-
-    debug("was $(length(epochIndex[:Index])) indices")
+    debug("New epoch length = $new_epoch_length_s")
+    debug("New # epochs     = $new_epochs_num")
 
     # Place new epoch indices
+    debug("Was $(length(epochIndex[:Index])) indices")
     new_indx = epochIndex[:Index][1:end-1] .+ new_epoch_indx'
     new_indx = reshape(new_indx', length(new_indx), 1)[1:end-1]
-
-    debug("now $(length(new_indx)) indices")
+    debug("Now $(length(new_indx)) indices")
 
     # Place in dict
     # Will wipe old info
@@ -311,7 +307,9 @@ function add_triggers(a::ASSR, mod_freq::Number, epochIndex;
 end
 
 
-function _clean_epoch_index(a::ASSR; remove_first::Int=0, max_epochs::Number=Inf, valid_indices::Array{Int}=[1, 2])
+function _clean_epoch_index(a::ASSR; valid_indices::Array{Int}=[1, 2],
+                            min_epoch_length::Int=0, max_epoch_length::Number=Inf,
+                            remove_first::Int=0, max_epochs::Number=Inf, kwargs...)
 
     # Make in to data frame for easy management
     epochIndex = DataFrame(Code = a.triggers["code"], Index = a.triggers["idx"]);
@@ -337,6 +335,20 @@ function _clean_epoch_index(a::ASSR; remove_first::Int=0, max_epochs::Number=Inf
     # Trim values if requested
     epochIndex = epochIndex[remove_first+1:end,:]                                  # Often the first trigger is rubbish
     epochIndex = epochIndex[1:minimum([max_epochs, length(epochIndex[:Index])]),:] # If there is rubbish at the end
+
+    # Throw out epochs that are too short
+    if min_epoch_length > 0
+        epochIndex[:valid_length] = epochIndex[:Length] .> min_epoch_length
+        warn("Removed $(sum(!epochIndex[:valid_length])) triggers < length $(min_epoch_length)")
+        epochIndex = epochIndex[epochIndex[:valid_length], :]
+    end
+    if max_epoch_length < Inf
+        epochIndex[:valid_length] = epochIndex[:Length] .< max_epoch_length
+        warn("Removed $(sum(!epochIndex[:valid_length])) triggers > length $(max_epoch_length)")
+        epochIndex = epochIndex[epochIndex[:valid_length], :]
+    end
+
+
 
     # Sanity check
     if std(epochIndex[:Length][2:end]) > 1
