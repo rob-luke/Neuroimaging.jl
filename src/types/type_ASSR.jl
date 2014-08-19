@@ -71,44 +71,52 @@ end
 
 function _clean_epoch_index(a::ASSR; valid_indices::Array{Int}=[1, 2],
                             min_epoch_length::Int=0, max_epoch_length::Number=Inf,
-                            remove_first::Int=0, max_epochs::Number=Inf, kwargs...)
+                            remove_first::Int=0,     max_epochs::Number=Inf, kwargs...)
 
     info("Cleaning trigger information")
 
     # Make in to data frame for easy management
     epochIndex = DataFrame(Code = a.triggers["code"], Index = a.triggers["idx"]);
-
-    # Make the codes more readable
     epochIndex[:Code] = epochIndex[:Code] - 252
 
     # Check for not valid indices and throw a warning
     if sum([in(i, [0, valid_indices]) for i = epochIndex[:Code]]) != length(epochIndex[:Code])
         non_valid = !convert(Array{Bool}, [in(i, [0, valid_indices]) for i = epochIndex[:Code]])
-        non_valid = unique(epochIndex[:Code][non_valid])
+        non_valid = sort(unique(epochIndex[:Code][non_valid]))
         warn("File contains non valid triggers: $non_valid")
-        debug(epochIndex)
     end
     # Just take valid indices
     valid = convert(Array{Bool}, vec([in(i, valid_indices) for i = epochIndex[:Code]]))
     epochIndex = epochIndex[ valid , : ]
 
-    # How long are the indices
-    epochIndex[:Length] = [0, diff(epochIndex[:Index])]
-
     # Trim values if requested
-    epochIndex = epochIndex[remove_first+1:end,:]
-    epochIndex = epochIndex[1:minimum([max_epochs, length(epochIndex[:Index])]),:]
+    if remove_first > 0
+        epochIndex = epochIndex[remove_first+1:end,:]
+        info("Trimming first $remove_first triggers")
+    end
+    if max_epochs < Inf
+        epochIndex = epochIndex[1:minimum([max_epochs, length(epochIndex[:Index])]),:]
+        info("Trimming to $max_epochs triggers")
+    end
 
-    # Throw out epochs that are too short
+    # Throw out epochs that are the wrong length
+    epochIndex[:Length] = [0, diff(epochIndex[:Index])]
     if min_epoch_length > 0
         epochIndex[:valid_length] = epochIndex[:Length] .> min_epoch_length
-        warn("Removed $(sum(!epochIndex[:valid_length])) triggers < length $(min_epoch_length)")
-        epochIndex = epochIndex[epochIndex[:valid_length], :]
+        num_non_valid = sum(!epochIndex[:valid_length])
+        if num_non_valid > 1    # Don't count the first trigger
+            warn("Removed $num_non_valid triggers < length $min_epoch_length")
+            epochIndex = epochIndex[epochIndex[:valid_length], :]
+        end
     end
+    epochIndex[:Length] = [0, diff(epochIndex[:Index])]
     if max_epoch_length < Inf
         epochIndex[:valid_length] = epochIndex[:Length] .< max_epoch_length
-        warn("Removed $(sum(!epochIndex[:valid_length])) triggers > length $(max_epoch_length)")
-        epochIndex = epochIndex[epochIndex[:valid_length], :]
+        num_non_valid = sum(!epochIndex[:valid_length])
+        if num_non_valid > 0
+            warn("Removed $num_non_valid triggers > length $max_epoch_length")
+            epochIndex = epochIndex[epochIndex[:valid_length], :]
+        end
     end
 
     # Sanity check
