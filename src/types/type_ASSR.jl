@@ -5,16 +5,17 @@ using MAT
 
 type ASSR
     data::Array
-    triggers::Dict   #TODO: Change to events
-    header::Dict
-    processing::Dict
+    triggers::Dict                 #TODO: Change to events
+    sample_rate::Number
     modulation_frequency::Number
-    amplitude::Number
-    reference_channel::String
+    reference_channel::String      # TODO: Change to array
     file_path::String
     file_name::String
-    sysCodeChan
-    trigChan          #TODO: Change to tiggers
+    system_code_channel            # Used when re writing data to disk. TODO: Make function to generate
+    trigger_channel                # Used when re writing data to disk. TODO: Make function to generate
+    header::Dict                   # Try not to use. Keep for completeness
+    processing::Dict               # Store processes run on the data
+    #TODO Channels as array of stings?
 end
 
 
@@ -28,42 +29,59 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
 
     info("Importing file $fname")
 
-    # Import using BDF.jl
-    fname2 = copy(fname)
-    dats, evtTab, trigChan, sysCodeChan = readBDF(fname)
-    bdfInfo = readBDFHeader(fname)
+    if isa(fname, String)
+        file_path, file_name, ext = fileparts(fname)
+        debug("Importing file for ASSR processing")
+    else
+        warn("Filetype is IO. Might be bugged")
+        file_path = "IO"
+        file_name = fname
+        ext = "IO"
+    end
 
-    filepath, filename, ext = fileparts(bdfInfo["fileName"])
+    #
+    # Import raw data
 
-    # Check if matching mat file exists
-    mat_path = string(filepath, filename, ".mat")
+    if ext == "bdf"
+        data, triggers, sample_rate, reference_channel, system_code_channel, trigger_channel, header = import_biosemi(fname)
+    else
+        warn("File type $ext is unknown")
+    end
+
+    #
+    # Import information files in the same directory
+
+    mat_path = string(file_path, file_name, ".mat")
     if isreadable(mat_path)
         rba                  = matread(mat_path)
         modulation_frequency = rba["properties"]["stimulation_properties"]["stimulus_1"]["rounded_modulation_frequency"]
-        amplitude            = rba["properties"]["stimulation_properties"]["stimulus_1"]["amplitude"]
         info("Imported matching .mat file")
     else
         modulation_frequency = NaN
-        amplitude            = NaN
     end
 
-    # Place in type
-    a = ASSR(dats', evtTab, bdfInfo, Dict(),
-               modulation_frequency, amplitude, "Raw", filepath, filename, sysCodeChan, trigChan)
+    #
+    # Create ASSR type
 
+    # Place in type
+    a = ASSR(data, triggers, sample_rate, modulation_frequency, reference_channel, file_path, file_name,
+             system_code_channel, trigger_channel, header, Dict())
+
+    #
+    # Clean the data
+
+    # Remove status channel information
     remove_channel!(a, "Status")
 
-    debug("  Imported $(size(dats)[1]) ASSR channels")
-    debug("  Info: $(a.modulation_frequency)Hz, $(a.header["subjID"]), $(a.header["startDate"]), $(a.header["startTime"])")
-
     # Tidy channel names if required
-    if bdfInfo["chanLabels"][1] == "A1"
+    if a.header["chanLabels"][1] == "A1"
         debug("  Converting names from BIOSEMI to 10-20")
         a.header["chanLabels"] = channelNames_biosemi_1020(a.header["chanLabels"])
     end
 
     # Clean epoch index
     a = _clean_epoch_index(a; kwargs...)
+
 
     return a
 end
@@ -206,8 +224,8 @@ function trim_ASSR(a::ASSR, stop::Int; start::Int=1)
     info("Trimming $(size(a.data)[end]) channels between $start and $stop")
 
     a.data = a.data[start:stop,:]
-    a.sysCodeChan = a.sysCodeChan[start:stop]
-    a.trigChan = a.trigChan[start:stop]
+    a.system_code_channel = a.system_code_channel[start:stop]
+    a.trigger_channel = a.trigger_channel[start:stop]
 
 
     to_keep = find(a.triggers["idx"] .<= stop)
@@ -401,7 +419,7 @@ function write_ASSR(a::ASSR, fname::String)
 
     info("Saving $(size(a.data)[end]) channels to $fname")
 
-    writeBDF(fname, a.data', a.trigChan, a.sysCodeChan, a.header["sampRate"][1],
+    writeBDF(fname, a.data', a.trigger_channel, a.system_code_channel, a.header["sampRate"][1],
         startDate=a.header["startDate"], startTime=a.header["startTime"],
         chanLabels=a.header["chanLabels"] )
 
@@ -449,7 +467,6 @@ function ftest(a::ASSR, freq_of_interest::Number; side_freq::Number=2, subject::
                         NoiseHz = side_freq,
                         Frequency = freq_of_interest,
                         ModulationFrequency = copy(a.modulation_frequency),
-                        PresentationAmplitude = copy(a.amplitude)
                         )
 
     key_name = new_processing_key(a.processing, "ftest")

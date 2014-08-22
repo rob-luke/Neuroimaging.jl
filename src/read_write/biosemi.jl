@@ -3,6 +3,39 @@
 # channelNames_biosemi_1020
 #
 
+using BDF
+
+#######################################
+#
+# Read BDF file
+#
+#######################################
+
+function import_biosemi(fname::Union(String, IO); kwargs...)
+
+    info("Importing BIOSEMI data file")
+
+    fname2 = copy(fname)
+
+    # Read raw data using BDF.jl
+    data, triggers, trigger_channel, system_code_channel = readBDF(fname)
+    header = readBDFHeader(fname)
+
+    # Check the sample rate
+    sample_rate = header["sampRate"]
+    if sum(diff(sample_rate)) != 0
+        warn("Sampling rate varies across channels")
+        sample_rate = NaN
+    else
+        sample_rate = sample_rate[1]
+    end
+
+    reference_channel = "Raw"
+
+    return  data', triggers, sample_rate, reference_channel, system_code_channel, trigger_channel, header
+end
+
+
 
 #######################################
 #

@@ -6,6 +6,7 @@ using Logging
 # File type reading and writing
 #
 export
+    import_biosemi,
     read_avr,
     read_bsa,
     read_dat,
@@ -16,6 +17,7 @@ export
     write_avr
 include("read_write/read.jl")
 include("read_write/write.jl")
+include("read_write/biosemi.jl")
 
 
 #
@@ -28,7 +30,6 @@ export
     remove_template,
     rereference
 include("preprocessing/preprocessing.jl")
-include("preprocessing/biosemi.jl")
 
 
 #
