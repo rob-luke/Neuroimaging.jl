@@ -48,24 +48,24 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
     end
 
     # Place in type
-    eeg = ASSR(dats', evtTab, bdfInfo, Dict(),
+    a = ASSR(dats', evtTab, bdfInfo, Dict(),
                modulation_frequency, amplitude, "Raw", filepath, filename, sysCodeChan, trigChan)
 
-    remove_channel!(eeg, "Status")
+    remove_channel!(a, "Status")
 
     debug("  Imported $(size(dats)[1]) ASSR channels")
-    debug("  Info: $(eeg.modulation_frequency)Hz, $(eeg.header["subjID"]), $(eeg.header["startDate"]), $(eeg.header["startTime"])")
+    debug("  Info: $(a.modulation_frequency)Hz, $(a.header["subjID"]), $(a.header["startDate"]), $(a.header["startTime"])")
 
     # Tidy channel names if required
     if bdfInfo["chanLabels"][1] == "A1"
         debug("  Converting names from BIOSEMI to 10-20")
-        eeg.header["chanLabels"] = channelNames_biosemi_1020(eeg.header["chanLabels"])
+        a.header["chanLabels"] = channelNames_biosemi_1020(a.header["chanLabels"])
     end
 
     # Clean epoch index
-    eeg = _clean_epoch_index(eeg; kwargs...)
+    a = _clean_epoch_index(a; kwargs...)
 
-    return eeg
+    return a
 end
 
 
@@ -137,85 +137,85 @@ end
 #
 #######################################
 
-function add_channel(eeg::ASSR, data::Array, chanLabels::ASCIIString;
-                     sampRate::Number=eeg.header["sampRate"][1],     scaleFactor::Number=eeg.header["scaleFactor"][1],
-                     physMin::Number=eeg.header["physMin"][1],       physMax::Number=eeg.header["physMax"][1],
-                     digMin::Number=eeg.header["digMin"][1],         digMax::Number=eeg.header["digMax"][1],
-                     nSampRec::Number=eeg.header["nSampRec"][1],     prefilt::String=eeg.header["prefilt"][1],
-                     reserved::String=eeg.header["reserved"][1],     physDim::String=eeg.header["physDim"][1],
-                     transducer::String=eeg.header["transducer"][1])
+function add_channel(a::ASSR, data::Array, chanLabels::ASCIIString;
+                     sampRate::Number=a.header["sampRate"][1],     scaleFactor::Number=a.header["scaleFactor"][1],
+                     physMin::Number=a.header["physMin"][1],       physMax::Number=a.header["physMax"][1],
+                     digMin::Number=a.header["digMin"][1],         digMax::Number=a.header["digMax"][1],
+                     nSampRec::Number=a.header["nSampRec"][1],     prefilt::String=a.header["prefilt"][1],
+                     reserved::String=a.header["reserved"][1],     physDim::String=a.header["physDim"][1],
+                     transducer::String=a.header["transducer"][1])
 
     info("Adding channel $chanLabels")
 
-    eeg.data = hcat(eeg.data, data)
+    a.data = hcat(a.data, data)
 
-    push!(eeg.header["sampRate"],    sampRate)
-    push!(eeg.header["physMin"],     physMin)
-    push!(eeg.header["physMax"],     physMax)
-    push!(eeg.header["digMax"],      digMax)
-    push!(eeg.header["digMin"],      digMin)
-    push!(eeg.header["nSampRec"],    nSampRec)
-    push!(eeg.header["scaleFactor"], scaleFactor)
+    push!(a.header["sampRate"],    sampRate)
+    push!(a.header["physMin"],     physMin)
+    push!(a.header["physMax"],     physMax)
+    push!(a.header["digMax"],      digMax)
+    push!(a.header["digMin"],      digMin)
+    push!(a.header["nSampRec"],    nSampRec)
+    push!(a.header["scaleFactor"], scaleFactor)
 
-    push!(eeg.header["prefilt"],    prefilt)
-    push!(eeg.header["reserved"],   reserved)
-    push!(eeg.header["chanLabels"], chanLabels)
-    push!(eeg.header["transducer"], transducer)
-    push!(eeg.header["physDim"],    physDim)
+    push!(a.header["prefilt"],    prefilt)
+    push!(a.header["reserved"],   reserved)
+    push!(a.header["chanLabels"], chanLabels)
+    push!(a.header["transducer"], transducer)
+    push!(a.header["physDim"],    physDim)
 
-    return eeg
+    return a
 end
 
 
-function remove_channel!(eeg::ASSR, channel_idx::Array{Int})
+function remove_channel!(a::ASSR, channel_idx::Array{Int})
 
     channel_idx = channel_idx[channel_idx .!= 0]
 
     info("Removing channel(s) $channel_idx")
 
-    keep_idx = [1:size(eeg.data)[end]]
+    keep_idx = [1:size(a.data)[end]]
     for c = sort(channel_idx, rev=true)
         try
             splice!(keep_idx, c)
         end
     end
 
-    eeg.data = eeg.data[:, keep_idx]
+    a.data = a.data[:, keep_idx]
 
     # Remove header info
     for key = ["sampRate", "physMin", "physMax", "nSampRec", "prefilt", "reserved", "chanLabels", "transducer",
                "physDim", "digMax", "digMin", "scaleFactor"]
-        eeg.header[key]    = eeg.header[key][keep_idx]
+        a.header[key]    = a.header[key][keep_idx]
     end
 end
 
-function remove_channel!(eeg::ASSR, channel_names::Array{ASCIIString})
+function remove_channel!(a::ASSR, channel_names::Array{ASCIIString})
 
     info("Removing channel(s) $(append_strings(channel_names))")
 
-    remove_channel!(eeg, int([findfirst(eeg.header["chanLabels"], c) for c=channel_names]))
+    remove_channel!(a, int([findfirst(a.header["chanLabels"], c) for c=channel_names]))
 end
 
-function remove_channel!(eeg::ASSR, channel_name::Union(String, Int))
-    remove_channel!(eeg, [channel_name])
+function remove_channel!(a::ASSR, channel_name::Union(String, Int))
+    remove_channel!(a, [channel_name])
 end
 
 
-function trim_ASSR(eeg::ASSR, stop::Int; start::Int=1)
+function trim_ASSR(a::ASSR, stop::Int; start::Int=1)
 
-    info("Trimming $(size(eeg.data)[end]) channels between $start and $stop")
+    info("Trimming $(size(a.data)[end]) channels between $start and $stop")
 
-    eeg.data = eeg.data[start:stop,:]
-    eeg.sysCodeChan = eeg.sysCodeChan[start:stop]
-    eeg.trigChan = eeg.trigChan[start:stop]
+    a.data = a.data[start:stop,:]
+    a.sysCodeChan = a.sysCodeChan[start:stop]
+    a.trigChan = a.trigChan[start:stop]
 
 
-    to_keep = find(eeg.triggers["idx"] .<= stop)
-    eeg.triggers["idx"]  = eeg.triggers["idx"][to_keep]
-    #=eeg.triggers["dur"]  = eeg.triggers["dur"][to_keep]=#
-    eeg.triggers["code"] = eeg.triggers["code"][to_keep]
+    to_keep = find(a.triggers["idx"] .<= stop)
+    a.triggers["idx"]  = a.triggers["idx"][to_keep]
+    #=a.triggers["dur"]  = a.triggers["dur"][to_keep]=#
+    a.triggers["code"] = a.triggers["code"][to_keep]
 
-    return eeg
+    return a
 end
 
 
@@ -225,11 +225,11 @@ end
 #
 #######################################
 
-function merge_channels(eeg::ASSR, merge_Chans::Array{ASCIIString}, new_name::String)
+function merge_channels(a::ASSR, merge_Chans::Array{ASCIIString}, new_name::String)
 
-    debug("Total origin channels: $(length(eeg.header["chanLabels"]))")
+    debug("Total origin channels: $(length(a.header["chanLabels"]))")
 
-    keep_idxs = [findfirst(eeg.header["chanLabels"], i) for i = merge_Chans]
+    keep_idxs = [findfirst(a.header["chanLabels"], i) for i = merge_Chans]
     keep_idxs = int(keep_idxs)
 
     if sum(keep_idxs .== 0) > 0
@@ -237,10 +237,10 @@ function merge_channels(eeg::ASSR, merge_Chans::Array{ASCIIString}, new_name::St
         keep_idxs = keep_idxs[keep_idxs .> 0]
     end
 
-    info("Merging channels $(append_strings(vec(eeg.header["chanLabels"][keep_idxs,:])))")
+    info("Merging channels $(append_strings(vec(a.header["chanLabels"][keep_idxs,:])))")
     debug("Merging channels $keep_idxs")
 
-    eeg = add_channel(eeg, mean(eeg.data[:,keep_idxs], 2), new_name)
+    a = add_channel(a, mean(a.data[:,keep_idxs], 2), new_name)
 end
 
 
@@ -251,23 +251,23 @@ end
 #######################################
 
 
-function highpass_filter(eeg::ASSR; cutOff::Number=2, order::Int=3, tolerance::Number=0.01)
+function highpass_filter(a::ASSR; cutOff::Number=2, order::Int=3, tolerance::Number=0.01)
 
-    eeg.data, f = highpass_filter(eeg.data, cutOff=cutOff, order=order, fs=eeg.header["sampRate"][1])
+    a.data, f = highpass_filter(a.data, cutOff=cutOff, order=order, fs=a.header["sampRate"][1])
 
-    _filter_check(f, eeg.modulation_frequency, eeg.header["sampRate"][1], tolerance)
+    _filter_check(f, a.modulation_frequency, a.header["sampRate"][1], tolerance)
 
-    return _append_filter(eeg, f)
+    return _append_filter(a, f)
  end
 
 
-function lowpass_filter(eeg::ASSR; cutOff::Number=150, order::Int=3, tolerance::Number=0.01)
+function lowpass_filter(a::ASSR; cutOff::Number=150, order::Int=3, tolerance::Number=0.01)
 
-    eeg.data, f = lowpass_filter(eeg.data, cutOff=cutOff, order=order, fs=eeg.header["sampRate"][1])
+    a.data, f = lowpass_filter(a.data, cutOff=cutOff, order=order, fs=a.header["sampRate"][1])
 
-    _filter_check(f, eeg.modulation_frequency, eeg.header["sampRate"][1], tolerance)
+    _filter_check(f, a.modulation_frequency, a.header["sampRate"][1], tolerance)
 
-    return _append_filter(eeg, f)
+    return _append_filter(a, f)
  end
 
 
@@ -284,15 +284,15 @@ function _filter_check(f::Filter, mod_freq::Number, fs::Number, tolerance::Numbe
 end
 
 
-function _append_filter(eeg::ASSR, f::Filter; name::String="filter")
+function _append_filter(a::ASSR, f::Filter; name::String="filter")
     #
     # Put the filter information in the ASSR processing structure
     #
 
-    key_name = new_processing_key(eeg.processing, "filter")
-    merge!(eeg.processing, [key_name => f])
+    key_name = new_processing_key(a.processing, "filter")
+    merge!(a.processing, [key_name => f])
 
-    return eeg
+    return a
 end
 
 
@@ -302,17 +302,17 @@ end
 #
 #######################################
 
-function rereference(eeg::ASSR, refChan)
+function rereference(a::ASSR, refChan)
 
-    eeg.data = rereference(eeg.data, refChan, eeg.header["chanLabels"])
+    a.data = rereference(a.data, refChan, a.header["chanLabels"])
 
     if isa(refChan, Array)
         refChan = append_strings(refChan)
     end
 
-    eeg.reference_channel = refChan
+    a.reference_channel = refChan
 
-    return eeg
+    return a
 end
 
 
@@ -381,29 +381,29 @@ end
 #
 #######################################
 
-function extract_epochs(eeg::ASSR)
+function extract_epochs(a::ASSR)
 
-    merge!(eeg.processing, ["epochs" => extract_epochs(eeg.data, eeg.triggers)])
+    merge!(a.processing, ["epochs" => extract_epochs(a.data, a.triggers)])
 
-    return eeg
+    return a
 end
 
 
-function create_sweeps(eeg::ASSR; epochsPerSweep::Int=4)
+function create_sweeps(a::ASSR; epochsPerSweep::Int=4)
 
-    merge!(eeg.processing, ["sweeps" => create_sweeps(eeg.processing["epochs"], epochsPerSweep = epochsPerSweep)])
+    merge!(a.processing, ["sweeps" => create_sweeps(a.processing["epochs"], epochsPerSweep = epochsPerSweep)])
 
-    return eeg
+    return a
 end
 
 
-function write_ASSR(eeg::ASSR, fname::String)
+function write_ASSR(a::ASSR, fname::String)
 
-    info("Saving $(size(eeg.data)[end]) channels to $fname")
+    info("Saving $(size(a.data)[end]) channels to $fname")
 
-    writeBDF(fname, eeg.data', eeg.trigChan, eeg.sysCodeChan, eeg.header["sampRate"][1],
-        startDate=eeg.header["startDate"], startTime=eeg.header["startTime"],
-        chanLabels=eeg.header["chanLabels"] )
+    writeBDF(fname, a.data', a.trigChan, a.sysCodeChan, a.header["sampRate"][1],
+        startDate=a.header["startDate"], startTime=a.header["startTime"],
+        chanLabels=a.header["chanLabels"] )
 
 end
 
@@ -414,30 +414,30 @@ end
 #
 #######################################
 
-function ftest(eeg::ASSR; side_freq::Number=2, subject::String="Unknown")
+function ftest(a::ASSR; side_freq::Number=2, subject::String="Unknown")
 
-    ftest(eeg, eeg.modulation_frequency,   side_freq=side_freq, subject=subject)
+    ftest(a, a.modulation_frequency,   side_freq=side_freq, subject=subject)
 end
 
-function ftest(eeg::ASSR, freq_of_interest::Number; side_freq::Number=2, subject::String="Unknown")
+function ftest(a::ASSR, freq_of_interest::Number; side_freq::Number=2, subject::String="Unknown")
 
     # Extract required information
-    fs = eeg.header["sampRate"][1]
+    fs = a.header["sampRate"][1]
 
     # TODO: Account for multiple applied filters
-    if haskey(eeg.processing, "filter1")
-        used_filter = eeg.processing["filter1"]
+    if haskey(a.processing, "filter1")
+        used_filter = a.processing["filter1"]
     else
         used_filter = nothing
     end
 
-    info("Calculating F statistic on $(size(eeg.data)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
+    info("Calculating F statistic on $(size(a.data)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
 
-    snrDb, signal, noise, statistic = ftest(eeg.processing["sweeps"], freq_of_interest, fs,
+    snrDb, signal, noise, statistic = ftest(a.processing["sweeps"], freq_of_interest, fs,
                                             side_freq = side_freq, used_filter = used_filter)
 
     result = DataFrame(
-                        Electrode = copy(eeg.header["chanLabels"]),
+                        Electrode = copy(a.header["chanLabels"]),
                         SignalPower = vec(signal),
                         NoisePower = vec(noise),
                         SNR = vec(10.^(snrDb/10)),
@@ -448,31 +448,31 @@ function ftest(eeg::ASSR, freq_of_interest::Number; side_freq::Number=2, subject
                         Analysis="ftest",
                         NoiseHz = side_freq,
                         Frequency = freq_of_interest,
-                        ModulationFrequency = copy(eeg.modulation_frequency),
-                        PresentationAmplitude = copy(eeg.amplitude)
+                        ModulationFrequency = copy(a.modulation_frequency),
+                        PresentationAmplitude = copy(a.amplitude)
                         )
 
-    key_name = new_processing_key(eeg.processing, "ftest")
-    merge!(eeg.processing, [key_name => result])
+    key_name = new_processing_key(a.processing, "ftest")
+    merge!(a.processing, [key_name => result])
 
-    return eeg
+    return a
 end
 
-function ftest(eeg::ASSR, freq_of_interest::Array; side_freq::Number=2, subject::String="Unknown")
+function ftest(a::ASSR, freq_of_interest::Array; side_freq::Number=2, subject::String="Unknown")
 
     for f = freq_of_interest
-        eeg = ftest(eeg, f, side_freq=side_freq, subject=subject)
+        a = ftest(a, f, side_freq=side_freq, subject=subject)
     end
-    return eeg
+    return a
 end
 
 
-function save_results(eeg::ASSR; name_extension::String="")
+function save_results(a::ASSR; name_extension::String="")
 
-    file_name = string(eeg.file_name, name_extension, ".csv")
+    file_name = string(a.file_name, name_extension, ".csv")
 
     # Rename to save space
-    results = eeg.processing
+    results = a.processing
 
     # Index of keys to be exported
     result_idx = find_keys_containing(results, "ftest")
@@ -493,7 +493,7 @@ function save_results(eeg::ASSR; name_extension::String="")
 
     info("File saved to $file_name")
 
-    return eeg
+    return a
 end
 
 #######################################
