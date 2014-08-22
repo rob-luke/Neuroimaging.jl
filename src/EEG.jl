@@ -36,11 +36,13 @@ include("preprocessing/preprocessing.jl")
 # Epochs
 #
 export
+    clean_triggers,
+    validate_triggers,
     extract_epochs,
     epoch_rejection,
     create_sweeps,
     average_epochs
-include("epochs.jl")
+include("synchronised_data.jl")
 
 
 #

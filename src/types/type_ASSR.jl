@@ -73,82 +73,14 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
     # Remove status channel information
     remove_channel!(a, "Status")
 
-    # Tidy channel names if required
-    if a.header["chanLabels"][1] == "A1"
-        debug("  Converting names from BIOSEMI to 10-20")
-        a.header["chanLabels"] = channelNames_biosemi_1020(a.header["chanLabels"])
-    end
 
     # Clean epoch index
-    a = _clean_epoch_index(a; kwargs...)
-
-
-    return a
-end
-
-
-function _clean_epoch_index(a::ASSR; valid_indices::Array{Int}=[1, 2],
-                            min_epoch_length::Int=0, max_epoch_length::Number=Inf,
-                            remove_first::Int=0,     max_epochs::Number=Inf, kwargs...)
-
-    info("Cleaning trigger information")
-
-    # Make in to data frame for easy management
-    epochIndex = DataFrame(Code = a.triggers["code"], Index = a.triggers["idx"]);
-    epochIndex[:Code] = epochIndex[:Code] - 252
-
-    # Check for not valid indices and throw a warning
-    if sum([in(i, [0, valid_indices]) for i = epochIndex[:Code]]) != length(epochIndex[:Code])
-        non_valid = !convert(Array{Bool}, [in(i, [0, valid_indices]) for i = epochIndex[:Code]])
-        non_valid = sort(unique(epochIndex[:Code][non_valid]))
-        warn("File contains non valid triggers: $non_valid")
-    end
-    # Just take valid indices
-    valid = convert(Array{Bool}, vec([in(i, valid_indices) for i = epochIndex[:Code]]))
-    epochIndex = epochIndex[ valid , : ]
-
-    # Trim values if requested
-    if remove_first > 0
-        epochIndex = epochIndex[remove_first+1:end,:]
-        info("Trimming first $remove_first triggers")
-    end
-    if max_epochs < Inf
-        epochIndex = epochIndex[1:minimum([max_epochs, length(epochIndex[:Index])]),:]
-        info("Trimming to $max_epochs triggers")
-    end
-
-    # Throw out epochs that are the wrong length
-    epochIndex[:Length] = [0, diff(epochIndex[:Index])]
-    if min_epoch_length > 0
-        epochIndex[:valid_length] = epochIndex[:Length] .> min_epoch_length
-        num_non_valid = sum(!epochIndex[:valid_length])
-        if num_non_valid > 1    # Don't count the first trigger
-            warn("Removed $num_non_valid triggers < length $min_epoch_length")
-            epochIndex = epochIndex[epochIndex[:valid_length], :]
-        end
-    end
-    epochIndex[:Length] = [0, diff(epochIndex[:Index])]
-    if max_epoch_length < Inf
-        epochIndex[:valid_length] = epochIndex[:Length] .< max_epoch_length
-        num_non_valid = sum(!epochIndex[:valid_length])
-        if num_non_valid > 0
-            warn("Removed $num_non_valid triggers > length $max_epoch_length")
-            epochIndex = epochIndex[epochIndex[:valid_length], :]
-        end
-    end
-
-    # Sanity check
-    if std(epochIndex[:Length][2:end]) > 1
-        warn("Your epoch lengths vary too much")
-        warn(string("Length: median=$(median(epochIndex[:Length][2:end])) sd=$(std(epochIndex[:Length][2:end])) ",
-              "min=$(minimum(epochIndex[:Length][2:end]))"))
-        debug(epochIndex)
-    end
-
-    a.triggers = ["idx" => vec(int(epochIndex[:Index])'), "code" => vec(epochIndex[:Code] .+ 252)]
+    a.triggers = clean_triggers(a.triggers; kwargs...)
 
     return a
 end
+
+
 #######################################
 #
 # Modify ASSR
@@ -228,10 +160,10 @@ function trim_ASSR(a::ASSR, stop::Int; start::Int=1)
     a.trigger_channel = a.trigger_channel[start:stop]
 
 
-    to_keep = find(a.triggers["idx"] .<= stop)
-    a.triggers["idx"]  = a.triggers["idx"][to_keep]
+    to_keep = find(a.triggers["Index"] .<= stop)
+    a.triggers["Index"]  = a.triggers["Index"][to_keep]
     #=a.triggers["dur"]  = a.triggers["dur"][to_keep]=#
-    a.triggers["code"] = a.triggers["code"][to_keep]
+    a.triggers["Code"] = a.triggers["Code"][to_keep]
 
     return a
 end
@@ -353,7 +285,7 @@ function add_triggers(a::ASSR, mod_freq::Number; kwargs...)
 
     debug("Adding triggers to reduce ASSR. Using $(mod_freq)Hz")
 
-    epochIndex = DataFrame(Code = a.triggers["code"], Index = a.triggers["idx"]);
+    epochIndex = DataFrame(Code = a.triggers["Code"], Index = a.triggers["Index"]);
     epochIndex[:Code] = epochIndex[:Code] - 252
 
     add_triggers(a, mod_freq, epochIndex; kwargs...)
@@ -386,7 +318,7 @@ function add_triggers(a::ASSR, mod_freq::Number, epochIndex; cycle_per_epoch::In
     # Place in dict
     # Will wipe old info
     new_code = int(ones(1, length(new_indx))) .+ 252
-    a.triggers = ["idx" => vec(int(new_indx)'), "code" => vec(new_code)]
+    a.triggers = ["Index" => vec(int(new_indx)'), "Code" => vec(new_code)]
 
     return a
 end

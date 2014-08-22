@@ -32,6 +32,15 @@ function import_biosemi(fname::Union(String, IO); kwargs...)
 
     reference_channel = "Raw"
 
+    # Tidy the trigger channel to standard names
+    triggers = ["Code" => triggers["code"], "Index" => triggers["idx"]]
+
+    # Tidy channel names if required
+    if header["chanLabels"][1] == "A1"
+        debug("  Converting names from BIOSEMI to 10-20")
+        header["chanLabels"] = channelNames_biosemi_1020(header["chanLabels"])
+    end
+
     return  data', triggers, sample_rate, reference_channel, system_code_channel, trigger_channel, header
 end
 
