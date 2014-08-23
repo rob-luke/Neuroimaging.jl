@@ -190,21 +190,21 @@ end
 
 function highpass_filter(a::ASSR; cutOff::Number=2, order::Int=3, tolerance::Number=0.01)
 
-    a.data, f = highpass_filter(a.data, cutOff=cutOff, order=order, fs=a.header["sampRate"][1])
+    a.data, f = highpass_filter(a.data, cutOff=cutOff, order=order, fs=a.sample_rate)
 
-    _filter_check(f, a.modulation_frequency, a.header["sampRate"][1], tolerance)
+    _filter_check(f, a.modulation_frequency, a.sample_rate, tolerance)
 
-    return _append_filter(a, f)
+    _append_filter(a, f)
  end
 
 
 function lowpass_filter(a::ASSR; cutOff::Number=150, order::Int=3, tolerance::Number=0.01)
 
-    a.data, f = lowpass_filter(a.data, cutOff=cutOff, order=order, fs=a.header["sampRate"][1])
+    a.data, f = lowpass_filter(a.data, cutOff=cutOff, order=order, fs=a.sample_rate)
 
-    _filter_check(f, a.modulation_frequency, a.header["sampRate"][1], tolerance)
+    _filter_check(f, a.modulation_frequency, a.sample_rate, tolerance)
 
-    return _append_filter(a, f)
+    _append_filter(a, f)
  end
 
 
@@ -235,7 +235,7 @@ end
 
 #######################################
 #
-# filtering
+# Change reference channels
 #
 #######################################
 
@@ -285,14 +285,14 @@ function add_triggers(a::ASSR, mod_freq::Number, epochIndex; cycle_per_epoch::In
 
     # Existing epochs
     existing_epoch_length   = maximum(diff(epochIndex[:Index]))     # samples
-    existing_epoch_length_s = existing_epoch_length / a.header["sampRate"][1]
+    existing_epoch_length_s = existing_epoch_length / a.sample_rate
     debug("Existing epoch length: $(existing_epoch_length_s)s")
 
     # New epochs
     new_epoch_length_s = cycle_per_epoch / mod_freq
     new_epochs_num     = round(existing_epoch_length_s / new_epoch_length_s) - 2
     new_epoch_times    = [1:new_epochs_num]*new_epoch_length_s
-    new_epoch_indx     = [0, round(new_epoch_times * a.header["sampRate"][1])]
+    new_epoch_indx     = [0, round(new_epoch_times * a.sample_rate)]
     debug("New epoch length = $new_epoch_length_s")
     debug("New # epochs     = $new_epochs_num")
 
@@ -338,7 +338,7 @@ function write_ASSR(a::ASSR, fname::String)
 
     info("Saving $(size(a.data)[end]) channels to $fname")
 
-    writeBDF(fname, a.data', a.trigger_channel, a.system_code_channel, a.header["sampRate"][1],
+    writeBDF(fname, a.data', a.trigger_channel, a.system_code_channel, a.sample_rate,
         startDate=a.header["startDate"], startTime=a.header["startTime"],
         chanLabels=a.header["chanLabels"] )
 
@@ -358,9 +358,6 @@ end
 
 function ftest(a::ASSR, freq_of_interest::Number; side_freq::Number=2, subject::String="Unknown")
 
-    # Extract required information
-    fs = a.header["sampRate"][1]
-
     # TODO: Account for multiple applied filters
     if haskey(a.processing, "filter1")
         used_filter = a.processing["filter1"]
@@ -370,7 +367,7 @@ function ftest(a::ASSR, freq_of_interest::Number; side_freq::Number=2, subject::
 
     info("Calculating F statistic on $(size(a.data)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
 
-    snrDb, signal, noise, statistic = ftest(a.processing["sweeps"], freq_of_interest, fs,
+    snrDb, signal, noise, statistic = ftest(a.processing["sweeps"], freq_of_interest, a.sample_rate,
                                             side_freq = side_freq, used_filter = used_filter)
 
     result = DataFrame(
