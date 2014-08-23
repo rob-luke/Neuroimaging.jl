@@ -1,4 +1,3 @@
-using BDF
 using DataFrames
 using MAT
 
@@ -39,40 +38,28 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
         ext = "IO"
     end
 
-    #
-    # Import raw data
+    # Extract frequency from the file name
+    if contains(file_name, "Hz")
+        a = match(r"[-_](\d+)Hz|Hz(\d+)[-_]", file_name).captures
+        modulation_frequency = float(a[[i !== nothing for i = a]][1])
+    else
+        modulation_frequency = NaN
+    end
 
+    # Import raw data
     if ext == "bdf"
         data, triggers, sample_rate, reference_channel, system_code_channel, trigger_channel, header = import_biosemi(fname)
     else
         warn("File type $ext is unknown")
     end
 
-    #
-    # Import information files in the same directory
 
-    mat_path = string(file_path, file_name, ".mat")
-    if isreadable(mat_path)
-        rba                  = matread(mat_path)
-        modulation_frequency = rba["properties"]["stimulation_properties"]["stimulus_1"]["rounded_modulation_frequency"]
-        info("Imported matching .mat file")
-    else
-        modulation_frequency = NaN
-    end
-
-    #
     # Create ASSR type
-
-    # Place in type
     a = ASSR(data, triggers, sample_rate, modulation_frequency, reference_channel, file_path, file_name,
              system_code_channel, trigger_channel, header, Dict())
 
-    #
-    # Clean the data
-
     # Remove status channel information
     remove_channel!(a, "Status")
-
 
     # Clean epoch index
     a.triggers = clean_triggers(a.triggers; kwargs...)
