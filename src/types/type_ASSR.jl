@@ -40,7 +40,7 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
 
     # Extract frequency from the file name
     if contains(file_name, "Hz")
-        a = match(r"[-_](\d+)Hz|Hz(\d+)[-_]", file_name).captures
+        a = match(r"[-_](\d+[_.]?\d+)Hz|Hz(\d+[_.]?\d+)[-_]", file_name).captures
         modulation_frequency = float(a[[i !== nothing for i = a]][1])
     else
         modulation_frequency = NaN

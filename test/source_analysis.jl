@@ -1,7 +1,7 @@
 using EEG
 using Base.Test
 
-fname = joinpath(dirname(@__FILE__), "data", "test.bdf")
+fname = joinpath(dirname(@__FILE__), "data", "test_Hz19.5-testing.bdf")
 
 s = read_ASSR(fname)
 
