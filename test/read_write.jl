@@ -17,11 +17,20 @@ sampRate = readBDFHeader(fname)["sampRate"][1]
 
 @test trigs == biosemi_trigger2channel(evtTab, dats, sampRate, code="code", index="idx", duration="dur")
 
-
 @test trigs !== trigger_channel(read_ASSR(fname))
 
-
 @test trigs == trigger_channel(read_ASSR(fname, valid_indices=[-1000:10000]))
+
+s  = read_ASSR(fname)
+write_ASSR(s, "testwrite.bdf")
+s2 = read_ASSR("testwrite.bdf")
+
+show(s)
+show(s2)
+
+@test s.data == s2.data
+@test s.triggers == s2.triggers
+@test s.sample_rate == s2.sample_rate
 
 
 #
