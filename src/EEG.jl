@@ -7,7 +7,8 @@ using Logging
 #
 export
     import_biosemi,
-    biosemi_trigger2channel,
+    create_channel,
+    create_events,
     read_avr,
     read_bsa,
     read_dat,

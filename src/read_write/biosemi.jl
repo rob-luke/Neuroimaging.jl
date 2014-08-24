@@ -1,6 +1,4 @@
-# Deal with BIOSEMI issues
-#
-# channelNames_biosemi_1020
+# Work with BIOSEMI files
 #
 
 using BDF
@@ -15,8 +13,6 @@ using Logging
 function import_biosemi(fname::Union(String, IO); kwargs...)
 
     info("Importing BIOSEMI data file")
-
-    fname2 = copy(fname)
 
     # Read raw data using BDF.jl
     data, triggers, trigger_channel, system_code_channel = readBDF(fname)
@@ -34,7 +30,9 @@ function import_biosemi(fname::Union(String, IO); kwargs...)
     reference_channel = "Raw"
 
     # Tidy the trigger channel to standard names
-    triggers = ["Code" => triggers["code"], "Index" => triggers["idx"], "Duration" => triggers["dur"]]
+    triggers = ["Code"     => triggers["code"],
+                "Index"    => triggers["idx"],
+                "Duration" => triggers["dur"]]
 
     # Tidy channel names if required
     if header["chanLabels"][1] == "A1"
@@ -42,24 +40,44 @@ function import_biosemi(fname::Union(String, IO); kwargs...)
         header["chanLabels"] = channelNames_biosemi_1020(header["chanLabels"])
     end
 
-    return  data', triggers, sample_rate, reference_channel, system_code_channel, header
+    system_codes = create_events(system_code_channel, sample_rate)
+
+    return  data', triggers, system_codes, sample_rate, reference_channel, header
+end
+
+#######################################
+#
+# Create events from channel
+#
+#######################################
+
+function create_events(channel::Array{Int16,1}, fs::Number; kwargs...)
+
+    startPoints = vcat(1, find(diff(channel) .!= 0).+1)
+    stopPoints = vcat(find(diff(channel) .!= 0), length(channel))
+    trigDurs = (stopPoints - startPoints)/fs
+
+    evt = channel[startPoints]
+    evtTab = (String=>Any)["Code" => evt,
+                           "Index" => startPoints,
+                           "Duration" => trigDurs]
+
 end
 
 
 #######################################
 #
-# Convert triggers information to trigger_channel
-# for writing to file using BDF.jl
+# Create channel from events
 #
 #######################################
 
-function biosemi_trigger2channel(t::Dict, data::Array, fs::Number; kwargs...)
+function create_channel(t::Dict, data::Array, fs::Number; kwargs...)
 
-    biosemi_trigger2channel(t, maximum(size(data)), fs; kwargs...)
+    create_channel(t, maximum(size(data)), fs; kwargs...)
 end
 
-function biosemi_trigger2channel(t::Dict, l::Int, fs::Number; code::String="Code", index::String="Index",
-                                 duration::String="Duration", kwargs...)
+function create_channel(t::Dict, l::Int, fs::Number; code::String="Code", index::String="Index",
+                        duration::String="Duration", kwargs...)
 
     debug("Creating trigger channel from data. Length: $l Triggers: $(length(t[index])) Fs: $fs")
 
@@ -74,7 +92,6 @@ function biosemi_trigger2channel(t::Dict, l::Int, fs::Number; code::String="Code
 
     return channel
 end
-
 
 
 #######################################

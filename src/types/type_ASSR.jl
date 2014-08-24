@@ -4,13 +4,13 @@ using MAT
 
 type ASSR
     data::Array
-    triggers::Dict                 #TODO: Change to events
+    triggers::Dict
+    system_codes::Dict
     sample_rate::Number
     modulation_frequency::Number
     reference_channel::String      # TODO: Change to array
     file_path::String
     file_name::String
-    system_code_channel            # Used when re writing data to disk. TODO: Make function to generate
     header::Dict                   # Try not to use. Keep for completeness
     processing::Dict               # Store processes run on the data
     #TODO Channels as array of stings?
@@ -53,15 +53,15 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
 
     # Import raw data
     if ext == "bdf"
-        data, triggers, sample_rate, reference_channel, system_code_channel, header = import_biosemi(fname)
+        data, triggers, system_codes, sample_rate, reference_channel, header = import_biosemi(fname)
     else
         warn("File type $ext is unknown")
     end
 
 
     # Create ASSR type
-    a = ASSR(data, triggers, sample_rate, modulation_frequency, reference_channel, file_path, file_name,
-             system_code_channel, header, Dict())
+    a = ASSR(data, triggers, system_codes, sample_rate, modulation_frequency, reference_channel, file_path, file_name,
+             header, Dict())
 
     # Remove status channel information
     remove_channel!(a, "Status")
@@ -148,13 +148,16 @@ function trim_ASSR(a::ASSR, stop::Int; start::Int=1)
     info("Trimming $(size(a.data)[end]) channels between $start and $stop")
 
     a.data = a.data[start:stop,:]
-    a.system_code_channel = a.system_code_channel[start:stop]
-
 
     to_keep = find(a.triggers["Index"] .<= stop)
-    a.triggers["Index"]  = a.triggers["Index"][to_keep]
-    #=a.triggers["dur"]  = a.triggers["dur"][to_keep]=#
-    a.triggers["Code"] = a.triggers["Code"][to_keep]
+    a.triggers["Index"]        = a.triggers["Index"][to_keep]
+    a.triggers["Duration"]     = a.triggers["Duration"][to_keep]
+    a.triggers["Code"]         = a.triggers["Code"][to_keep]
+
+    to_keep = find(a.system_codes["Index"] .<= stop)
+    a.system_codes["Index"]    = a.system_codes["Index"][to_keep]
+    a.system_codes["Duration"] = a.system_codes["Duration"][to_keep]
+    a.system_codes["Code"]     = a.system_codes["Code"][to_keep]
 
     return a
 end
@@ -307,9 +310,9 @@ function add_triggers(a::ASSR, mod_freq::Number, epochIndex; cycle_per_epoch::In
     debug("Now $(length(new_indx)) indices")
 
     # Place in dict
-    # Will wipe old info
     new_code = int(ones(1, length(new_indx))) .+ 252
-    a.triggers = ["Index" => vec(int(new_indx)'), "Code" => vec(new_code)]
+    a.triggers = ["Index" => vec(int(new_indx)'), "Code" => vec(new_code), "Duration" => ones(length(new_code), 1)']
+    #TODO Possible the trigger duration of one is not long enough
 
     return a
 end
@@ -347,7 +350,13 @@ end
 
 function trigger_channel(a::ASSR)
 
-    biosemi_trigger2channel(a.triggers, a.data, a.sample_rate)
+    create_channel(a.triggers, a.data, a.sample_rate)
+end
+
+
+function system_code_channel(a::ASSR)
+
+    create_channel(a.system_codes, a.data, a.sample_rate)
 end
 
 
@@ -355,9 +364,9 @@ function write_ASSR(a::ASSR, fname::String)
 
     info("Saving $(size(a.data)[end]) channels to $fname")
 
-    writeBDF(fname, a.data', trigger_channel(a), a.system_code_channel, a.sample_rate,
-        startDate=a.header["startDate"], startTime=a.header["startTime"],
-        chanLabels=a.header["chanLabels"] )
+    writeBDF(fname, a.data', trigger_channel(a), system_code_channel(a), a.sample_rate,
+             startDate=a.header["startDate"], startTime=a.header["startTime"],
+             chanLabels=a.header["chanLabels"] )
 
 end
 
