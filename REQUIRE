@@ -1,6 +1,7 @@
 DSP
 BDF
 DataFrames
+SIUnits
 ProgressMeter
 Distributions
 MAT
