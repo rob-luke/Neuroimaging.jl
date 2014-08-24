@@ -82,6 +82,8 @@ end
 
 function validate_triggers(t::Dict; kwargs...)
 
+    info("Validating trigger information")
+
     if t.count > 3
         err("Trigger channel has extra columns")
     end
@@ -96,6 +98,10 @@ function validate_triggers(t::Dict; kwargs...)
 
     if !haskey(t, "Duration")
         critical("Trigger channel does not contain code information")
+    end
+
+    if length(t["Index"]) !== length(t["Code"]) && length(t["Index"]) !== length(t["Duration"])
+        critical("Trigger data lengths are different")
     end
 end
 

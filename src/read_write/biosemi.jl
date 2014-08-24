@@ -65,6 +65,9 @@ function biosemi_trigger2channel(t::Dict, l::Int, fs::Number; code::String="Code
 
     channel = Array(Int16, l)
 
+    # Initialise array
+    for i = 1:l ; channel[i] = t[code][1]; end
+
     for i = 1:length(t[index])
         channel[t[index][i] : t[index][i] + t[duration][i] * fs] = t[code][i]
     end

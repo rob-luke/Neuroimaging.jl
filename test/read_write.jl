@@ -21,8 +21,9 @@ sampRate = readBDFHeader(fname)["sampRate"][1]
 
 @test trigs == trigger_channel(read_ASSR(fname, valid_indices=[-1000:10000]))
 
+s  = read_ASSR(fname)
+write_ASSR(s, "testwrite.bdf")
 s  = read_ASSR(fname, valid_indices=[-1000:10000])
-show(s)
 write_ASSR(s, "testwrite.bdf")
 s2 = read_ASSR("testwrite.bdf", valid_indices=[-1000:10000])
 
