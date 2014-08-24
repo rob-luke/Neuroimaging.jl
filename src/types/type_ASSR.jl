@@ -9,7 +9,7 @@ type ASSR
     system_codes::Dict
     sample_rate
     modulation_frequency
-    reference_channel::String      # TODO: Change to array
+    reference_channel::Array{String}
     file_path::String
     file_name::String
     channel_names::Array{String}
@@ -60,7 +60,7 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
 
 
     # Create ASSR type
-    a = ASSR(data, triggers, system_codes, sample_rate * Hertz, modulation_frequency, reference_channel, file_path, file_name,
+    a = ASSR(data, triggers, system_codes, sample_rate * Hertz, modulation_frequency, [reference_channel], file_path, file_name,
              header["chanLabels"], Dict())
 
     # Remove status channel information
@@ -224,15 +224,11 @@ end
 #
 #######################################
 
-function rereference(a::ASSR, refChan)
+function rereference(a::ASSR, refChan::Union(String, Array{ASCIIString}))
 
     a.data = rereference(a.data, refChan, a.channel_names)
 
-    if isa(refChan, Array)
-        refChan = append_strings(refChan)
-    end
-
-    a.reference_channel = refChan
+    a.reference_channel = [refChan]
 
     return a
 end
