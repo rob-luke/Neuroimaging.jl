@@ -17,6 +17,12 @@ type ASSR
 end
 
 
+import Base.show
+function Base.show(io::IO, a::ASSR)
+
+    println(io, "ASSR with $(size(a.data,2)) channels of $(size(a.data,1)) samples sampled at $(a.sample_rate)Hz")
+end
+
 #######################################
 #
 # Read ASSR
