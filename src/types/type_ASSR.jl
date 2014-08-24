@@ -1,19 +1,20 @@
 using DataFrames
 using MAT
 using SIUnits
+import SIUnits
 
 
 type ASSR
     data::Array
     triggers::Dict
     system_codes::Dict
-    sample_rate
-    modulation_frequency
+    sample_rate::SIUnits.SIQuantity{Number,0,0,-1,0,0,0,0}
+    modulation_frequency::SIUnits.SIQuantity{Number,0,0,-1,0,0,0,0}
     reference_channel::Array{String}
     file_path::String
     file_name::String
     channel_names::Array{String}
-    processing::Dict               # Store processes run on the data
+    processing::Dict
 end
 
 
@@ -57,7 +58,6 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
     else
         warn("File type $ext is unknown")
     end
-
 
     # Create ASSR type
     a = ASSR(data, triggers, system_codes, sample_rate * Hertz, modulation_frequency, [reference_channel], file_path, file_name,
