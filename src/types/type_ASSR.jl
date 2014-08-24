@@ -3,13 +3,14 @@ using MAT
 using SIUnits
 import SIUnits
 
+typealias FreqHz{T} SIUnits.SIQuantity{T,0,0,-1,0,0,0,0}
 
 type ASSR
     data::Array
     triggers::Dict
     system_codes::Dict
-    sample_rate::SIUnits.SIQuantity{Number,0,0,-1,0,0,0,0}
-    modulation_frequency::SIUnits.SIQuantity{Number,0,0,-1,0,0,0,0}
+    sample_rate::FreqHz{Number}
+    modulation_frequency::FreqHz{Number}
     reference_channel::Array{String}
     file_path::String
     file_name::String
