@@ -42,7 +42,7 @@ function import_biosemi(fname::Union(String, IO); kwargs...)
         header["chanLabels"] = channelNames_biosemi_1020(header["chanLabels"])
     end
 
-    return  data', triggers, sample_rate, reference_channel, system_code_channel, trigger_channel, header
+    return  data', triggers, sample_rate, reference_channel, system_code_channel, header
 end
 
 

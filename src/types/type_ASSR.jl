@@ -11,7 +11,6 @@ type ASSR
     file_path::String
     file_name::String
     system_code_channel            # Used when re writing data to disk. TODO: Make function to generate
-    trigger_channel                # Used when re writing data to disk. TODO: Make function to generate
     header::Dict                   # Try not to use. Keep for completeness
     processing::Dict               # Store processes run on the data
     #TODO Channels as array of stings?
@@ -48,7 +47,7 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
 
     # Import raw data
     if ext == "bdf"
-        data, triggers, sample_rate, reference_channel, system_code_channel, trigger_channel, header = import_biosemi(fname)
+        data, triggers, sample_rate, reference_channel, system_code_channel, header = import_biosemi(fname)
     else
         warn("File type $ext is unknown")
     end
@@ -56,7 +55,7 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
 
     # Create ASSR type
     a = ASSR(data, triggers, sample_rate, modulation_frequency, reference_channel, file_path, file_name,
-             system_code_channel, trigger_channel, header, Dict())
+             system_code_channel, header, Dict())
 
     # Remove status channel information
     remove_channel!(a, "Status")
@@ -144,7 +143,6 @@ function trim_ASSR(a::ASSR, stop::Int; start::Int=1)
 
     a.data = a.data[start:stop,:]
     a.system_code_channel = a.system_code_channel[start:stop]
-    a.trigger_channel = a.trigger_channel[start:stop]
 
 
     to_keep = find(a.triggers["Index"] .<= stop)
@@ -351,7 +349,7 @@ function write_ASSR(a::ASSR, fname::String)
 
     info("Saving $(size(a.data)[end]) channels to $fname")
 
-    writeBDF(fname, a.data', a.trigger_channel, a.system_code_channel, a.sample_rate,
+    writeBDF(fname, a.data', trigger_channel(a), a.system_code_channel, a.sample_rate,
         startDate=a.header["startDate"], startTime=a.header["startTime"],
         chanLabels=a.header["chanLabels"] )
 
