@@ -14,7 +14,7 @@ function clean_triggers(t::Dict; valid_indices::Array{Int}=[1, 2],
     validate_triggers(t)
 
     # Make in to data frame for easy management
-    epochIndex = DataFrame(Code = t["Code"], Index = t["Index"]);
+    epochIndex = DataFrame(Code = t["Code"], Index = t["Index"], Duration = t["Duration"]);
     epochIndex[:Code] = epochIndex[:Code] - 252
 
     # Check for not valid indices and throw a warning
@@ -65,7 +65,8 @@ function clean_triggers(t::Dict; valid_indices::Array{Int}=[1, 2],
         debug(epochIndex)
     end
 
-    triggers = ["Index" => vec(int(epochIndex[:Index])'), "Code" => vec(epochIndex[:Code] .+ 252)]
+    triggers = ["Index" => vec(int(epochIndex[:Index])'), "Code" => vec(epochIndex[:Code] .+ 252),
+                "Duration" => vec(epochIndex[:Duration])']
 
     validate_triggers(triggers)
 
@@ -81,7 +82,7 @@ end
 
 function validate_triggers(t::Dict; kwargs...)
 
-    if t.count > 2
+    if t.count > 3
         err("Trigger channel has extra columns")
     end
 
@@ -93,6 +94,9 @@ function validate_triggers(t::Dict; kwargs...)
         critical("Trigger channel does not contain code information")
     end
 
+    if !haskey(t, "Duration")
+        critical("Trigger channel does not contain code information")
+    end
 end
 
 
