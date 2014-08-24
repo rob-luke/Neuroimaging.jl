@@ -12,17 +12,16 @@ type ASSR
     reference_channel::String      # TODO: Change to array
     file_path::String
     file_name::String
-    header::Dict                   # Try not to use. Keep for completeness
+    channel_names::Array{String}
     processing::Dict               # Store processes run on the data
-    #TODO Channels as array of stings?
 end
 
 
 import Base.show
 function Base.show(io::IO, a::ASSR)
-
     println(io, "ASSR with $(size(a.data,2)) channels of $(size(a.data,1)) samples sampled at $(a.sample_rate)")
 end
+
 
 #######################################
 #
@@ -62,7 +61,7 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
 
     # Create ASSR type
     a = ASSR(data, triggers, system_codes, sample_rate * Hertz, modulation_frequency, reference_channel, file_path, file_name,
-             header, Dict())
+             header["chanLabels"], Dict())
 
     # Remove status channel information
     remove_channel!(a, "Status")
@@ -80,31 +79,12 @@ end
 #
 #######################################
 
-function add_channel(a::ASSR, data::Array, chanLabels::ASCIIString;
-                     sampRate::Number=a.header["sampRate"][1],     scaleFactor::Number=a.header["scaleFactor"][1],
-                     physMin::Number=a.header["physMin"][1],       physMax::Number=a.header["physMax"][1],
-                     digMin::Number=a.header["digMin"][1],         digMax::Number=a.header["digMax"][1],
-                     nSampRec::Number=a.header["nSampRec"][1],     prefilt::String=a.header["prefilt"][1],
-                     reserved::String=a.header["reserved"][1],     physDim::String=a.header["physDim"][1],
-                     transducer::String=a.header["transducer"][1])
+function add_channel(a::ASSR, data::Array, chanLabels::ASCIIString)
 
     info("Adding channel $chanLabels")
 
     a.data = hcat(a.data, data)
-
-    push!(a.header["sampRate"],    sampRate)
-    push!(a.header["physMin"],     physMin)
-    push!(a.header["physMax"],     physMax)
-    push!(a.header["digMax"],      digMax)
-    push!(a.header["digMin"],      digMin)
-    push!(a.header["nSampRec"],    nSampRec)
-    push!(a.header["scaleFactor"], scaleFactor)
-
-    push!(a.header["prefilt"],    prefilt)
-    push!(a.header["reserved"],   reserved)
-    push!(a.header["chanLabels"], chanLabels)
-    push!(a.header["transducer"], transducer)
-    push!(a.header["physDim"],    physDim)
+    push!(a.channel_names, chanLabels)
 
     return a
 end
@@ -125,18 +105,15 @@ function remove_channel!(a::ASSR, channel_idx::Array{Int})
 
     a.data = a.data[:, keep_idx]
 
-    # Remove header info
-    for key = ["sampRate", "physMin", "physMax", "nSampRec", "prefilt", "reserved", "chanLabels", "transducer",
-               "physDim", "digMax", "digMin", "scaleFactor"]
-        a.header[key]    = a.header[key][keep_idx]
-    end
+    a.channel_names = a.channel_names[keep_idx]
+
 end
 
 function remove_channel!(a::ASSR, channel_names::Array{ASCIIString})
 
     info("Removing channel(s) $(append_strings(channel_names))")
 
-    remove_channel!(a, int([findfirst(a.header["chanLabels"], c) for c=channel_names]))
+    remove_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
 end
 
 function remove_channel!(a::ASSR, channel_name::Union(String, Int))
@@ -172,9 +149,9 @@ end
 
 function merge_channels(a::ASSR, merge_Chans::Array{ASCIIString}, new_name::String)
 
-    debug("Total origin channels: $(length(a.header["chanLabels"]))")
+    debug("Total origin channels: $(length(a.channel_names))")
 
-    keep_idxs = [findfirst(a.header["chanLabels"], i) for i = merge_Chans]
+    keep_idxs = [findfirst(a.channel_names, i) for i = merge_Chans]
     keep_idxs = int(keep_idxs)
 
     if sum(keep_idxs .== 0) > 0
@@ -182,7 +159,7 @@ function merge_channels(a::ASSR, merge_Chans::Array{ASCIIString}, new_name::Stri
         keep_idxs = keep_idxs[keep_idxs .> 0]
     end
 
-    info("Merging channels $(append_strings(vec(a.header["chanLabels"][keep_idxs,:])))")
+    info("Merging channels $(append_strings(vec(a.channel_names[keep_idxs,:])))")
     debug("Merging channels $keep_idxs")
 
     a = add_channel(a, mean(a.data[:,keep_idxs], 2), new_name)
@@ -249,7 +226,7 @@ end
 
 function rereference(a::ASSR, refChan)
 
-    a.data = rereference(a.data, refChan, a.header["chanLabels"])
+    a.data = rereference(a.data, refChan, a.channel_names)
 
     if isa(refChan, Array)
         refChan = append_strings(refChan)
@@ -365,9 +342,7 @@ function write_ASSR(a::ASSR, fname::String)
 
     info("Saving $(size(a.data)[end]) channels to $fname")
 
-    writeBDF(fname, a.data', trigger_channel(a), system_code_channel(a), int(a.sample_rate),
-             startDate=a.header["startDate"], startTime=a.header["startTime"],
-             chanLabels=a.header["chanLabels"] )
+    writeBDF(fname, a.data', trigger_channel(a), system_code_channel(a), int(a.sample_rate), chanLabels=a.channel_names)
 
 end
 
@@ -397,8 +372,9 @@ function ftest(a::ASSR, freq_of_interest::Number; side_freq::Number=2, subject::
     snrDb, signal, noise, statistic = ftest(a.processing["sweeps"], freq_of_interest, float(a.sample_rate),
                                             side_freq = side_freq, used_filter = used_filter)
 
+
     result = DataFrame(
-                        Electrode = copy(a.header["chanLabels"]),
+                        Electrode = copy(a.channel_names),
                         SignalPower = vec(signal),
                         NoisePower = vec(noise),
                         SNR = vec(10.^(snrDb/10)),
