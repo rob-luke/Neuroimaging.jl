@@ -7,6 +7,7 @@ using Logging
 #
 export
     import_biosemi,
+    biosemi_trigger2channel,
     read_avr,
     read_bsa,
     read_dat,
@@ -66,6 +67,7 @@ export
     add_channel,
     assr_frequency,
     save_results,
+    trigger_channel,
     write_ASSR,
         highpass_filter,
         rereference,

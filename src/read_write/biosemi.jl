@@ -4,6 +4,7 @@
 #
 
 using BDF
+using Logging
 
 #######################################
 #
@@ -42,6 +43,38 @@ function import_biosemi(fname::Union(String, IO); kwargs...)
     end
 
     return  data', triggers, sample_rate, reference_channel, system_code_channel, trigger_channel, header
+end
+
+
+#######################################
+#
+# Convert triggers information to trigger_channel
+# for writing to file using BDF.jl
+#
+#######################################
+
+function biosemi_trigger2channel(t::Dict, data::Array, fs::Number; kwargs...)
+
+    biosemi_trigger2channel(t, maximum(size(data)), fs; kwargs...)
+end
+
+function biosemi_trigger2channel(t::Dict, l::Int, fs::Number; code::String="Code", index::String="Index",
+                                 duration::String="Duration", kwargs...)
+
+    debug("Creating trigger channel from data. Length: $l Triggers: $(length(t[index]))")
+    debug("Fs: $fs")
+
+    channel = Array(Int16, l)
+
+    for i = 1:length(t[index])
+        #=if t[index][i] + t[duration][i] * fs < length(channel)=#
+            channel[t[index][i] : t[index][i] + t[duration][i] * fs] = t[code][i]
+        #=else=#
+            #=critical("Triggers exist past the end of the data")=#
+        #=end=#
+    end
+
+    return channel
 end
 
 

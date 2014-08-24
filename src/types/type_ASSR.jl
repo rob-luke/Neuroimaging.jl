@@ -334,6 +334,19 @@ function create_sweeps(a::ASSR; epochsPerSweep::Int=4)
 end
 
 
+
+#######################################
+#
+# File IO
+#
+#######################################
+
+function trigger_channel(a::ASSR)
+
+    biosemi_trigger2channel(a.triggers, a.data, a.sample_rate)
+end
+
+
 function write_ASSR(a::ASSR, fname::String)
 
     info("Saving $(size(a.data)[end]) channels to $fname")

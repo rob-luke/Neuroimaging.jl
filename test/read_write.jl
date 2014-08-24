@@ -1,8 +1,27 @@
 using EEG
+using BDF
 using Logging
 using Base.Test
 
 Logging.configure(level=DEBUG)
+
+
+#
+# BIOSEMI
+#
+
+fname = joinpath(dirname(@__FILE__), "data", "test_Hz19.5-testing.bdf")
+
+dats, evtTab, trigs, statusChan = readBDF(fname);
+sampRate = readBDFHeader(fname)["sampRate"][1]
+
+@test trigs == biosemi_trigger2channel(evtTab, dats, sampRate, code="code", index="idx", duration="dur")
+
+
+@test trigs !== trigger_channel(read_ASSR(fname))
+
+
+@test trigs == trigger_channel(read_ASSR(fname, valid_indices=[-1000:10000]))
 
 
 #
