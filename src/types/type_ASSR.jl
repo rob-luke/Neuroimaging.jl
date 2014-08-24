@@ -1,13 +1,14 @@
 using DataFrames
 using MAT
+using SIUnits
 
 
 type ASSR
     data::Array
     triggers::Dict
     system_codes::Dict
-    sample_rate::Number
-    modulation_frequency::Number
+    sample_rate
+    modulation_frequency
     reference_channel::String      # TODO: Change to array
     file_path::String
     file_name::String
@@ -20,7 +21,7 @@ end
 import Base.show
 function Base.show(io::IO, a::ASSR)
 
-    println(io, "ASSR with $(size(a.data,2)) channels of $(size(a.data,1)) samples sampled at $(a.sample_rate)Hz")
+    println(io, "ASSR with $(size(a.data,2)) channels of $(size(a.data,1)) samples sampled at $(a.sample_rate)")
 end
 
 #######################################
@@ -46,7 +47,7 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
     # Extract frequency from the file name
     if contains(file_name, "Hz")
         a = match(r"[-_](\d+[_.]?\d+)Hz|Hz(\d+[_.]?\d+)[-_]", file_name).captures
-        modulation_frequency = float(a[[i !== nothing for i = a]][1])
+        modulation_frequency = float(a[[i !== nothing for i = a]][1]) * Hertz
     else
         modulation_frequency = NaN
     end
@@ -60,7 +61,7 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
 
 
     # Create ASSR type
-    a = ASSR(data, triggers, system_codes, sample_rate, modulation_frequency, reference_channel, file_path, file_name,
+    a = ASSR(data, triggers, system_codes, sample_rate * Hertz, modulation_frequency, reference_channel, file_path, file_name,
              header, Dict())
 
     # Remove status channel information
@@ -197,9 +198,9 @@ end
 
 function highpass_filter(a::ASSR; cutOff::Number=2, order::Int=3, tolerance::Number=0.01)
 
-    a.data, f = highpass_filter(a.data, cutOff=cutOff, order=order, fs=a.sample_rate)
+    a.data, f = highpass_filter(a.data, cutOff=cutOff, order=order, fs=float(a.sample_rate))
 
-    _filter_check(f, a.modulation_frequency, a.sample_rate, tolerance)
+    _filter_check(f, float(a.modulation_frequency), float(a.sample_rate), tolerance)
 
     _append_filter(a, f)
  end
@@ -207,9 +208,9 @@ function highpass_filter(a::ASSR; cutOff::Number=2, order::Int=3, tolerance::Num
 
 function lowpass_filter(a::ASSR; cutOff::Number=150, order::Int=3, tolerance::Number=0.01)
 
-    a.data, f = lowpass_filter(a.data, cutOff=cutOff, order=order, fs=a.sample_rate)
+    a.data, f = lowpass_filter(a.data, cutOff=cutOff, order=order, fs=float(a.sample_rate))
 
-    _filter_check(f, a.modulation_frequency, a.sample_rate, tolerance)
+    _filter_check(f, float(a.modulation_frequency), float(a.sample_rate), tolerance)
 
     _append_filter(a, f)
  end
@@ -271,7 +272,7 @@ function add_triggers(a::ASSR; kwargs...)
 
     debug("Adding triggers to reduce ASSR. Using ASSR modulation frequency")
 
-    add_triggers(a, a.modulation_frequency; kwargs...)
+    add_triggers(a, float(a.modulation_frequency); kwargs...)
 end
 
 
@@ -292,14 +293,14 @@ function add_triggers(a::ASSR, mod_freq::Number, epochIndex; cycle_per_epoch::In
 
     # Existing epochs
     existing_epoch_length   = maximum(diff(epochIndex[:Index]))     # samples
-    existing_epoch_length_s = existing_epoch_length / a.sample_rate
+    existing_epoch_length_s = existing_epoch_length / float(a.sample_rate)
     debug("Existing epoch length: $(existing_epoch_length_s)s")
 
     # New epochs
     new_epoch_length_s = cycle_per_epoch / mod_freq
     new_epochs_num     = round(existing_epoch_length_s / new_epoch_length_s) - 2
     new_epoch_times    = [1:new_epochs_num]*new_epoch_length_s
-    new_epoch_indx     = [0, round(new_epoch_times * a.sample_rate)]
+    new_epoch_indx     = [0, round(new_epoch_times * float(a.sample_rate))]
     debug("New epoch length = $new_epoch_length_s")
     debug("New # epochs     = $new_epochs_num")
 
@@ -350,13 +351,13 @@ end
 
 function trigger_channel(a::ASSR)
 
-    create_channel(a.triggers, a.data, a.sample_rate)
+    create_channel(a.triggers, a.data, float(a.sample_rate))
 end
 
 
 function system_code_channel(a::ASSR)
 
-    create_channel(a.system_codes, a.data, a.sample_rate)
+    create_channel(a.system_codes, a.data, float(a.sample_rate))
 end
 
 
@@ -364,7 +365,7 @@ function write_ASSR(a::ASSR, fname::String)
 
     info("Saving $(size(a.data)[end]) channels to $fname")
 
-    writeBDF(fname, a.data', trigger_channel(a), system_code_channel(a), a.sample_rate,
+    writeBDF(fname, a.data', trigger_channel(a), system_code_channel(a), int(a.sample_rate),
              startDate=a.header["startDate"], startTime=a.header["startTime"],
              chanLabels=a.header["chanLabels"] )
 
@@ -379,7 +380,7 @@ end
 
 function ftest(a::ASSR; side_freq::Number=2, subject::String="Unknown")
 
-    ftest(a, a.modulation_frequency,   side_freq=side_freq, subject=subject)
+    ftest(a, float(a.modulation_frequency),   side_freq=side_freq, subject=subject)
 end
 
 function ftest(a::ASSR, freq_of_interest::Number; side_freq::Number=2, subject::String="Unknown")
@@ -393,7 +394,7 @@ function ftest(a::ASSR, freq_of_interest::Number; side_freq::Number=2, subject::
 
     info("Calculating F statistic on $(size(a.data)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
 
-    snrDb, signal, noise, statistic = ftest(a.processing["sweeps"], freq_of_interest, a.sample_rate,
+    snrDb, signal, noise, statistic = ftest(a.processing["sweeps"], freq_of_interest, float(a.sample_rate),
                                             side_freq = side_freq, used_filter = used_filter)
 
     result = DataFrame(
@@ -408,7 +409,7 @@ function ftest(a::ASSR, freq_of_interest::Number; side_freq::Number=2, subject::
                         Analysis="ftest",
                         NoiseHz = side_freq,
                         Frequency = freq_of_interest,
-                        ModulationFrequency = copy(a.modulation_frequency),
+                        ModulationFrequency = copy(float(a.modulation_frequency)),
                         )
 
     key_name = new_processing_key(a.processing, "ftest")

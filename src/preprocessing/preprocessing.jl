@@ -12,7 +12,7 @@ using Distributions
 #######################################
 
 function highpass_filter(signals::Array; cutOff::Number=2,
-                         order::Int=3, fs::Int=8192)
+                         order::Int=3, fs::Number=8192)
 
     signals = convert(Array{Float64}, signals)
 
@@ -35,7 +35,7 @@ end
 #######################################
 
 function lowpass_filter(signals::Array; cutOff::Number=2,
-                         order::Int=3, fs::Int=8192)
+                         order::Int=3, fs::Number=8192)
 
     signals = convert(Array{Float64}, signals)
 
