@@ -61,17 +61,12 @@ end
 function biosemi_trigger2channel(t::Dict, l::Int, fs::Number; code::String="Code", index::String="Index",
                                  duration::String="Duration", kwargs...)
 
-    debug("Creating trigger channel from data. Length: $l Triggers: $(length(t[index]))")
-    debug("Fs: $fs")
+    debug("Creating trigger channel from data. Length: $l Triggers: $(length(t[index])) Fs: $fs")
 
     channel = Array(Int16, l)
 
     for i = 1:length(t[index])
-        #=if t[index][i] + t[duration][i] * fs < length(channel)=#
-            channel[t[index][i] : t[index][i] + t[duration][i] * fs] = t[code][i]
-        #=else=#
-            #=critical("Triggers exist past the end of the data")=#
-        #=end=#
+        channel[t[index][i] : t[index][i] + t[duration][i] * fs] = t[code][i]
     end
 
     return channel
