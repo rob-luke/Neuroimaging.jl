@@ -21,7 +21,9 @@ end
 
 import Base.show
 function Base.show(io::IO, a::ASSR)
-    println(io, "ASSR with $(size(a.data,2)) channels of $(size(a.data,1)) samples sampled at $(a.sample_rate)")
+    time_length = round(size(a.data,1) / a.sample_rate / 60, 2)
+    println(io, "ASSR measurement of $time_length mins with $(size(a.data,2)) channels sampled at $(a.sample_rate)")
+    print(io, "  Modulation frequency $(a.modulation_frequency )")
 end
 
 
@@ -48,7 +50,7 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
     # Extract frequency from the file name
     if contains(file_name, "Hz")
         a = match(r"[-_](\d+[_.]?\d+)Hz|Hz(\d+[_.]?\d+)[-_]", file_name).captures
-        modulation_frequency = float(a[[i !== nothing for i = a]][1]) * Hertz
+        modulation_frequency = assr_frequency(float(a[[i !== nothing for i = a]][1])) * Hertz
     else
         modulation_frequency = NaN
     end
