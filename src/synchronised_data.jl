@@ -38,32 +38,36 @@ function clean_triggers(t::Dict; valid_indices::Array{Int}=[1, 2],
     end
 
     # Throw out epochs that are the wrong length
-    epochIndex[:Length] = [0, diff(epochIndex[:Index])]
-    if min_epoch_length > 0
-        epochIndex[:valid_length] = epochIndex[:Length] .> min_epoch_length
-        num_non_valid = sum(!epochIndex[:valid_length])
-        if num_non_valid > 1    # Don't count the first trigger
-            warn("Removed $num_non_valid triggers < length $min_epoch_length")
-            epochIndex = epochIndex[epochIndex[:valid_length], :]
+    if length(epochIndex[:Index]) > 2
+        epochIndex[:Length] = [0, diff(epochIndex[:Index])]
+        if min_epoch_length > 0
+            epochIndex[:valid_length] = epochIndex[:Length] .> min_epoch_length
+            num_non_valid = sum(!epochIndex[:valid_length])
+            if num_non_valid > 1    # Don't count the first trigger
+                warn("Removed $num_non_valid triggers < length $min_epoch_length")
+                epochIndex = epochIndex[epochIndex[:valid_length], :]
+            end
         end
-    end
-    epochIndex[:Length] = [0, diff(epochIndex[:Index])]
-    if max_epoch_length < Inf
-        epochIndex[:valid_length] = epochIndex[:Length] .< max_epoch_length
-        num_non_valid = sum(!epochIndex[:valid_length])
-        if num_non_valid > 0
-            warn("Removed $num_non_valid triggers > length $max_epoch_length")
-            epochIndex = epochIndex[epochIndex[:valid_length], :]
+        epochIndex[:Length] = [0, diff(epochIndex[:Index])]
+        if max_epoch_length < Inf
+            epochIndex[:valid_length] = epochIndex[:Length] .< max_epoch_length
+            num_non_valid = sum(!epochIndex[:valid_length])
+            if num_non_valid > 0
+                warn("Removed $num_non_valid triggers > length $max_epoch_length")
+                epochIndex = epochIndex[epochIndex[:valid_length], :]
+            end
         end
+
+        # Sanity check
+        if std(epochIndex[:Length][2:end]) > 1
+            warn("Your epoch lengths vary too much")
+            warn(string("Length: median=$(median(epochIndex[:Length][2:end])) sd=$(std(epochIndex[:Length][2:end])) ",
+                  "min=$(minimum(epochIndex[:Length][2:end]))"))
+            debug(epochIndex)
+        end
+
     end
 
-    # Sanity check
-    if std(epochIndex[:Length][2:end]) > 1
-        warn("Your epoch lengths vary too much")
-        warn(string("Length: median=$(median(epochIndex[:Length][2:end])) sd=$(std(epochIndex[:Length][2:end])) ",
-              "min=$(minimum(epochIndex[:Length][2:end]))"))
-        debug(epochIndex)
-    end
 
     triggers = ["Index" => vec(int(epochIndex[:Index])'), "Code" => vec(epochIndex[:Code] .+ 252),
                 "Duration" => vec(epochIndex[:Duration])']
