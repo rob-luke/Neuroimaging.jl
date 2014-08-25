@@ -178,9 +178,9 @@ end
 
 function highpass_filter(a::ASSR; cutOff::Number=2, order::Int=3, tolerance::Number=0.01)
 
-    a.data, f = highpass_filter(a.data, cutOff=cutOff, order=order, fs=float(a.sample_rate))
+    a.data, f = highpass_filter(a.data, cutOff=cutOff, order=order, fs=int(a.sample_rate))
 
-    _filter_check(f, float(a.modulation_frequency), float(a.sample_rate), tolerance)
+    _filter_check(f, float(a.modulation_frequency), int(a.sample_rate), tolerance)
 
     _append_filter(a, f)
  end
@@ -188,9 +188,9 @@ function highpass_filter(a::ASSR; cutOff::Number=2, order::Int=3, tolerance::Num
 
 function lowpass_filter(a::ASSR; cutOff::Number=150, order::Int=3, tolerance::Number=0.01)
 
-    a.data, f = lowpass_filter(a.data, cutOff=cutOff, order=order, fs=float(a.sample_rate))
+    a.data, f = lowpass_filter(a.data, cutOff=cutOff, order=order, fs=int(a.sample_rate))
 
-    _filter_check(f, float(a.modulation_frequency), float(a.sample_rate), tolerance)
+    _filter_check(f, float(a.modulation_frequency), int(a.sample_rate), tolerance)
 
     _append_filter(a, f)
  end
