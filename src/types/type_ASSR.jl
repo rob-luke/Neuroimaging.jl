@@ -23,7 +23,7 @@ import Base.show
 function Base.show(io::IO, a::ASSR)
     time_length = round(size(a.data,1) / a.sample_rate / 60, 2)
     println(io, "ASSR measurement of $time_length mins with $(size(a.data,2)) channels sampled at $(a.sample_rate)")
-    print(io, "  Modulation frequency $(a.modulation_frequency )")
+    println(io, "  Modulation frequency $(a.modulation_frequency )")
 end
 
 
