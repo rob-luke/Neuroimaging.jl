@@ -368,7 +368,7 @@ function ftest(a::ASSR, freq_of_interest::Number; side_freq::Number=2, subject::
 
     info("Calculating F statistic on $(size(a.data)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
 
-    snrDb, signal, noise, statistic = ftest(a.processing["sweeps"], freq_of_interest, float(a.sample_rate),
+    snrDb, signal, noise, statistic = ftest(a.processing["sweeps"], freq_of_interest, int(a.sample_rate),
                                             side_freq = side_freq, used_filter = used_filter)
 
 
