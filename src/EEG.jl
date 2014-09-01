@@ -37,6 +37,9 @@ include("preprocessing/preprocessing.jl")
 export
     channel_rejection
 include("preprocessing/data_rejection.jl")
+export
+    bandpass_filter
+include("preprocessing/filtering.jl")
 
 
 
@@ -74,6 +77,7 @@ export
     remove_channel!,
     add_channel,
     assr_frequency,
+    bandpass_filter,
     save_results,
     trigger_channel,
     channel_rejection,

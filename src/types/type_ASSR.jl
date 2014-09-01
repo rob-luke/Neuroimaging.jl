@@ -207,7 +207,7 @@ function highpass_filter(a::ASSR; cutOff::Number=2, order::Int=3, tolerance::Num
     _filter_check(f, float(a.modulation_frequency), int(a.sample_rate), tolerance)
 
     _append_filter(a, f)
- end
+end
 
 
 function lowpass_filter(a::ASSR; cutOff::Number=150, order::Int=3, tolerance::Number=0.01)
@@ -217,7 +217,18 @@ function lowpass_filter(a::ASSR; cutOff::Number=150, order::Int=3, tolerance::Nu
     _filter_check(f, float(a.modulation_frequency), int(a.sample_rate), tolerance)
 
     _append_filter(a, f)
- end
+end
+
+
+function bandpass_filter(a::ASSR; lower::Number=float(a.modulation_frequency)-2, upper::Number=float(a.modulation_frequency)+4,
+                         n::Int=3, rp::Number=0.001, rs::Number=30, tolerance::Number=0.01)
+
+    a.data, f = bandpass_filter(a.data, lower, upper, int(a.sample_rate), n=n, rp=rp, rs=rs)
+
+    _filter_check(f, float(a.modulation_frequency), int(a.sample_rate), tolerance)
+
+    _append_filter(a, f)
+end
 
 
 function _filter_check(f::Filter, mod_freq::Number, fs::Number, tolerance::Number)
