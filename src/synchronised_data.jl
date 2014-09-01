@@ -1,4 +1,11 @@
 
+# Trigger information is stored in a dictionary
+# containing three fields, all referenced in samples.
+# Index:    Start of trigger
+# Code:     Code of trigger
+# Duration: Duration of trigger
+
+
 #######################################
 #
 # Clean trigger channel
@@ -68,7 +75,6 @@ function clean_triggers(t::Dict; valid_indices::Array{Int}=[1, 2],
 
     end
 
-
     triggers = ["Index" => vec(int(epochIndex[:Index])'), "Code" => vec(epochIndex[:Code] .+ 252),
                 "Duration" => vec(epochIndex[:Duration])']
 
@@ -101,7 +107,7 @@ function validate_triggers(t::Dict; kwargs...)
     end
 
     if !haskey(t, "Duration")
-        critical("Trigger channel does not contain code information")
+        critical("Trigger channel does not contain duration information")
     end
 
     if length(t["Index"]) !== length(t["Code"]) && length(t["Index"]) !== length(t["Duration"])
@@ -137,7 +143,7 @@ function extract_epochs(dats::Array, evtTab::Dict; remove_first::Int=0)
     lenEpochs = minimum(diff(epochIndex[:Index]))
     numChans  = size(dats)[end]
 
-    debug("Epochs = $lenEpochs x $numEpochs x $numChans")
+    debug("Creating epochs: $lenEpochs x $numEpochs x $numChans")
 
     epochs = zeros(Float64, (int(lenEpochs), int(numEpochs), int(numChans)))
 
