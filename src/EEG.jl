@@ -16,10 +16,12 @@ export
     read_elp,
     write_dat,
     prepare_dat,
-    write_avr
+    write_avr,
+    read_evt
 include("read_write/read.jl")
 include("read_write/write.jl")
 include("read_write/biosemi.jl")
+include("read_write/besa.jl")
 
 
 #
@@ -67,6 +69,7 @@ export
     ASSR,
     read_ASSR,
     trim_ASSR,
+    read_evt,
     add_triggers,
     remove_channel!,
     add_channel,

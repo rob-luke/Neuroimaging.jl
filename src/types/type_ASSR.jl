@@ -78,6 +78,20 @@ end
 
 #######################################
 #
+# Read event files
+#
+#######################################
+
+function read_evt(a::ASSR, fname::String; kwargs...)
+    d = read_evt(fname, a.sample_rate; kwargs...)
+    validate_triggers(d)
+    a.triggers = d
+    return a
+end
+
+
+#######################################
+#
 # Add channels
 #
 #######################################

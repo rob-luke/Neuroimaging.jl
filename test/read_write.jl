@@ -36,6 +36,16 @@ show(s2)
 
 
 #
+# BESA
+#
+
+s = read_ASSR(  joinpath(dirname(@__FILE__), "data", "test_Hz19.5-testing.bdf"))
+s = read_evt(s, joinpath(dirname(@__FILE__), "data", "test.evt"))
+
+@test_throws BoundsError extract_epochs(s)
+
+
+#
 # Convert between events and channels
 #
 
@@ -83,6 +93,8 @@ x2, y2, z2, s2, t2 = read_dat(sname)
 @test z==z2
 @test s==s2
 @test t==t2
+
+
 
 
 println()
