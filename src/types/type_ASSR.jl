@@ -269,7 +269,15 @@ end
 
 function channel_rejection(a::ASSR; kwargs...)
 
-    valid = channel_rejection(a.data, kwargs...)
+    if haskey(a.processing, "epochs")
+
+        data = reshape(a.processing["epochs"],
+                size(a.processing["epochs"], 1) * size(a.processing["epochs"], 2), size(a.processing["epochs"],3))
+    else
+        data = a.data
+    end
+
+    valid = channel_rejection(data, kwargs...)
 
     info("Rejected $(sum(!valid)) channels $(append_strings(a.channel_names[find(!valid)]))")
 
@@ -310,7 +318,7 @@ function add_triggers(a::ASSR, mod_freq::Number, epochIndex; cycle_per_epoch::In
     info("Adding triggers to reduce ASSR. Reducing $(mod_freq)Hz to $cycle_per_epoch cycle(s).")
 
     # Existing epochs
-    existing_epoch_length   = maximum(diff(epochIndex[:Index]))     # samples
+    existing_epoch_length   = median(diff(epochIndex[:Index]))     # samples
     existing_epoch_length_s = existing_epoch_length / float(a.sample_rate)
     debug("Existing epoch length: $(existing_epoch_length_s)s")
 
