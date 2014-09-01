@@ -87,6 +87,8 @@ function write_avr(fname::String, data::Array, chanNames::Array, fs::Number)
 
     info("Saving avr to $fname")
 
+    fs  = float(fs)
+
     fid = open(fname, "w")
 
     @printf(fid, "Npts= %d   TSB= %2.6f DI= %2.6f SB= %2.3f SC= %3.1f Nchan= %d\n", size(data,1), 1000/fs, 1000/fs,
