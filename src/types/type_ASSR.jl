@@ -115,24 +115,17 @@ function remove_channel!(a::ASSR, channel_idx::Array{Int})
     a.data = a.data[:, keep_idx]
 
     a.channel_names = a.channel_names[keep_idx]
-
 end
 
 function remove_channel!(a::ASSR, channel_names::Array{ASCIIString})
-
-    info("Removing channel(s) $(append_strings(channel_names))")
-
     remove_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
-end
+    info("Removing channel(s) $(append_strings(channel_names))"); end
 
-function remove_channel!(a::ASSR, channel_name::Union(String, Int))
-    remove_channel!(a, [channel_name])
-end
+function remove_channel!(a::ASSR, channel_names::Union(Array{String}))
+    remove_channel!(a, convert(Array{ASCIIString}, channel_names)); end
 
-function remove_channel!(a::ASSR, channel_names::Array{String})
-    remove_channel!(a, convert(Array{ASCIIString}, channel_names))
-end
-
+function remove_channel!(a::ASSR, channel_name::Union(Int, String, ASCIIString))
+    remove_channel!(a, [channel_name]); end
 
 #######################################
 #
