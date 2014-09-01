@@ -32,6 +32,10 @@ export
     remove_template,
     rereference
 include("preprocessing/preprocessing.jl")
+export
+    channel_rejection
+include("preprocessing/data_rejection.jl")
+
 
 
 #
@@ -69,6 +73,7 @@ export
     assr_frequency,
     save_results,
     trigger_channel,
+    channel_rejection,
     write_ASSR,
         highpass_filter,
         rereference,

@@ -78,7 +78,7 @@ end
 
 #######################################
 #
-# Modify ASSR
+# Add channels
 #
 #######################################
 
@@ -92,6 +92,12 @@ function add_channel(a::ASSR, data::Array, chanLabels::ASCIIString)
     return a
 end
 
+
+#######################################
+#
+# Remove channels
+#
+#######################################
 
 function remove_channel!(a::ASSR, channel_idx::Array{Int})
 
@@ -123,7 +129,18 @@ function remove_channel!(a::ASSR, channel_name::Union(String, Int))
     remove_channel!(a, [channel_name])
 end
 
+function remove_channel!(a::ASSR, channel_names::Array{String})
+    remove_channel!(a, convert(Array{ASCIIString}, channel_names))
+end
 
+
+#######################################
+#
+# Trim channels
+#
+#######################################
+
+# TODO Change name to trim_channel
 function trim_ASSR(a::ASSR, stop::Int; start::Int=1)
 
     info("Trimming $(size(a.data)[end]) channels between $start and $stop")
@@ -232,6 +249,24 @@ function rereference(a::ASSR, refChan::Union(String, Array{ASCIIString}))
     a.data = rereference(a.data, refChan, a.channel_names)
 
     a.reference_channel = [refChan]
+
+    return a
+end
+
+
+#######################################
+#
+# Rejection channels
+#
+#######################################
+
+function channel_rejection(a::ASSR; kwargs...)
+
+    valid = channel_rejection(a.data, kwargs...)
+
+    info("Rejected $(sum(!valid)) channels $(append_strings(a.channel_names[find(!valid)]))")
+
+    remove_channel!(a, a.channel_names[find(!valid)])
 
     return a
 end
