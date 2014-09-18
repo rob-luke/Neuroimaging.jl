@@ -95,7 +95,7 @@ end
 # Euclidean distance for coordinates and dipoles
 #
 
-import Distance.euclidean
+import Distances.euclidean
 function euclidean(a::Union(Coordinate, Dipole), b::Union(Coordinate, Dipole))
     euclidean([a.x, a.y, a.z], [b.x, b.y, b.z])
 end
