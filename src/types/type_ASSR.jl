@@ -55,6 +55,16 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
         modulation_frequency = NaN
     end
 
+    # Or even better if there is a mat file read it
+    mat_path = string(file_path, file_name, ".mat")
+    if isreadable(mat_path)
+        rba                  = matread(mat_path)
+        try
+            modulation_frequency = rba["properties"]["stimulation_properties"]["stimulus_1"]["rounded_modulation_frequency"]
+        end
+        info("Imported matching .mat file")
+    end
+
     # Import raw data
     if ext == "bdf"
         data, triggers, system_codes, sample_rate, reference_channel, header = import_biosemi(fname)
