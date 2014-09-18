@@ -45,7 +45,7 @@ s = ftest(s, [40.0391, 20], side_freq=2.5, ID="A test file", Note="Small test fi
 
 @test_approx_eq_eps s.processing["ftest2"][:SNRdB] [3.2826] 0.002  #TODO tighten tolerance here. filter seems issue
 
-s = save_results(s)
+s = save_ftests(s)
 
 s = add_triggers(s, 40.0391, cycle_per_epoch=3)
 
