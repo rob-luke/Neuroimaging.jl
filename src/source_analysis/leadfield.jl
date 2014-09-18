@@ -16,10 +16,10 @@ function match_leadfield(l, s::ASSR)
 
     info("Matching leadfield to ASSR")
 
-    idx = [findfirst(l.sensors, name) for name = s.header["chanLabels"]]
+    idx = [findfirst(l.sensors, name) for name = s.channel_names]
 
     if length(unique(idx)) < length(idx)
-        error("Not all ASSR channels mapped to sensor #ASSR=$(length(s.header["chanLabels"])), #L=$(length(l.sensors))")
+        error("Not all ASSR channels mapped to sensor #ASSR=$(length(s.channel_names)), #L=$(length(l.sensors))")
     end
 
     l.L = l.L[:,:,idx]
