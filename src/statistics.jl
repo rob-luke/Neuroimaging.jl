@@ -7,7 +7,8 @@
 #
 #######################################
 
-function ftest(sweeps::Array, freq_of_interest::Number, fs::Number; side_freq::Number=2, used_filter=nothing)
+function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
+               side_freq::Number=1, used_filter=nothing, spill_bins::Int=2)
 
     # Calculates the F test as is commonly implemented in ASSR research
     #
@@ -20,6 +21,7 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number; side_freq::N
     # `fs`          | Sampling rate (Hz)
     # `side_freq`   | The amount of data to use on each side of frequency of interest to estimate noise (Hz)
     # `used_filter` | Filter used on the sweep data. If provided then is compensated for
+    # `spill_bins`  | The number of bins to ignore on each side of the frequency of interest
     #
     # ---------------------------------------------------------------------------
     #
@@ -34,33 +36,25 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number; side_freq::N
     # ---------------------------------------------------------------------------
 
     #TODO Don't treat harmonic frequencies as noise
-    #TODO Allow choice of how many bins to ignore each side of freq_of_interest
     #TODO Better function description with references
 
     info("Calculating F statistic on $(size(sweeps)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
 
     # Determine frequencies of interest
     frequencies = linspace(0, 1, int(size(sweeps,1) / 2 + 1))*fs/2
-    idx      = _find_frequency_idx(frequencies, freq_of_interest)
-    idx_Low  = _find_frequency_idx(frequencies, freq_of_interest - side_freq)
-    idx_High = _find_frequency_idx(frequencies, freq_of_interest + side_freq)
+    idx         = _find_frequency_idx(frequencies, freq_of_interest)
+    idx_Low     = _find_frequency_idx(frequencies, freq_of_interest - side_freq)
+    idx_High    = _find_frequency_idx(frequencies, freq_of_interest + side_freq)
 
     # Calculate amplitude at each frequency
     spectrum    = _ftest_spectrum(sweeps)
 
     # Compensate for filter response
     if !(used_filter == nothing)
-        h = freqz(used_filter, frequencies, fs)
-
-        filter_compensation = Array(Float64, size(frequencies))
-        for freq=1:length(frequencies)
-            filter_compensation[freq] = abs(h[freq])*abs(h[freq])
-        end
-
-        spectrum = spectrum ./ filter_compensation
+        filter_response     = freqz(used_filter, frequencies, fs)
+        filter_compensation = [abs(f)^2 for f = filter_response]
+        spectrum            = spectrum ./ filter_compensation
         debug("Accounted for filter response in F test spectrum estimation")
-    else
-        debug("Not incorporating filter response in F test")
     end
 
     # Determine signal phase
@@ -70,7 +64,7 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number; side_freq::N
     signal_power = abs(spectrum[idx, :]).^2                            # Biased response power
 
     # Determine noise power
-    noise_idxs      = [idx_Low-1:idx-2, idx+2:idx_High+1]              # Ignore one bin either side
+    noise_idxs      = [idx_Low-spill_bins/2 : idx-spill_bins, idx+spill_bins : idx_High+spill_bins/2]
     noise_bins      = spectrum[noise_idxs,:]
     noise_bins      = abs(noise_bins)
     noise_power     = sum(noise_bins .^2, 1) ./ size(noise_bins,1)     # Recording noise power
