@@ -423,12 +423,8 @@ end
 #
 #######################################
 
-function ftest(a::ASSR; side_freq::Number=2, subject::String="Unknown")
 
-    ftest(a, float(a.modulation_frequency),   side_freq=side_freq, subject=subject)
-end
-
-function ftest(a::ASSR, freq_of_interest::Number; side_freq::Number=2, subject::String="Unknown")
+function ftest(a::ASSR, freq_of_interest::Number; ID::String="", Note::String="", kwargs... )
 
     # TODO: Account for multiple applied filters
     if haskey(a.processing, "filter1")
@@ -437,26 +433,22 @@ function ftest(a::ASSR, freq_of_interest::Number; side_freq::Number=2, subject::
         used_filter = nothing
     end
 
-    info("Calculating F statistic on $(size(a.data)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
-
-    snrDb, signal, noise, statistic = ftest(a.processing["sweeps"], freq_of_interest, int(a.sample_rate),
-                                            side_freq = side_freq, used_filter = used_filter)
-
+    snrDb, phase, signal, noise, statistic =
+        ftest(a.processing["sweeps"], freq_of_interest, int(a.sample_rate), used_filter = used_filter; kwargs...)
 
     result = DataFrame(
-                        Electrode = copy(a.channel_names),
-                        SignalPower = vec(signal),
-                        NoisePower = vec(noise),
-                        SNR = vec(10.^(snrDb/10)),
-                        SNRdB = vec(snrDb),
-                        Statistic = vec(statistic),
-                        Significant = vec(statistic.<0.05),
-                        Subject = subject,
-                        Analysis="ftest",
-                        NoiseHz = side_freq,
-                        Frequency = freq_of_interest,
+                        ID                  = vec(repmat([ID], length(a.channel_names), 1)),
+                        Channel             = copy(a.channel_names),
                         ModulationFrequency = copy(float(a.modulation_frequency)),
-                        )
+                        AnalysisType        = "ftest",
+                        AnalysisFrequency   = freq_of_interest,
+                        SignalPower         = vec(signal),
+                        SignalPhase         = vec(phase),
+                        NoisePower          = vec(noise),
+                        SNRdB               = vec(snrDb),
+                        Statistic           = vec(statistic),
+                        Note                = Note
+                      )
 
     key_name = new_processing_key(a.processing, "ftest")
     merge!(a.processing, [key_name => result])
@@ -464,15 +456,22 @@ function ftest(a::ASSR, freq_of_interest::Number; side_freq::Number=2, subject::
     return a
 end
 
-function ftest(a::ASSR, freq_of_interest::Array; side_freq::Number=2, subject::String="Unknown")
 
-    for f = freq_of_interest
-        a = ftest(a, f, side_freq=side_freq, subject=subject)
-    end
-    return a
+# If more than one frequency of interest is specified then run for all
+function ftest(a::ASSR, freq_of_interest::Array; kwargs...)
+
+    for f = freq_of_interest; a = ftest(a, f; kwargs...); end; return a
 end
 
 
+# If no frequency of interest is specified then use the modulation frequency
+function ftest(a::ASSR; kwargs...)
+
+    ftest(a, float(a.modulation_frequency); kwargs...)
+end
+
+
+# Save ftest results to file
 function save_results(a::ASSR; name_extension::String="")
 
     file_name = string(a.file_name, name_extension, ".csv")

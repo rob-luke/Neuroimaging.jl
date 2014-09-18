@@ -17,12 +17,12 @@ s = extract_epochs(s)
 
 s = create_sweeps(s, epochsPerSweep=4)
 
-snrDb, signal_power, noise_power, statistic = ftest(s.processing["sweeps"], 40.0391, 8192, side_freq=2.5)
+snrDb, signal_phase, signal_power, noise_power, statistic = ftest(s.processing["sweeps"], 40.0391, 8192, side_freq=2.5)
 
 @test_approx_eq_eps snrDb     [NaN, -7.0915, -7.8101, 2.6462, -10.2675, -4.1863] 0.001
 @test_approx_eq_eps statistic [NaN,  0.8233,  0.8480, 0.1721,   0.9105,  0.6854] 0.001
 
-s = ftest(s, side_freq=2.5)
+s = ftest(s, side_freq=2.5, Note="Original channels")
 
 @test_approx_eq_eps s.processing["ftest1"][:SNRdB] [NaN, -1.2386, 0.5514, -1.5537, -2.7541, -6.7079] 0.001
 
@@ -41,7 +41,7 @@ s = extract_epochs(s)
 
 s = create_sweeps(s, epochsPerSweep=4)
 
-s = ftest(s, [40.0391, 20], side_freq=2.5)
+s = ftest(s, [40.0391, 20], side_freq=2.5, ID="A test file", Note="Small test file 2262h")
 
 @test_approx_eq_eps s.processing["ftest2"][:SNRdB] [3.2826] 0.002  #TODO tighten tolerance here. filter seems issue
 

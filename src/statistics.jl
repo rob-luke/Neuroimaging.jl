@@ -9,7 +9,35 @@
 
 function ftest(sweeps::Array, freq_of_interest::Number, fs::Number; side_freq::Number=2, used_filter=nothing)
 
-    #TODO: Don't treat harmonic frequencies as noise
+    # Calculates the F test as is commonly implemented in ASSR research
+    #
+    # ---------------------------------------------------------------------------
+    #
+    # Parameters    | ~
+    # ------------- | ----------------------------------------------------------
+    # `sweeps`      | Array of measurements. Samples x Sweeps x Channels
+    # `freq`        | Frequency of interest (Hz)
+    # `fs`          | Sampling rate (Hz)
+    # `side_freq`   | The amount of data to use on each side of frequency of interest to estimate noise (Hz)
+    # `used_filter` | Filter used on the sweep data. If provided then is compensated for
+    #
+    # ---------------------------------------------------------------------------
+    #
+    # Returns        | ~
+    # -------------- | ----------------------------------------------------------
+    # `snrDb`        | Signal to noise ratio in dB
+    # `signal_phase` | Signal phase at frequency of interest
+    # `signal_power` | Signal power at frequency of interest
+    # `noise_power`  | Noise power estimated of side frequencies
+    # `statistic`    | F statistic
+    #
+    # ---------------------------------------------------------------------------
+
+    #TODO Don't treat harmonic frequencies as noise
+    #TODO Allow choice of how many bins to ignore each side of freq_of_interest
+    #TODO Better function description with references
+
+    info("Calculating F statistic on $(size(sweeps)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
 
     # Determine frequencies of interest
     frequencies = linspace(0, 1, int(size(sweeps,1) / 2 + 1))*fs/2
@@ -35,39 +63,37 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number; side_freq::N
         debug("Not incorporating filter response in F test")
     end
 
+    # Determine signal phase
+    signal_phase = angle(spectrum[idx, :])                             # Biased response phase
+
     # Determine signal power
-    signal_power = abs( spectrum[idx, :] ).^2
+    signal_power = abs(spectrum[idx, :]).^2                            # Biased response power
 
     # Determine noise power
-    # Ignore one bin either side
-    noise_idxs      = [idx_Low-1:idx-2, idx+2:idx_High+1]
-
+    noise_idxs      = [idx_Low-1:idx-2, idx+2:idx_High+1]              # Ignore one bin either side
     noise_bins      = spectrum[noise_idxs,:]
     noise_bins      = abs(noise_bins)
-    noise_power     = sum(noise_bins .^2, 1) ./ size(noise_bins,1)
+    noise_power     = sum(noise_bins .^2, 1) ./ size(noise_bins,1)     # Recording noise power
 
-    # Return SNR
-    snr = (signal_power ./ noise_power)
+    # Calculate SNR
+    snr = (signal_power ./ noise_power)                                # Biased recording SNR
     snrDb = 10 * log10(snr)
 
     # Calculate statistic
     continuous_distribution = FDist(2, 2*size(noise_bins,1))
     statistic = ccdf(continuous_distribution, snr)
 
-    debug("Frequencies = [$(freq_of_interest - side_freq), ",
-                           "$(freq_of_interest), ",
-                           "$(freq_of_interest + side_freq)]")
-    debug("Indicies    = [$(minimum(noise_idxs)), ",
-                           "$(idx), ",
-                           "$(maximum(noise_idxs))]")
+    # Debugging information
+    debug("Frequencies = [$(freq_of_interest - side_freq), $(freq_of_interest), $(freq_of_interest + side_freq)]")
+    debug("Indicies    = [$(minimum(noise_idxs)), $(idx), $(maximum(noise_idxs))]")
     debug("Noise bins  = $(size(noise_bins,1))")
-    debug("Signal  = $(signal_power)")
-    debug("Noise   = $(noise_power)")
-    debug("SNR     = $(snr)")
-    debug("SNR dB  = $(snrDb)")
-    debug("Stat    = $(statistic)")
+    debug("Signal      = $(signal_power)")
+    debug("Noise       = $(noise_power)")
+    debug("SNR         = $(snr)")
+    debug("SNR dB      = $(snrDb)")
+    debug("Stat        = $(statistic)")
 
-    return snrDb, signal_power, noise_power, statistic
+    return snrDb, signal_phase, signal_power, noise_power, statistic
 end
 
 
