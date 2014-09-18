@@ -12,7 +12,7 @@ type leadfield
 end
 
 
-function match_leadfield(l::leadfield, s::ASSR)
+function match_leadfield(l, s::ASSR)
 
     info("Matching leadfield to ASSR")
 
@@ -32,7 +32,7 @@ end
 
 
 # Find the index in the leadfield that is closest to specified location
-function find_location(l::leadfield, x::Number, y::Number, z::Number)
+function find_location(l, x::Number, y::Number, z::Number)
 
     info("Find location ($x, $y, $z) in $(size(l.L,1)) sources")
 
@@ -45,6 +45,6 @@ function find_location(l::leadfield, x::Number, y::Number, z::Number)
     return idx
 end
 
-function find_location(l::leadfield, d::Union(Dipole, Coordinate))
+function find_location(l, d::Union(Dipole, Coordinate))
     find_location(l, d.x, d.y, d.z)
 end
