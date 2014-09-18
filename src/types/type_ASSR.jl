@@ -506,4 +506,9 @@ function assr_frequency(rounded_freq::Number; stimulation_sample_rate::Number=32
                                                                 stimulation_sample_rate / stimulation_frames_per_epoch
 end
 
+function assr_frequency(rounded_freq::AbstractVector)
+
+    [assr_frequency(f) for f = rounded_freq]
+end
+
 
