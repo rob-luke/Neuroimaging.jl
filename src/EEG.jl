@@ -96,7 +96,9 @@ include("types/type_ASSR.jl")
 export
     Electrodes,
         show,
-        match_sensors
+        match_sensors,
+    EEG_64_10_20,
+    EEG_Vanvooren_2014
 include("sensors.jl")
 
 export
