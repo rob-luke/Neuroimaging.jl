@@ -35,12 +35,6 @@ function new_processing_key(d::Dict, key_name::String)
 end
 
 
-function fileparts(fname::String)
-
-end
-
-
-
 # Find keys containing a string
 function find_keys_containing(d, partial_key::String)
 
@@ -57,15 +51,15 @@ function fileparts(fname::String)
         extension = ""
     else
 
-    separators = sort(unique([search(fname, '/', i) for i = 1:length(fname)]))
-    pathname = fname[1:last(separators)]
+        separators = sort(unique([search(fname, '/', i) for i = 1:length(fname)]))
+        pathname = fname[1:last(separators)]
 
-    extension  = last(sort(unique([search(fname, '.', i) for i = 1:length(fname)])))
+        extension  = last(sort(unique([search(fname, '.', i) for i = 1:length(fname)])))
 
-    filename = fname[last(separators)+1:extension-1]
+        filename = fname[last(separators)+1:extension-1]
 
-    extension  = fname[extension+1:end]
-end
+        extension  = fname[extension+1:end]
+    end
 
     return pathname, filename, extension
 end
