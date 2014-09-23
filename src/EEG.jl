@@ -139,7 +139,8 @@ export
     append_strings,
     new_processing_key,
     find_keys_containing,
-    fileparts
+    fileparts,
+    add_dataframe_static_rows
 include("helper.jl")
 
 

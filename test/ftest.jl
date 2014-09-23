@@ -22,7 +22,7 @@ snrDb, signal_phase, signal_power, noise_power, statistic = ftest(s.processing["
 @test_approx_eq_eps snrDb     [NaN, -7.0915, -7.8101, 2.6462, -10.2675, -4.1863] 0.001
 @test_approx_eq_eps statistic [NaN,  0.8233,  0.8480, 0.1721,   0.9105,  0.6854] 0.001
 
-s = ftest(s, side_freq=2.5, Note="Original channels")
+s = ftest(s, side_freq=2.5, Note="Original channels", Additional_columns = 22)
 
 @test_approx_eq_eps s.processing["ftest1"][:SNRdB] [NaN, -1.2386, 0.5514, -1.5537, -2.7541, -6.7079] 0.001
 

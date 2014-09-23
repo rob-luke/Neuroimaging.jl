@@ -424,7 +424,7 @@ end
 #######################################
 
 
-function ftest(a::ASSR, freq_of_interest::Number; ID::String="", Note::String="", kwargs... )
+function ftest(a::ASSR, freq_of_interest::Number; ID::String="", kwargs... )
 
     # TODO: Account for multiple applied filters
     if haskey(a.processing, "filter1")
@@ -446,9 +446,10 @@ function ftest(a::ASSR, freq_of_interest::Number; ID::String="", Note::String=""
                         SignalPhase         = vec(phase),
                         NoisePower          = vec(noise),
                         SNRdB               = vec(snrDb),
-                        Statistic           = vec(statistic),
-                        Note                = Note
+                        Statistic           = vec(statistic)
                       )
+
+    result = add_dataframe_static_rows(result, kwargs)
 
     key_name = new_processing_key(a.processing, "ftest")
     merge!(a.processing, [key_name => result])
