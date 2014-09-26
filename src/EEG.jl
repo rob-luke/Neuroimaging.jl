@@ -118,7 +118,8 @@ include("source_analysis/beamformers.jl")
 export
     Dipole,
     find_dipoles,
-    best_dipole
+    best_dipole,
+    orient_dipole
 include("source_analysis/dipoles.jl")
 
 export

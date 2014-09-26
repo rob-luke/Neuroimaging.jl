@@ -135,3 +135,27 @@ function best_dipole(ref::Coordinate, dips::Array{Dipole}; maxdist::Number=30)
 
     return dip[1]
 end
+
+
+#######################################
+#
+# Optimise dipole orientation
+#
+#######################################
+
+function orient_dipole(dipole_data::Array{Float32, 2}, triggers, fs::Integer, modulation_frequency)
+
+    #
+    # Input:  Signal projected on to orthogonal orientations and necessary parameters
+    # Output: Single signal of orientations projected on to SNR optimal vector
+    #
+
+    a = ASSR(dipole_data, triggers, Dict(), fs * Hertz, modulation_frequency, [""], "", "", ["o1", "o2", "o3"], Dict())
+    a = extract_epochs(a)
+    a = create_sweeps(a)
+    a = ftest(a)
+    s= a.processing["ftest1"][:SNRdB]
+    s= s ./ maximum(s)
+    s= s ./ sum(s)
+    convert(Array, a.data * s)
+end
