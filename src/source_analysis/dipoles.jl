@@ -143,12 +143,14 @@ end
 #
 #######################################
 
-function orient_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Integer, modulation_frequency)
+function orient_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Number, modulation_frequency)
 
     #
     # Input:  Signal projected on to orthogonal orientations and necessary parameters
     # Output: Single signal of orientations projected on to SNR optimal vector
     #
+
+    info("Optimising dipole orientation")
 
     a = ASSR(dipole_data, triggers, Dict(), fs * Hertz, modulation_frequency, [""], "", "", ["o1", "o2", "o3"], Dict())
     a = extract_epochs(a)
@@ -160,10 +162,10 @@ function orient_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Integ
     convert(Array, a.data * s)
 end
 
-function orient_dipole(dipole_data::Array{Float32, 2}, triggers, fs::Integer, modulation_frequency)
+function orient_dipole(dipole_data::Array{Float32, 2}, triggers, fs, modulation_frequency)
     orient_dipole(convert(Array{FloatingPoint, 2}, dipole_data), triggers, fs, modulation_frequency)
 end
 
-function orient_dipole(dipole_data::Array{Float64, 2}, triggers, fs::Integer, modulation_frequency)
+function orient_dipole(dipole_data::Array{Float64, 2}, triggers, fs, modulation_frequency)
     orient_dipole(convert(Array{FloatingPoint, 2}, dipole_data), triggers, fs, modulation_frequency)
 end
