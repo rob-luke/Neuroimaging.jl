@@ -143,7 +143,7 @@ end
 #
 #######################################
 
-function orient_dipole(dipole_data::Array{Float32, 2}, triggers, fs::Integer, modulation_frequency)
+function orient_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Integer, modulation_frequency)
 
     #
     # Input:  Signal projected on to orthogonal orientations and necessary parameters
@@ -158,4 +158,12 @@ function orient_dipole(dipole_data::Array{Float32, 2}, triggers, fs::Integer, mo
     s= s ./ maximum(s)
     s= s ./ sum(s)
     convert(Array, a.data * s)
+end
+
+function orient_dipole(dipole_data::Array{Float32, 2}, triggers, fs::Integer, modulation_frequency)
+    orient_dipole(convert(Array{FloatingPoint, 2}, dipole_data), triggers, fs, modulation_frequency)
+end
+
+function orient_dipole(dipole_data::Array{Float64, 2}, triggers, fs::Integer, modulation_frequency)
+    orient_dipole(convert(Array{FloatingPoint, 2}, dipole_data), triggers, fs, modulation_frequency)
 end
