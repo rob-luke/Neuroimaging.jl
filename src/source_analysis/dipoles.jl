@@ -152,6 +152,11 @@ function orient_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Numbe
 
     info("Optimising dipole orientation")
 
+    if size(dipole_data, 2) > size(dipole_data, 1)
+        debug("Transposing. Channels should be in the second dimension.")
+        dipole_data = dipole_data'
+    end
+
     a = ASSR(dipole_data, triggers, Dict(), fs * Hertz, modulation_frequency, [""], "", "", ["o1", "o2", "o3"], Dict())
     a = extract_epochs(a)
     a = create_sweeps(a)
