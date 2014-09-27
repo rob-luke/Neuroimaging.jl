@@ -119,7 +119,8 @@ export
     Dipole,
     find_dipoles,
     best_dipole,
-    orient_dipole
+    orient_dipole,
+    best_ftest_dipole
 include("source_analysis/dipoles.jl")
 
 export
