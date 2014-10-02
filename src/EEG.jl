@@ -98,7 +98,9 @@ export
         show,
         match_sensors,
     EEG_64_10_20,
-    EEG_Vanvooren_2014
+    EEG_Vanvooren_2014,
+    EEG_Vanvooren_2014_Left,
+    EEG_Vanvooren_2014_Right
 include("sensors.jl")
 
 export
