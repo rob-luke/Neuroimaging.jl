@@ -230,10 +230,17 @@ function lowpass_filter(a::ASSR; cutOff::Number=150, order::Int=3, tolerance::Nu
 end
 
 
-function bandpass_filter(a::ASSR; lower::Number=float(a.modulation_frequency)-2, upper::Number=float(a.modulation_frequency)+4,
-                         n::Int=3, rp::Number=0.001, rs::Number=30, tolerance::Number=0.01)
+function bandpass_filter(a::ASSR;
+                         lower::Number=float(a.modulation_frequency)-1,
+                         upper::Number=float(a.modulation_frequency)+1,
+                         n::Int=24, rp::Number=0.0001, tolerance::Number=0.01)
 
-    a.data, f = bandpass_filter(a.data, lower, upper, int(a.sample_rate), n=n, rp=rp, rs=rs)
+    # Type 1 Chebychev filter
+    # The default options here are optimised for modulation frequencies 4, 10, 20, 40, 80
+    # TODO filter check does not work here. Why not?
+    # TODO automatic minimum filter order selection
+
+    a.data, f = bandpass_filter(a.data, lower, upper, int(a.sample_rate), n, rp)
 
     _filter_check(f, float(a.modulation_frequency), int(a.sample_rate), tolerance)
 
