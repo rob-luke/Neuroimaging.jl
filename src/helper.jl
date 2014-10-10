@@ -67,6 +67,18 @@ function fileparts(fname::String)
 end
 
 
+# Find the index of closest number in a list
+function _find_closest_number_idx(list::Array, target::Number)
+
+    diff_array = abs(list .- target)
+    targetIdx  = findfirst(diff_array , minimum(diff_array))
+
+    debug("Frequency index is $(targetIdx) is $(list[targetIdx]) Hz")
+
+    return targetIdx
+end
+
+
 #######################################
 #
 # DataFrame manipulation

@@ -1,4 +1,4 @@
-
+using Distributions
 
 
 #######################################
@@ -42,9 +42,9 @@ function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
 
     # Determine frequencies of interest
     frequencies = linspace(0, 1, int(size(sweeps,1) / 2 + 1))*fs/2
-    idx         = _find_frequency_idx(frequencies, freq_of_interest)
-    idx_Low     = _find_frequency_idx(frequencies, freq_of_interest - side_freq)
-    idx_High    = _find_frequency_idx(frequencies, freq_of_interest + side_freq)
+    idx         = _find_closest_number_idx(frequencies, freq_of_interest)
+    idx_Low     = _find_closest_number_idx(frequencies, freq_of_interest - side_freq)
+    idx_High    = _find_closest_number_idx(frequencies, freq_of_interest + side_freq)
 
     # Calculate amplitude at each frequency
     spectrum    = _ftest_spectrum(sweeps)

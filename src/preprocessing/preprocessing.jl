@@ -1,8 +1,3 @@
-using DataFrames
-using ProgressMeter
-using Distributions
-
-
 ##########################################
 #
 # Remove template signal from all channels
@@ -10,9 +5,7 @@ using Distributions
 ##########################################
 
 # Pass in array to subtract from each channel
-function remove_template(signals::Array,
-                        reference::Array)
-
+function remove_template(signals::Array, reference::Array)
 
     for chan = 1:size(signals)[end]
         signals[:, chan] = signals[:, chan] - reference
@@ -27,7 +20,6 @@ end
 # Re reference
 #
 #######################################
-
 
 # Pass in array of channels re reference to
 function rereference(signals::Array,
@@ -48,8 +40,8 @@ end
 
 # Pass in name of channels to re reference to
 function rereference(signals::Array,
-                        refChan::Union(String, Array{ASCIIString}),
-                        chanNames::Array{String})
+                     refChan::Union(String, Array{ASCIIString}),
+                     chanNames::Array{String})
 
 
     if refChan == "car" || refChan == "average"
@@ -67,21 +59,3 @@ function rereference(signals::Array,
 
     return rereference(signals, refChan_Idx)
 end
-
-
-#######################################
-#
-# Helper functions
-#
-#######################################
-
-function _find_frequency_idx(freq_array::Array, freq_of_interest::Number)
-
-    diff_array = abs(freq_array .- freq_of_interest)
-    targetIdx  = findfirst(diff_array , minimum(diff_array))
-
-    debug("Frequency index is $(targetIdx) is $(freq_array[targetIdx]) Hz")
-
-    return targetIdx
-end
-
