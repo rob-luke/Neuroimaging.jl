@@ -157,8 +157,7 @@ function remove_channel!(a::ASSR, channel_name::Union(Int, String, ASCIIString);
 #
 #######################################
 
-# TODO Change name to trim_channel
-function trim_ASSR(a::ASSR, stop::Int; start::Int=1, kwargs...)
+function trim_channel(a::ASSR, stop::Int; start::Int=1, kwargs...)
 
     info("Trimming $(size(a.data)[end]) channels between $start and $stop")
 
@@ -389,7 +388,6 @@ end
 
 
 function create_sweeps(a::ASSR; epochsPerSweep::Int=32, kwargs...)
-    #TODO make kwargs
 
     merge!(a.processing, ["sweeps" => create_sweeps(a.processing["epochs"], epochsPerSweep = epochsPerSweep)])
 

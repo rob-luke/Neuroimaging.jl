@@ -76,7 +76,7 @@ include("statistics/gfp.jl")
 export
     ASSR,
     read_ASSR,
-    trim_ASSR,
+    trim_channel,
     read_evt,
     add_triggers,
     remove_channel!,

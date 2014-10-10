@@ -57,7 +57,7 @@ a, b, c = size(s.processing["epochs"])
 @test b == 362
 @test c == 1
 
-s = trim_ASSR(s, 10)  # TODO add test
+s = trim_channel(s, 10)  # TODO add test
 
 println()
 println("!! F test passed !!")
