@@ -5,8 +5,10 @@ using Logging
 #
 # File type reading and writing
 #
+
 export
     import_biosemi,
+    channelNames_biosemi_1020,
     create_channel,
     create_events,
     read_avr,
@@ -27,25 +29,25 @@ include("read_write/besa.jl")
 #
 # Pre-processing
 #
-export
-    channelNames_biosemi_1020,
-    highpass_filter,
-    lowpass_filter,
-    remove_template,
-    rereference
-include("preprocessing/preprocessing.jl")
+
 export
     channel_rejection
 include("preprocessing/data_rejection.jl")
 export
+    highpass_filter,
+    lowpass_filter,
     bandpass_filter
 include("preprocessing/filtering.jl")
-
+export
+    remove_template,
+    rereference
+include("preprocessing/reference.jl")
 
 
 #
 # Epochs
 #
+
 export
     clean_triggers,
     validate_triggers,
@@ -59,6 +61,7 @@ include("synchronised_data.jl")
 #
 # Statistics
 #
+
 export
     ftest,
     gfp
@@ -68,6 +71,7 @@ include("statistics.jl")
 #
 # Type - ASSR
 #
+
 export
     ASSR,
     read_ASSR,
@@ -93,6 +97,7 @@ include("types/type_ASSR.jl")
 #
 # Source analysis
 #
+
 export
     Electrodes,
         show,
@@ -139,6 +144,7 @@ include("source_analysis/projection.jl")
 #
 # Helper functions
 #
+
 export
     append_strings,
     new_processing_key,
