@@ -66,6 +66,7 @@ export
     ftest,
     gfp
 include("statistics/ftest.jl")
+include("statistics/gfp.jl")
 
 
 #
