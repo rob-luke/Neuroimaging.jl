@@ -65,7 +65,7 @@ include("synchronised_data.jl")
 export
     ftest,
     gfp
-include("statistics.jl")
+include("statistics/ftest.jl")
 
 
 #
