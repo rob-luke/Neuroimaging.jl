@@ -106,7 +106,7 @@ end
 #
 #######################################
 
-function add_channel(a::ASSR, data::Array, chanLabels::ASCIIString)
+function add_channel(a::ASSR, data::Array, chanLabels::ASCIIString; kwargs...)
 
     info("Adding channel $chanLabels")
 
@@ -123,7 +123,7 @@ end
 #
 #######################################
 
-function remove_channel!(a::ASSR, channel_idx::Array{Int})
+function remove_channel!(a::ASSR, channel_idx::Array{Int}; kwargs...)
 
     channel_idx = channel_idx[channel_idx .!= 0]
 
@@ -141,14 +141,14 @@ function remove_channel!(a::ASSR, channel_idx::Array{Int})
     a.channel_names = a.channel_names[keep_idx]
 end
 
-function remove_channel!(a::ASSR, channel_names::Array{ASCIIString})
+function remove_channel!(a::ASSR, channel_names::Array{ASCIIString}; kwargs...)
     remove_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
     info("Removing channel(s) $(append_strings(channel_names))"); end
 
-function remove_channel!(a::ASSR, channel_names::Union(Array{String}))
+function remove_channel!(a::ASSR, channel_names::Union(Array{String}); kwargs...)
     remove_channel!(a, convert(Array{ASCIIString}, channel_names)); end
 
-function remove_channel!(a::ASSR, channel_name::Union(Int, String, ASCIIString))
+function remove_channel!(a::ASSR, channel_name::Union(Int, String, ASCIIString); kwargs...)
     remove_channel!(a, [channel_name]); end
 
 #######################################
@@ -158,7 +158,7 @@ function remove_channel!(a::ASSR, channel_name::Union(Int, String, ASCIIString))
 #######################################
 
 # TODO Change name to trim_channel
-function trim_ASSR(a::ASSR, stop::Int; start::Int=1)
+function trim_ASSR(a::ASSR, stop::Int; start::Int=1, kwargs...)
 
     info("Trimming $(size(a.data)[end]) channels between $start and $stop")
 
@@ -184,7 +184,7 @@ end
 #
 #######################################
 
-function merge_channels(a::ASSR, merge_Chans::Array{ASCIIString}, new_name::String)
+function merge_channels(a::ASSR, merge_Chans::Array{ASCIIString}, new_name::String; kwargs...)
 
     debug("Total origin channels: $(length(a.channel_names))")
 
@@ -199,7 +199,7 @@ function merge_channels(a::ASSR, merge_Chans::Array{ASCIIString}, new_name::Stri
     info("Merging channels $(append_strings(vec(a.channel_names[keep_idxs,:])))")
     debug("Merging channels $keep_idxs")
 
-    a = add_channel(a, mean(a.data[:,keep_idxs], 2), new_name)
+    a = add_channel(a, mean(a.data[:,keep_idxs], 2), new_name; kwargs...)
 end
 
 
@@ -210,7 +210,7 @@ end
 #######################################
 
 
-function highpass_filter(a::ASSR; cutOff::Number=2, order::Int=3, tolerance::Number=0.01)
+function highpass_filter(a::ASSR; cutOff::Number=2, order::Int=3, tolerance::Number=0.01, kwargs...)
 
     a.data, f = highpass_filter(a.data, cutOff=cutOff, order=order, fs=int(a.sample_rate))
 
@@ -220,7 +220,7 @@ function highpass_filter(a::ASSR; cutOff::Number=2, order::Int=3, tolerance::Num
 end
 
 
-function lowpass_filter(a::ASSR; cutOff::Number=150, order::Int=3, tolerance::Number=0.01)
+function lowpass_filter(a::ASSR; cutOff::Number=150, order::Int=3, tolerance::Number=0.01, kwargs...)
 
     a.data, f = lowpass_filter(a.data, cutOff=cutOff, order=order, fs=int(a.sample_rate))
 
@@ -233,7 +233,7 @@ end
 function bandpass_filter(a::ASSR;
                          lower::Number=float(a.modulation_frequency)-1,
                          upper::Number=float(a.modulation_frequency)+1,
-                         n::Int=24, rp::Number=0.0001, tolerance::Number=0.01)
+                         n::Int=24, rp::Number=0.0001, tolerance::Number=0.01, kwargs...)
 
     # Type 1 Chebychev filter
     # The default options here are optimised for modulation frequencies 4, 10, 20, 40, 80
@@ -279,7 +279,7 @@ end
 #
 #######################################
 
-function rereference(a::ASSR, refChan::Union(String, Array{ASCIIString}))
+function rereference(a::ASSR, refChan::Union(String, Array{ASCIIString}); kwargs...)
 
     a.data = rereference(a.data, refChan, a.channel_names)
 
@@ -341,7 +341,7 @@ function add_triggers(a::ASSR, mod_freq::Number; kwargs...)
 end
 
 
-function add_triggers(a::ASSR, mod_freq::Number, epochIndex; cycle_per_epoch::Int=1, args...)
+function add_triggers(a::ASSR, mod_freq::Number, epochIndex; cycle_per_epoch::Int=1, kwargs...)
 
     info("Adding triggers to reduce ASSR. Reducing $(mod_freq)Hz to $cycle_per_epoch cycle(s).")
 
@@ -380,7 +380,7 @@ end
 #
 #######################################
 
-function extract_epochs(a::ASSR)
+function extract_epochs(a::ASSR; kwargs...)
 
     merge!(a.processing, ["epochs" => extract_epochs(a.data, a.triggers)])
 
@@ -388,7 +388,7 @@ function extract_epochs(a::ASSR)
 end
 
 
-function create_sweeps(a::ASSR; epochsPerSweep::Int=32)
+function create_sweeps(a::ASSR; epochsPerSweep::Int=32, kwargs...)
     #TODO make kwargs
 
     merge!(a.processing, ["sweeps" => create_sweeps(a.processing["epochs"], epochsPerSweep = epochsPerSweep)])
@@ -404,19 +404,19 @@ end
 #
 #######################################
 
-function trigger_channel(a::ASSR)
+function trigger_channel(a::ASSR; kwargs...)
 
     create_channel(a.triggers, a.data, float(a.sample_rate))
 end
 
 
-function system_code_channel(a::ASSR)
+function system_code_channel(a::ASSR; kwargs...)
 
     create_channel(a.system_codes, a.data, float(a.sample_rate))
 end
 
 
-function write_ASSR(a::ASSR, fname::String)
+function write_ASSR(a::ASSR, fname::String; kwargs...)
 
     info("Saving $(size(a.data)[end]) channels to $fname")
 
@@ -481,7 +481,7 @@ end
 
 
 # Save ftest results to file
-function save_ftests(a::ASSR; name_extension::String="")
+function save_ftests(a::ASSR; name_extension::String="", kwargs...)
 
     file_name = string(a.file_name, name_extension, ".csv")
 
