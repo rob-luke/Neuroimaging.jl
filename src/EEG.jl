@@ -92,7 +92,7 @@ export
         merge_channels,
         extract_epochs,
         create_sweeps
-include("types/type_ASSR.jl")
+include("types/ASSR.jl")
 
 
 #
