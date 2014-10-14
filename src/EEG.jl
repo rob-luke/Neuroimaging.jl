@@ -151,7 +151,8 @@ export
     new_processing_key,
     find_keys_containing,
     fileparts,
-    add_dataframe_static_rows
+    add_dataframe_static_rows,
+    _find_closest_number_idx
 include("helper.jl")
 
 
