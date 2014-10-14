@@ -35,7 +35,7 @@ a = extract_epochs(a)
 a = create_sweeps(a)
 a = ftest(a, [2:200])
 a = ftest(a, float(a.modulation_frequency)*[1, 2, 3, 4])
-a = save_ftests(a)
+a = save_results(a)
 
 
 # Read the saved data and plot with Gadfly.jl

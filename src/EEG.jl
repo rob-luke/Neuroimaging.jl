@@ -85,7 +85,7 @@ export
     add_channel,
     assr_frequency,
     bandpass_filter,
-    save_ftests,
+    save_results,
     trigger_channel,
     channel_rejection,
     write_ASSR,

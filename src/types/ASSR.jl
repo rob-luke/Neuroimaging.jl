@@ -501,7 +501,7 @@ end
 
 
 # Save ftest results to file
-function save_ftests(a::ASSR; name_extension::String="", kwargs...)
+function save_results(a::ASSR; name_extension::String="", kwargs...)
 
     file_name = string(a.file_name, name_extension, ".csv")
 
