@@ -19,11 +19,13 @@ export
     write_dat,
     prepare_dat,
     write_avr,
-    read_evt
+    read_evt,
+    read_rba_mat
 include("read_write/read.jl")
 include("read_write/write.jl")
 include("read_write/biosemi.jl")
 include("read_write/besa.jl")
+include("read_write/rba.jl")
 
 
 #

@@ -23,7 +23,18 @@ import Base.show
 function Base.show(io::IO, a::ASSR)
     time_length = round(size(a.data,1) / a.sample_rate / 60, 2)
     println(io, "ASSR measurement of $time_length mins with $(size(a.data,2)) channels sampled at $(a.sample_rate)")
-    println(io, "  Modulation frequency $(a.modulation_frequency )")
+    println(io, "  Modulation frequency: $(a.modulation_frequency )")
+
+    if haskey(a.processing, "Amplitude")
+        println(io, "  Stimulation amplitude: $(a.processing["Amplitude"]) dB")
+    end
+    if haskey(a.processing, "Name")
+        println(io, "  Participant name: $(a.processing["Name"] )")
+    end
+    if haskey(a.processing, "Side")
+        println(io, "  Stimulation side: $(a.processing["Side"] )")
+    end
+
 end
 
 
@@ -57,12 +68,11 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
 
     # Or even better if there is a mat file read it
     mat_path = string(file_path, file_name, ".mat")
+    stimulation_side      = nothing  # In case it is not
+    participant_name      = nothing  # defined in the mat file
+    stimulation_amplitude = nothing
     if isreadable(mat_path)
-        rba                  = matread(mat_path)
-        try
-            modulation_frequency = rba["properties"]["stimulation_properties"]["stimulus_1"]["rounded_modulation_frequency"]
-        end
-        info("Imported matching .mat file")
+        modulation_frequency, stimulation_side, participant_name, stimulation_amplitude = read_rba_mat(mat_path)
     end
 
     # Import raw data
@@ -76,6 +86,16 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
     a = ASSR(data, triggers, system_codes, sample_rate * Hertz, modulation_frequency, [reference_channel], file_path, file_name,
              header["chanLabels"], Dict())
 
+    if stimulation_side != nothing
+        a.processing["Side"] = stimulation_side
+    end
+    if participant_name != nothing
+        a.processing["Name"] = participant_name
+    end
+    if stimulation_amplitude != nothing
+        a.processing["Amplitude"] = stimulation_amplitude
+    end
+
     # Remove status channel information
     remove_channel!(a, "Status")
 
@@ -84,6 +104,8 @@ function read_ASSR(fname::Union(String, IO); kwargs...)
 
     return a
 end
+
+
 
 
 #######################################
