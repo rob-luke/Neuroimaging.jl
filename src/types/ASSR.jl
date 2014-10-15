@@ -510,6 +510,7 @@ function save_results(a::ASSR; name_extension::String="", kwargs...)
 
     # Index of keys to be exported
     result_idx = find_keys_containing(results, "ftest")
+    result_idx = [result_idx, find_keys_containing(results, "hotelling")]
 
     if length(result_idx) > 0
 
