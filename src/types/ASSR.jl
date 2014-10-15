@@ -409,9 +409,9 @@ function extract_epochs(a::ASSR; kwargs...)
 end
 
 
-function create_sweeps(a::ASSR; epochsPerSweep::Int=32, kwargs...)
+function create_sweeps(a::ASSR; epochsPerSweep::Int=64, kwargs...)
 
-    merge!(a.processing, ["sweeps" => create_sweeps(a.processing["epochs"], epochsPerSweep = epochsPerSweep)])
+    merge!(a.processing, ["sweeps" => create_sweeps(a.processing["epochs"], epochsPerSweep)])
 
     return a
 end

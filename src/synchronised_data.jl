@@ -209,7 +209,7 @@ end
 #
 #######################################
 
-function create_sweeps(epochs::Array; epochsPerSweep::Int=32)
+function create_sweeps(epochs::Array, epochsPerSweep::Int)
 
     epochsLen = size(epochs)[1]
     epochsNum = size(epochs)[2]
