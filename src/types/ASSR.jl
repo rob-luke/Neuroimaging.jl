@@ -409,13 +409,20 @@ function extract_epochs(a::ASSR; kwargs...)
 end
 
 
+function epoch_rejection(a::ASSR; cutOff::Number=0.95, kwargs...)
+
+    a.processing["epochs"] = epoch_rejection(a.processing["epochs"], cutOff)
+
+    return a
+end
+
+
 function create_sweeps(a::ASSR; epochsPerSweep::Int=64, kwargs...)
 
     merge!(a.processing, ["sweeps" => create_sweeps(a.processing["epochs"], epochsPerSweep)])
 
     return a
 end
-
 
 
 #######################################

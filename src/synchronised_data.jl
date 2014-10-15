@@ -174,7 +174,7 @@ end
 #
 #######################################
 
-function epoch_rejection(epochs::Array; rejectionMethod::String="peak2peak", cutOff::Number=0.9)
+function epoch_rejection(epochs::Array, cutOff::Number; rejectionMethod::String="peak2peak")
 
     epochsLen = size(epochs)[1]
     epochsNum = size(epochs)[2]
