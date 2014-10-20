@@ -1,6 +1,7 @@
 # EEG
 
 [![Build Status](https://travis-ci.org/codles/EEG.jl.svg?branch=master)](https://travis-ci.org/codles/EEG.jl)
+[![Build status](https://ci.appveyor.com/api/projects/status/ph8d0fas94w0gk8g/branch/master?svg=true)](https://ci.appveyor.com/project/codles/eeg-jl/branch/master)
 [![Coverage Status](https://img.shields.io/coveralls/codles/EEG.jl.svg)](https://coveralls.io/r/codles/EEG.jl?branch=master)
 
 Process EEG files in Julia.  
