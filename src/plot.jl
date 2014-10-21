@@ -343,13 +343,13 @@ end
 
 #######################################
 #
-# Type ASSR
+# Type SSR
 #
 #######################################
 
 
 # Plot whole all data
-function plot_timeseries(eeg::ASSR; titletext::String="")
+function plot_timeseries(eeg::SSR; titletext::String="")
 
     p = plot_timeseries(eeg.data, eeg.header["sampRate"][1], titletext=titletext)
 
@@ -357,7 +357,7 @@ function plot_timeseries(eeg::ASSR; titletext::String="")
 end
 
 # Plot a single channel
-function plot_timeseries(eeg::ASSR, chanName::String; titletext::String="")
+function plot_timeseries(eeg::SSR, chanName::String; titletext::String="")
 
     idx = findfirst(eeg.header["chanLabels"], chanName)
 
@@ -367,7 +367,7 @@ function plot_timeseries(eeg::ASSR, chanName::String; titletext::String="")
 end
 
 
-function plot_spectrum(eeg::ASSR, chan::Int; targetFreq::Number=0)
+function plot_spectrum(eeg::SSR, chan::Int; targetFreq::Number=0)
 
     channel_name = eeg.header["chanLabels"][chan]
 
@@ -400,13 +400,13 @@ function plot_spectrum(eeg::ASSR, chan::Int; targetFreq::Number=0)
     return p
 end
 
-function plot_spectrum(eeg::ASSR, chan::String; targetFreq::Number=0)
+function plot_spectrum(eeg::SSR, chan::String; targetFreq::Number=0)
 
     return plot_spectrum(eeg, findfirst(eeg.header["chanLabels"], chan), targetFreq=targetFreq)
 end
 
 
-function ASSR_spectrogram(eeg::ASSR, channel::Int, lower::Number, upper::Number; seconds::Int=32)
+function SSR_spectrogram(eeg::SSR, channel::Int, lower::Number, upper::Number; seconds::Int=32)
 
     fs = eeg.header["sampRate"][channel]
 
@@ -446,10 +446,10 @@ function ASSR_spectrogram(eeg::ASSR, channel::Int, lower::Number, upper::Number;
     return t2
 end
 
-function ASSR_spectrogram(eeg::ASSR, channel::String, lower::Number, upper::Number; seconds::Int=32)
+function SSR_spectrogram(eeg::SSR, channel::String, lower::Number, upper::Number; seconds::Int=32)
 
 
-    ASSR_spectrogram(eeg, findfirst(eeg.header["chanLabels"], channel), lower, upper, seconds=seconds)
+    SSR_spectrogram(eeg, findfirst(eeg.header["chanLabels"], channel), lower, upper, seconds=seconds)
 end
 
 

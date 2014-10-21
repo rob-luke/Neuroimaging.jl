@@ -12,7 +12,7 @@ using MAT
 # Input
 fname = joinpath(dirname(@__FILE__), "data", "test_Hz19.5-testing.bdf")
 
-s = read_ASSR(fname)
+s = read_SSR(fname)
 s = extract_epochs(s)
 s = create_sweeps(s; epochsPerSweep=4)
 julia_result = average_epochs(s.processing["sweeps"])

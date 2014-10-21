@@ -72,12 +72,12 @@ include("statistics/gfp.jl")
 
 
 #
-# Type - ASSR
+# Type - SSR
 #
 
 export
-    ASSR,
-    read_ASSR,
+    SSR,
+    read_SSR,
     trim_channel,
     read_evt,
     add_triggers,
@@ -88,13 +88,13 @@ export
     save_results,
     trigger_channel,
     channel_rejection,
-    write_ASSR,
+    write_SSR,
         highpass_filter,
         rereference,
         merge_channels,
         extract_epochs,
         create_sweeps
-include("types/ASSR.jl")
+include("types/SSR.jl")
 
 
 #
@@ -167,7 +167,7 @@ include("helper.jl")
     #=plot_spectrum,=#
     #=plot_timeseries,=#
     #=oplot_dipoles,=#
-    #=ASSR_spectrogram,=#
+    #=SSR_spectrogram,=#
     #=plot_filter_response=#
 #=include("plot.jl")=#
 #=export=#

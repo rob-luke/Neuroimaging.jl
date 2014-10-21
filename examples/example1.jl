@@ -3,7 +3,7 @@ using Winston
 
 fname = "../data/Example-40Hz.bdf"
 
-s = read_ASSR(fname, verbose=true)
+s = read_SSR(fname, verbose=true)
 
 s = proc_hp(s, cutOff=2, verbose=true)
 

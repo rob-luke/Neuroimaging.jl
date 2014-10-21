@@ -10,7 +10,7 @@ using Distributions
 function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
                side_freq::Number=0.5, used_filter=nothing, spill_bins::Int=2, kwargs...)
 
-    # Calculates the F test as is commonly implemented in ASSR research
+    # Calculates the F test as is commonly implemented in SSR research
     #
     # ---------------------------------------------------------------------------
     #

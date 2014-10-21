@@ -9,7 +9,7 @@ println()
 # Read EEG and determine scalp sensor statistics
 #
 
-s = read_ASSR("/Users/rluke/Documents/Data/EEG/BDFs/NH/Example-40Hz.bdf", verbose=true)
+s = read_SSR("/Users/rluke/Documents/Data/EEG/BDFs/NH/Example-40Hz.bdf", verbose=true)
 
 s = highpass_filter(s, cutOff=2, verbose=true)
 

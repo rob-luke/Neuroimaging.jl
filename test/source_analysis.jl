@@ -3,7 +3,7 @@ using Base.Test
 
 fname = joinpath(dirname(@__FILE__), "data", "test_Hz19.5-testing.bdf")
 
-a = read_ASSR(fname)
+a = read_SSR(fname)
 
 #######################################
 #

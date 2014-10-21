@@ -6,7 +6,7 @@ Logging.configure(level=DEBUG)
 
 fname = joinpath(dirname(@__FILE__), "data", "test_Hz19.5-testing.bdf")
 
-s = read_ASSR(fname)
+s = read_SSR(fname)
 
 @test_approx_eq_eps maximum(s.data[:,2])   54.5939 0.1
 @test_approx_eq_eps minimum(s.data[:,4]) -175.2503 0.1

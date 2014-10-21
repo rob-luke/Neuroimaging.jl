@@ -17,15 +17,15 @@ sampRate = readBDFHeader(fname)["sampRate"][1]
 
 @test trigs == create_channel(evtTab, dats, sampRate, code="code", index="idx", duration="dur")
 
-@test trigs !== trigger_channel(read_ASSR(fname))
+@test trigs !== trigger_channel(read_SSR(fname))
 
-@test trigs == trigger_channel(read_ASSR(fname, valid_indices=[-1000:10000]))
+@test trigs == trigger_channel(read_SSR(fname, valid_indices=[-1000:10000]))
 
-s  = read_ASSR(fname)
-write_ASSR(s, "testwrite.bdf")
-s  = read_ASSR(fname, valid_indices=[-1000:10000])
-write_ASSR(s, "testwrite.bdf")
-s2 = read_ASSR("testwrite.bdf", valid_indices=[-1000:10000])
+s  = read_SSR(fname)
+write_SSR(s, "testwrite.bdf")
+s  = read_SSR(fname, valid_indices=[-1000:10000])
+write_SSR(s, "testwrite.bdf")
+s2 = read_SSR("testwrite.bdf", valid_indices=[-1000:10000])
 
 show(s)
 show(s2)
@@ -39,7 +39,7 @@ show(s2)
 # BESA
 #
 
-s = read_ASSR(  joinpath(dirname(@__FILE__), "data", "test_Hz19.5-testing.bdf"))
+s = read_SSR(  joinpath(dirname(@__FILE__), "data", "test_Hz19.5-testing.bdf"))
 s = read_evt(s, joinpath(dirname(@__FILE__), "data", "test.evt"))
 
 @test_throws BoundsError extract_epochs(s)
