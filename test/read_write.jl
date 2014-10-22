@@ -42,8 +42,6 @@ show(s2)
 s = read_SSR(  joinpath(dirname(@__FILE__), "data", "test_Hz19.5-testing.bdf"))
 s = read_evt(s, joinpath(dirname(@__FILE__), "data", "test.evt"))
 
-@test_throws BoundsError extract_epochs(s)
-
 
 #
 # Convert between events and channels

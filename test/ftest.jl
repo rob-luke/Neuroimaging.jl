@@ -54,7 +54,7 @@ s = extract_epochs(s)
 a, b, c = size(s.processing["epochs"])
 
 @test a == 613
-@test b == 362
+@test b == 363
 @test c == 1
 
 s = trim_channel(s, 10)  # TODO add test

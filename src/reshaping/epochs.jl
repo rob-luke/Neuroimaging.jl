@@ -33,7 +33,7 @@ function extract_epochs(data::Array, triggers::Dict, valid_triggers::AbstractVec
     # Change offset so numbers are manageable
     triggers[:Code] = triggers[:Code] - 252
 
-    # Determine which triggers are valid
+    # Determine indices of triggers which are valid
     valid_triggers = any(triggers[:Code] .== valid_triggers', 2)
     valid_triggers = find(valid_triggers .== true)
 
@@ -41,27 +41,27 @@ function extract_epochs(data::Array, triggers::Dict, valid_triggers::AbstractVec
     triggers = triggers[valid_triggers, :]                # That aren't valid
     triggers = triggers[remove_first+1:end-remove_last,:] # Often the first trigger is rubbish
 
-    # User feedback
-    numEpochs = size(triggers)[1] - 1
     lenEpochs = minimum(diff(triggers[:Index]))
     numChans  = size(data)[end]
-    debug("Creating epochs: $lenEpochs x $numEpochs x $numChans")
 
+    # Check we aren't looking past the end of the data
+    start_indices = triggers[:Index]
+    end_indices   = start_indices + lenEpochs - 1
+    while end_indices[end] > size(data, 1)
+        pop!(start_indices)
+        pop!(end_indices)
+        warn("Removed end epoch as its not complete")
+    end
+
+    # Create variable for epochs
+    numEpochs = length(start_indices)
     epochs = zeros(Float64, (int(lenEpochs), int(numEpochs), int(numChans)))
 
-    chan = 1
-    while chan <= numChans
-        epoch = 1
-        while epoch <= numEpochs
+    # User feedback
+    debug("Creating epochs: $lenEpochs x $numEpochs x $numChans")
 
-            startLoc = triggers[:Index][epoch]
-            endLoc   = startLoc + lenEpochs - 1
-
-            epochs[:,epoch, chan] = vec(data[startLoc:endLoc, chan])
-
-            epoch += 1
-        end
-        chan += 1
+    for si = 1:length(start_indices)
+        epochs[:, si, :] = data[start_indices[si]: end_indices[si], :]
     end
 
     info("Generated $numEpochs epochs of length $lenEpochs for $numChans channels")
