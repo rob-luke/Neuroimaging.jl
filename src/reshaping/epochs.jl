@@ -5,27 +5,46 @@
 #
 #######################################
 
-function extract_epochs(dats::Array, evtTab::Dict; remove_first::Int=0)
+@doc md"""
+Extract epoch data from array of channels.
 
-    epochIndex = DataFrame(Code = evtTab["Code"], Index = evtTab["Index"]);
-    epochIndex[:Code] = epochIndex[:Code] - 252
-    if findfirst(epochIndex[:Code], -4) > 0
-        debug("Epochs for CI file")
-        epochIndex = epochIndex[epochIndex[:Code].==-4,:]
-        if remove_first == 0
-            remove_first += 1
-        end
-    else
-        debug("Epochs for NH file")
-        epochIndex = epochIndex[epochIndex[:Code].>0,:]
-    end
-    epochIndex = epochIndex[remove_first+1:end,:] # Often the first trigger is rubbish
+### Input
 
+* Array of raw data. Samples x Channels
+* Dictionary of trigger information
+* Vector of valid trigger numbers
+* remove_first: Remove the first n triggers (0).
+* valid_triggers: Trigger numbers that are considered valid ([1,2])
 
-    numEpochs = size(epochIndex)[1] - 1
-    lenEpochs = minimum(diff(epochIndex[:Index]))
-    numChans  = size(dats)[end]
+### Example
 
+```julia
+epochs = extract_epochs(data, triggers, [1,2], 0, 0)
+```
+""" ->
+function extract_epochs(data::Array, triggers::Dict, valid_triggers::AbstractVector, remove_first::Int, remove_last::Int)
+
+    validate_triggers(triggers)
+
+    triggers = DataFrame(Code = triggers["Code"], Index = triggers["Index"])
+    # TODO Use convert function
+    #=triggers = convert(DataFrame, triggers)=#
+
+    # Change offset so numbers are manageable
+    triggers[:Code] = triggers[:Code] - 252
+
+    # Determine which triggers are valid
+    valid_triggers = any(triggers[:Code] .== valid_triggers', 2)
+    valid_triggers = find(valid_triggers .== true)
+
+    # Remove unwanted triggers
+    triggers = triggers[valid_triggers, :]                # That aren't valid
+    triggers = triggers[remove_first+1:end-remove_last,:] # Often the first trigger is rubbish
+
+    # User feedback
+    numEpochs = size(triggers)[1] - 1
+    lenEpochs = minimum(diff(triggers[:Index]))
+    numChans  = size(data)[end]
     debug("Creating epochs: $lenEpochs x $numEpochs x $numChans")
 
     epochs = zeros(Float64, (int(lenEpochs), int(numEpochs), int(numChans)))
@@ -35,10 +54,10 @@ function extract_epochs(dats::Array, evtTab::Dict; remove_first::Int=0)
         epoch = 1
         while epoch <= numEpochs
 
-            startLoc = epochIndex[:Index][epoch]
+            startLoc = triggers[:Index][epoch]
             endLoc   = startLoc + lenEpochs - 1
 
-            epochs[:,epoch, chan] = vec(dats[startLoc:endLoc, chan])
+            epochs[:,epoch, chan] = vec(data[startLoc:endLoc, chan])
 
             epoch += 1
         end

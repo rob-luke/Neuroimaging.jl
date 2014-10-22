@@ -419,9 +419,24 @@ end
 #
 #######################################
 
-function extract_epochs(a::SSR; kwargs...)
+@doc md"""
+Extract epoch data from SSR.
 
-    merge!(a.processing, ["epochs" => extract_epochs(a.data, a.triggers)])
+### Optional arguments
+
+* Vector of valid trigger numbers
+* remove_first: Remove the first n triggers (0).
+* valid_triggers: Trigger numbers that are considered valid ([1,2])
+
+### Example
+
+```julia
+epochs = extract_epochs(SSR, valid_triggers=[1,2])
+```
+""" ->
+function extract_epochs(a::SSR; valid_triggers::AbstractArray=[1,2], remove_first::Int=0, remove_last::Int=0, kwargs...)
+
+    merge!(a.processing, ["epochs" => extract_epochs(a.data, a.triggers, valid_triggers, remove_first, remove_last)])
 
     return a
 end
