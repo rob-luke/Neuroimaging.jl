@@ -6,7 +6,8 @@
 
 Process EEG files in Julia.  
 **For research only. Not for clinical use. Use at your own risk**  
-See [documentation](http://codles.github.io/EEG.jl/).
+See [documentation](http://codles.github.io/EEG.jl/).  
+If you use this software let me know, and I will stop making breaking changes.
 
 
 ## Example
