@@ -36,6 +36,7 @@ include("read_write/rba.jl")
 #
 
 export
+    epoch_rejection,
     channel_rejection
 include("preprocessing/data_rejection.jl")
 export
@@ -47,20 +48,23 @@ export
     remove_template,
     rereference
 include("preprocessing/reference.jl")
+export
+    clean_triggers,
+    validate_triggers
+include("preprocessing/triggers.jl")
 
 
 #
-# Epochs
+# Reshaping of data
 #
 
 export
-    clean_triggers,
-    validate_triggers,
     extract_epochs,
-    epoch_rejection,
-    create_sweeps,
     average_epochs
-include("synchronised_data.jl")
+include("reshaping/epochs.jl")
+export
+    create_sweeps
+include("reshaping/sweeps.jl")
 
 
 #

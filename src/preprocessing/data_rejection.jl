@@ -1,6 +1,42 @@
 
 #######################################
 #
+# Reject epochs
+#
+#######################################
+
+function epoch_rejection(epochs::Array, cutOff::Number; rejectionMethod::String="peak2peak")
+
+    epochsLen = size(epochs)[1]
+    epochsNum = size(epochs)[2]
+    chansNum  = size(epochs)[3]
+
+    info("Rejected $(int(round((1-cutOff)*100)))% of epochs")
+
+    if rejectionMethod == "peak2peak"
+
+        peak2peak = Float64[]
+
+        epoch = 1
+        while epoch <= epochsNum
+
+            push!(peak2peak, maximum(epochs[:,epoch,:]) - minimum(epochs[:,epoch,:]))
+
+            epoch += 1
+        end
+
+        cutOff = sort(peak2peak)[floor(length(peak2peak)*cutOff)]
+        epochs = epochs[:, peak2peak.<cutOff, :]
+
+    end
+
+    return epochs
+end
+
+
+
+#######################################
+#
 # Reject channels base on variance
 #
 #######################################
