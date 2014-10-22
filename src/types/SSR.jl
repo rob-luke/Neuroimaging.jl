@@ -163,6 +163,21 @@ end
 #
 #######################################
 
+@doc md"""
+Remove channels from SSR.
+
+### Example
+
+```julia
+a = read_SSR(filename)
+    remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
+
+```
+""" ->
+function remove_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
+    remove_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
+    info("Removing channel(s) $(append_strings(channel_names))"); end
+
 function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
 
     channel_idx = channel_idx[channel_idx .!= 0]
@@ -181,15 +196,43 @@ function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
     a.channel_names = a.channel_names[keep_idx]
 end
 
-function remove_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
-    remove_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
-    info("Removing channel(s) $(append_strings(channel_names))"); end
-
 function remove_channel!(a::SSR, channel_names::Union(Array{String}); kwargs...)
     remove_channel!(a, convert(Array{ASCIIString}, channel_names)); end
 
 function remove_channel!(a::SSR, channel_name::Union(Int, String, ASCIIString); kwargs...)
     remove_channel!(a, [channel_name]); end
+
+
+@doc md"""
+Remove all channels except those requested from SSR.
+
+### Example
+
+```julia
+a = read_SSR(filename)
+    keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
+
+```
+""" ->
+function keep_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
+
+    remove_channels = [1:size(a.data,2)]
+
+    channel_idx = sort(channel_idx, rev=true)
+    for c = channel_idx
+        splice!(remove_channels, c)
+    end
+
+    remove_channel!(a, remove_channels; kwargs...)
+
+end
+
+function keep_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
+    info("Keeping channel(s) $(append_strings(channel_names))")
+    keep_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
+end
+
+
 
 #######################################
 #
@@ -239,6 +282,12 @@ function merge_channels(a::SSR, merge_Chans::Array{ASCIIString}, new_name::Strin
     debug("Merging channels $keep_idxs")
 
     a = add_channel(a, mean(a.data[:,keep_idxs], 2), new_name; kwargs...)
+end
+
+function merge_channels(a::SSR, merge_Chans::ASCIIString, new_name::String; kwargs...)
+
+    a = merge_channels(a, [merge_Chans], new_name; kwargs...)
+
 end
 
 

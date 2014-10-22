@@ -89,6 +89,7 @@ export
     read_evt,
     add_triggers,
     remove_channel!,
+    keep_channel!,
     add_channel,
     assr_frequency,
     bandpass_filter,
