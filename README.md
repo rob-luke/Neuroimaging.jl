@@ -5,12 +5,9 @@
 [![Coverage Status](https://img.shields.io/coveralls/codles/EEG.jl.svg)](https://coveralls.io/r/codles/EEG.jl?branch=master)
 
 Process EEG files in Julia.  
-**This package is not tested. Use at your own risk**  
+**For research only. Not for clinical use. Use at your own risk**  
+See [documentation](http://codles.github.io/EEG.jl/).
 
-## Description
-
-This package includes low level processing functions (filtering, referencing, statistics etc).  
-It also includes types for various EEG measurments (SSR, ABR etc) and wrapper functions to process these files using the lower level functions.
 
 ## Example
 
@@ -60,40 +57,4 @@ Results in the following figure which displays the SNR at each frequency.
 The vertical lines highlight the harmonics of the stimulus and color represents if a significant response was detected.
 
 ![SSR Example](doc/images/Example-40Hz-SSR.png)
-
-
-
-
-
-
-## Functions
-
-Currently there are function for the following processes on raw data and SSR types
-
-#### Preprocessing
-- filtering  
-- re-referencing
-- epoch and sweep extraction
-- epoch rejection based on peak to peak amplitudes
-
-#### Statistics
-- ftest
-
-#### File IO
-- *.dat
-
-## Installation
-
-Requires:
-- BDF
-- DSP
-- Winston
-- DataFrames
-- ProgressMeter
-- Logging
-  
-Pkg.clone("git://github.com/codles/EEG.jl.git")
-
-
-
 
