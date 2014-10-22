@@ -116,7 +116,7 @@ export
     EEG_Vanvooren_2014,
     EEG_Vanvooren_2014_Left,
     EEG_Vanvooren_2014_Right
-include("sensors.jl")
+include("source_analysis/sensors.jl")
 
 export
     Coordinate,
@@ -162,7 +162,7 @@ export
     fileparts,
     add_dataframe_static_rows,
     _find_closest_number_idx
-include("helper.jl")
+include("miscellaneous/helper.jl")
 
 
 #
@@ -176,7 +176,7 @@ include("helper.jl")
     #=oplot_dipoles,=#
     #=SSR_spectrogram,=#
     #=plot_filter_response=#
-#=include("plot.jl")=#
+#=include("plotting/plot.jl")=#
 #=export=#
     #=plot_dat,=#
     #=oplot=#
