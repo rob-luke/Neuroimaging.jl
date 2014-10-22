@@ -1,0 +1,57 @@
+<!doctype html>
+
+<meta charset="utf-8">
+
+<title>EEG</title>
+
+<link rel="stylesheet" type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.5.0/codemirror.min.css">
+
+<link rel="stylesheet" type="text/css" href="static/custom.css">
+
+<h1 class='package-header'>EEG</h1>
+
+<p><strong>EEG.jl</strong> is a set of tools for analysing electroencephalography files. </p><h1 id='module-reference'>Reference</h1>
+<ul class='index'>
+<li >
+<strong>methods:</strong>
+</li>
+<li >
+<ul >
+<li >
+<a href='#read_SSR(fname::Union(String,IO))'>read_SSR(fname::Union(String,IO))</a></li>
+</ul>
+</li>
+</ul>
+<div class='entries'>
+<div class='entry'>
+<div id='read_SSR(fname::Union(String,IO))' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> read_SSR(fname::Union(String,IO))
+</div>
+<div class='entry-body'>
+<p>Read a file or IO stream and store the data in an SSR type.</p>
+<p>Matching .mat files are read and modulation frequency information extracted. Failing that, the modulation frequency is extracted from the file name.</p>
+<h3>Optional arguments</h3>
+<ul><li>min_epoch_length: Minimum epoch length in samples. Shorter epochs will be removed.</li><li>max_epoch_length: Maximum epoch length in samples. Longer epochs will be removed.</li></ul>
+<h3>Supported file formats</h3>
+<ul><li>BIOSEMI .bdf</li></ul><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='https://github.com/codles/EEG.jl/tree/09c0b6b7c5737abd40646f496d580fbc80061943/src/types/SSR.jl#L64'>EEG/src/types/SSR.jl:64</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.5.0/codemirror.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.5.0/mode/julia/julia.min.js"></script>
+
+
+
+<script type="text/javascript" src="static/custom.js"></script>
+
