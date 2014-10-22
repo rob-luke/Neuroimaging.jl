@@ -1,6 +1,9 @@
 module EEG
 
 using Logging
+using Docile
+
+@docstrings [ :manual => ["../doc/manual.md"] ]
 
 #
 # File type reading and writing

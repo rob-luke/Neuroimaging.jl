@@ -2,6 +2,7 @@ using DataFrames
 using MAT
 using SIUnits
 import SIUnits
+using Docile
 
 typealias FreqHz{T} SIUnits.SIQuantity{T,0,0,-1,0,0,0,0}
 
@@ -44,6 +45,23 @@ end
 #
 #######################################
 
+@doc md"""
+Read a file or IO stream and store the data in an SSR type.
+
+Matching .mat files are read and modulation frequency information extracted.
+Failing that, the modulation frequency is extracted from the file name.
+
+### Optional arguments
+
+* min_epoch_length: Minimum epoch length in samples. Shorter epochs will be removed.
+* max_epoch_length: Maximum epoch length in samples. Longer epochs will be removed.
+
+### Supported file formats
+
+* BIOSEMI .bdf
+
+
+""" ->
 function read_SSR(fname::Union(String, IO); kwargs...)
 
     info("Importing file $fname")
