@@ -21,11 +21,79 @@
 <li >
 <ul >
 <li >
+<a href='#extract_epochs(a::SSR)'>extract_epochs(a::SSR)</a></li>
+<li >
+<a href='#extract_epochs(data::Array{T,N},triggers::Dict{K,V},valid_triggers::AbstractArray{T,1},remove_first::Int64,remove_last::Int64)'>extract_epochs(data::Array{T,N},triggers::Dict{K,V},valid_triggers::AbstractArray{T,1},remove_first::Int64,remove_last::Int64)</a></li>
+<li >
+<a href='#keep_channel!(a::SSR,channel_idx::Array{Int64,N})'>keep_channel!(a::SSR,channel_idx::Array{Int64,N})</a></li>
+<li >
 <a href='#read_SSR(fname::Union(IO,String))'>read_SSR(fname::Union(IO,String))</a></li>
+<li >
+<a href='#remove_channel!(a::SSR,channel_names::Array{ASCIIString,N})'>remove_channel!(a::SSR,channel_names::Array{ASCIIString,N})</a></li>
 </ul>
 </li>
 </ul>
 <div class='entries'>
+<div class='entry'>
+<div id='extract_epochs(a::SSR)' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> extract_epochs(a::SSR)
+</div>
+<div class='entry-body'>
+<p>Extract epoch data from SSR.</p>
+<h3>Optional arguments</h3>
+<ul><li>valid_triggers: Trigger numbers that are considered valid ([1,2])</li><li>remove_first: Remove the first n triggers (0).</li><li>remove_last: Remove the last n triggers (0)</li></ul>
+<h3>Example</h3>
+<pre><code>epochs = extract_epochs(SSR, valid_triggers=[1,2])</code></pre><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='https://github.com/codles/EEG.jl/tree/fa670475b68bc444c59421cf66e7a8d6f455a656/src/types/SSR.jl#L485'>EEG/src/types/SSR.jl:485</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='extract_epochs(data::Array{T,N},triggers::Dict{K,V},valid_triggers::AbstractArray{T,1},remove_first::Int64,remove_last::Int64)' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> extract_epochs(data::Array{T,N},triggers::Dict{K,V},valid_triggers::AbstractArray{T,1},remove_first::Int64,remove_last::Int64)
+</div>
+<div class='entry-body'>
+<p>Extract epoch data from array of channels.</p>
+<h3>Input</h3>
+<ul><li>Array of raw data. Samples x Channels</li><li>Dictionary of trigger information</li><li>Vector of valid trigger numbers</li><li>Number of first triggers to remove</li><li>Number of end triggers to remove</li></ul>
+<h3>Example</h3>
+<pre><code>epochs = extract_epochs(data, triggers, [1,2], 0, 0)</code></pre><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='https://github.com/codles/EEG.jl/tree/fa670475b68bc444c59421cf66e7a8d6f455a656/src/reshaping/epochs.jl#L24'>EEG/src/reshaping/epochs.jl:24</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='keep_channel!(a::SSR,channel_idx::Array{Int64,N})' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> keep_channel!(a::SSR,channel_idx::Array{Int64,N})
+</div>
+<div class='entry-body'>
+<p>Remove all channels except those requested from SSR.</p>
+<h3>Example</h3>
+<pre><code>a = read_SSR(filename)
+    keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
+</code></pre><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='https://github.com/codles/EEG.jl/tree/fa670475b68bc444c59421cf66e7a8d6f455a656/src/types/SSR.jl#L216'>EEG/src/types/SSR.jl:216</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
 <div class='entry'>
 <div id='read_SSR(fname::Union(IO,String))' class='entry-name category-method'>
 <div class='category'>[method] &mdash; </div> read_SSR(fname::Union(IO,String))
@@ -41,7 +109,27 @@
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/e5954ae738c55144425c78c4594a8163a9d0f5e3/src/types/SSR.jl#L64'>EEG/src/types/SSR.jl:64</a></td>
+<a href='https://github.com/codles/EEG.jl/tree/fa670475b68bc444c59421cf66e7a8d6f455a656/src/types/SSR.jl#L64'>EEG/src/types/SSR.jl:64</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='remove_channel!(a::SSR,channel_names::Array{ASCIIString,N})' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> remove_channel!(a::SSR,channel_names::Array{ASCIIString,N})
+</div>
+<div class='entry-body'>
+<p>Remove channels from SSR.</p>
+<h3>Example</h3>
+<pre><code>a = read_SSR(filename)
+    remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
+</code></pre><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='https://github.com/codles/EEG.jl/tree/fa670475b68bc444c59421cf66e7a8d6f455a656/src/types/SSR.jl#L176'>EEG/src/types/SSR.jl:176</a></td>
 </tr>
 </table>
 </div>
