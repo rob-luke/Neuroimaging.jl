@@ -424,9 +424,9 @@ Extract epoch data from SSR.
 
 ### Optional arguments
 
-* Vector of valid trigger numbers
-* remove_first: Remove the first n triggers (0).
 * valid_triggers: Trigger numbers that are considered valid ([1,2])
+* remove_first: Remove the first n triggers (0).
+* remove_last: Remove the last n triggers (0)
 
 ### Example
 
