@@ -13,8 +13,8 @@ Extract epoch data from array of channels.
 * Array of raw data. Samples x Channels
 * Dictionary of trigger information
 * Vector of valid trigger numbers
-* remove_first: Remove the first n triggers (0).
-* valid_triggers: Trigger numbers that are considered valid ([1,2])
+* Number of first triggers to remove
+* Number of end triggers to remove
 
 ### Example
 
