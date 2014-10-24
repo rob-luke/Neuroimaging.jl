@@ -15,7 +15,9 @@ before_install:
 script:
   - julia -e 'Pkg.clone("https://github.com/codles/MinMaxFilter.jl.git")'
   - julia -e 'Pkg.add("DSP"); Pkg.checkout("DSP")'
-  - julia -e 'Pkg.init(); Pkg.clone(pwd()); Pkg.test("EEG")'
+  - julia -e 'Pkg.clone("git://github.com/codles/EEG.jl.git")'
+  - julia -e 'Pkg.update()'
+  - julia -e 'Pkg.test("EEG")'
   - julia --code-coverage ./test/runtests.jl
 after_success:
 - julia -e 'cd(Pkg.dir("EEG")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
