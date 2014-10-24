@@ -17,6 +17,7 @@ script:
   - julia -e 'Pkg.add("DSP"); Pkg.checkout("DSP")'
   - julia -e 'Pkg.clone("git://github.com/codles/EEG.jl.git")'
   - julia -e 'Pkg.update()'
+  - julia -e 'Pkg.build("EEG")'  # Requested by TRAVIS after failure
   - julia -e 'Pkg.test("EEG")'
   - julia --code-coverage ./test/runtests.jl
 after_success:
