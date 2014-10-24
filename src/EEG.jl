@@ -172,7 +172,7 @@ include("miscellaneous/helper.jl")
 export
     oplot,
     plot_dat,
-    oplot
+    oplot,
     plot_spectrum,
     plot_timeseries,
     oplot_dipoles,
