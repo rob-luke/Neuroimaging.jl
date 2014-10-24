@@ -7,8 +7,8 @@ env:
   matrix:
     - JULIAVERSION="juliareleases"
 before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
+  - "export DISPLAY=:99.0"                                         # Required for graphics
+  - "sh -e /etc/init.d/xvfb start"                                 # Required for graphics
   - sudo add-apt-repository ppa:staticfloat/julia-deps -y
   - sudo add-apt-repository ppa:staticfloat/${JULIAVERSION} -y
   - sudo apt-get update -qq -y
@@ -18,8 +18,8 @@ script:
   - julia -e 'Pkg.clone("https://github.com/codles/MinMaxFilter.jl.git")'
   - julia -e 'Pkg.add("DSP"); Pkg.checkout("DSP")'
   - julia -e 'Pkg.clone("git://github.com/codles/EEG.jl.git")'
-  - julia -e 'Pkg.update()'
-  - julia -e 'Pkg.build("EEG")'  # Requested by TRAVIS after failure
+  - julia -e 'Pkg.update()'                                       # Required for Tk to work
+  - julia -e 'Pkg.build("EEG")'                                   # Required for Tk to work
   - julia -e 'Pkg.test("EEG")'
   - julia --code-coverage ./test/runtests.jl
 after_success:
