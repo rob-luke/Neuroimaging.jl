@@ -49,7 +49,7 @@ end
 Read a file or IO stream and store the data in an SSR type.
 
 Matching .mat files are read and modulation frequency information extracted.
-Failing that, the modulation frequency is extracted from the file name.
+Failing that, user passed arguments are used or the modulation frequency is extracted from the file name.
 
 ### Optional arguments
 
@@ -62,36 +62,44 @@ Failing that, the modulation frequency is extracted from the file name.
 
 
 """ ->
-function read_SSR(fname::Union(String, IO); kwargs...)
+function read_SSR(fname::Union(String, IO);
+                  stimulation_amplitude::Number=NaN,   # User can set these
+                  modulation_frequency::Number=NaN,    # values, but if not
+                  stimulation_side::String="",         # then attempt to read
+                  participant_name::String="",         # from file name or mat
+                  kwargs...)
 
-    info("Importing file $fname")
+    info("Importing SSR from file: $fname")
 
     if isa(fname, String)
         file_path, file_name, ext = fileparts(fname)
-        debug("Importing file for SSR processing")
     else
         warn("Filetype is IO. Might be bugged")
-        file_path = "IO"
-        file_name = fname
-        ext = "IO"
+        file_path = "IO"; file_name = fname; ext = "IO"
     end
 
-    # Extract frequency from the file name
-    if contains(file_name, "Hz")
+
+    #
+    # Extract meta data
+    #
+
+    # Extract frequency from the file name if not set manually
+    if contains(file_name, "Hz") && isnan(modulation_frequency)
         a = match(r"[-_](\d+[_.]?[\d+]?)Hz|Hz(\d+[_.]?[\d+]?)[-_]", file_name).captures
         modulation_frequency = assr_frequency(float(a[[i !== nothing for i = a]][1])) * Hertz
-    else
-        modulation_frequency = NaN
+        debug("Extracted modulation frequency from file name: $modulation_frequency")
     end
 
     # Or even better if there is a mat file read it
     mat_path = string(file_path, file_name, ".mat")
-    stimulation_side      = nothing  # In case it is not
-    participant_name      = nothing  # defined in the mat file
-    stimulation_amplitude = nothing
     if isreadable(mat_path)
         modulation_frequency, stimulation_side, participant_name, stimulation_amplitude = read_rba_mat(mat_path)
     end
+
+
+    #
+    # Read file data
+    #
 
     # Import raw data
     if ext == "bdf"
@@ -101,18 +109,28 @@ function read_SSR(fname::Union(String, IO); kwargs...)
     end
 
     # Create SSR type
-    a = SSR(data, triggers, system_codes, sample_rate * Hertz, modulation_frequency, [reference_channel], file_path, file_name,
-             header["chanLabels"], Dict())
+    a = SSR(data, triggers, system_codes, sample_rate * Hertz, modulation_frequency,
+            [reference_channel], file_path, file_name, header["chanLabels"], Dict())
 
-    if stimulation_side != nothing
+
+    #
+    # Store meta data in processing dictionary
+    #
+
+    if stimulation_side != ""
         a.processing["Side"] = stimulation_side
     end
-    if participant_name != nothing
+    if participant_name != ""
         a.processing["Name"] = participant_name
     end
-    if stimulation_amplitude != nothing
+    if !isnan(stimulation_amplitude)
         a.processing["Amplitude"] = stimulation_amplitude
     end
+
+
+    #
+    # Clean up
+    #
 
     # Remove status channel information
     remove_channel!(a, "Status")
