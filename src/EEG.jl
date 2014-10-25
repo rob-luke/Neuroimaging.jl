@@ -168,18 +168,17 @@ include("miscellaneous/helper.jl")
 
 #
 # Plotting functions
-# Requires Winston and is disabled until it works on travis-ci
 #
-#=export=#
-    #=oplot,=#
-    #=plot_spectrum,=#
-    #=plot_timeseries,=#
-    #=oplot_dipoles,=#
-    #=SSR_spectrogram,=#
-    #=plot_filter_response=#
-#=include("plotting/plot.jl")=#
-#=export=#
-    #=plot_dat,=#
-    #=oplot=#
+export
+    oplot,
+    plot_dat,
+    oplot,
+    plot_spectrum,
+    plot_timeseries,
+    oplot_dipoles,
+    SSR_spectrogram,
+    plot_filter_response
+include("plotting/plot.jl")
+
 
 end
