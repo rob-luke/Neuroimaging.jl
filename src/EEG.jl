@@ -79,6 +79,16 @@ include("statistics/gfp.jl")
 
 
 #
+# Synchrony
+#
+
+export
+    phase_lag_index,
+    save_synchrony_results
+include("synchrony/phase_lag_index.jl")
+
+
+#
 # Type - SSR
 #
 
