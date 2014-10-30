@@ -57,9 +57,10 @@ function clean_triggers(t::Dict; valid_indices::Array{Int}=[1, 2],
 
     # Check for not valid indices and throw a warning
     if sum([in(i, [0, valid_indices]) for i = epochIndex[:Code]]) != length(epochIndex[:Code])
+        warn("Non valid triggers found")
         non_valid = !convert(Array{Bool}, [in(i, [0, valid_indices]) for i = epochIndex[:Code]])
         non_valid = sort(unique(epochIndex[:Code][non_valid]))
-        warn("File contains non valid triggers: $non_valid")
+        warn("Non valid triggers: $non_valid")
     end
     # Just take valid indices
     valid = convert(Array{Bool}, vec([in(i, valid_indices) for i = epochIndex[:Code]]))
