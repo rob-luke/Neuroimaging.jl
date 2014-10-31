@@ -22,21 +22,45 @@ TODO: Add references to MASTER and Luts et al
 * F statistic
 
 """ ->
-function ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Real, fs::Real, side_freq::Real,
-                used_filter::Union(Filter, Nothing), spill_bins::Int)
+function ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Union(Real, Array{Real}),
+                fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int)
 
     #TODO Don't treat harmonic frequencies as noise
 
-    info("Calculating F statistic on $(size(sweeps)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
+    # Calculate amplitude at each frequency
+    # Only do this once, then calculate all requested frequencies from this spectrum
+    spectrum    = _ftest_spectrum(sweeps)
+
+    # Initialise variables so they are visible outside the loop
+    snrDb        = nothing
+    signal_phase = nothing
+    signal_power = nothing
+    noise_power  = nothing
+    statistic    = nothing
+
+    # Loop through requested frequencies to analyse
+    # TODO Currently this will not work, each time the result is overwritten
+    for freq in freq_of_interest
+
+        snrDb, signal_phase, signal_power, noise_power, statistic =
+            ftest(spectrum, freq, fs, side_freq, used_filter, spill_bins)
+
+    end
+
+    return snrDb, signal_phase, signal_power, noise_power, statistic
+end
+
+
+function ftest(spectrum::Union(Array{Complex{Float64},2}, Array{Complex{Float32},2}), freq_of_interest::Real,
+                fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int)
+
+    info("Calculating F statistic on $(size(spectrum)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
 
     # Determine frequencies of interest
-    frequencies = linspace(0, 1, int(size(sweeps,1) / 2 + 1))*fs/2
+    frequencies = linspace(0, 1, size(spectrum,1))*fs/2
     idx         = _find_closest_number_idx(frequencies, freq_of_interest)
     idx_Low     = _find_closest_number_idx(frequencies, freq_of_interest - side_freq)
     idx_High    = _find_closest_number_idx(frequencies, freq_of_interest + side_freq)
-
-    # Calculate amplitude at each frequency
-    spectrum    = _ftest_spectrum(sweeps)
 
     # Compensate for filter response
     if !(used_filter == nothing)
