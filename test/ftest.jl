@@ -17,7 +17,7 @@ s = extract_epochs(s)
 
 s = create_sweeps(s, epochsPerSweep=4)
 
-snrDb, signal_phase, signal_power, noise_power, statistic = ftest(s.processing["sweeps"], 40.0391, 8192, side_freq=2.5)
+snrDb, signal_phase, signal_power, noise_power, statistic = ftest(s.processing["sweeps"], 40.0391, 8192, 2.5, nothing, 2)
 
 @test_approx_eq_eps snrDb     [NaN, -7.0915, -7.8101, 2.6462, -10.2675, -4.1863] 0.001
 @test_approx_eq_eps statistic [NaN,  0.8233,  0.8480, 0.1721,   0.9105,  0.6854] 0.001

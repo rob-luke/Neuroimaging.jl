@@ -559,7 +559,7 @@ end
 #######################################
 
 
-function ftest(a::SSR, freq_of_interest::Number; ID::String="", kwargs... )
+function ftest(a::SSR, freq_of_interest::Number; side_freq::Number=0.5, ID::String="", spill_bins::Int=2, kwargs... )
 
     # TODO: Account for multiple applied filters
     if haskey(a.processing, "filter1")
@@ -569,7 +569,7 @@ function ftest(a::SSR, freq_of_interest::Number; ID::String="", kwargs... )
     end
 
     snrDb, phase, signal, noise, statistic =
-        ftest(a.processing["sweeps"], freq_of_interest, int(a.sample_rate), used_filter = used_filter; kwargs...)
+        ftest(a.processing["sweeps"], freq_of_interest, float(a.sample_rate), side_freq, used_filter, spill_bins)
 
     result = DataFrame(
                         ID                  = vec(repmat([ID], length(a.channel_names), 1)),

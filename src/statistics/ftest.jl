@@ -7,8 +7,7 @@ using Distributions
 #
 #######################################
 
-function ftest(sweeps::Array, freq_of_interest::Number, fs::Number;
-               side_freq::Number=0.5, used_filter=nothing, spill_bins::Int=2, kwargs...)
+function ftest(sweeps::Array, freq_of_interest::Number, fs::Number, side_freq::Number, used_filter, spill_bins::Int)
 
     # Calculates the F test as is commonly implemented in SSR research
     #
