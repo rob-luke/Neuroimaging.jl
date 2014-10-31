@@ -1,42 +1,31 @@
 using Distributions
 
+@doc md"""
+Calculates the F test as is commonly implemented in SSR research.  
+TODO: Add references to MASTER and Luts et al
 
-#######################################
-#
-# F test
-#
-#######################################
+### Parameters
 
-function ftest(sweeps::Array, freq_of_interest::Real, fs::Real, side_freq::Real,
+* Sweep measurements. Samples x Sweeps x Channels
+* Frequency(ies) of interest (Hz)
+* Sampling rate (Hz)
+* The amount of data to use on each side of frequency of interest to estimate noise (Hz)
+* Filter used on the sweep data. If provided then is compensated for
+* The number of bins to ignore on each side of the frequency of interest
+
+### Returns
+
+* Signal to noise ratio in dB
+* Signal phase at frequency of interest
+* Signal power at frequency of interest
+* Noise power estimated of side frequencies
+* F statistic
+
+""" ->
+function ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Real, fs::Real, side_freq::Real,
                 used_filter::Union(Filter, Nothing), spill_bins::Int)
 
-    # Calculates the F test as is commonly implemented in SSR research
-    #
-    # ---------------------------------------------------------------------------
-    #
-    # Parameters    | ~
-    # ------------- | ----------------------------------------------------------
-    # `sweeps`      | Array of measurements. Samples x Sweeps x Channels
-    # `freq`        | Frequency of interest (Hz)
-    # `fs`          | Sampling rate (Hz)
-    # `side_freq`   | The amount of data to use on each side of frequency of interest to estimate noise (Hz)
-    # `used_filter` | Filter used on the sweep data. If provided then is compensated for
-    # `spill_bins`  | The number of bins to ignore on each side of the frequency of interest
-    #
-    # ---------------------------------------------------------------------------
-    #
-    # Returns        | ~
-    # -------------- | ----------------------------------------------------------
-    # `snrDb`        | Signal to noise ratio in dB
-    # `signal_phase` | Signal phase at frequency of interest
-    # `signal_power` | Signal power at frequency of interest
-    # `noise_power`  | Noise power estimated of side frequencies
-    # `statistic`    | F statistic
-    #
-    # ---------------------------------------------------------------------------
-
     #TODO Don't treat harmonic frequencies as noise
-    #TODO Better function description with references
 
     info("Calculating F statistic on $(size(sweeps)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
 
