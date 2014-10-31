@@ -17,6 +17,8 @@ Calculated using [Synchrony.jl](https://github.com/simonster/Synchrony.jl)
 """ ->
 function phase_lag_index(data::Array, freq_of_interest::Real, fs::Real)
 
+    err("PLI code has not been validated. Do not use")
+
     debug("Calculating phase lag index. Sensors:$(size(data,2)) Samples:$(size(data,1)) Epochs:$(size(data,3))")
 
     # between which actual frequencies are analysed
