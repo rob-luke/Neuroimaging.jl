@@ -22,32 +22,10 @@ TODO: Add references to MASTER and Luts et al
 * F statistic
 
 """ ->
-function ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Union(Real, Array{Real}),
+function ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Real,
                 fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int)
 
-    #TODO Don't treat harmonic frequencies as noise
-
-    # Calculate amplitude at each frequency
-    # Only do this once, then calculate all requested frequencies from this spectrum
-    spectrum    = _ftest_spectrum(sweeps)
-
-    # Initialise variables so they are visible outside the loop
-    snrDb        = nothing
-    signal_phase = nothing
-    signal_power = nothing
-    noise_power  = nothing
-    statistic    = nothing
-
-    # Loop through requested frequencies to analyse
-    # TODO Currently this will not work, each time the result is overwritten
-    for freq in freq_of_interest
-
-        snrDb, signal_phase, signal_power, noise_power, statistic =
-            ftest(spectrum, freq, fs, side_freq, used_filter, spill_bins)
-
-    end
-
-    return snrDb, signal_phase, signal_power, noise_power, statistic
+    ftest(_ftest_spectrum(sweeps), freq_of_interest, fs, side_freq, used_filter, spill_bins)
 end
 
 
@@ -55,6 +33,8 @@ function ftest(spectrum::Union(Array{Complex{Float64},2}, Array{Complex{Float32}
                 fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int)
 
     info("Calculating F statistic on $(size(spectrum)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
+
+    #TODO Don't treat harmonic frequencies as noise
 
     # Determine frequencies of interest
     frequencies = linspace(0, 1, size(spectrum,1))*fs/2

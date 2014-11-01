@@ -559,7 +559,8 @@ end
 #######################################
 
 
-function ftest(a::SSR, freq_of_interest::Number; side_freq::Number=0.5, ID::String="", spill_bins::Int=2, kwargs... )
+function ftest(a::SSR; freq_of_interest::Union(Real, AbstractArray)=float(a.modulation_frequency),
+                side_freq::Number=0.5, ID::String="", spill_bins::Int=2, kwargs... )
 
     # TODO: Account for multiple applied filters
     if haskey(a.processing, "filter1")
@@ -568,42 +569,40 @@ function ftest(a::SSR, freq_of_interest::Number; side_freq::Number=0.5, ID::Stri
         used_filter = nothing
     end
 
-    snrDb, phase, signal, noise, statistic =
-        ftest(a.processing["sweeps"], freq_of_interest, float(a.sample_rate), side_freq, used_filter, spill_bins)
+    spectrum    = EEG._ftest_spectrum(a.processing["sweeps"])
 
-    result = DataFrame(
-                        ID                  = vec(repmat([ID], length(a.channel_names), 1)),
-                        Channel             = copy(a.channel_names),
-                        ModulationFrequency = copy(float(a.modulation_frequency)),
-                        AnalysisType        = "ftest",
-                        AnalysisFrequency   = freq_of_interest,
-                        SignalPower         = vec(signal),
-                        SignalPhase         = vec(phase),
-                        NoisePower          = vec(noise),
-                        SNRdB               = vec(snrDb),
-                        Statistic           = vec(statistic)
-                      )
+    for freq in freq_of_interest
 
-    result = add_dataframe_static_rows(result, kwargs)
+        snrDb, phase, signal, noise, statistic =
+            ftest(spectrum, freq, float(a.sample_rate), side_freq, used_filter, spill_bins)
 
-    key_name = new_processing_key(a.processing, "ftest")
-    merge!(a.processing, [key_name => result])
+        result = DataFrame(
+                            ID                  = vec(repmat([ID], length(a.channel_names), 1)),
+                            Channel             = copy(a.channel_names),
+                            ModulationFrequency = copy(float(a.modulation_frequency)),
+                            AnalysisType        = "ftest",
+                            AnalysisFrequency   = freq,
+                            SignalPower         = vec(signal),
+                            SignalPhase         = vec(phase),
+                            NoisePower          = vec(noise),
+                            SNRdB               = vec(snrDb),
+                            Statistic           = vec(statistic)
+                          )
+
+        result = add_dataframe_static_rows(result, kwargs)
+
+        key_name = new_processing_key(a.processing, "ftest")
+        merge!(a.processing, [key_name => result])
+
+    end
 
     return a
 end
 
 
-# If more than one frequency of interest is specified then run for all
 function ftest(a::SSR, freq_of_interest::Array; kwargs...)
 
-    for f = freq_of_interest; a = ftest(a, f; kwargs...); end; return a
-end
-
-
-# If no frequency of interest is specified then use the modulation frequency
-function ftest(a::SSR; kwargs...)
-
-    ftest(a, float(a.modulation_frequency); kwargs...)
+    ftest(a, freq_of_interest = freq_of_interest; kwargs...)
 end
 
 
