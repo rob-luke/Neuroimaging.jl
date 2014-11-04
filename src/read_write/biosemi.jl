@@ -83,10 +83,10 @@ function create_channel(t::Dict, l::Int, fs::Number; code::String="Code", index:
 
     channel = Array(Int16, l)
 
-    # Initialise array
-    for i = 1:l ; channel[i] = t[code][1]; end
+    # Initialise array to 252 code
+    for i = 1:l ; channel[i] = 252; end
 
-    for i = 1:length(t[index])
+    for i = 1:length(t[index])-1
         channel[t[index][i] : t[index][i] + t[duration][i] * fs] = t[code][i]
     end
 

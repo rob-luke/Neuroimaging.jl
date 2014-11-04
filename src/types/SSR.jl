@@ -56,6 +56,11 @@ Failing that, user passed arguments are used or the modulation frequency is extr
 * min_epoch_length: Minimum epoch length in samples. Shorter epochs will be removed.
 * max_epoch_length: Maximum epoch length in samples. Longer epochs will be removed.
 * valid_triggers: Triggers that are considered valid, others are removed.
+* stimulation_amplitude: Amplitude of stimulation
+* modulation_frequency: Modulation frequency of SSR stimulation
+* participant name: Name of participant
+* remove_first: Number of epochs to be removed from start of recording
+* max_epochs: Maximum number of epochs to retain
 
 ### Supported file formats
 
