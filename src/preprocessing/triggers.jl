@@ -47,6 +47,9 @@ function clean_triggers(t::Dict; valid_indices::Array{Int}=[1, 2],
                         min_epoch_length::Int=0, max_epoch_length::Number=Inf,
                         remove_first::Int=0,     max_epochs::Number=Inf, kwargs...)
 
+    # TODO Move valid indices from here to type definition
+    # TODO Rename to valid triggers
+
     info("Cleaning triggers")
 
     validate_triggers(t)
@@ -58,10 +61,14 @@ function clean_triggers(t::Dict; valid_indices::Array{Int}=[1, 2],
     # Check for not valid indices and throw a warning
     if sum([in(i, [0, valid_indices]) for i = epochIndex[:Code]]) != length(epochIndex[:Code])
         warn("Non valid triggers found")
-        non_valid = !convert(Array{Bool}, [in(i, [0, valid_indices]) for i = epochIndex[:Code]])
-        non_valid = sort(unique(epochIndex[:Code][non_valid]))
+        validity = Bool[]
+        for e in epochIndex[:Code]
+            push!(validity, in(e, valid_indices))
+        end
+        non_valid = sort(unique(epochIndex[:Code][!validity]))
         warn("Non valid triggers: $non_valid")
     end
+
     # Just take valid indices
     valid = convert(Array{Bool}, vec([in(i, valid_indices) for i = epochIndex[:Code]]))
     epochIndex = epochIndex[ valid , : ]
