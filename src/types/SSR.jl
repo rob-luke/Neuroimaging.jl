@@ -35,6 +35,9 @@ function Base.show(io::IO, a::SSR)
     if haskey(a.processing, "Side")
         println(io, "  Stimulation side: $(a.processing["Side"] )")
     end
+    if haskey(a.processing, "Carrier_Frequency")
+        println(io, "  Carrier frequency: $(a.processing["Carrier_Frequency"] ) Hz")
+    end
 
 end
 
@@ -71,8 +74,9 @@ Failing that, user passed arguments are used or the modulation frequency is extr
 function read_SSR(fname::Union(String, IO);
                   stimulation_amplitude::Number=NaN,   # User can set these
                   modulation_frequency::Number=NaN,    # values, but if not
-                  stimulation_side::String="",         # then attempt to read
-                  participant_name::String="",         # from file name or mat
+                  carrier_frequency::Number=NaN,       # then attempt to read
+                  stimulation_side::String="",         # from file name or mat
+                  participant_name::String="",
                   valid_triggers::Array{Int}=[1,2],
                   min_epoch_length::Int=0,
                   max_epoch_length::Number=Inf,
@@ -105,7 +109,8 @@ function read_SSR(fname::Union(String, IO);
     # Or even better if there is a mat file read it
     mat_path = string(file_path, file_name, ".mat")
     if isreadable(mat_path)
-        modulation_frequency, stimulation_side, participant_name, stimulation_amplitude = read_rba_mat(mat_path)
+        modulation_frequency, stimulation_side, participant_name,
+            stimulation_amplitude, carrier_frequency = read_rba_mat(mat_path)
     end
 
 
@@ -137,6 +142,9 @@ function read_SSR(fname::Union(String, IO);
     end
     if !isnan(stimulation_amplitude)
         a.processing["Amplitude"] = stimulation_amplitude
+    end
+    if !isnan(carrier_frequency)
+        a.processing["Carrier_Frequency"] = carrier_frequency
     end
 
 
