@@ -55,6 +55,7 @@ Failing that, user passed arguments are used or the modulation frequency is extr
 
 * min_epoch_length: Minimum epoch length in samples. Shorter epochs will be removed.
 * max_epoch_length: Maximum epoch length in samples. Longer epochs will be removed.
+* valid_triggers: Triggers that are considered valid, others are removed.
 
 ### Supported file formats
 
@@ -67,7 +68,13 @@ function read_SSR(fname::Union(String, IO);
                   modulation_frequency::Number=NaN,    # values, but if not
                   stimulation_side::String="",         # then attempt to read
                   participant_name::String="",         # from file name or mat
+                  valid_triggers::Array{Int}=[1,2],
+                  min_epoch_length::Int=0,
+                  max_epoch_length::Number=Inf,
+                  remove_first::Int=0,
+                  max_epochs::Number=Inf,
                   kwargs...)
+
 
     info("Importing SSR from file: $fname")
 
@@ -136,7 +143,7 @@ function read_SSR(fname::Union(String, IO);
     remove_channel!(a, "Status")
 
     # Clean epoch index
-    a.triggers = clean_triggers(a.triggers; kwargs...)
+    a.triggers = clean_triggers(a.triggers, valid_triggers, min_epoch_length, max_epoch_length, remove_first, max_epochs)
 
     return a
 end

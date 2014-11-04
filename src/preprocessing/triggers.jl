@@ -43,15 +43,12 @@ end
 #
 #######################################
 
-function clean_triggers(t::Dict; valid_indices::Array{Int}=[1, 2],
-                        min_epoch_length::Int=0, max_epoch_length::Number=Inf,
-                        remove_first::Int=0,     max_epochs::Number=Inf, kwargs...)
+function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::Int, max_epoch_length::Number,
+                        remove_first::Int, max_epochs::Number)
 
-    # TODO Move valid indices from here to type definition
-    # TODO Rename to valid triggers
+    debug("Cleaning triggers")
 
-    info("Cleaning triggers")
-
+    # Ensure the passed in dictionary contains all required fields
     validate_triggers(t)
 
     # Make in to data frame for easy management
@@ -59,28 +56,28 @@ function clean_triggers(t::Dict; valid_indices::Array{Int}=[1, 2],
     epochIndex[:Code] = epochIndex[:Code] - 252
 
     # Check for not valid indices and throw a warning
-    if sum([in(i, [0, valid_indices]) for i = epochIndex[:Code]]) != length(epochIndex[:Code])
+    if sum([in(i, [0, valid_triggers]) for i = epochIndex[:Code]]) != length(epochIndex[:Code])
         warn("Non valid triggers found")
         validity = Bool[]
         for e in epochIndex[:Code]
-            push!(validity, in(e, valid_indices))
+            push!(validity, in(e, valid_triggers))
         end
         non_valid = sort(unique(epochIndex[:Code][!validity]))
         warn("Non valid triggers: $non_valid")
     end
 
     # Just take valid indices
-    valid = convert(Array{Bool}, vec([in(i, valid_indices) for i = epochIndex[:Code]]))
+    valid = convert(Array{Bool}, vec([in(i, valid_triggers) for i = epochIndex[:Code]]))
     epochIndex = epochIndex[ valid , : ]
 
     # Trim values if requested
     if remove_first > 0
         epochIndex = epochIndex[remove_first+1:end,:]
-        info("Trimming first $remove_first triggers")
+        debug("Trimming first $remove_first triggers")
     end
     if max_epochs < Inf
         epochIndex = epochIndex[1:minimum([max_epochs, length(epochIndex[:Index])]),:]
-        info("Trimming to $max_epochs triggers")
+        debug("Trimming to $max_epochs triggers")
     end
 
     # Throw out epochs that are the wrong length
