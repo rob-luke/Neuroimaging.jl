@@ -24,6 +24,8 @@ epochs = extract_epochs(data, triggers, [1,2], 0, 0)
 """ ->
 function extract_epochs(data::Array, triggers::Dict, valid_triggers::AbstractVector, remove_first::Int, remove_last::Int)
 
+    debug("Extracting epochs for $(size(data)[end]) channels using triggers $(valid_triggers)")
+
     validate_triggers(triggers)
 
     triggers = DataFrame(Code = triggers["Code"], Index = triggers["Index"])
@@ -36,6 +38,8 @@ function extract_epochs(data::Array, triggers::Dict, valid_triggers::AbstractVec
     # Determine indices of triggers which are valid
     valid_triggers = any(triggers[:Code] .== valid_triggers', 2)
     valid_triggers = find(valid_triggers .== true)
+
+    debug("Number of valid triggers: $(length(valid_triggers))")
 
     # Remove unwanted triggers
     triggers = triggers[valid_triggers, :]                # That aren't valid
