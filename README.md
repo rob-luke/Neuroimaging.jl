@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.org/codles/EEG.jl.svg?branch=master)](https://travis-ci.org/codles/EEG.jl)
 [![Build status](https://ci.appveyor.com/api/projects/status/ph8d0fas94w0gk8g/branch/master?svg=true)](https://ci.appveyor.com/project/codles/eeg-jl/branch/master)
 [![Coverage Status](https://img.shields.io/coveralls/codles/EEG.jl.svg)](https://coveralls.io/r/codles/EEG.jl?branch=master)
+[![Analytics](https://ga-beacon.appspot.com/UA-56325803-1/eeg/readme)](https://github.com/igrigorik/ga-beacon)
+
 
 Process EEG files in Julia.  
 **For research only. Not for clinical use. Use at your own risk**  
@@ -58,4 +60,3 @@ Results in the following figure which displays the SNR at each frequency.
 The vertical lines highlight the harmonics of the stimulus and color represents if a significant response was detected.
 
 ![SSR Example](doc/images/Example-40Hz-SSR.png)
-
