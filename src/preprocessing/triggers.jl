@@ -110,6 +110,13 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
 
     end
 
+    # If the trigger has been signalled by 0 status then offset this
+    # Otherwise when saving and reading again, nothing will be detected
+    if sum(epochIndex[:Code]) == 0
+        warn("Trigger status indicated by 0, shifting to 1 for further processing")
+        epochIndex[:Code] = epochIndex[:Code] .+ 1
+    end
+
     triggers = ["Index" => vec(int(epochIndex[:Index])'), "Code" => vec(epochIndex[:Code] .+ 252),
                 "Duration" => vec(epochIndex[:Duration])']
 
