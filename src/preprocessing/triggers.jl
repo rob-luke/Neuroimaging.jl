@@ -52,8 +52,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
     validate_triggers(t)
 
     # Make in to data frame for easy management
-    epochIndex = DataFrame(Code = t["Code"], Index = t["Index"], Duration = t["Duration"]);
-    epochIndex[:Code] = epochIndex[:Code] - 252
+    epochIndex = DataFrame(Code = t["Code"] -252, Index = t["Index"], Duration = t["Duration"]);
 
     # Check for not valid indices and throw a warning
     if sum([in(i, [0, valid_triggers]) for i = epochIndex[:Code]]) != length(epochIndex[:Code])
