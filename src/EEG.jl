@@ -50,7 +50,8 @@ export
 include("preprocessing/reference.jl")
 export
     clean_triggers,
-    validate_triggers
+    validate_triggers,
+    extra_triggers
 include("preprocessing/triggers.jl")
 
 
