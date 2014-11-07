@@ -1,3 +1,4 @@
 *.swp
 *.cov
 *-checkpoint.ipynb
+*.DS_Store
