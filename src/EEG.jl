@@ -1,7 +1,8 @@
 module EEG
 
-using Logging
-using Docile
+using Logging  # For user feedback
+using Docile   # For documentation
+using Compat   # For backward julia compatability
 
 @docstrings [ :manual => ["../doc/manual.md"] ]
 
@@ -97,22 +98,14 @@ export
     SSR,
     read_SSR,
     trim_channel,
-    read_evt,
     add_triggers,
     remove_channel!,
     keep_channel!,
     add_channel,
     assr_frequency,
-    bandpass_filter,
     save_results,
     trigger_channel,
-    channel_rejection,
-    write_SSR,
-        highpass_filter,
-        rereference,
-        merge_channels,
-        extract_epochs,
-        create_sweeps
+    write_SSR
 include("types/SSR.jl")
 
 
