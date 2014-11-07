@@ -181,6 +181,10 @@ function extra_triggers(t::Dict, old_trigger_code::Union(Int, Array{Int}),
         end
     end
 
+    # Ensure triggers are sorted
+    v = sortperm(index)
+    index = index[v]
+    code  = code[v]
 
     triggers = ["Index" => vec(int(index)'), "Code" => vec(code .+ trigger_code_offset),
                 "Duration" => vec([0, diff(index)])']
