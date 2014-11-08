@@ -71,3 +71,35 @@ function bandpass_filter(signals::Array, lower::Number, upper::Number, fs::Numbe
 
     return signals, f
 end
+
+
+#######################################
+#
+# Filter compensation
+#
+#######################################
+
+function compensate_for_filter(d::Dict, spectrum::AbstractArray, fs::Real)
+
+    frequencies = linspace(0, 1, int(size(spectrum, 1))) * fs / 2
+
+    key_name = "filter"
+    key_numb = 1
+    key      = string(key_name, key_numb)
+
+    while haskey(d, key)
+
+        used_filter         = d[key]
+        filter_response     = freqz(used_filter, frequencies, fs)
+        for f = 1:length(filter_response)
+            spectrum[f, :, :] = spectrum[f, :, :] ./ abs(filter_response[f])^2
+        end
+
+        debug("Accounted for $key response in hotelling test spectrum estimation")
+
+        key_numb += 1
+        key = string(key_name, key_numb)
+    end
+
+    return spectrum
+end

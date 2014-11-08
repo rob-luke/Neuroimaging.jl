@@ -43,7 +43,8 @@ include("preprocessing/data_rejection.jl")
 export
     highpass_filter,
     lowpass_filter,
-    bandpass_filter
+    bandpass_filter,
+    compensate_for_filter
 include("preprocessing/filtering.jl")
 export
     remove_template,

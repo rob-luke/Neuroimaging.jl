@@ -73,8 +73,6 @@ function _find_closest_number_idx(list::Array, target::Number)
     diff_array = abs(list .- target)
     targetIdx  = findfirst(diff_array , minimum(diff_array))
 
-    debug("Target: $target Result: $(list[targetIdx]) Index: $targetIdx")
-
     return targetIdx
 end
 
