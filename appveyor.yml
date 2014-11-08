@@ -1,7 +1,7 @@
 environment:
   matrix:
   # Releases
-  - JULIAVERSION: "stable/win32"
+#  - JULIAVERSION: "stable/win32"  Disabled until bug in SIUnits is fixed https://github.com/Keno/SIUnits.jl/issues/37
   - JULIAVERSION: "stable/win64"
   # Nightlies
 #  - JULIAVERSION: "download/win32"
