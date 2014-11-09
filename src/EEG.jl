@@ -6,6 +6,20 @@ using Compat   # For backward julia compatability
 
 @docstrings [ :manual => ["../doc/manual.md"] ]
 
+
+#
+# Helper functions
+#
+
+export
+    append_strings,
+    new_processing_key,
+    find_keys_containing,
+    fileparts,
+    add_dataframe_static_rows,
+    _find_closest_number_idx
+include("miscellaneous/helper.jl")
+
 #
 # File type reading and writing
 #
@@ -157,18 +171,6 @@ include("source_analysis/projection.jl")
 
 
 
-#
-# Helper functions
-#
-
-export
-    append_strings,
-    new_processing_key,
-    find_keys_containing,
-    fileparts,
-    add_dataframe_static_rows,
-    _find_closest_number_idx
-include("miscellaneous/helper.jl")
 
 
 #
