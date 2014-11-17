@@ -588,19 +588,15 @@ end
 function ftest(a::SSR; freq_of_interest::Union(Real, AbstractArray)=float(a.modulation_frequency),
                 side_freq::Number=0.5, ID::String="", spill_bins::Int=2, kwargs... )
 
-    # TODO: Account for multiple applied filters
-    if haskey(a.processing, "filter1")
-        used_filter = a.processing["filter1"]
-    else
-        used_filter = nothing
-    end
 
+    # Do calculation here once, instead of in each low level call
     spectrum    = EEG._ftest_spectrum(a.processing["sweeps"])
+    spectrum    = compensate_for_filter(a.processing, spectrum, float(a.sample_rate))
+    frequencies = linspace(0, 1, int(size(spectrum, 1)))*float(a.sample_rate)/2
 
     for freq in freq_of_interest
 
-        snrDb, phase, signal, noise, statistic =
-            ftest(spectrum, freq, float(a.sample_rate), side_freq, used_filter, spill_bins)
+        snrDb, phase, signal, noise, statistic = ftest(spectrum, frequencies, freq, side_freq, spill_bins)
 
         result = DataFrame(
                             ID                  = vec(repmat([ID], length(a.channel_names), 1)),
@@ -615,10 +611,9 @@ function ftest(a::SSR; freq_of_interest::Union(Real, AbstractArray)=float(a.modu
                             Statistic           = vec(statistic)
                           )
 
-        result = add_dataframe_static_rows(result, kwargs)
-
+        result   = add_dataframe_static_rows(result, kwargs)
         key_name = new_processing_key(a.processing, "ftest")
-        merge!(a.processing, [key_name => result])
+        merge!(a.processing, @compat Dict(key_name => result) )
 
     end
 
@@ -626,6 +621,7 @@ function ftest(a::SSR; freq_of_interest::Union(Real, AbstractArray)=float(a.modu
 end
 
 
+# Backward compatibility
 function ftest(a::SSR, freq_of_interest::Array; kwargs...)
 
     ftest(a, freq_of_interest = freq_of_interest; kwargs...)

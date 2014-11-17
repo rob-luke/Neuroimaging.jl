@@ -25,30 +25,21 @@ TODO: Add references to MASTER and Luts et al
 function ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Real,
                 fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int)
 
-    ftest(_ftest_spectrum(sweeps), freq_of_interest, fs, side_freq, used_filter, spill_bins)
+    spectrum    = EEG._ftest_spectrum(sweeps)
+    frequencies = linspace(0, 1, int(size(spectrum, 1)))*float(fs)/2
+
+    ftest(spectrum, frequencies, freq_of_interest, side_freq, spill_bins)
 end
 
 
-function ftest(spectrum::Union(Array{Complex{Float64},2}, Array{Complex{Float32},2}), freq_of_interest::Real,
-                fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int)
+function ftest(spectrum::Union(Array{Complex{Float64},2}, Array{Complex{Float32},2}, Array{Complex{FloatingPoint},2}),
+                   frequencies::AbstractArray, freq_of_interest::Real, side_freq::Real, spill_bins::Int)
 
     info("Calculating F statistic on $(size(spectrum)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
 
-    #TODO Don't treat harmonic frequencies as noise
-
-    # Determine frequencies of interest
-    frequencies = linspace(0, 1, size(spectrum,1))*fs/2
-    idx         = _find_closest_number_idx(frequencies, freq_of_interest)
-    idx_Low     = _find_closest_number_idx(frequencies, freq_of_interest - side_freq)
-    idx_High    = _find_closest_number_idx(frequencies, freq_of_interest + side_freq)
-
-    # Compensate for filter response
-    if !(used_filter == nothing)
-        filter_response     = freqz(used_filter, frequencies, fs)
-        filter_compensation = [abs(f)^2 for f = filter_response]
-        spectrum            = spectrum ./ filter_compensation
-        debug("Accounted for filter response in F test spectrum estimation")
-    end
+    idx      = _find_closest_number_idx(frequencies, freq_of_interest)
+    idx_Low  = _find_closest_number_idx(frequencies, freq_of_interest - side_freq)
+    idx_High = _find_closest_number_idx(frequencies, freq_of_interest + side_freq)
 
     # Determine signal phase
     signal_phase = angle(spectrum[idx, :])                             # Biased response phase
