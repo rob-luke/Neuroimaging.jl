@@ -32,8 +32,8 @@ function ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_inte
 end
 
 
-function ftest(spectrum::Union(Array{Complex{Float64},2}, Array{Complex{Float32},2}, Array{Complex{FloatingPoint},2}),
-                   frequencies::AbstractArray, freq_of_interest::Real, side_freq::Real, spill_bins::Int)
+function ftest{T <: FloatingPoint}(spectrum::Array{Complex{T},2}, frequencies::AbstractArray,
+            freq_of_interest::Real, side_freq::Real, spill_bins::Int)
 
     info("Calculating F statistic on $(size(spectrum)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
 
@@ -98,5 +98,3 @@ end
 function _ftest_spectrum(sweeps::Array{Float64,3};ref=0); _ftest_spectrum(squeeze(mean(sweeps,2),2),ref=ref); end
 #=function _ftest_spectrum(s::Array{Float32}; ref=0); _ftest_spectrum(convert(Array{FloatingPoint}, s), ref=ref); end=#
 #=function _ftest_spectrum(s::Array{Float64}; ref=0); _ftest_spectrum(convert(Array{FloatingPoint}, s), ref=ref); end=#
-
-
