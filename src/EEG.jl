@@ -90,7 +90,6 @@ include("reshaping/sweeps.jl")
 
 export
     ftest,
-    plot_ftest,
     gfp
 include("statistics/ftest.jl")
 include("statistics/gfp.jl")
@@ -185,8 +184,11 @@ export
     plot_timeseries,
     oplot_dipoles,
     SSR_spectrogram,
-    plot_filter_response
+    plot_filter_response,
+    plot_ftest
 include("plotting/plot.jl")
+include("plotting/ftest.jl")
+
 
 
 end
