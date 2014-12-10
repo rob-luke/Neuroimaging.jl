@@ -247,12 +247,9 @@ function oplot_dipoles(existing_plot, x, y, z;
 end
 
 
-function oplot(existing_plot::Table, dip::Union(Dipole, Coordinate);
-                        color::String="red",
-                        symbolkind::String="filled circle",
-                        ncols::Int=2, size::Number=dip.size)
+function oplot(existing_plot::Table, dip::Union(Dipole, Coordinate); kwargs...)
 
-    oplot_dipoles(existing_plot, dip.x, dip.y, dip.z, color=color, symbolkind=symbolkind, ncols=ncols, size=size)
+    oplot_dipoles(existing_plot, dip.x, dip.y, dip.z; kwargs...)
 end
 
 
@@ -262,83 +259,101 @@ end
 #
 #######################################
 
-function plot_dat(x, y, z, dat_data;
-                threshold_ratio::Number=1/1000,
-                ncols::Int=2,
-                max_size::Number=2)
+@doc md"""
+Plot a dat file from three views.
+
+### Optional Arguments
+
+* threshold_ratio(1/1000): locations smaller than this are not plotted
+* ncols(2): number of colums used for output plot
+* max_size(2): maximum size for any point
+
+""" ->
+function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, dat_data::Array{T};
+                threshold_ratio::Number=1/1000, ncols::Int=2, max_size::Union(Number, Nothing)=nothing, min_size=0.2,
+                threshold::Number = 0.01)
 
     max_value = maximum(dat_data)
-    threshold = max_value * threshold_ratio
+    threshold = minimum([threshold, max_value * threshold_ratio])
 
-    size_multiplier = max_size / max_value
+    if max_size !== nothing
+        size_multiplier = max_size / max_value
+    else
+        size_multiplier = 1
+    end
 
-    back = FramedPlot(title = "Back",
-                           xlabel = "Left - Right",
-                           ylabel = "Inferior - Superior")
+    # TODO use metaprogramming here
 
-    side = FramedPlot(title = "Side",
-                           xlabel = "Posterior - Anterior",
-                           ylabel = "Inferior - Superior")
-
-    top = FramedPlot(title = "Top",
-                           xlabel = "Left - Right",
-                           ylabel = "Posterior - Anterior")
-
-
-    s = squeeze(maximum(dat_data,2),2)
+    s = squeeze(maximum(dat_data, 2), 2)   # Data along dimensions to be plotted
+    x_tmp = zeros(T, size(s,1)*size(s,2), 1)   # Allocate arrays
+    y_tmp = zeros(T, size(s,1)*size(s,2), 1)
+    s_tmp = zeros(T, size(s,1)*size(s,2), 1)
+    i = 1
     for xidx = 1:length(x)
-        for zidx = 1:length(z)
-            if s[xidx,zidx] > threshold
-                add(back, Points(x[xidx], z[zidx], symbolkind="cross", size=s[xidx, zidx]*size_multiplier))
+        for yidx = 1:length(z)
+            x_tmp[i] = x[xidx]
+            y_tmp[i] = z[yidx]
+            if s[xidx,yidx] > threshold
+                s_tmp[i] = s[xidx, yidx]*size_multiplier
             end
+            i += 1
         end
     end
-    #=back = imagesc(s)=#
-    #=colormap("jet", 200)=#
+    back = scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], s_tmp, "x",
+        title = "Back", xlabel = "Left - Right", ylabel = "Inferior - Superior")
 
-    s = squeeze(maximum(dat_data,1),1)
-    for yidx = 1:length(y)
-        for zidx = 1:length(z)
-            if s[yidx,zidx] > threshold
-                add(side, Points(y[yidx], z[zidx], symbolkind="cross", size=s[yidx, zidx]*size_multiplier))
+    s = squeeze(maximum(dat_data, 1), 1)   # Data along dimensions to be plotted
+    x_tmp = zeros(T, size(s,1)*size(s,2), 1)   # Allocate arrays
+    y_tmp = zeros(T, size(s,1)*size(s,2), 1)
+    s_tmp = zeros(T, size(s,1)*size(s,2), 1)
+    i = 1
+    for xidx = 1:length(y)
+        for yidx = 1:length(z)
+            x_tmp[i] = y[xidx]
+            y_tmp[i] = z[yidx]
+            if s[xidx,yidx] > threshold
+                s_tmp[i] = s[xidx, yidx]*size_multiplier
             end
+            i += 1
         end
     end
+    side = scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], s_tmp, "x",
+        title = "Side", xlabel = "Posterior - Anterior", ylabel = "Inferior - Superior")
 
-    s = squeeze(maximum(dat_data,3),3)
+    s = squeeze(maximum(dat_data, 3), 3)   # Data along dimensions to be plotted
+    x_tmp = zeros(T, size(s,1)*size(s,2), 1)   # Allocate arrays
+    y_tmp = zeros(T, size(s,1)*size(s,2), 1)
+    s_tmp = zeros(T, size(s,1)*size(s,2), 1)
+    i = 1
     for xidx = 1:length(x)
         for yidx = 1:length(y)
+            x_tmp[i] = x[xidx]
+            y_tmp[i] = y[yidx]
             if s[xidx,yidx] > threshold
-                add(top, Points(x[xidx], y[yidx], symbolkind="cross", size=s[xidx, yidx]*size_multiplier))
+                s_tmp[i] = s[xidx, yidx]*size_multiplier
             end
+            i += 1
         end
     end
+    top = scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], s_tmp, "x", label = "Voxel",
+        title = "Top", xlabel = "Left - Right", ylabel = "Posterior - Anterior")
 
-    t = _place_plots([back, side, top], ncols)
-
-    return t
+    _place_plots([back, side, top], ncols)
 end
 
-function plot_dat(dat_data;
-                threshold_ratio::Number=1/1000,
-                ncols::Int=2)
+function plot_dat(dat_data; kwargs...)
 
-    plot_dat(1:size(dat_data,1), 1:size(dat_data,2), 1:size(dat_data,3), dat_data,  threshold_ratio=threshold_ratio, ncols=ncols)
-
+    plot_dat(1:size(dat_data,1), 1:size(dat_data,2), 1:size(dat_data,3), dat_data; kwargs...)
 end
 
-function plot_dat(dat_data::Array{FloatingPoint, 3};
-                threshold_ratio::Number=1/1000,
-                ncols::Int=2)
-
+function plot_dat{T <: Number}(dat_data::Array{T, 3}; kwargs...)
 
     x = 1:size(dat_data)[1]
     y = 1:size(dat_data)[2]
     z = 1:size(dat_data)[3]
 
-    plot_dat(x, y, z, dat_data, threshold_ratio=threshold_ratio, ncols=ncols)
+    plot_dat(x, y, z, dat_data; kwargs...)
 end
-
 
 
 #######################################
