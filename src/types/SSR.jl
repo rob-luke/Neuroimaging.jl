@@ -206,10 +206,11 @@ Remove channels from SSR.
 
 ### Example
 
+Remove channel Cz and those in the set called `EEG_Vanvooren_2014_Right`
+
 ```julia
 a = read_SSR(filename)
     remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
-
 ```
 """ ->
 function remove_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
@@ -245,6 +246,8 @@ function remove_channel!(a::SSR, channel_name::Union(Int, String, ASCIIString); 
 Remove all channels except those requested from SSR.
 
 ### Example
+
+Remove all channels except Cz and those in the set called `EEG_Vanvooren_2014_Right`
 
 ```julia
 a = read_SSR(filename)
