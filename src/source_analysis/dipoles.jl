@@ -24,7 +24,7 @@ end
 #######################################
 
 
-function find_dipoles(s::Array{FloatingPoint, 3}; window::Array{Int}=[6,6,6],
+function find_dipoles{T <: Number}(s::Array{T, 3}; window::Array{Int}=[6,6,6],
                       x=1:size(s,1), y=1:size(s,2),
                       z=1:size(s,3), t=1:size(s,4))
 
@@ -54,7 +54,7 @@ function find_dipoles(s::Array{FloatingPoint, 3}; window::Array{Int}=[6,6,6],
 end
 
 
-function find_dipoles(s::Array{FloatingPoint, 4}; window::Array{Int}=[6,6,6,20],
+function find_dipoles{T <: Number}(s::Array{T, 4}; window::Array{Int}=[6,6,6,20],
                       x=1:size(s,1), y=1:size(s,2),
                       z=1:size(s,3), t=1:size(s,4))
 
