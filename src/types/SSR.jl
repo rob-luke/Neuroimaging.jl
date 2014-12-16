@@ -233,6 +233,8 @@ function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
     a.data = a.data[:, keep_idx]
 
     a.channel_names = a.channel_names[keep_idx]
+
+    return a
 end
 
 function remove_channel!(a::SSR, channel_names::Union(Array{String}); kwargs...)
