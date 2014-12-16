@@ -101,8 +101,8 @@ function read_SSR(fname::Union(String, IO);
 
     # Extract frequency from the file name if not set manually
     if contains(file_name, "Hz") && isnan(modulation_frequency)
-        a = match(r"[-_](\d+[_.]?[\d+]?)Hz|Hz(\d+[_.]?[\d+]?)[-_]", file_name).captures
-        modulation_frequency = assr_frequency(float(a[[i !== nothing for i = a]][1])) * Hertz
+        a = match(r"[-_](\d+[_.]?[\d+]+?)Hz|Hz(\d+[_.]?[\d+]+?)[-_]", file_name).captures
+        modulation_frequency = float(a[[i !== nothing for i = a]][1]) * Hertz
         debug("Extracted modulation frequency from file name: $modulation_frequency")
     end
 
