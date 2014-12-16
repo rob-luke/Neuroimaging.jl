@@ -198,9 +198,8 @@ function read_dat(fname::String)
                 for y = 1:length(Y)
                     d = readline(fid)       # values
 
-                    for x = 1:length(X)
-                        complete_data[x, y, z, t] = float(d[(x-1)*13+1:(x-1)*13+11])
-                    end
+                    m = matchall(r"(\d+.\d+)", d)
+                    complete_data[:, y, z, t] = float(m)
                 end
 
                 readline(fid)           # blank or dashed
