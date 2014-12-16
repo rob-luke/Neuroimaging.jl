@@ -120,7 +120,8 @@ export
     assr_frequency,
     save_results,
     trigger_channel,
-    write_SSR
+    write_SSR,
+    merge_channels
 include("types/SSR.jl")
 
 
