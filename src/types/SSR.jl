@@ -257,6 +257,12 @@ a = read_SSR(filename)
 
 ```
 """ ->
+function keep_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
+    info("Keeping channel(s) $(append_strings(channel_names))")
+    keep_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
+end
+
+
 function keep_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
 
     remove_channels = [1:size(a.data,2)]
@@ -267,14 +273,7 @@ function keep_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
     end
 
     remove_channel!(a, remove_channels; kwargs...)
-
 end
-
-function keep_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
-    info("Keeping channel(s) $(append_strings(channel_names))")
-    keep_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
-end
-
 
 
 #######################################
@@ -284,7 +283,17 @@ end
 #######################################
 
 @doc md"""
-Trim SSR recording by removing data before and after specifed samples.
+Trim SSR recording by removing data after `stop` specifed samples.
+
+### Optional Parameters
+
+* `start` Remove samples before this value
+
+### Example
+
+```julia
+s = trim_channel(s, 8192*300, start=8192)
+```
 
 """ ->
 function trim_channel(a::SSR, stop::Int; start::Int=1, kwargs...)
@@ -315,6 +324,9 @@ end
 #
 #######################################
 
+@doc md"""
+Merge SSR channels listed in `merge_Chans` and label the averaged channel as `new_name`
+""" ->
 function merge_channels(a::SSR, merge_Chans::Array{ASCIIString}, new_name::String; kwargs...)
 
     debug("Total origin channels: $(length(a.channel_names))")
