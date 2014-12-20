@@ -183,9 +183,9 @@ end
 function oplot(existing_plot, elec::Electrodes;
                         color::String="red",
                         symbolkind::String="filled circle",
-                        ncols::Int=2)
+                        ncols::Int=2, kwargs...)
 
-    p = oplot(existing_plot, elec.xloc, elec.yloc, elec.zloc, color=color, symbolkind=symbolkind, ncols=ncols)
+    p = oplot(existing_plot, elec.xloc, elec.yloc, elec.zloc, color=color, symbolkind=symbolkind, ncols=ncols; kwargs...)
 
     return p
 end
@@ -193,15 +193,15 @@ end
 function oplot(existing_plot, x, y, z;
                         color::String="red",
                         symbolkind::String="filled circle",
-                        ncols::Int=2)
+                        ncols::Int=2, kwargs...)
 
     p = _extract_plots(existing_plot)
 
     # Points for each dipole
     for l in 1:length(x)
-        add(p[1], Points(x[l], z[l], color=color, size=1, symbolkind=symbolkind))
-        add(p[2], Points(y[l], z[l], color=color, size=1, symbolkind=symbolkind))
-        add(p[3], Points(x[l], y[l], color=color, size=1, symbolkind=symbolkind))
+        add(p[1], Points(x[l], z[l], color=color, size=1, symbolkind=symbolkind; kwargs...))
+        add(p[2], Points(y[l], z[l], color=color, size=1, symbolkind=symbolkind; kwargs...))
+        add(p[3], Points(x[l], y[l], color=color, size=1, symbolkind=symbolkind; kwargs...))
     end
 
     p = _place_plots(p, ncols)
@@ -271,7 +271,7 @@ Plot a dat file from three views.
 """ ->
 function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, dat_data::Array{T};
                 threshold_ratio::Number=1/1000, ncols::Int=2, max_size::Union(Number, Nothing)=nothing, min_size=0.2,
-                threshold::Number = 0.01)
+                threshold::Number = 0.01, kwargs...)
 
     max_value = maximum(dat_data)
     threshold = minimum([threshold, max_value * threshold_ratio])
@@ -300,7 +300,7 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
         end
     end
     back = scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], s_tmp, "x",
-        title = "Back", xlabel = "Left - Right", ylabel = "Inferior - Superior")
+        title = "Back", xlabel = "Left - Right", ylabel = "Inferior - Superior"; kwargs...)
 
     s = squeeze(maximum(dat_data, 1), 1)   # Data along dimensions to be plotted
     x_tmp = zeros(T, size(s,1)*size(s,2), 1)   # Allocate arrays
@@ -318,7 +318,7 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
         end
     end
     side = scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], s_tmp, "x",
-        title = "Side", xlabel = "Posterior - Anterior", ylabel = "Inferior - Superior")
+        title = "Side", xlabel = "Posterior - Anterior", ylabel = "Inferior - Superior"; kwargs...)
 
     s = squeeze(maximum(dat_data, 3), 3)   # Data along dimensions to be plotted
     x_tmp = zeros(T, size(s,1)*size(s,2), 1)   # Allocate arrays
@@ -336,7 +336,7 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
         end
     end
     top = scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], s_tmp, "x", label = "Voxel",
-        title = "Top", xlabel = "Left - Right", ylabel = "Posterior - Anterior")
+        title = "Top", xlabel = "Left - Right", ylabel = "Posterior - Anterior"; kwargs...)
 
     _place_plots([back, side, top], ncols)
 end
