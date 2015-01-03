@@ -32,7 +32,7 @@ show(s2)
 
 @test s.data == s2.data
 @test s.triggers == s2.triggers
-@test s.sample_rate == s2.sample_rate
+@test s.samplingrate == s2.samplingrate
 
 
 #

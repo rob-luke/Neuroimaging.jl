@@ -122,7 +122,12 @@ export
     trigger_channel,
     write_SSR,
     merge_channels
-include("types/SSR.jl")
+include("types/SSR/SSR.jl")
+include("types/SSR/Preprocessing.jl")
+include("types/SSR/ReadWrite.jl")
+include("types/SSR/Reshaping.jl")
+include("types/SSR/Statistics.jl")
+include("types/SSR/Synchrony.jl")
 
 
 #
