@@ -12,3 +12,6 @@ s = read_SSR(fname)
 @test samplingrate(Int, s) == 8192
 @test isa(samplingrate(s), FloatingPoint)
 @test isa(samplingrate(Int, s), Int)
+
+@test modulationrate(s) == 19.5
+@test isa(modulationrate(s), FloatingPoint)

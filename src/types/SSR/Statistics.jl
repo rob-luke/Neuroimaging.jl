@@ -7,7 +7,7 @@ using DataFrames
 #######################################
 
 
-function ftest(a::SSR; freq_of_interest::Union(Real, AbstractArray)=float(a.modulationfreq),
+function ftest(a::SSR; freq_of_interest::Union(Real, AbstractArray)=modulationrate(a),
                 side_freq::Number=0.5, ID::String="", spill_bins::Int=2, kwargs... )
 
 
@@ -23,7 +23,7 @@ function ftest(a::SSR; freq_of_interest::Union(Real, AbstractArray)=float(a.modu
         result = DataFrame(
                             ID                  = vec(repmat([ID], length(a.channel_names), 1)),
                             Channel             = copy(a.channel_names),
-                            ModulationFrequency = copy(float(a.modulationfreq)),
+                            ModulationFrequency = copy(modulationrate(a)),
                             AnalysisType        = "ftest",
                             AnalysisFrequency   = freq,
                             SignalPower         = vec(signal),

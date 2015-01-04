@@ -112,6 +112,7 @@ include("synchrony/phase_lag_index.jl")
 export
     SSR,
     samplingrate,
+    modulationrate,
     read_SSR,
     trim_channel,
     add_triggers,

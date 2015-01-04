@@ -30,8 +30,8 @@ write_dat(joinpath(dirname(@__FILE__), "data", "SA.dat"), 1:size(NAI,1), 1:size(
 #
 #######################################
 
-a = add_channel(a, orient_dipole(a.data[:,1:3], a.triggers,  int(a.samplingrate), a.modulationfreq), "Optimised")
-a = add_channel(a, best_ftest_dipole(a.data[:,1:3], a.triggers,  int(a.samplingrate), a.modulationfreq), "Best")
+a = add_channel(a, orient_dipole(a.data[:,1:3], a.triggers,  int(a.samplingrate), a.modulationrate), "Optimised")
+a = add_channel(a, best_ftest_dipole(a.data[:,1:3], a.triggers,  int(a.samplingrate), a.modulationrate), "Best")
 a = extract_epochs(a)
 a = create_sweeps(a)
 a = ftest(a)

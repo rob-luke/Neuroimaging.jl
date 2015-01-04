@@ -10,7 +10,7 @@ type SSR
     triggers::Dict
     system_codes::Dict
     samplingrate::FreqHz{Number}
-    modulationfreq::FreqHz{Number}
+    modulationrate::FreqHz{Number}
     reference_channel::Array{String}
     file_path::String
     file_name::String
@@ -42,6 +42,23 @@ samplingrate(t, s::SSR) = convert(t, float(s.samplingrate))
 samplingrate(s::SSR) = samplingrate(FloatingPoint, s)
 
 
+@doc md"""
+Return the modulation rate of a steady state type.
+If no type is provided, the modulation rate is returned as a floating point.
+
+### Example
+
+Return the modulation rate of a recording
+
+```julia
+    s = read_SSR(filename)
+    modulationrate(s)
+```
+""" ->
+modulationrate(t, s::SSR) = convert(t, float(s.modulationrate))
+modulationrate(s::SSR) = modulationrate(FloatingPoint, s)
+
+
 #######################################
 #
 # Show
@@ -52,7 +69,7 @@ import Base.show
 function Base.show(io::IO, a::SSR)
     time_length = round(size(a.data,1) / a.samplingrate / 60, 2)
     println(io, "SSR measurement of $time_length mins with $(size(a.data,2)) channels sampled at $(a.samplingrate)")
-    println(io, "  Modulation frequency: $(a.modulationfreq )")
+    println(io, "  Modulation frequency: $(a.modulationrate )")
 
     if haskey(a.processing, "Amplitude")
         println(io, "  Stimulation amplitude: $(a.processing["Amplitude"]) dB")
