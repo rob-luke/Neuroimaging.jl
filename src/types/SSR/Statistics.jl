@@ -69,7 +69,7 @@ function save_results(a::SSR; name_extension::String="", kwargs...)
         if length(result_idx) > 1
             for k = result_idx[2:end]
                 result_data = get(results, collect(keys(results))[k], 0)
-                to_save = rbind(to_save, result_data)
+                to_save = vcat(to_save, result_data)
             end
         end
 
