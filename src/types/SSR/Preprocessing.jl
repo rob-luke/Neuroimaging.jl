@@ -9,7 +9,7 @@ function highpass_filter(a::SSR; cutOff::Number=2, order::Int=3, tolerance::Numb
 
     a.data, f = highpass_filter(a.data, cutOff=cutOff, order=order, fs=int(a.samplingrate))
 
-    _filter_check(f, float(a.modulation_frequency), int(a.samplingrate), tolerance)
+    _filter_check(f, float(a.modulationfreq), int(a.samplingrate), tolerance)
 
     _append_filter(a, f)
 end
@@ -19,15 +19,15 @@ function lowpass_filter(a::SSR; cutOff::Number=150, order::Int=3, tolerance::Num
 
     a.data, f = lowpass_filter(a.data, cutOff=cutOff, order=order, fs=int(a.samplingrate))
 
-    _filter_check(f, float(a.modulation_frequency), int(a.samplingrate), tolerance)
+    _filter_check(f, float(a.modulationfreq), int(a.samplingrate), tolerance)
 
     _append_filter(a, f)
 end
 
 
 function bandpass_filter(a::SSR;
-                         lower::Number=float(a.modulation_frequency)-1,
-                         upper::Number=float(a.modulation_frequency)+1,
+                         lower::Number=float(a.modulationfreq)-1,
+                         upper::Number=float(a.modulationfreq)+1,
                          n::Int=24, rp::Number=0.0001, tolerance::Number=0.01, kwargs...)
 
     # Type 1 Chebychev filter
@@ -37,7 +37,7 @@ function bandpass_filter(a::SSR;
 
     a.data, f = bandpass_filter(a.data, lower, upper, int(a.samplingrate), n, rp)
 
-    _filter_check(f, float(a.modulation_frequency), int(a.samplingrate), tolerance)
+    _filter_check(f, float(a.modulationfreq), int(a.samplingrate), tolerance)
 
     _append_filter(a, f)
 end

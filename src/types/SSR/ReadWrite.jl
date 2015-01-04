@@ -16,7 +16,7 @@ Failing that, user passed arguments are used or the modulation frequency is extr
 * max_epoch_length: Maximum epoch length in samples. Longer epochs will be removed.
 * valid_triggers: Triggers that are considered valid, others are removed.
 * stimulation_amplitude: Amplitude of stimulation
-* modulation_frequency: Modulation frequency of SSR stimulation
+* modulationfreq: Modulation frequency of SSR stimulation
 * participant name: Name of participant
 * remove_first: Number of epochs to be removed from start of recording
 * max_epochs: Maximum number of epochs to retain
@@ -29,7 +29,7 @@ Failing that, user passed arguments are used or the modulation frequency is extr
 """ ->
 function read_SSR(fname::Union(String, IO);
                   stimulation_amplitude::Number=NaN,   # User can set these
-                  modulation_frequency::Number=NaN,    # values, but if not
+                  modulationfreq::Number=NaN,    # values, but if not
                   carrier_frequency::Number=NaN,       # then attempt to read
                   stimulation_side::String="",         # from file name or mat
                   participant_name::String="",
@@ -56,16 +56,16 @@ function read_SSR(fname::Union(String, IO);
     #
 
     # Extract frequency from the file name if not set manually
-    if contains(file_name, "Hz") && isnan(modulation_frequency)
+    if contains(file_name, "Hz") && isnan(modulationfreq)
         a = match(r"[-_](\d+[_.]?[\d+]+?)Hz|Hz(\d+[_.]?[\d+]+?)[-_]", file_name).captures
-        modulation_frequency = float(a[[i !== nothing for i = a]][1]) * Hertz
-        debug("Extracted modulation frequency from file name: $modulation_frequency")
+        modulationfreq = float(a[[i !== nothing for i = a]][1]) * Hertz
+        debug("Extracted modulation frequency from file name: $modulationfreq")
     end
 
     # Or even better if there is a mat file read it
     mat_path = string(file_path, file_name, ".mat")
     if isreadable(mat_path)
-        modulation_frequency, stimulation_side, participant_name,
+        modulationfreq, stimulation_side, participant_name,
             stimulation_amplitude, carrier_frequency = read_rba_mat(mat_path)
     end
 
@@ -82,7 +82,7 @@ function read_SSR(fname::Union(String, IO);
     end
 
     # Create SSR type
-    a = SSR(data, triggers, system_codes, samplingrate * Hertz, modulation_frequency,
+    a = SSR(data, triggers, system_codes, samplingrate * Hertz, modulationfreq,
             [reference_channel], file_path, file_name, header["chanLabels"], Dict())
 
 

@@ -11,7 +11,7 @@ type SSR
     triggers::Dict
     system_codes::Dict
     samplingrate::FreqHz{Number}
-    modulation_frequency::FreqHz{Number}
+    modulationfreq::FreqHz{Number}
     reference_channel::Array{String}
     file_path::String
     file_name::String
@@ -24,7 +24,7 @@ import Base.show
 function Base.show(io::IO, a::SSR)
     time_length = round(size(a.data,1) / a.samplingrate / 60, 2)
     println(io, "SSR measurement of $time_length mins with $(size(a.data,2)) channels sampled at $(a.samplingrate)")
-    println(io, "  Modulation frequency: $(a.modulation_frequency )")
+    println(io, "  Modulation frequency: $(a.modulationfreq )")
 
     if haskey(a.processing, "Amplitude")
         println(io, "  Stimulation amplitude: $(a.processing["Amplitude"]) dB")

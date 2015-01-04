@@ -24,7 +24,7 @@ function phase_lag_index(a::SSR, ChannelOrigin::Int, ChannelDestination::Int, fr
     result = DataFrame(
                         ID                  = ID,
                         AnalysisFrequency   = freq_of_interest,
-                        ModulationFrequency = float(a.modulation_frequency),
+                        ModulationFrequency = float(a.modulationfreq),
                         ChannelOrigin       = copy(a.channel_names[ChannelOrigin]),
                         ChannelDestination  = copy(a.channel_names[ChannelDestination]),
                         AnalysisType        = "phase_lag_index",
@@ -53,7 +53,7 @@ end
 
 # If you dont specify an analysis frequency, use modulation frequency
 function phase_lag_index(a::SSR, ChannelOrigin::Int, ChannelDestination::Int;
-        freq_of_interest::Union(Real, AbstractArray)=[float(a.modulation_frequency)],
+        freq_of_interest::Union(Real, AbstractArray)=[float(a.modulationfreq)],
         ID::String="", kwargs...)
     phase_lag_index(a, ChannelOrigin, ChannelDestination, freq_of_interest, ID=ID; kwargs...)
 end

@@ -51,7 +51,7 @@ function add_triggers(a::SSR; kwargs...)
 
     debug("Adding triggers to reduce SSR. Using SSR modulation frequency")
 
-    add_triggers(a, float(a.modulation_frequency); kwargs...)
+    add_triggers(a, float(a.modulationfreq); kwargs...)
 end
 
 
