@@ -19,7 +19,7 @@ function phase_lag_index(a::SSR, ChannelOrigin::Int, ChannelDestination::Int, fr
 
     data = permutedims(a.processing["epochs"], [1, 3, 2])
 
-    pli = phase_lag_index(data[:, [ChannelOrigin, ChannelDestination], :], freq_of_interest, float(a.samplingrate))
+    pli = phase_lag_index(data[:, [ChannelOrigin, ChannelDestination], :], freq_of_interest, samplingrate(a))
 
     result = DataFrame(
                         ID                  = ID,

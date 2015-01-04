@@ -13,8 +13,8 @@ function ftest(a::SSR; freq_of_interest::Union(Real, AbstractArray)=float(a.modu
 
     # Do calculation here once, instead of in each low level call
     spectrum    = EEG._ftest_spectrum(a.processing["sweeps"])
-    spectrum    = compensate_for_filter(a.processing, spectrum, float(a.samplingrate))
-    frequencies = linspace(0, 1, int(size(spectrum, 1)))*float(a.samplingrate)/2
+    spectrum    = compensate_for_filter(a.processing, spectrum, samplingrate(a))
+    frequencies = linspace(0, 1, int(size(spectrum, 1)))*samplingrate(a)/2
 
     for freq in freq_of_interest
 

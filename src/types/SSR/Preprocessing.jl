@@ -7,9 +7,9 @@
 
 function highpass_filter(a::SSR; cutOff::Number=2, order::Int=3, tolerance::Number=0.01, kwargs...)
 
-    a.data, f = highpass_filter(a.data, cutOff=cutOff, order=order, fs=int(a.samplingrate))
+    a.data, f = highpass_filter(a.data, cutOff=cutOff, order=order, fs=samplingrate(a))
 
-    _filter_check(f, float(a.modulationfreq), int(a.samplingrate), tolerance)
+    _filter_check(f, float(a.modulationfreq), samplingrate(a), tolerance)
 
     _append_filter(a, f)
 end
@@ -17,9 +17,9 @@ end
 
 function lowpass_filter(a::SSR; cutOff::Number=150, order::Int=3, tolerance::Number=0.01, kwargs...)
 
-    a.data, f = lowpass_filter(a.data, cutOff=cutOff, order=order, fs=int(a.samplingrate))
+    a.data, f = lowpass_filter(a.data, cutOff=cutOff, order=order, fs=samplingrate(a))
 
-    _filter_check(f, float(a.modulationfreq), int(a.samplingrate), tolerance)
+    _filter_check(f, float(a.modulationfreq), samplingrate(a), tolerance)
 
     _append_filter(a, f)
 end
@@ -35,9 +35,9 @@ function bandpass_filter(a::SSR;
     # TODO filter check does not work here. Why not?
     # TODO automatic minimum filter order selection
 
-    a.data, f = bandpass_filter(a.data, lower, upper, int(a.samplingrate), n, rp)
+    a.data, f = bandpass_filter(a.data, lower, upper, samplingrate(a), n, rp)
 
-    _filter_check(f, float(a.modulationfreq), int(a.samplingrate), tolerance)
+    _filter_check(f, float(a.modulationfreq), samplingrate(a), tolerance)
 
     _append_filter(a, f)
 end

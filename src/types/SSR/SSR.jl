@@ -2,7 +2,6 @@ using DataFrames
 using MAT
 using SIUnits
 import SIUnits
-using Docile
 
 typealias FreqHz{T} SIUnits.SIQuantity{T,0,0,-1,0,0,0,0}
 
@@ -19,6 +18,35 @@ type SSR
     processing::Dict
 end
 
+
+#######################################
+#
+# SSR info
+#
+#######################################
+
+@doc md"""
+Return the sampling rate of a steady state type.
+If no type is provided, the sampling rate is returned as a floating point.
+
+### Example
+
+Return the sampling rate of a recording
+
+```julia
+    s = read_SSR(filename)
+    samplingrate(s)
+```
+""" ->
+samplingrate(t, s::SSR) = convert(t, float(s.samplingrate))
+samplingrate(s::SSR) = samplingrate(FloatingPoint, s)
+
+
+#######################################
+#
+# Show
+#
+#######################################
 
 import Base.show
 function Base.show(io::IO, a::SSR)

@@ -72,14 +72,14 @@ function add_triggers(a::SSR, mod_freq::Number, epochIndex; cycle_per_epoch::Int
 
     # Existing epochs
     existing_epoch_length   = median(diff(epochIndex[:Index]))     # samples
-    existing_epoch_length_s = existing_epoch_length / float(a.samplingrate)
+    existing_epoch_length_s = existing_epoch_length / samplingrate(a)
     debug("Existing epoch length: $(existing_epoch_length_s)s")
 
     # New epochs
     new_epoch_length_s = cycle_per_epoch / mod_freq
     new_epochs_num     = round(existing_epoch_length_s / new_epoch_length_s) - 2
     new_epoch_times    = [1:new_epochs_num]*new_epoch_length_s
-    new_epoch_indx     = [0, round(new_epoch_times * float(a.samplingrate))]
+    new_epoch_indx     = [0, round(new_epoch_times * samplingrate(a))]
     debug("New epoch length = $new_epoch_length_s")
     debug("New # epochs     = $new_epochs_num")
 

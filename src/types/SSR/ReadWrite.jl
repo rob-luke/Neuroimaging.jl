@@ -143,13 +143,13 @@ end
 
 function trigger_channel(a::SSR; kwargs...)
 
-    create_channel(a.triggers, a.data, float(a.samplingrate))
+    create_channel(a.triggers, a.data, samplingrate(a))
 end
 
 
 function system_code_channel(a::SSR; kwargs...)
 
-    create_channel(a.system_codes, a.data, float(a.samplingrate))
+    create_channel(a.system_codes, a.data, samplingrate(a))
 end
 
 
@@ -157,6 +157,6 @@ function write_SSR(a::SSR, fname::String; kwargs...)
 
     info("Saving $(size(a.data)[end]) channels to $fname")
 
-    writeBDF(fname, a.data', trigger_channel(a), system_code_channel(a), int(a.samplingrate), chanLabels=a.channel_names)
+    writeBDF(fname, a.data', trigger_channel(a), system_code_channel(a), samplingrate(Int, a), chanLabels=a.channel_names)
 
 end
