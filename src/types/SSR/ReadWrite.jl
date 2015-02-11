@@ -67,6 +67,9 @@ function read_SSR(fname::Union(String, IO);
     if isreadable(mat_path)
         modulationrate, stimulation_side, participant_name,
             stimulation_amplitude, carrier_frequency = read_rba_mat(mat_path)
+        valid_mat = true
+    else
+        valid_mat = false
     end
 
 
@@ -84,6 +87,12 @@ function read_SSR(fname::Union(String, IO);
     # Create SSR type
     a = SSR(data, triggers, system_codes, samplingrate * Hertz, modulationrate,
             [reference_channel], file_path, file_name, header["chanLabels"], Dict(), header)
+
+
+    # If a valid mat file was found then store that information with the raw header
+    if valid_mat
+        a.header["rbadata"] = matread(mat_path)
+    end
 
 
     #
