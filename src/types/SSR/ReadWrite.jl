@@ -83,7 +83,7 @@ function read_SSR(fname::Union(String, IO);
 
     # Create SSR type
     a = SSR(data, triggers, system_codes, samplingrate * Hertz, modulationrate,
-            [reference_channel], file_path, file_name, header["chanLabels"], Dict())
+            [reference_channel], file_path, file_name, header["chanLabels"], Dict(), header)
 
 
     #

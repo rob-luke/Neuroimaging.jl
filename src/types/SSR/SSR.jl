@@ -5,6 +5,23 @@ import SIUnits
 
 typealias FreqHz{T} SIUnits.SIQuantity{T,0,0,-1,0,0,0,0}
 
+
+@doc md"""
+Steady State Responses.
+This composite type contains the information for steady state response recordings and analysis.
+
+## Fields
+data: contains the recorded data
+trigers: contains information about timing for creation of epochs
+system_codes: contains system information
+samplingrate: the sampling rate of the data
+modulationrate: the modulation rate of the stimulus
+reference_channel: the channel the data has been referenced to
+file_path and file_name: where the file was read in from
+channel_names: the names of the channels
+processing: dictionary type to store analysis
+header: additional information read from the file
+""" ->
 type SSR
     data::Array
     triggers::Dict
@@ -16,6 +33,7 @@ type SSR
     file_name::String
     channel_names::Array{String}
     processing::Dict
+    header::Dict
 end
 
 
@@ -278,5 +296,3 @@ function assr_frequency(rounded_freq::AbstractVector)
 
     [assr_frequency(f) for f = rounded_freq]
 end
-
-
