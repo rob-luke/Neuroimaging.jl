@@ -52,7 +52,6 @@ function rereference(signals::Array,
         refChan_Idx = [findfirst(chanNames, i) for i = refChan]
     end
 
-    info("Re referencing $(size(signals)[end]) channels to $(length(refChan_Idx)) channels.")
     debug("Reference channels = $refChan")
 
     if refChan == 0; error("Requested channel is not in the provided list of channels"); end
