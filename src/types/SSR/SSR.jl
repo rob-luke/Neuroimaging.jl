@@ -7,7 +7,7 @@ typealias FreqHz{T} SIUnits.SIQuantity{T,0,0,-1,0,0,0,0}
 
 
 @doc md"""
-Steady State Responses.
+Steady State Response.
 This composite type contains the information for steady state response recordings and analysis.
 
 ## Fields
@@ -21,6 +21,17 @@ file_path and file_name: where the file was read in from
 channel_names: the names of the channels
 processing: dictionary type to store analysis
 header: additional information read from the file
+
+## Processing Fields
+The following standard names are used when saving data to the processing dictionary.
+
+Name: The identifier for the participant
+Side: Side of stimulation
+Carrier_Frequency: Carrier frequency of the stimulus
+Amplitude: Amplitude of the stimulus
+epochs: The epochs extracted from the recording
+sweeps: The extracted sweeps from the recording
+
 """ ->
 type SSR
     data::Array
@@ -107,10 +118,23 @@ end
 
 #######################################
 #
-# Add channels
+# Manipulate channels
 #
 #######################################
 
+@doc md"""
+Add a channel to the SSR type with specified channel names.
+
+### Example
+
+Add a channel called `Merged`
+
+```julia
+    s = read_SSR(filename)
+    new_channel = mean(s.data, 2)
+    s = add_channel(s, new_channel, "Merged")
+```
+""" ->
 function add_channel(a::SSR, data::Array, chanLabels::ASCIIString; kwargs...)
 
     info("Adding channel $chanLabels")
@@ -122,14 +146,8 @@ function add_channel(a::SSR, data::Array, chanLabels::ASCIIString; kwargs...)
 end
 
 
-#######################################
-#
-# Remove channels
-#
-#######################################
-
 @doc md"""
-Remove channels from SSR.
+Remove specified channels from SSR.
 
 ### Example
 
@@ -218,6 +236,8 @@ Trim SSR recording by removing data after `stop` specifed samples.
 
 ### Example
 
+Remove the first 8192 samples and everything after 8192*300 samples
+
 ```julia
 s = trim_channel(s, 8192*300, start=8192)
 ```
@@ -253,6 +273,13 @@ end
 
 @doc md"""
 Merge SSR channels listed in `merge_Chans` and label the averaged channel as `new_name`
+
+### Example
+
+```julia
+    s = merge_channels(s, ["P6", "P8"], "P68")
+```
+
 """ ->
 function merge_channels(a::SSR, merge_Chans::Array{ASCIIString}, new_name::String; kwargs...)
 
@@ -262,7 +289,7 @@ function merge_channels(a::SSR, merge_Chans::Array{ASCIIString}, new_name::Strin
     keep_idxs = int(keep_idxs)
 
     if sum(keep_idxs .== 0) > 0
-        warn("Could not merge channels as don't exist: $(append_strings(vec(merge_Chans[keep_idxs .== 0])))")
+        warn("Could not merge as these channels don't exist: $(append_strings(vec(merge_Chans[keep_idxs .== 0])))")
         keep_idxs = keep_idxs[keep_idxs .> 0]
     end
 
@@ -273,9 +300,7 @@ function merge_channels(a::SSR, merge_Chans::Array{ASCIIString}, new_name::Strin
 end
 
 function merge_channels(a::SSR, merge_Chans::ASCIIString, new_name::String; kwargs...)
-
     a = merge_channels(a, [merge_Chans], new_name; kwargs...)
-
 end
 
 
