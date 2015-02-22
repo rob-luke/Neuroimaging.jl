@@ -64,6 +64,10 @@ function read_SSR(fname::Union(String, IO);
 
     # Or even better if there is a mat file read it
     mat_path = string(file_path, file_name, ".mat")
+    if !isreadable(mat_path)
+        mat_path = string(file_path, file_name, "-properties.mat")
+    end
+
     if isreadable(mat_path)
         modulationrate, stimulation_side, participant_name,
             stimulation_amplitude, carrier_frequency = read_rba_mat(mat_path)
