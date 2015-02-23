@@ -1,12 +1,17 @@
-#######################################
-#
-# Helper functions
-#
-#######################################
-
 using DataFrames
 
+@doc doc"""
+Concatanate `strings` with a `separator` between each.
 
+### Input
+
+* strings: Array of strings to place one after another
+* separator: String to place between each string (Default: ` `)
+
+### Output
+
+String consisting of all input strings
+""" ->
 function append_strings(strings::Union(Array{String}, Array{ASCIIString}); separator::String=" ")
 
     newString = strings[1]
