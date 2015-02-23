@@ -23,15 +23,17 @@
 <li >
 <a href='#add_channel(a::SSR, data::Array{T, N}, chanLabels::ASCIIString)'>add_channel(a::SSR, data::Array{T, N}, chanLabels::ASCIIString)</a></li>
 <li >
+<a href='#append_strings(strings::Union(Array{ASCIIString, N}, Array{String, N}))'>append_strings(strings::Union(Array{ASCIIString, N}, Array{String, N}))</a></li>
+<li >
 <a href='#beamformer_type4(B::Array{T, N}, E::Array{T, N}, L::Array{T, N})'>beamformer_type4(B::Array{T, N}, E::Array{T, N}, L::Array{T, N})</a></li>
 <li >
-<a href='#extra_triggers(t::Dict{K, V}, old_trigger_code::Union(Int64, Array{Int64, N}), new_trigger_code::Int64, new_trigger_time::Number, fs::Number)'>extra_triggers(t::Dict{K, V}, old_trigger_code::Union(Int64, Array{Int64, N}), new_trigger_code::Int64, new_trigger_time::Number, fs::Number)</a></li>
+<a href='#extra_triggers(t::Dict{K, V}, old_trigger_code::Union(Array{Int64, N}, Int64), new_trigger_code::Int64, new_trigger_time::Number, fs::Number)'>extra_triggers(t::Dict{K, V}, old_trigger_code::Union(Array{Int64, N}, Int64), new_trigger_code::Int64, new_trigger_time::Number, fs::Number)</a></li>
 <li >
 <a href='#extract_epochs(a::SSR)'>extract_epochs(a::SSR)</a></li>
 <li >
 <a href='#extract_epochs(data::Array{T, N}, triggers::Dict{K, V}, valid_triggers::AbstractArray{T, 1}, remove_first::Int64, remove_last::Int64)'>extract_epochs(data::Array{T, N}, triggers::Dict{K, V}, valid_triggers::AbstractArray{T, 1}, remove_first::Int64, remove_last::Int64)</a></li>
 <li >
-<a href='#ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)'>ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)</a></li>
+<a href='#ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)'>ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)</a></li>
 <li >
 <a href='#keep_channel!(a::SSR, channel_names::Array{ASCIIString, N})'>keep_channel!(a::SSR, channel_names::Array{ASCIIString, N})</a></li>
 <li >
@@ -45,9 +47,9 @@
 <li >
 <a href='#plot_dat{T<:Number}(x::Array{T<:Number, 1}, y::Array{T<:Number, 1}, z::Array{T<:Number, 1}, dat_data::Array{T<:Number, N})'>plot_dat{T<:Number}(x::Array{T<:Number, 1}, y::Array{T<:Number, 1}, z::Array{T<:Number, 1}, dat_data::Array{T<:Number, N})</a></li>
 <li >
-<a href='#plot_ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)'>plot_ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)</a></li>
+<a href='#plot_ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)'>plot_ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)</a></li>
 <li >
-<a href='#read_SSR(fname::Union(String, IO))'>read_SSR(fname::Union(String, IO))</a></li>
+<a href='#read_SSR(fname::Union(IO, String))'>read_SSR(fname::Union(IO, String))</a></li>
 <li >
 <a href='#remove_channel!(a::SSR, channel_names::Array{ASCIIString, N})'>remove_channel!(a::SSR, channel_names::Array{ASCIIString, N})</a></li>
 <li >
@@ -89,6 +91,26 @@
 </div>
 </div>
 <div class='entry'>
+<div id='append_strings(strings::Union(Array{ASCIIString, N}, Array{String, N}))' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> append_strings(strings::Union(Array{ASCIIString, N}, Array{String, N}))
+</div>
+<div class='entry-body'>
+<p>Concatanate <code>strings</code> with a <code>separator</code> between each.</p>
+<h3>Input</h3>
+<ul><li>strings: Array of strings to place one after another</li><li>separator: String to place between each string (Default: ` `)</li></ul>
+<h3>Output</h3>
+<p>String consisting of all input strings </p><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/miscellaneous/helper.jl#L14'>EEG/src/miscellaneous/helper.jl:14</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
 <div id='beamformer_type4(B::Array{T, N}, E::Array{T, N}, L::Array{T, N})' class='entry-name category-method'>
 <div class='category'>[method] &mdash; </div> beamformer_type4(B::Array{T, N}, E::Array{T, N}, L::Array{T, N})
 </div>
@@ -109,8 +131,8 @@
 </div>
 </div>
 <div class='entry'>
-<div id='extra_triggers(t::Dict{K, V}, old_trigger_code::Union(Int64, Array{Int64, N}), new_trigger_code::Int64, new_trigger_time::Number, fs::Number)' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> extra_triggers(t::Dict{K, V}, old_trigger_code::Union(Int64, Array{Int64, N}), new_trigger_code::Int64, new_trigger_time::Number, fs::Number)
+<div id='extra_triggers(t::Dict{K, V}, old_trigger_code::Union(Array{Int64, N}, Int64), new_trigger_code::Int64, new_trigger_time::Number, fs::Number)' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> extra_triggers(t::Dict{K, V}, old_trigger_code::Union(Array{Int64, N}, Int64), new_trigger_code::Int64, new_trigger_time::Number, fs::Number)
 </div>
 <div class='entry-body'>
 <p>Place extra triggers a set time after existing triggers.</p>
@@ -166,8 +188,8 @@
 </div>
 </div>
 <div class='entry'>
-<div id='ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)
+<div id='ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)
 </div>
 <div class='entry-body'>
 <p>Calculates the F test as is commonly implemented in SSR research.   TODO: Add references to MASTER and Luts et al</p>
@@ -299,8 +321,8 @@
 </div>
 </div>
 <div class='entry'>
-<div id='plot_ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> plot_ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)
+<div id='plot_ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> plot_ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)
 </div>
 <div class='entry-body'>
 <p>VIsualise the data used to determine the f statistic.   The spectrum is plotted in black, the noise estimate is highlited in red, and the signal marked in green. Dots indicate the noise and signal power. </p><div class='entry-meta'>
@@ -315,8 +337,8 @@
 </div>
 </div>
 <div class='entry'>
-<div id='read_SSR(fname::Union(String, IO))' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> read_SSR(fname::Union(String, IO))
+<div id='read_SSR(fname::Union(IO, String))' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> read_SSR(fname::Union(IO, String))
 </div>
 <div class='entry-body'>
 <p>Read a file or IO stream and store the data in an SSR type.</p>
