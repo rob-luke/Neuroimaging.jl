@@ -4,6 +4,9 @@ using Logging  # For user feedback
 using Docile   # For documentation
 using Compat   # For backward julia compatability
 
+using SIUnits
+using SIUnits.ShortUnits
+
 @docstrings [ :manual => ["../doc/manual.md"] ]
 
 

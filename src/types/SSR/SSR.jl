@@ -1,36 +1,35 @@
 using DataFrames
 using MAT
-using SIUnits
-import SIUnits
 
-typealias FreqHz{T} SIUnits.SIQuantity{T,0,0,-1,0,0,0,0}
+typealias FreqHz{T} SIUnits.SIQuantity{T,0,0,-1,0,0,0,0,0,0}
 
 
 @doc md"""
 Steady State Response.
 This composite type contains the information for steady state response recordings and analysis.
 
-## Fields
-data: contains the recorded data
-trigers: contains information about timing for creation of epochs
-system_codes: contains system information
-samplingrate: the sampling rate of the data
-modulationrate: the modulation rate of the stimulus
-reference_channel: the channel the data has been referenced to
-file_path and file_name: where the file was read in from
-channel_names: the names of the channels
-processing: dictionary type to store analysis
-header: additional information read from the file
+### Fields
 
-## Processing Fields
+* data: contains the recorded data
+* trigers: contains information about timing for creation of epochs
+* system_codes: contains system information
+* samplingrate: the sampling rate of the data
+* modulationrate: the modulation rate of the stimulus
+* reference_channel: the channel the data has been referenced to
+* file_path and file_name: where the file was read in from
+* channel_names: the names of the channels
+* processing: dictionary type to store analysis
+* header: additional information read from the file
+
+### Processing Fields
 The following standard names are used when saving data to the processing dictionary.
 
-Name: The identifier for the participant
-Side: Side of stimulation
-Carrier_Frequency: Carrier frequency of the stimulus
-Amplitude: Amplitude of the stimulus
-epochs: The epochs extracted from the recording
-sweeps: The extracted sweeps from the recording
+* Name: The identifier for the participant
+* Side: Side of stimulation
+* Carrier_Frequency: Carrier frequency of the stimulus
+* Amplitude: Amplitude of the stimulus
+* epochs: The epochs extracted from the recording
+* sweeps: The extracted sweeps from the recording
 
 """ ->
 type SSR
