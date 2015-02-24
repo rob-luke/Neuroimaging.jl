@@ -24,10 +24,8 @@ function append_strings(strings::Union(Array{String}, Array{ASCIIString}); separ
     return newString
 end
 
+append_strings(string::String) = string
 
-function append_strings(strings::String; separator::String=" ")
-    return strings
-end
 
 
 function new_processing_key(d::Dict, key_name::String)
