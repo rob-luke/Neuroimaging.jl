@@ -27,7 +27,31 @@ end
 append_strings(string::String) = string
 
 
+@doc doc"""
+Return a new processing key with the number incremented.
+It checks for existing keys and returns a string with the next key to be used.
 
+### Input
+
+* d: Dictionary containing existing keys
+* key_name: Base of the
+
+### Output
+
+* String with new key name
+
+### Example
+
+```julia
+results_storage = Dict()
+results_storage[new_processing_key(results_storage, "FTest")] = 4
+results_storage[new_processing_key(results_storage, "FTest")] = 49
+
+# Dict(Any, Any) with 2 entries
+#   "FTest1" => 4
+#   "FTest2" => 49
+```
+""" ->
 function new_processing_key(d::Dict, key_name::String)
 
     key_numb = 1
