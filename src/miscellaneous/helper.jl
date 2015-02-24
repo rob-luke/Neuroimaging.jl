@@ -64,14 +64,59 @@ function new_processing_key(d::Dict, key_name::String)
 end
 
 
-# Find keys containing a string
-function find_keys_containing(d, partial_key::String)
+@doc doc"""
+Find dictionary keys containing a string.
+
+### Input
+
+* d: Dictionary containing existing keys
+* partial_key: String you want to find in key names
+
+### Output
+
+* Array containg the indices of dictionary containing the partial_key
+
+### Example
+
+```julia
+results_storage = Dict()
+results_storage[new_processing_key(results_storage, "FTest")] = 4
+results_storage[new_processing_key(results_storage, "Turtle")] = 5
+results_storage[new_processing_key(results_storage, "FTest")] = 49
+
+find_keys_containing(results_storage, "FTest")
+
+# 2-element Array{Int64,1}:
+#  1
+#  3
+```
+""" ->
+function find_keys_containing(d::Dict, partial_key::String)
 
     valid_keys = [beginswith(i, partial_key) for i = collect(keys(d))]
     findin(valid_keys, true)
 end
 
 
+@doc doc"""
+Extract the path, filename and extension of a file
+
+### Input
+
+* fname: String with the full path to a file
+
+### Output
+
+* Three strings containing the path, file name and file extension
+
+### Example
+
+```julia
+fileparts("/Users/test/subdir/test-file.bdf")
+
+# ("/Users/test/subdir/","test-file","bdf")
+```
+""" ->
 function fileparts(fname::String)
 
     if fname==""
@@ -94,13 +139,30 @@ function fileparts(fname::String)
 end
 
 
-# Find the index of closest number in a list
-function _find_closest_number_idx(list::Array, target::Number)
+@doc doc"""
+Find the closest number to a target in an array and return the index
+
+### Input
+
+* list: Array containing numbers
+* target: Number to find closest to in the list
+
+### Output
+
+* Index of the closest number to the target
+
+### Example
+
+```julia
+_find_closest_number_idx([1, 2, 2.7, 3.2, 4, 3.1, 7], 3)
+
+# 6
+```
+""" ->
+function _find_closest_number_idx{T <: Number}(list::Array{T, 1}, target::Number)
 
     diff_array = abs(list .- target)
     targetIdx  = findfirst(diff_array , minimum(diff_array))
-
-    return targetIdx
 end
 
 
