@@ -4,6 +4,7 @@ using Logging
 
 Logging.configure(level=DEBUG)
 
+include("miscellaneous/helper.jl")
 include("preprocessing/data_rejection.jl")
 include("preprocessing/filtering.jl")
 include("epochs.jl")
