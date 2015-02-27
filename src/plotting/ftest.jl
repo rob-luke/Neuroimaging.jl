@@ -1,25 +1,85 @@
 using Gadfly
 
-@doc """
-VIsualise the data used to determine the f statistic.  
+
+@doc doc"""
+Visualise the data used to determine the f statistic.
+
 The spectrum is plotted in black, the noise estimate is highlited in red, and the signal marked in green.
 Dots indicate the noise and signal power.
+
+This wrapper function extracts all required information from the SSR type
+
+### Input
+
+* s: Steady state response type
+
+### Output
+
+Saves a pdf to disk
 """ ->
-function plot_ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Real,
-                fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int; kwargs...)
+function plot_ftest(s::SSR; freq_of_interest::Real=modulationrate(s), side_freq::Real=1, spill_bins::Int=2,
+    min_plot_freq::Real=1, max_plot_freq::Real=2.2*modulationrate(s), plot_channel::Int=1,
+    fig_name::String="ftest.pdf", kwargs...)
+
+    if !haskey(s.processing, "sweeps")
+        warn("You need to calculate sweeps before you can display the ftest spectrum")
+
+        if !haskey(s.processing, "epochs")
+            warn("You need to calculate epochs to create sweeps")
+
+            s = extract_epochs(s; kwargs...)
+        end
+
+        s = create_sweeps(s; kwargs...)
+    end
+
+    spectrum = EEG._ftest_spectrum(s.processing["sweeps"])
+    spectrum = compensate_for_filter(s.processing, spectrum, samplingrate(s))
+    frequencies = linspace(0, 1, int(size(spectrum, 1)))*samplingrate(s)/2
+
+    plot_ftest(spectrum, frequencies, freq_of_interest, side_freq, spill_bins, min_plot_freq, max_plot_freq, plot_channel, fig_name)
+end
+
+
+function plot_ftest{T <: FloatingPoint}(sweeps::Array{T, 3}, fs::Real,
+    freq_of_interest::Real, side_freq::Real, spill_bins::Int, min_plot_freq::Real, max_plot_freq::Real,
+    plot_channel::Int, fig_name::String)
 
     spectrum    = EEG._ftest_spectrum(sweeps)
-    # No compensation for filtering
+    # Does not compensate for filtering
     frequencies = linspace(0, 1, int(size(spectrum, 1)))*float(fs)/2
 
     plot_ftest(spectrum, frequencies, freq_of_interest, side_freq, spill_bins; kwargs...)
 end
 
 
-function plot_ftest{T <: FloatingPoint}(spectrum::Array{Complex{T},2}, frequencies::AbstractArray,
-            freq_of_interest::Real, side_freq::Real, spill_bins::Int;
-            min_plot_freq::Real=2, max_plot_freq::Real=2.2*freq_of_interest, plot_channel::Int=1, fig_name::String="ftest.pdf")
+@doc doc"""
+Visualise the data used to determine the f statistic.
 
+The spectrum is plotted in black, the noise estimate is highlited in red, and the signal marked in green.
+Dots indicate the noise and signal power.
+
+### Input
+
+* spectrum: Spectrum of data to plot
+* frequencies: The frequencies associated with each point in the spectrum
+* freq_of_interest: The frequency to analyse
+* side_freq: How many Hz each side to use to determine the noise estimate
+* spill_bins: How many bins either side of the freq_of_interest to ignore in noise estimate. This is in case of spectral leakage
+* min_plot_freq: Minimum frequency to plot in Hz
+* max_plot_freq: Maximum frequency to plot in Hz
+* plot_channel: If there are multiple dimensions, this specifies which to plot
+* fig_name: Figure name to save the pdf to
+
+### Output
+
+Saves a pdf to disk
+""" ->
+function plot_ftest{T <: FloatingPoint}(spectrum::Array{Complex{T},2}, frequencies::AbstractArray,
+    freq_of_interest::Real, side_freq::Real, spill_bins::Int, min_plot_freq::Real, max_plot_freq::Real,
+    plot_channel::Int, fig_name::String)
+
+    spectrum = spectrum[:, plot_channel]
 
     idx      = _find_closest_number_idx(frequencies, freq_of_interest)
     idx_Low  = _find_closest_number_idx(frequencies, freq_of_interest - side_freq)
@@ -41,7 +101,7 @@ function plot_ftest{T <: FloatingPoint}(spectrum::Array{Complex{T},2}, frequenci
     idx_low_plot  = _find_closest_number_idx(frequencies, min_plot_freq)
     idx_high_plot = _find_closest_number_idx(frequencies, max_plot_freq)
 
-    raw_plot = layer(x=frequencies[idx_low_plot:idx_high_plot], y=abs(spectrum[idx_low_plot:idx_high_plot, plot_channel]).^2, Geom.line, Theme(default_color=color("black")))
+    raw_plot = layer(x=frequencies[idx_low_plot:idx_high_plot], y=abs(spectrum[idx_low_plot:idx_high_plot, :]).^2, Geom.line, Theme(default_color=color("black")))
     noi_plot = layer(x=frequencies[noise_idxs], y=noise_bins.^2, Geom.line, Theme(default_color=color("red")))
     sig_plot = layer(x=frequencies[idx-1:idx+1], y=abs(spectrum[idx-1:idx+1, :]).^2, Geom.line, Theme(default_color=color("green")))
     noi_pnt  = layer(x=[min_plot_freq], y=[noise_power], Geom.point, Theme(default_color=color("red")))
