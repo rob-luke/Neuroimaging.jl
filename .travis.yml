@@ -17,6 +17,7 @@ before_install:
 script:
   - julia -e 'Pkg.clone("https://github.com/codles/MinMaxFilter.jl.git")'
   - julia -e 'Pkg.add("DSP"); Pkg.checkout("DSP")'
+  - julia -e 'Pkg.add("SIUnits"); Pkg.checkout("SIUnits")'
   - julia -e 'Pkg.clone("git://github.com/codles/EEG.jl.git")'
   - julia -e 'Pkg.update()'                                       # Required for Tk to work
   - julia -e 'Pkg.build("EEG")'                                   # Required for Tk to work
