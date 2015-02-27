@@ -89,16 +89,41 @@ function compensate_for_filter(d::Dict, spectrum::AbstractArray, fs::Real)
 
     while haskey(d, key)
 
-        used_filter         = d[key]
-        filter_response     = freqz(used_filter, frequencies, fs)
-        for f = 1:length(filter_response)
-            spectrum[f, :, :] = spectrum[f, :, :] ./ abs(filter_response[f])^2
-        end
+        spectrum = compensate_for_filter(d[key], spectrum, frequencies, fs)
 
-        debug("Accounted for $key response in hotelling test spectrum estimation")
+        debug("Accounted for $key response in spectrum estimation")
 
         key_numb += 1
         key = string(key_name, key_numb)
+    end
+
+    return spectrum
+end
+
+
+@doc doc"""
+Recover the spectrum of signal by compensating for filtering done.
+
+### Input
+
+* filter: The filter used on the spectrum
+* spectrum: Spectrum of signal
+* frequencies: Array of frequencies you want to apply the compensation to
+* fs: Sampling rate
+
+### Output
+
+* spectrum: Spectrum of the signal after comensating for the filter
+
+
+""" ->
+function compensate_for_filter(filter::Filter, spectrum::AbstractArray, frequencies::AbstractArray, fs::Real)
+    #TODO Extend this to arbitrary number of dimensions rather than the hard coded 3
+
+    filter_response     = freqz(filter, frequencies, fs)
+
+    for f = 1:length(filter_response)
+        spectrum[f, :, :] = spectrum[f, :, :] ./ abs(filter_response[f])^2
     end
 
     return spectrum
