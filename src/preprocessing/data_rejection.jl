@@ -1,36 +1,44 @@
+@doc doc"""
+Reject epochs based on the maximum peak to peak voltage within an epoch across all channels
 
-#######################################
-#
-# Reject epochs
-#
-#######################################
+### Input
 
-function epoch_rejection(epochs::Array, cutOff::Number; rejectionMethod::String="peak2peak")
+* epochs: Array containing the epoch data in the format samples x epochs x channels
+* retain_percentage: The percentage of epochs to retain
+* rejection_method: Method to be used for epoch rejection (peak2peak)
 
-    epochsLen = size(epochs)[1]
-    epochsNum = size(epochs)[2]
-    chansNum  = size(epochs)[3]
+### Output
 
-    info("Rejected $(int(round((1-cutOff)*100)))% of epochs")
+* An array with a reduced amount of entries in the epochs dimension
+""" ->
+function epoch_rejection{T <: Number}(epochs::Array{T, 3}, retain_percentage::FloatingPoint;
+                         rejection_method::Function=peak2peak)
 
-    if rejectionMethod == "peak2peak"
-
-        peak2peak = Float64[]
-
-        epoch = 1
-        while epoch <= epochsNum
-
-            push!(peak2peak, maximum(epochs[:,epoch,:]) - minimum(epochs[:,epoch,:]))
-
-            epoch += 1
-        end
-
-        cutOff = sort(peak2peak)[floor(length(peak2peak)*cutOff)]
-        epochs = epochs[:, peak2peak.<cutOff, :]
-
+    if (0 > retain_percentage) || (1 < retain_percentage)
+        warn("Non valid percentage value for retaining epochs $(retain_percentage)")
     end
 
-    return epochs
+    info("Rejected $(int(round((1 - retain_percentage) * 100)))% of epochs based on $(string(rejection_method))")
+
+    # Epoch value should be a value or score per epoch where a lower value is better
+    # The lowest `retain_percentage` amount of epoch values will be kept
+    epoch_values = rejection_method(epochs)
+
+    cut_off_value = sort(epoch_values)[floor(length(epoch_values) * retain_percentage)]
+    epochs = epochs[:, epoch_values .< cut_off_value, :]
+end
+
+# Find the peak to peak value for each epoch to be returned to epoch_rejection()
+function peak2peak(epochs)
+
+    epochsNum = size(epochs)[2]
+
+    values = Array(FloatingPoint, epochsNum)
+    for epoch in 1:epochsNum
+        values[epoch] = abs(maximum(epochs[:, epoch, :]) - minimum(epochs[:, epoch, :]))
+    end
+
+    return values
 end
 
 
