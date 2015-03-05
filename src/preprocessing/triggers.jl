@@ -94,7 +94,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
                 epochIndex = epochIndex[epochIndex[:valid_length], :]
             end
         end
-        epochIndex[:Length] = [0, diff(epochIndex[:Index])]
+        epochIndex[:Length] = [0, diff(epochIndex[:Index]); ]
         if max_epoch_length < Inf
             epochIndex[:valid_length] = epochIndex[:Length] .< max_epoch_length
             num_non_valid = sum(!epochIndex[:valid_length])
