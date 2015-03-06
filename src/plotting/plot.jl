@@ -220,30 +220,16 @@ function oplot_dipoles(existing_plot, x, y, z;
                         ncols::Int=2,
                         size::Number=1)
 
-    # Generate table
-    nrows = int(ceil(3/ncols))
-    t = Table(nrows, ncols)
+    ep = _extract_plots(existing_plot)
 
-    # Extract existing plots
-    back  = existing_plot[1,1]
-    side  = existing_plot[1,2]
-    top   = existing_plot[2,1]
-
-    # Points for each dipole
     for p in 1:length(x)
 
-        add(back, Points(x[p], z[p], color=color, size=size, symbolkind=symbolkind))
-        add(side, Points(y[p], z[p], color=color, size=size, symbolkind=symbolkind))
-        add(top,  Points(x[p], y[p], color=color, size=size, symbolkind=symbolkind))
-
+        add(ep[1], Points(x[p], z[p], color=color, size=size, symbolkind=symbolkind))
+        add(ep[2], Points(y[p], z[p], color=color, size=size, symbolkind=symbolkind))
+        add(ep[3], Points(x[p], y[p], color=color, size=size, symbolkind=symbolkind))
     end
 
-    t = Table(2,2)
-    t[1,1] = back
-    t[1,2] = side
-    t[2,1] = top
-
-    return t
+    _place_plots(ep, ncols)
 end
 
 
@@ -300,7 +286,7 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
         end
     end
     back = scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], s_tmp, "x",
-        title = "Back", xlabel = "Left - Right", ylabel = "Inferior - Superior"; kwargs...)
+        title = "Back", xlabel = "Left - Right (mm)", ylabel = "Inferior - Superior (mm)"; kwargs...)
 
     s = squeeze(maximum(dat_data, 1), 1)   # Data along dimensions to be plotted
     x_tmp = zeros(T, size(s,1)*size(s,2), 1)   # Allocate arrays
@@ -318,7 +304,7 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
         end
     end
     side = scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], s_tmp, "x",
-        title = "Side", xlabel = "Posterior - Anterior", ylabel = "Inferior - Superior"; kwargs...)
+        title = "Side", xlabel = "Posterior - Anterior (mm)", ylabel = "Inferior - Superior (mm)"; kwargs...)
 
     s = squeeze(maximum(dat_data, 3), 3)   # Data along dimensions to be plotted
     x_tmp = zeros(T, size(s,1)*size(s,2), 1)   # Allocate arrays
@@ -336,7 +322,7 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
         end
     end
     top = scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], s_tmp, "x", label = "Voxel",
-        title = "Top", xlabel = "Left - Right", ylabel = "Posterior - Anterior"; kwargs...)
+        title = "Top", xlabel = "Left - Right (mm)", ylabel = "Posterior - Anterior (mm)"; kwargs...)
 
     _place_plots([back, side, top], ncols)
 end
