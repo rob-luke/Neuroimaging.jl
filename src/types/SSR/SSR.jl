@@ -167,7 +167,7 @@ function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
 
     info("Removing channel(s) $channel_idx")
 
-    keep_idx = [1:size(a.data)[end]]
+    keep_idx = [1:size(a.data)[end]; ]
     for c = sort(channel_idx, rev=true)
         try
             splice!(keep_idx, c)
@@ -209,7 +209,7 @@ end
 
 function keep_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
 
-    remove_channels = [1:size(a.data,2)]
+    remove_channels = [1:size(a.data,2); ]
 
     channel_idx = sort(channel_idx, rev=true)
     for c = channel_idx
@@ -248,17 +248,17 @@ function trim_channel(a::SSR, stop::Int; start::Int=1, kwargs...)
 
     a.data = a.data[start:stop,:]
 
+    to_keep = find( (a.triggers["Index"] .>= start) & (a.triggers["Index"] .<= stop))
+    a.triggers["Index"] = a.triggers["Index"][to_keep]
+    a.triggers["Duration"] = a.triggers["Duration"][to_keep]
+    a.triggers["Code"] = a.triggers["Code"][to_keep]
     a.triggers["Index"] -= (start-1)
-    to_keep = find(a.triggers["Index"] .<= stop)
-    a.triggers["Index"]        = a.triggers["Index"][to_keep]
-    a.triggers["Duration"]     = a.triggers["Duration"][to_keep]
-    a.triggers["Code"]         = a.triggers["Code"][to_keep]
 
-    a.system_codes["Index"] -= (start-1)
-    to_keep = find(a.system_codes["Index"] .<= stop)
+    to_keep = find( (a.system_codes["Index"] .>= start) & (a.system_codes["Index"] .<= stop))
     a.system_codes["Index"]    = a.system_codes["Index"][to_keep]
     a.system_codes["Duration"] = a.system_codes["Duration"][to_keep]
     a.system_codes["Code"]     = a.system_codes["Code"][to_keep]
+    a.system_codes["Index"] -= (start-1)
 
     return a
 end

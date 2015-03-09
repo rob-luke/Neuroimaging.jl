@@ -21,9 +21,9 @@ function extract_epochs(a::SSR; valid_triggers::AbstractArray=[1,2], remove_firs
 end
 
 
-function epoch_rejection(a::SSR; cutOff::Number=0.95, kwargs...)
+function epoch_rejection(a::SSR; retain_percentage::Number=0.95, kwargs...)
 
-    a.processing["epochs"] = epoch_rejection(a.processing["epochs"], cutOff)
+    a.processing["epochs"] = epoch_rejection(a.processing["epochs"], retain_percentage; kwargs...)
 
     return a
 end

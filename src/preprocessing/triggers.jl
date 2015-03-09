@@ -59,7 +59,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
     debug("Originally $(length(epochIndex[:Code])) triggers")
 
     # Check for not valid indices and throw a warning
-    if sum([in(i, [0, valid_triggers]) for i = epochIndex[:Code]]) != length(epochIndex[:Code])
+    if sum([in(i, [0; valid_triggers]) for i = epochIndex[:Code]]) != length(epochIndex[:Code])
         warn("Non valid triggers found")
         validity = Bool[]
         for e in epochIndex[:Code]
@@ -85,7 +85,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
 
     # Throw out epochs that are the wrong length
     if length(epochIndex[:Index]) > 2
-        epochIndex[:Length] = [0, diff(epochIndex[:Index])]
+        epochIndex[:Length] = [0; diff(epochIndex[:Index])]
         if min_epoch_length > 0
             epochIndex[:valid_length] = epochIndex[:Length] .> min_epoch_length
             num_non_valid = sum(!epochIndex[:valid_length])
@@ -94,7 +94,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
                 epochIndex = epochIndex[epochIndex[:valid_length], :]
             end
         end
-        epochIndex[:Length] = [0, diff(epochIndex[:Index])]
+        epochIndex[:Length] = [0, diff(epochIndex[:Index]); ]
         if max_epoch_length < Inf
             epochIndex[:valid_length] = epochIndex[:Length] .< max_epoch_length
             num_non_valid = sum(!epochIndex[:valid_length])
