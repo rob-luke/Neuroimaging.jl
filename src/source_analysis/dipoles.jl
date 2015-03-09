@@ -15,6 +15,17 @@ type Dipole
 end
 
 
+import Base.show
+function Base.show(io::IO, d::Dipole)
+
+    @printf("Dipole with coordinates x=% 6.2f, y=% 6.2f, z=% 6.2f, size=% 9.5f\n", d.x, d.y, d.z, d.size)
+end
+
+
+
+
+
+
 #######################################
 #
 # Find dipoles in source data
