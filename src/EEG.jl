@@ -126,7 +126,8 @@ export
     save_results,
     trigger_channel,
     write_SSR,
-    merge_channels
+    merge_channels,
+    bootstrap
 include("types/SSR/SSR.jl")
 include("types/SSR/Preprocessing.jl")
 include("types/SSR/ReadWrite.jl")
