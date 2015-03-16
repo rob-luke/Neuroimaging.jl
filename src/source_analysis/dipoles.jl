@@ -117,7 +117,7 @@ end
 # Takes the largest sized dipole within set distance from reference coordinates
 #
 
-function best_dipole(ref::Coordinate, dips::Array{Dipole}; maxdist::Number=30)
+function best_dipole(ref::Union(Coordinate, Dipole), dips::Array{Dipole}; maxdist::Number=30)
 
     info("Calculating best dipole for $(length(dips)) dipoles")
 
@@ -146,6 +146,7 @@ function best_dipole(ref::Coordinate, dips::Array{Dipole}; maxdist::Number=30)
 
     return dip[1]
 end
+
 
 
 #######################################
