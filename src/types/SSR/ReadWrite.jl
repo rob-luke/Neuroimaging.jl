@@ -41,13 +41,12 @@ function read_SSR(fname::String;
                   max_epoch_length::Number=Inf,
                   remove_first::Int=0,
                   max_epochs::Number=Inf,
-                  env::AWSEnv=nothing,
-                  bkt::String="",
+                  env=nothing,
+                  bkt="",
                   kwargs...)
 
 
     info("Importing SSR from file: $fname")
-
 
     file_path, file_name, ext = fileparts(fname)
 
