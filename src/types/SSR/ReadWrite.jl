@@ -4,6 +4,9 @@
 #
 #######################################
 
+using AWS
+using AWS.S3
+
 @doc md"""
 Read a file or IO stream and store the data in an SSR type.
 
@@ -27,9 +30,9 @@ Failing that, user passed arguments are used or the modulation frequency is extr
 
 
 """ ->
-function read_SSR(fname::Union(String, IO);
+function read_SSR(fname::String;
                   stimulation_amplitude::Number=NaN,   # User can set these
-                  modulationrate::Number=NaN,    # values, but if not
+                  modulationrate::Number=NaN,          # values, but if not
                   carrier_frequency::Number=NaN,       # then attempt to read
                   stimulation_side::String="",         # from file name or mat
                   participant_name::String="",
@@ -38,16 +41,20 @@ function read_SSR(fname::Union(String, IO);
                   max_epoch_length::Number=Inf,
                   remove_first::Int=0,
                   max_epochs::Number=Inf,
+                  env::AWSEnv=nothing,
+                  bkt::String="",
                   kwargs...)
 
 
     info("Importing SSR from file: $fname")
 
-    if isa(fname, String)
-        file_path, file_name, ext = fileparts(fname)
-    else
-        warn("Filetype is IO. Might be bugged")
-        file_path = "IO"; file_name = fname; ext = "IO"
+
+    file_path, file_name, ext = fileparts(fname)
+
+    if env != nothing
+
+        debug("File type is S3")
+        fname = S3.get_object(env, bkt, fname).obj
     end
 
 
