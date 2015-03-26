@@ -17,7 +17,7 @@ end
 
 function lowpass_filter(a::SSR; cutOff::Number=150, order::Int=3, tolerance::Number=0.01, kwargs...)
 
-    a.data, f = lowpass_filter(a.data, cutOff=cutOff, order=order, fs=samplingrate(a))
+    a.data, f = lowpass_filter(a.data, cutOff, samplingrate(a), order)
 
     _filter_check(f, modulationrate(a), samplingrate(a), tolerance)
 

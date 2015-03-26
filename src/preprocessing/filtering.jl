@@ -2,7 +2,7 @@ using DSP
 
 
 @doc doc"""
-High pass filter
+High pass filter applied in forward and reverse direction
 
 Simply a wrapper for the DSP.jl functions
 
@@ -40,22 +40,38 @@ function highpass_filter{T <: FloatingPoint}(signals::Array{T}, Wn::Number, orde
 end
 
 
-#######################################
-#
-# Low pass filter
-#
-#######################################
 
-function lowpass_filter(signals::Array; cutOff::Number=2,
-                         order::Int=3, fs::Number=8192)
+@doc doc"""
+Low pass filter applied in forward and reverse direction
 
-    signals = convert(Array{Float64}, signals)
+Simply a wrapper for the DSP.jl functions
 
+### Input
+
+* signals: Signal data in the format samples x channels
+* cutOff: Cut off frequency in Hz
+* fs: Sampling rate
+* order: Filter orde
+
+### Output
+
+* filtered signal
+* filter used on signal
+""" ->
+function lowpass_filter{T <: FloatingPoint}(signals::Array{T}, cutOff::Number, fs::Number, order::Int)
+
+    debug("Lowpass filtering $(size(signals)[end]) channels.  Pass band < $(cutOff) Hz")
     Wn = cutOff/(fs/2)
-    f = digitalfilter(Lowpass(Wn), Butterworth(order))
 
-    info("Lowpass filtering $(size(signals)[end]) channels.  Pass band < $(cutOff) Hz")
-    debug("Filter order = $order, fs = $fs, Wn = $Wn")
+    lowpass_filter(signals, Wn, order)
+end
+
+
+function lowpass_filter{T <: FloatingPoint}(signals::Array{T}, Wn::Number, order::Int)
+
+    debug("Filter order = $order, Wn = $Wn")
+
+    f = digitalfilter(Lowpass(Wn), Butterworth(order))
 
     signals = filtfilt(f, signals)
 
@@ -130,7 +146,6 @@ Recover the spectrum of signal by compensating for filtering done.
 ### Output
 
 * spectrum: Spectrum of the signal after comensating for the filter
-
 
 """ ->
 function compensate_for_filter(filter::Filter, spectrum::AbstractArray, frequencies::AbstractArray, fs::Real)
