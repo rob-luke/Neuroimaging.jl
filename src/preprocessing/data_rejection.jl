@@ -57,7 +57,7 @@ Rejection can be based on a threshold or dynamicly chosen based on the variation
 
 Returns an array indicating the channels to be kept
 """ ->
-function channel_rejection{T <: Number}(sigs::Array{T, 2}, threshold_abs::Number, threshold_var::Number)
+function channel_rejection{T <: Number}(sigs::Array{T}, threshold_abs::Number, threshold_var::Number)
 
     debug("Rejecting channels for signal of $(size(sigs,2)) chanels and $(size(sigs,1)) samples")
 
