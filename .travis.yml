@@ -17,6 +17,6 @@ before_install:
   # - julia -e 'Pkg.update()'                                       # Required for Tk to work
   # - julia -e 'Pkg.build("EEG")'                                   # Required for Tk to work
 script:
-  - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("EEG"); Pkg.test("EEG"; coverage=true)
+  - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("EEG"); Pkg.test("EEG"; coverage=true)'
 after_success:
  - if [ $TRAVIS_JULIA_VERSION = "release" ]; then julia -e 'cd(Pkg.dir("EEG")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'; fi
