@@ -42,36 +42,37 @@ function peak2peak(epochs)
 end
 
 
+@doc doc"""
+Reject channels with too great a variance.
 
-#######################################
-#
-# Reject channels base on variance
-#
-#######################################
+Rejection can be based on a threshold or dynamicly chosen based on the variation of all channels.
 
-function channel_rejection(signals::AbstractArray; threshold_abs::Number=1000, threshold_var::Number=2, kwargs...)
-    #
-    # Rejects channels based on their variance
-    # Values above an absolute threshold are removed
-    # Of the remaining channels anything above several standard deviations is removed
-    #
-    # Input:     Array           samples x channels
-    # Output:    Array{Bool}     Boolean array signifying if channel should be rejected
+### Input
 
-    debug("Rejecting channels for signal of $(size(signals,2)) chanels and $(size(signals,1)) samples")
+* signals: Array of data in format samples x channels
+* threshold_abs: Absolute threshold to remove channels with variance above this value
+* threshold_std: Reject channels with a variance more than n times the std of all channels
 
-    variances           = var(signals,1)
+### Output
+
+Returns an array indicating the channels to be kept
+""" ->
+function channel_rejection{T <: Number}(sigs::Array{T, 2}, threshold_abs::Number, threshold_var::Number)
+
+    debug("Rejecting channels for signal of $(size(sigs,2)) chanels and $(size(sigs,1)) samples")
+
+    variances           = var(sigs,1)        # Determine the variance of each channel
     valid_nonzero       = variances .!= 0    # The reference channel will have a variance of 0 so ignore it
 
     # Reject channels above the threshold
     valid_threshold_abs = variances .< threshold_abs
+    debug("Static rejection threshold: $(threshold_abs)")
 
     # Reject channels outside median + n * std
-    variances_median    = median(variances[valid_nonzero])
-    variances_std       = std(variances[valid_nonzero])
+    variances_median    = median(variances[valid_nonzero])    # Use the median as usually not normal
+    variances_std       = std(variances[valid_nonzero])       # And ignore the reference channel
     valid_threshold_var = variances  .<  (variances_median + threshold_var * variances_std)
     debug("Dynamic rejection threshold: $(variances_median + threshold_var * variances_std)")
 
-    # Merge all methods
-    valid_channels = valid_nonzero & valid_threshold_abs & valid_threshold_var
+    valid_nonzero & valid_threshold_abs & valid_threshold_var   # Merge all methods
 end

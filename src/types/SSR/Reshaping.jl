@@ -106,17 +106,17 @@ end
 #
 #######################################
 
-function channel_rejection(a::SSR; kwargs...)
+function channel_rejection(a::SSR; threshold_abs::Number=1000, threshold_var::Number=2, kwargs...)
 
+    # Run on epochs if available, else run on the raw data
     if haskey(a.processing, "epochs")
-
         data = reshape(a.processing["epochs"],
                 size(a.processing["epochs"], 1) * size(a.processing["epochs"], 2), size(a.processing["epochs"],3))
     else
         data = a.data
     end
 
-    valid = channel_rejection(data, kwargs...)
+    valid = channel_rejection(data, threshold_abs, threshold_var)
 
     info("Rejected $(sum(!valid)) channels $(append_strings(a.channel_names[find(!valid)]))")
 
