@@ -172,10 +172,12 @@ function system_code_channel(a::SSR; kwargs...)
 end
 
 
-function write_SSR(a::SSR, fname::String; kwargs...)
+function write_SSR(a::SSR, fname::String; chanLabels=a.channel_names, subjID=a.header["subjID"],
+                   startDate=a.header["startDate"], kwargs...)
 
     info("Saving $(size(a.data)[end]) channels to $fname")
 
-    writeBDF(fname, a.data', trigger_channel(a), system_code_channel(a), samplingrate(Int, a), chanLabels=a.channel_names)
+    writeBDF(fname, a.data', trigger_channel(a), system_code_channel(a), samplingrate(Int, a), chanLabels=chanLabels,
+             startDate=startDate, subjID=subjID)
 
 end

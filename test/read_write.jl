@@ -22,8 +22,10 @@ sampRate = readBDFHeader(fname)["sampRate"][1]
 @test trigs == trigger_channel(read_SSR(fname, valid_triggers=[-1000:10000]))
 
 s  = read_SSR(fname)
+s.header["subjID"] = "test"
 write_SSR(s, "testwrite.bdf")
 s  = read_SSR(fname, valid_triggers=[-1000:10000])
+s.header["subjID"] = "test"
 write_SSR(s, "testwrite.bdf")
 s2 = read_SSR("testwrite.bdf", valid_triggers=[-1000:10000])
 
@@ -33,6 +35,7 @@ show(s2)
 @test s.data == s2.data
 @test s.triggers == s2.triggers
 @test s.samplingrate == s2.samplingrate
+@test contains(s2.header["subjID"], "test")
 
 
 #
