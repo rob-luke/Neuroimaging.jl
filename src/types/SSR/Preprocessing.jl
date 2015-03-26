@@ -7,7 +7,7 @@
 
 function highpass_filter(a::SSR; cutOff::Number=2, order::Int=3, tolerance::Number=0.01, kwargs...)
 
-    a.data, f = highpass_filter(a.data, cutOff=cutOff, order=order, fs=samplingrate(a))
+    a.data, f = highpass_filter(a.data, cutOff, samplingrate(a), order)
 
     _filter_check(f, modulationrate(a), samplingrate(a), tolerance)
 

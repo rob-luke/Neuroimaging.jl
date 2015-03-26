@@ -1,22 +1,38 @@
 using DSP
 
 
-#######################################
-#
-# High pass filter
-#
-#######################################
+@doc doc"""
+High pass filter
 
-function highpass_filter(signals::Array; cutOff::Number=2,
-                         order::Int=3, fs::Number=8192)
+Simply a wrapper for the DSP.jl functions
 
-    signals = convert(Array{Float64}, signals)
+### Input
+
+* signals: Signal data in the format samples x channels
+* cutOff: Cut off frequency in Hz
+* fs: Sampling rate
+* order: Filter orde
+
+### Output
+
+* filtered signal
+* filter used on signal
+""" ->
+function highpass_filter{T <: FloatingPoint}(signals::Array{T}, cutOff::Number, fs::Number, order::Int)
+
+    debug("Highpass filtering $(size(signals)[end]) channels.  Pass band > $(cutOff) Hz")
 
     Wn = cutOff/(fs/2)
-    f = digitalfilter(Highpass(Wn), Butterworth(order))
 
-    info("Highpass filtering $(size(signals)[end]) channels.  Pass band > $(cutOff) Hz")
-    debug("Filter order = $order, fs = $fs, Wn = $Wn")
+    highpass_filter(signals, Wn, order)
+end
+
+
+function highpass_filter{T <: FloatingPoint}(signals::Array{T}, Wn::Number, order::Int)
+
+    debug("Filter order = $order, Wn = $Wn")
+
+    f = digitalfilter(Highpass(Wn), Butterworth(order))
 
     signals = filtfilt(f, signals)
 
