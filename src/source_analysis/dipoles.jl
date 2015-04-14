@@ -184,7 +184,7 @@ end
 
 function orient_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Number, modulation_frequency)
 
-    warning("This function is not used. Check the output carefully")
+    warn("This function is not used. Check the output carefully")
 
     #
     # Input:  Signal projected on to orthogonal orientations and necessary parameters
@@ -219,7 +219,7 @@ end
 
 function best_ftest_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Number, modulation_frequency)
 
-    warning("This function is not used. Check the output carefully")
+    warn("This function is not used. Check the output carefully")
 
     #
     # Input:  Signal projected on to orthogonal orientations and necessary parameters
