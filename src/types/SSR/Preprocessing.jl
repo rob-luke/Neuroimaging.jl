@@ -43,7 +43,7 @@ function bandpass_filter(a::SSR;
 end
 
 
-function _filter_check(f::Filter, mod_freq::Number, fs::Number, tolerance::Number)
+function _filter_check(f::FilterCoefficients, mod_freq::Number, fs::Number, tolerance::Number)
     #
     # Ensure that the filter does not alter the modulation frequency greater than a set tolerance
     #
@@ -56,7 +56,7 @@ function _filter_check(f::Filter, mod_freq::Number, fs::Number, tolerance::Numbe
 end
 
 
-function _append_filter(a::SSR, f::Filter; name::String="filter")
+function _append_filter(a::SSR, f::FilterCoefficients; name::String="filter")
     #
     # Put the filter information in the SSR processing structure
     #

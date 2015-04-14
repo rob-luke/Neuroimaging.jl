@@ -148,7 +148,7 @@ Recover the spectrum of signal by compensating for filtering done.
 * spectrum: Spectrum of the signal after comensating for the filter
 
 """ ->
-function compensate_for_filter(filter::Filter, spectrum::AbstractArray, frequencies::AbstractArray, fs::Real)
+function compensate_for_filter(filter::FilterCoefficients, spectrum::AbstractArray, frequencies::AbstractArray, fs::Real)
     #TODO Extend this to arbitrary number of dimensions rather than the hard coded 3
 
     filter_response     = freqz(filter, frequencies, fs)
