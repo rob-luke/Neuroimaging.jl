@@ -59,10 +59,10 @@ Determines the local maxima in a 3 dimensional array
 * dips: An array of dipoles
 
 """ ->
-function find_dipoles{T <: Number}(s::Array{T, 3}; window::Array{Int}=[6,6,6], x=1:size(s,1), y=1:size(s,2),
-                                   z=1:size(s,3))
+function find_dipoles{T <: Number}(s::Array{T, 3}; window::Array{Int}=[6,6,6], x::AbstractVector{T}=1:size(s,1),
+                                   y::AbstractVector{T}=1:size(s,2), z::AbstractVector{T}=1:size(s,3))
 
-    info("3d dipole finding")
+    debug("Finding dipoles for 3d array")
 
     minval, maxval = minmax_filter(s, window, verbose=false)
 
@@ -167,7 +167,7 @@ function best_dipole(ref::Union(Coordinate, Dipole), dips::Array{Dipole}; maxdis
         bestdip = minimum(dists)
         dip = dips[find(dists .== bestdip)]
         debug("No dipole within $(maxdist)mm. ")
-        
+
     end
     debug("Best = $(euclidean(ref, dip[1]))")
 
