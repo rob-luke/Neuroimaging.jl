@@ -73,6 +73,11 @@ function bootstrap(s::SSR; freq_of_interest::Union(Real, AbstractArray) = modula
     return s
 end
 
+function bootstrap(s::SSR, freq_of_interest::Union(Real, AbstractArray); kwargs...)
+
+    bootstrap(s, freq_of_interest=freq_of_interest; kwargs...)
+end
+
 
 # Generate random selection with replacement for bootstrapping
 function generate_sample_selection(N::Int)
