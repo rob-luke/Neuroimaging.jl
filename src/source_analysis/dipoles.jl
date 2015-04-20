@@ -202,7 +202,7 @@ function orient_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Numbe
     a = extract_epochs(a)
     a = create_sweeps(a)
     a = ftest(a)
-    a = a.processing["ftest1"][:SNRdB]
+    a = a.processing["statistics"][:SNRdB]  # Should save ftest with different name incase statistics already used
     a = a ./ maximum(a)
     a = a ./ sum(a)
     convert(Array, dipole_data * a)
@@ -237,7 +237,7 @@ function best_ftest_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::N
     a = extract_epochs(a)
     a = create_sweeps(a)
     a = ftest(a)
-    a = a.processing["ftest1"][:SNRdB]
+    a = a.processing["statistics"][:SNRdB]  # Should save ftest with different name incase statistics already used
     a = vec(float(a .== maximum(a)))
     convert(Array, dipole_data * a)
 end

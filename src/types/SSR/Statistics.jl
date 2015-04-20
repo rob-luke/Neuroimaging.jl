@@ -147,46 +147,47 @@ end
 #######################################
 
 
-function ftest(a::SSR; freq_of_interest::Union(Real, AbstractArray)=modulationrate(a),
-                side_freq::Number=0.5, ID::String="", spill_bins::Int=2, kwargs... )
-
+function ftest(s::SSR; freq_of_interest::Union(Real, AbstractArray)=modulationrate(s), side_freq::Number=0.5,
+    ID::String="", spill_bins::Int=2, results_key::String="statistics", kwargs... )
 
     # Do calculation here once, instead of in each low level call
-    spectrum    = EEG._ftest_spectrum(a.processing["sweeps"])
-    spectrum    = compensate_for_filter(a.processing, spectrum, samplingrate(a))
-    frequencies = linspace(0, 1, int(size(spectrum, 1)))*samplingrate(a)/2
+    spectrum    = EEG._ftest_spectrum(s.processing["sweeps"])
+    spectrum    = compensate_for_filter(s.processing, spectrum, samplingrate(s))
+    frequencies = linspace(0, 1, int(size(spectrum, 1)))*samplingrate(s)/2
 
     for freq in freq_of_interest
 
         snrDb, phase, signal, noise, statistic = ftest(spectrum, frequencies, freq, side_freq, spill_bins)
 
-        result = DataFrame(
-                            ID                  = vec(repmat([ID], length(a.channel_names), 1)),
-                            Channel             = copy(a.channel_names),
-                            ModulationRate      = copy(modulationrate(a)),
-                            AnalysisType        = "ftest",
-                            AnalysisFrequency   = freq,
-                            SignalPower         = vec(signal),
-                            SignalPhase         = vec(phase),
-                            NoisePower          = vec(noise),
-                            SNRdB               = vec(snrDb),
-                            Statistic           = vec(statistic)
-                          )
+        result = DataFrame(ID                 = vec(repmat([ID], length(s.channel_names), 1)),
+                           Channel            = copy(s.channel_names),
+                           ModulationRate     = copy(modulationrate(s)),
+                           AnalysisType       = "F-test",
+                           AnalysisFrequency  = freq,
+                           SignalPower        = vec(signal),
+                           SignalPhase        = vec(phase),
+                           NoisePower         = vec(noise),
+                           SNRdB              = vec(snrDb),
+                           Statistic          = vec(statistic))
 
-        result   = add_dataframe_static_rows(result, kwargs)
-        key_name = new_processing_key(a.processing, "ftest")
-        merge!(a.processing, @compat Dict(key_name => result) )
+        result = add_dataframe_static_rows(result, kwargs)
+
+        if haskey(s.processing, results_key)
+            s.processing[results_key] = vcat(s.processing[results_key], result)
+        else
+            s.processing[results_key] = result
+        end
 
     end
 
-    return a
+    return s
 end
 
 
 # Backward compatibility
-function ftest(a::SSR, freq_of_interest::Array; kwargs...)
+function ftest(s::SSR, freq_of_interest::Array; kwargs...)
 
-    ftest(a, freq_of_interest = freq_of_interest; kwargs...)
+    ftest(s, freq_of_interest = freq_of_interest; kwargs...)
 end
 
 

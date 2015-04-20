@@ -24,7 +24,7 @@ snrDb, signal_phase, signal_power, noise_power, statistic = ftest(s.processing["
 
 s = ftest(s, side_freq=2.5, Note="Original channels", Additional_columns = 22)
 
-@test_approx_eq_eps s.processing["ftest1"][:SNRdB] [NaN, -1.2386, 0.5514, -1.5537, -2.7541, -6.7079] 0.001
+@test_approx_eq_eps s.processing["statistics"][:SNRdB] [NaN, -1.2386, 0.5514, -1.5537, -2.7541, -6.7079] 0.001
 
 s = rereference(s, "car")
 
@@ -43,7 +43,7 @@ s = create_sweeps(s, epochsPerSweep=4)
 
 s = ftest(s, [40.0391, 20], side_freq=2.5, ID="A test file", Note="Small test file 2262h")
 
-@test_approx_eq_eps s.processing["ftest2"][:SNRdB] [3.2826] 0.002  #TODO tighten tolerance here. filter seems issue
+@test_approx_eq_eps s.processing["statistics"][:SNRdB][7] [3.2826] 0.002  #TODO tighten tolerance here. filter seems issue
 
 s = save_results(s)
 

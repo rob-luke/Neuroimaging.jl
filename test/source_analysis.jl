@@ -35,7 +35,7 @@ a = add_channel(a, best_ftest_dipole(a.data[:,1:3], a.triggers,  int(a.samplingr
 a = extract_epochs(a)
 a = create_sweeps(a)
 a = ftest(a)
-println(a.processing["ftest1"])
+println(a.processing["statistics"])
 
 
 
