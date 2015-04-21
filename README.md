@@ -31,11 +31,7 @@ See [documentation](http://codles.github.io/EEG.jl/).
 
 ```julia
 
-using EEG
-using DataFrames
-using Gadfly
-using Logging
-Logging.configure(level=INFO)
+using EEG, DataFrames, Gadfly
 
 
 # Read file and pre processing
@@ -49,8 +45,8 @@ a = merge_channels(a, EEG_Vanvooren_2014, "Merged")
 # Run an F-test and save data
 a = extract_epochs(a)
 a = create_sweeps(a)
-a = ftest(a, [2:200])
-a = ftest(a, float(a.modulation_frequency)*[1, 2, 3, 4])
+a = ftest(a, modulationrate(a)*[1, 2, 3, 4]) # Look at harmonics
+a = ftest(a, [2:200])                        # Look at off stimulation frequencies
 a = save_results(a)
 
 
@@ -66,8 +62,6 @@ p = plot(df, x="AnalysisFrequency", y="SNRdB", color="Significant",
              Scale.discrete_color_manual("red","green"))
 
 draw(PNG("Example-40Hz.png", 18cm, 12cm), p)
-
-
 ```
 
 
