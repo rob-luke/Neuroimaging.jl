@@ -1,8 +1,6 @@
 # Work with BIOSEMI files
-#
 
 using BDF
-using Logging
 
 #######################################
 #

@@ -1,6 +1,4 @@
-
 function read_rba_mat(mat_path)
-
     # Define variables here so that they can be accessed within the scope of try constructs
     modulation_frequency  = NaN
     stimulation_amplitude = NaN

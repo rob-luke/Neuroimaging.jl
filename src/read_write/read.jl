@@ -1,13 +1,4 @@
-# Read files
-#
-# read_bsa
-# read_dat
-# read_sfp
-#
-
-
 using DataFrames
-
 
 #######################################
 #
@@ -15,10 +6,21 @@ using DataFrames
 #
 #######################################
 
-function read_avr(fname::String)
+@doc doc"""
+Read AVR file
 
+### Input
+* fname: Name or path for the AVR file
+
+### Output
+* data: Array of data read from AVR file
+* chanNames: Channel Names
+
+""" ->
+function read_avr(fname::String)
     info("Reading avr file: $fname")
 
+    # Open file
     fid = open(fname, "r")
 
     # Header line
@@ -58,7 +60,17 @@ end
 #
 #######################################
 
+@doc doc"""
+Read BSA file
+
+### Input
+* fname: Name or path for the BSA file
+
+### Output
+* bsa: Dipole object
+""" ->
 function read_bsa(fname::String)
+    info("Reading BSA file = $fname")
 
     # Open file
     fid = open(fname, "r")
@@ -81,10 +93,10 @@ function read_bsa(fname::String)
     m = match(regexp, title_line)
 
     # Useless line
-    line_line  = readline(fid)
+    readline(fid)
 
     # Read remaining dipoles
-    while ~eof(fid)
+    while !eof(fid)
         d = readline(fid)
         dm = match(regexp, d)
 
@@ -97,7 +109,6 @@ function read_bsa(fname::String)
         push!(bsa.color, float(dm.captures[8]))
         push!(bsa.state, float(dm.captures[9]))
         push!(bsa.size,  float(dm.captures[10]))
-
     end
 
     close(fid)
@@ -117,11 +128,22 @@ end
 #
 #######################################
 
+@doc doc"""
+Read dat files
+
+File specs were taken from https://github.com/fieldtrip/fieldtrip/blob/1cabb512c46cc70e5b734776f20cdc3c181243bd/external/besa/readBESAimage.m
+
+### Input
+* fname: Name or path for the BSA file
+
+### Output
+* X
+* Y
+* Z
+* complete_data
+* sample_times
+""" ->
 function read_dat(fname::String)
-
-    # File specs taken from https://github.com/fieldtrip/fieldtrip/blob/1cabb512c46cc70e5b734776f20cdc3c181243bd/external/besa/readBESAimage.m
-
-
     info("Reading dat file = $fname")
 
     # Open file
@@ -133,7 +155,7 @@ function read_dat(fname::String)
     version = float(version.captures[2])
     debug("version = $version")
     if version != 2
-        warn("Unknown dat file version!!")
+        warn("Unknown dat file version")
         return
     end
 
@@ -155,11 +177,11 @@ function read_dat(fname::String)
         debug("Regularisation = $regularization")
         debug("Units = $units")
     elseif search(typeline, "MSBF") != 0:-1
-        warn("Type not implemented yet")
+        warn("MSBF type not implemented yet")
     elseif search(typeline, "MSPS") != 0:-1
-        warn("Type not implemented yet")
+        warn("MSPS type not implemented yet")
     elseif search(typeline, "Sens") != 0:-1
-        warn("Type not implemented yet")
+        warn("Sens type not implemented yet")
     else
         warn("Unknown type")
     end
@@ -191,27 +213,22 @@ function read_dat(fname::String)
 
         file_still_going = true
         while file_still_going
-
             for z = 1:length(Z)
                 readline(fid)           # Z: z
 
                 for y = 1:length(Y)
                     d = readline(fid)       # values
-
                     m = matchall(r"(\d+.\d+)", d)
                     complete_data[:, y, z, t] = float(m)
                 end
 
                 readline(fid)           # blank or dashed
-
             end
 
             if eof(fid)
                 file_still_going = false
             else
-
                 t += 1
-
                 s = readline(fid)               # Sample n, t.tt ms
                 s = match(r"Sample \d+, (\d+.\d+) ms", s)
                 push!(sample_times, float(s.captures[1]))
@@ -220,9 +237,7 @@ function read_dat(fname::String)
                 temp = complete_data
                 complete_data = Array(Float64, (length(X), length(Y), length(Z), t))
                 complete_data[:,:,:,1:t-1] = temp
-
             end
-
         end
     else
         warn("Unsported file")
@@ -240,8 +255,16 @@ end
 #
 #######################################
 
-function read_sfp(fname::String)
+@doc doc"""
+Read sfp file
 
+### Input
+* fname: Name or path for the sfp file
+
+### Output
+* elec: Electrodes object
+""" ->
+function read_sfp(fname::String)
     info("Reading dat file = $fname")
 
     # Create an empty electrode set
@@ -257,7 +280,7 @@ function read_sfp(fname::String)
 
     # Convert label to ascii and remove '
     labels = df[:x1]
-    for i = 1:length(labels)
+    for i in eachindex(labels)
         push!(elec.label, replace(labels[i], "'", "" ))
     end
 
@@ -274,9 +297,18 @@ end
 #
 #######################################
 
+@doc doc"""
+Read elp file
+
+(Not yet working, need to convert to 3d coord system)
+
+### Input
+* fname: Name or path for the sfp file
+
+### Output
+* elec: Electrodes object
+""" ->
 function read_elp(fname::String)
-    # Read elp file
-    #
     # This does not work yet, need to convert to 3d coord system
 
     error("Reading ELPs has not been validated")
