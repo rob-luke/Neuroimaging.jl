@@ -6,15 +6,30 @@
 [![Analytics](https://ga-beacon.appspot.com/UA-56325803-1/eeg/readme)](https://github.com/igrigorik/ga-beacon)
 
 
-Process EEG files in Julia.  
-**For research only. Not for clinical use. Use at your own risk**  
+Process EEG files in Julia.
+
+*If you use this software let me know, and I will stop making breaking changes.*
+
+(**For research only. Not for clinical use. Use at your own risk**)
+
+## Installation
+
+To install this package, run the following command into Julia's command line:
+
+
+```julia
+Pkg.clone("git://github.com/codles/EEG.jl.git")
+```
+
+## Documentation
+
 See [documentation](http://codles.github.io/EEG.jl/).  
-If you use this software let me know, and I will stop making breaking changes.
+
 
 
 ## Example
 
-```python
+```julia
 
 using EEG
 using DataFrames

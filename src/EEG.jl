@@ -3,131 +3,134 @@ module EEG
 using Logging  # For user feedback
 using Docile   # For documentation
 using Compat   # For backward julia compatability
-
 using SIUnits
 using SIUnits.ShortUnits
+
+export # Helper functions
+       append_strings,
+       new_processing_key,
+       find_keys_containing,
+       fileparts,
+       add_dataframe_static_rows,
+       _find_closest_number_idx,
+       # File type reading and writing
+       import_biosemi,
+       channelNames_biosemi_1020,
+       create_channel,
+       create_events,
+       read_avr,
+       read_bsa,
+       read_dat,
+       read_sfp,
+       #read_elp,
+       write_dat,
+       prepare_dat,
+       write_avr,
+       read_evt,
+       read_rba_mat,
+       # Pre-processing
+       epoch_rejection,
+       channel_rejection,
+       highpass_filter,
+       lowpass_filter,
+       bandpass_filter,
+       compensate_for_filter,
+       remove_template,
+       rereference,
+       clean_triggers,
+       validate_triggers,
+       extra_triggers,
+       # Reshaping of data
+       extract_epochs,
+       average_epochs,
+       create_sweeps,
+       # Statistics
+       ftest,
+       gfp,
+       # Synchrony
+       phase_lag_index,
+       save_synchrony_results,
+       # Type - SSR
+       SSR,
+       samplingrate,
+       modulationrate,
+       read_SSR,
+       trim_channel,
+       add_triggers,
+       remove_channel!,
+       keep_channel!,
+       add_channel,
+       assr_frequency,
+       save_results,
+       trigger_channel,
+       write_SSR,
+       merge_channels,
+       bootstrap,
+       # Source analysis
+       Electrodes,
+           show,
+           match_sensors,
+       EEG_64_10_20,
+       EEG_Vanvooren_2014,
+       EEG_Vanvooren_2014_Left,
+       EEG_Vanvooren_2014_Right,
+       Coordinate,
+           SPM,
+           BrainVision,
+           Talairach,
+       convert,
+       conv_bv2tal,
+       conv_spm_mni2tal,
+       beamformer_lcmv,
+       Dipole,
+       find_dipoles,
+       best_dipole,
+       orient_dipole,
+       best_ftest_dipole,
+       match_leadfield,
+       find_location,
+       project,
+       # Plotting
+       oplot,
+       plot_dat,
+       plot_spectrum,
+       plot_timeseries,
+       oplot_dipoles,
+       SSR_spectrogram,
+       plot_filter_response,
+       plot_ftest
+
+
 
 @docstrings [ :manual => ["../doc/manual.md"] ]
 
 
-#
 # Helper functions
-#
-
-export
-    append_strings,
-    new_processing_key,
-    find_keys_containing,
-    fileparts,
-    add_dataframe_static_rows,
-    _find_closest_number_idx
 include("miscellaneous/helper.jl")
 
-#
 # File type reading and writing
-#
-
-export
-    import_biosemi,
-    channelNames_biosemi_1020,
-    create_channel,
-    create_events,
-    read_avr,
-    read_bsa,
-    read_dat,
-    read_sfp,
-    read_elp,
-    write_dat,
-    prepare_dat,
-    write_avr,
-    read_evt,
-    read_rba_mat
 include("read_write/read.jl")
 include("read_write/write.jl")
 include("read_write/biosemi.jl")
 include("read_write/besa.jl")
 include("read_write/rba.jl")
 
-
-#
 # Pre-processing
-#
-
-export
-    epoch_rejection,
-    channel_rejection
 include("preprocessing/data_rejection.jl")
-export
-    highpass_filter,
-    lowpass_filter,
-    bandpass_filter,
-    compensate_for_filter
 include("preprocessing/filtering.jl")
-export
-    remove_template,
-    rereference
 include("preprocessing/reference.jl")
-export
-    clean_triggers,
-    validate_triggers,
-    extra_triggers
 include("preprocessing/triggers.jl")
-
-
-#
-# Reshaping of data
-#
-
-export
-    extract_epochs,
-    average_epochs
 include("reshaping/epochs.jl")
-export
-    create_sweeps
 include("reshaping/sweeps.jl")
 
-
-#
 # Statistics
-#
-
-export
-    ftest,
-    gfp
 include("statistics/ftest.jl")
 include("statistics/gfp.jl")
 
-
-#
 # Synchrony
-#
-
-export
-    phase_lag_index,
-    save_synchrony_results
 include("synchrony/phase_lag_index.jl")
 
-
-#
 # Type - SSR
-#
-
-export
-    SSR,
-    samplingrate,
-    modulationrate,
-    read_SSR,
-    trim_channel,
-    add_triggers,
-    remove_channel!,
-    keep_channel!,
-    add_channel,
-    assr_frequency,
-    save_results,
-    trigger_channel,
-    write_SSR,
-    merge_channels,
-    bootstrap
 include("types/SSR/SSR.jl")
 include("types/SSR/Preprocessing.jl")
 include("types/SSR/ReadWrite.jl")
@@ -135,72 +138,17 @@ include("types/SSR/Reshaping.jl")
 include("types/SSR/Statistics.jl")
 include("types/SSR/Synchrony.jl")
 
-
-#
 # Source analysis
-#
-
-export
-    Electrodes,
-        show,
-        match_sensors,
-    EEG_64_10_20,
-    EEG_Vanvooren_2014,
-    EEG_Vanvooren_2014_Left,
-    EEG_Vanvooren_2014_Right
 include("source_analysis/sensors.jl")
-
-export
-    Coordinate,
-        SPM,
-        BrainVision,
-        Talairach,
-    convert,
-    conv_bv2tal,
-    conv_spm_mni2tal
 include("source_analysis/spatial_coordinates.jl")
-
-export
-    beamformer_lcmv
 include("source_analysis/beamformers.jl")
-
-export
-    Dipole,
-    find_dipoles,
-    best_dipole,
-    orient_dipole,
-    best_ftest_dipole
 include("source_analysis/dipoles.jl")
-
-export
-    match_leadfield,
-    find_location
 include("source_analysis/leadfield.jl")
-
-export
-    project
 include("source_analysis/projection.jl")
 
-
-
-
-
-#
 # Plotting functions
-#
-export
-    oplot,
-    plot_dat,
-    oplot,
-    plot_spectrum,
-    plot_timeseries,
-    oplot_dipoles,
-    SSR_spectrogram,
-    plot_filter_response,
-    plot_ftest
 include("plotting/plot.jl")
 include("plotting/ftest.jl")
 
 
-
-end
+end # module

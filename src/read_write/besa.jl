@@ -1,9 +1,7 @@
-
+@doc doc"""
+Read *.evt file and convert to form for EEG.jl
+""" ->
 function read_evt(fname::String, fs::Number; kwargs...)
-    #
-    # Read *.evt file and convert to form for EEG.jl
-    #
-
     info("Reading evt file: $fname")
 
     d = readdlm(fname)

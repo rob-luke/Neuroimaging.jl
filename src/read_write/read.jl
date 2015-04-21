@@ -1,13 +1,4 @@
-# Read files
-#
-# read_bsa
-# read_dat
-# read_sfp
-#
-
-
 using DataFrames
-
 
 #######################################
 #
@@ -15,38 +6,47 @@ using DataFrames
 #
 #######################################
 
-function read_avr(fname::String)
+@doc doc"""
+Read AVR file
 
+### Input
+* fname: Name or path for the AVR file
+
+### Output
+* data: Array of data read from AVR file
+* chanNames: Channel Names
+
+""" ->
+function read_avr(fname::String)
     info("Reading avr file: $fname")
 
-    fid = open(fname, "r")
+    # Open file
+    open(fname, "r") do fid
+        # Header line
+        regexp = r"Npts= (\d*)\s+TSB= ([-+]?[0-9]*\.?[0-9]+)\s+DI= ([-+]?[0-9]*\.?[0-9]+)\s+SB= ([-+]?[0-9]*\.?[0-9]+)\s+SC= ([-+]?[0-9]*\.?[0-9]+)\s+Nchan= (\d*)"
+        m     = match(regexp, readline(fid))
+        Npts  = m.captures[1]
+        TSB   = m.captures[2]
+        DI    = m.captures[3]
+        SB    = m.captures[4]
+        SC    = m.captures[5]
+        Nchan = m.captures[6]
 
-    # Header line
-    regexp = r"Npts= (\d*)\s+TSB= ([-+]?[0-9]*\.?[0-9]+)\s+DI= ([-+]?[0-9]*\.?[0-9]+)\s+SB= ([-+]?[0-9]*\.?[0-9]+)\s+SC= ([-+]?[0-9]*\.?[0-9]+)\s+Nchan= (\d*)"
-    m     = match(regexp, readline(fid))
-    Npts  = m.captures[1]
-    TSB   = m.captures[2]
-    DI    = m.captures[3]
-    SB    = m.captures[4]
-    SC    = m.captures[5]
-    Nchan = m.captures[6]
+        # Channel line
+        regexp = r"(\w+)"
+        chanNames      = matchall(regexp, readline(fid))
 
-    # Channel line
-    regexp = r"(\w+)"
-    chanNames      = matchall(regexp, readline(fid))
+        # data
+        data = Array(FloatingPoint, (int(ascii(Npts)), int(ascii(Nchan))))
 
-    # data
-    data = Array(FloatingPoint, (int(ascii(Npts)), int(ascii(Nchan))))
-
-    Nchan = int(ascii(Nchan))
-    for c = 1:Nchan
-        d = matchall(r"([-+]?[0-9]*\.?[0-9]+)", readline(fid))
-        for n = 1:int(ascii(Npts))
-            data[n,c] = float(ascii(d[n]))
+        Nchan = int(ascii(Nchan))
+        for c = 1:Nchan
+            d = matchall(r"([-+]?[0-9]*\.?[0-9]+)", readline(fid))
+            for n = 1:int(ascii(Npts))
+                data[n,c] = float(ascii(d[n]))
+            end
         end
-    end
-
-    close(fid)
+    end # Close file
 
     return data, chanNames
 end
@@ -58,49 +58,56 @@ end
 #
 #######################################
 
+@doc doc"""
+Read BSA file
+
+### Input
+* fname: Name or path for the BSA file
+
+### Output
+* bsa: Dipole object
+""" ->
 function read_bsa(fname::String)
+    info("Reading BSA file = $fname")
 
     # Open file
-    fid = open(fname, "r")
+    open(fname, "r") do fid
+        # Read version
+        version_line      = readline(fid)
+        separator         = search(version_line, '|')
+        version           = version_line[1:separator-1]
+        coordinate_system = version_line[separator+1:end-1]
 
-    # Read version
-    version_line      = readline(fid)
-    separator         = search(version_line, '|')
-    version           = version_line[1:separator-1]
-    coordinate_system = version_line[separator+1:end-1]
+        # Create an empty dipole
+        bsa = Dipole(version, coordinate_system,
+                        Float64[], Float64[], Float64[],
+                        Float64[], Float64[], Float64[],
+                        Float64[], Float64[], Float64[])
 
-    # Create an empty dipole
-    bsa = Dipole(version, coordinate_system,
-                    Float64[], Float64[], Float64[],
-                    Float64[], Float64[], Float64[],
-                    Float64[], Float64[], Float64[])
+        # Read title line
+        title_line = readline(fid)
+        regexp = r"(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)"
+        m = match(regexp, title_line)
 
-    # Read title line
-    title_line = readline(fid)
-    regexp = r"(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)"
-    m = match(regexp, title_line)
+        # Useless line
+        readline(fid)
 
-    # Useless line
-    line_line  = readline(fid)
+        # Read remaining dipoles
+        while !eof(fid)
+            d = readline(fid)
+            dm = match(regexp, d)
 
-    # Read remaining dipoles
-    while ~eof(fid)
-        d = readline(fid)
-        dm = match(regexp, d)
-
-        push!(bsa.xloc,  float(dm.captures[2]))
-        push!(bsa.yloc,  float(dm.captures[3]))
-        push!(bsa.zloc,  float(dm.captures[4]))
-        push!(bsa.xori,  float(dm.captures[5]))
-        push!(bsa.yori,  float(dm.captures[6]))
-        push!(bsa.zori,  float(dm.captures[7]))
-        push!(bsa.color, float(dm.captures[8]))
-        push!(bsa.state, float(dm.captures[9]))
-        push!(bsa.size,  float(dm.captures[10]))
-
-    end
-
-    close(fid)
+            push!(bsa.xloc,  float(dm.captures[2]))
+            push!(bsa.yloc,  float(dm.captures[3]))
+            push!(bsa.zloc,  float(dm.captures[4]))
+            push!(bsa.xori,  float(dm.captures[5]))
+            push!(bsa.yori,  float(dm.captures[6]))
+            push!(bsa.zori,  float(dm.captures[7]))
+            push!(bsa.color, float(dm.captures[8]))
+            push!(bsa.state, float(dm.captures[9]))
+            push!(bsa.size,  float(dm.captures[10]))
+        end
+    end # Close file
 
     info("BSA file imported: $fname")
     debug("Version = $version")
@@ -117,118 +124,121 @@ end
 #
 #######################################
 
+@doc doc"""
+Read dat files
+
+File specs were taken from https://github.com/fieldtrip/fieldtrip/blob/1cabb512c46cc70e5b734776f20cdc3c181243bd/external/besa/readBESAimage.m
+
+### Input
+* fname: Name or path for the BSA file
+
+### Output
+* X
+* Y
+* Z
+* complete_data
+* sample_times
+""" ->
 function read_dat(fname::String)
-
-    # File specs taken from https://github.com/fieldtrip/fieldtrip/blob/1cabb512c46cc70e5b734776f20cdc3c181243bd/external/besa/readBESAimage.m
-
-
     info("Reading dat file = $fname")
 
     # Open file
-    fid = open(fname, "r")
+    open(fname, "r") do fid
 
-    # Ensure we are reading version 2
-    version = readline(fid)
-    version = match(r"(\S+):(\d.\d)", version)
-    version = float(version.captures[2])
-    debug("version = $version")
-    if version != 2
-        warn("Unknown dat file version!!")
-        return
-    end
+        # Ensure we are reading version 2
+        version = readline(fid)
+        version = match(r"(\S+):(\d.\d)", version)
+        version = float(version.captures[2])
+        debug("version = $version")
+        if version != 2
+            warn("Unknown dat file version")
+            return
+        end
 
-    # Header info
-    empty          = readline(fid)
-    data_file      = readline(fid)
-    condition      = readline(fid)
-    typeline       = readline(fid)
+        # Header info
+        empty          = readline(fid)
+        data_file      = readline(fid)
+        condition      = readline(fid)
+        typeline       = readline(fid)
 
-    # Types of data that can be stored
-    if search(typeline, "Method") != 0:-1  # TODO: change to imatch
-        debug("File type is Method")
-        image_type = typeline[21:end]
-        image_mode = "Time"
-        regularization = readline(fid)[21:end-1]
-        #=Latency=#  # TODO: Fix for latencies. See fieldtrip
-        #=Units=#
-        units          = readline(fid)[3:end-1]
-        debug("Regularisation = $regularization")
-        debug("Units = $units")
-    elseif search(typeline, "MSBF") != 0:-1
-        warn("Type not implemented yet")
-    elseif search(typeline, "MSPS") != 0:-1
-        warn("Type not implemented yet")
-    elseif search(typeline, "Sens") != 0:-1
-        warn("Type not implemented yet")
-    else
-        warn("Unknown type")
-    end
+        # Types of data that can be stored
+        if search(typeline, "Method") != 0:-1  # TODO: change to imatch
+            debug("File type is Method")
+            image_type = typeline[21:end]
+            image_mode = "Time"
+            regularization = readline(fid)[21:end-1]
+            #=Latency=#  # TODO: Fix for latencies. See fieldtrip
+            #=Units=#
+            units          = readline(fid)[3:end-1]
+            debug("Regularisation = $regularization")
+            debug("Units = $units")
+        elseif search(typeline, "MSBF") != 0:-1
+            warn("MSBF type not implemented yet")
+        elseif search(typeline, "MSPS") != 0:-1
+            warn("MSPS type not implemented yet")
+        elseif search(typeline, "Sens") != 0:-1
+            warn("Sens type not implemented yet")
+        else
+            warn("Unknown type")
+        end
 
-    empty       = readline(fid)
-    description = readline(fid)
+        empty       = readline(fid)
+        description = readline(fid)
 
-    # Read in the dimensions
-    regexp = r"[X-Z]:\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+(-?\d+)"
-    X = match(regexp, readline(fid))
-    X = linspace(float(X.captures[1]), float(X.captures[2]), int(X.captures[3]))
-    Y = match(regexp, readline(fid))
-    Y = linspace(float(Y.captures[1]), float(Y.captures[2]), int(Y.captures[3]))
-    Z = match(regexp, readline(fid))
-    Z = linspace(float(Z.captures[1]), float(Z.captures[2]), int(Z.captures[3]))
+        # Read in the dimensions
+        regexp = r"[X-Z]:\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+(-?\d+)"
+        X = match(regexp, readline(fid))
+        X = linspace(float(X.captures[1]), float(X.captures[2]), int(X.captures[3]))
+        Y = match(regexp, readline(fid))
+        Y = linspace(float(Y.captures[1]), float(Y.captures[2]), int(Y.captures[3]))
+        Z = match(regexp, readline(fid))
+        Z = linspace(float(Z.captures[1]), float(Z.captures[2]), int(Z.captures[3]))
 
-    empty       = readline(fid)
+        empty       = readline(fid)
 
-    # Variables to fill
-    t = 1
-    complete_data = Array(Float64, (length(X), length(Y), length(Z), t))
-    sample_times  = Float64[]
+        # Variables to fill
+        t = 1
+        complete_data = Array(Float64, (length(X), length(Y), length(Z), t))
+        sample_times  = Float64[]
 
-    description = readline(fid)
-    if search(description, "Sample") != 0:-1
+        description = readline(fid)
+        if search(description, "Sample") != 0:-1
 
-        s = match(r"Sample \d+, (\d+.\d+) ms", description)
-        push!(sample_times, float(s.captures[1]))
+            s = match(r"Sample \d+, (\d+.\d+) ms", description)
+            push!(sample_times, float(s.captures[1]))
 
-        file_still_going = true
-        while file_still_going
+            file_still_going = true
+            while file_still_going
+                for z = 1:length(Z)
+                    readline(fid)           # Z: z
 
-            for z = 1:length(Z)
-                readline(fid)           # Z: z
+                    for y = 1:length(Y)
+                        d = readline(fid)       # values
+                        m = matchall(r"(\d+.\d+)", d)
+                        complete_data[:, y, z, t] = float(m)
+                    end
 
-                for y = 1:length(Y)
-                    d = readline(fid)       # values
-
-                    m = matchall(r"(\d+.\d+)", d)
-                    complete_data[:, y, z, t] = float(m)
+                    readline(fid)           # blank or dashed
                 end
 
-                readline(fid)           # blank or dashed
+                if eof(fid)
+                    file_still_going = false
+                else
+                    t += 1
+                    s = readline(fid)               # Sample n, t.tt ms
+                    s = match(r"Sample \d+, (\d+.\d+) ms", s)
+                    push!(sample_times, float(s.captures[1]))
 
+                    # There is no nice way to grow a multidimensional array
+                    temp = complete_data
+                    complete_data = Array(Float64, (length(X), length(Y), length(Z), t))
+                    complete_data[:,:,:,1:t-1] = temp
+                end
             end
-
-            if eof(fid)
-                file_still_going = false
-            else
-
-                t += 1
-
-                s = readline(fid)               # Sample n, t.tt ms
-                s = match(r"Sample \d+, (\d+.\d+) ms", s)
-                push!(sample_times, float(s.captures[1]))
-
-                # There is no nice way to grow a multidimensional array
-                temp = complete_data
-                complete_data = Array(Float64, (length(X), length(Y), length(Z), t))
-                complete_data[:,:,:,1:t-1] = temp
-
-            end
-
+        else
+            warn("Unsported file")
         end
-    else
-        warn("Unsported file")
-    end
-
-    close(fid)
+    end # Close file
 
     return X, Y, Z, complete_data, sample_times
 end
@@ -240,8 +250,16 @@ end
 #
 #######################################
 
-function read_sfp(fname::String)
+@doc doc"""
+Read sfp file
 
+### Input
+* fname: Name or path for the sfp file
+
+### Output
+* elec: Electrodes object
+""" ->
+function read_sfp(fname::String)
     info("Reading dat file = $fname")
 
     # Create an empty electrode set
@@ -257,7 +275,7 @@ function read_sfp(fname::String)
 
     # Convert label to ascii and remove '
     labels = df[:x1]
-    for i = 1:length(labels)
+    for i in eachindex(labels)
         push!(elec.label, replace(labels[i], "'", "" ))
     end
 
@@ -274,6 +292,17 @@ end
 #
 #######################################
 
+@doc doc"""
+Read elp file
+
+(Not yet working)
+
+### Input
+* fname: Name or path for the sfp file
+
+### Output
+* elec: Electrodes object
+""" ->
 function read_elp(fname::String)
     # Read elp file
     #
