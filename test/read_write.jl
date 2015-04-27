@@ -1,11 +1,3 @@
-using EEG
-using BDF
-using Logging
-using Base.Test
-
-Logging.configure(level=DEBUG)
-
-
 #
 # BIOSEMI
 #

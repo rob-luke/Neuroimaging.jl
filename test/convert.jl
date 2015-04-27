@@ -1,6 +1,3 @@
-using EEG
-using Base.Test
-
 # #####
 #
 # MNI 2 Tal

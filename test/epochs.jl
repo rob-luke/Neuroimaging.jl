@@ -1,8 +1,3 @@
-using EEG
-using Base.Test
-using MAT
-
-
 #######################################
 #
 # Test epochs extracted and converted to sweeps

@@ -1,9 +1,3 @@
-using EEG
-using Base.Test
-using Logging
-Logging.configure(level=DEBUG)
-
-
 #######################################
 #
 # Test channel rejection

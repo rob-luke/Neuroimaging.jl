@@ -1,9 +1,3 @@
-using EEG
-using Base.Test
-using Logging
-
-Logging.configure(level=DEBUG)
-
 #=fname = "/Users/rluke/Data/EEG/BDFs/NH/example/Example-40Hz.bdf"=#
 
 fname = joinpath(dirname(@__FILE__), "../data", "test_Hz19.5-testing.bdf")

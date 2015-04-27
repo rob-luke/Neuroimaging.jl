@@ -1,6 +1,7 @@
 using EEG
 using Base.Test
 using Logging
+using MAT, BDF
 
 Logging.configure(level=DEBUG)
 

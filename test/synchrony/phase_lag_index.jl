@@ -1,8 +1,3 @@
-using EEG
-using Logging
-Logging.configure(level=INFO)
-
-
 #######################################
 #
 # Test channel rejection
