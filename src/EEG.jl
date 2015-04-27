@@ -161,7 +161,5 @@ include("source_analysis/projection.jl")
 
 # Plotting functions
 include("plotting/plot.jl")
-include("plotting/ftest.jl")
-
 
 end # module
