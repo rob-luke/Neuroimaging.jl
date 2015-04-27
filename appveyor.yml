@@ -18,6 +18,7 @@ build_script:
   - IF EXIST .git\shallow (git fetch --unshallow)
   - C:\projects\julia\bin\julia -e "versioninfo(); Pkg.init(); Pkg.clone(\"git://github.com/codles/EEG.jl.git\")"
   - C:\projects\julia\bin\julia -e "Pkg.clone(\"git://github.com/codles/MinMaxFilter.jl.git\")"
+  - C:\projects\julia\bin\julia -e "Pkg.checkout(\"DSP\")"
 
 test_script:
   - C:\projects\julia\bin\julia test\runtests.jl
