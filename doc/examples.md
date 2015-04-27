@@ -6,9 +6,6 @@
 ### Harmonic Analysis
 
 
-
-## Example
-
 ```julia
 
 using EEG, DataFrames, Gadfly
