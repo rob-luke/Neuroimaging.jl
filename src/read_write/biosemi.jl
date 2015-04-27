@@ -1,7 +1,3 @@
-# Work with BIOSEMI files
-
-using BDF
-
 #######################################
 #
 # Read BDF file

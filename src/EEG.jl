@@ -16,6 +16,7 @@ using DSP
 using Distributions
 using Winston, Gadfly
 using MinMaxFilter
+using BDF
 
 
 export # Helper functions
