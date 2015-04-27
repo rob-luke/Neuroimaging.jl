@@ -57,4 +57,4 @@ draw(PNG("Example-40Hz.png", 18cm, 12cm), p)
 Results in the following figure which displays the SNR at each frequency.
 The vertical lines highlight the harmonics of the stimulus and color represents if a significant response was detected.
 
-![SSR Example](doc/images/Example-40Hz-SSR.png)
+![SSR Example](https://raw.githubusercontent.com/codles/EEG.jl/master/doc/images/Example-40Hz-SSR.png)
