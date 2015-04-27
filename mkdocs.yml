@@ -1,0 +1,6 @@
+site_name:           EEG.jl
+repo_url:            https://github.com/codles/EEG.jl
+site_description:    Process electrophysiological recordings in Julia.
+site_author:         Robert Luke
+theme:               readthedocs
+markdown_extensions: [tables, fenced_code]
