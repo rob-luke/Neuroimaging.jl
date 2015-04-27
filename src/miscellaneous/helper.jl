@@ -1,5 +1,3 @@
-using DataFrames
-
 @doc doc"""
 Concatanate `strings` with a `separator` between each.
 

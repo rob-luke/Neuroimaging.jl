@@ -1,5 +1,3 @@
-using Distances
-
 #
 # leadfield is defined in another module
 #

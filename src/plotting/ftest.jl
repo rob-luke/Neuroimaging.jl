@@ -1,6 +1,3 @@
-using Gadfly
-
-
 @doc doc"""
 Visualise the data used to determine the f statistic.
 

@@ -1,6 +1,3 @@
-using DataFrames
-using MAT
-
 typealias FreqHz{T} SIUnits.SIQuantity{T,0,0,-1,0,0,0,0,0,0}
 
 

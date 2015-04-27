@@ -3,8 +3,20 @@ module EEG
 using Logging  # For user feedback
 using Docile   # For documentation
 using Compat   # For backward julia compatability
-using SIUnits
+using SIUnits  # Smarter units
 using SIUnits.ShortUnits
+using Synchrony
+using DataFrames
+using Distances
+using ProgressMeter
+using AWS
+using AWS.S3
+using BDF
+using DSP
+using Distributions
+using Winston, Gadfly
+using MinMaxFilter
+
 
 export # Helper functions
        append_strings,

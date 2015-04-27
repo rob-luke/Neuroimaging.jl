@@ -23,9 +23,6 @@ Logging.configure(level=INFO)
 # Example plotting
 #
 
-#=using DataFrames=#
-#=using Gadfly=#
-
 #=df = readtable("test_Hz19.5-testing-synchrony.csv")=#
 
 #=plot(df, x="ChannelOrigin", y="ChannelDestination", color="Strength", Geom.rectbin,=#

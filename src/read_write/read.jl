@@ -1,5 +1,3 @@
-using DataFrames
-
 #######################################
 #
 # Read AVR file

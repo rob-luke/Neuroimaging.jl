@@ -12,11 +12,6 @@
 #
 
 
-using Winston
-using DSP: periodogram
-
-import Winston.oplot
-
 #######################################
 #
 # Plot spectrum of signal

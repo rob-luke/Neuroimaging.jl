@@ -1,6 +1,3 @@
-using DSP
-
-
 @doc doc"""
 High pass filter applied in forward and reverse direction
 

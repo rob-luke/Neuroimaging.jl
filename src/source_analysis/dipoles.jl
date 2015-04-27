@@ -1,5 +1,3 @@
-using MinMaxFilter
-
 @doc doc"""
 Dipole type.
 

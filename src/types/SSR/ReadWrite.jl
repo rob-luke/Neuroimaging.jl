@@ -4,9 +4,6 @@
 #
 #######################################
 
-using AWS
-using AWS.S3
-
 @doc md"""
 Read a file or IO stream and store the data in an SSR type.
 

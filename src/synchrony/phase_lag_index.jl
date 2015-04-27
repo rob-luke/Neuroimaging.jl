@@ -1,7 +1,3 @@
-using Synchrony
-using DataFrames
-
-
 @doc md"""
 Phase locked index of waveforms two time series cut in to epochs.
 
