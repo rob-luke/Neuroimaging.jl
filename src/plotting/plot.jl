@@ -198,4 +198,3 @@ function plot_multi_channel_timeseries{T <: Number}(signals::Array{T, 2}, fs::Nu
         Guide.yticks(ticks=[0:size(signals, 2)-1]),
         Scale.x_continuous(minvalue=minimum(time), maxvalue=maximum(time)))   # Tight fit on time axis
 end
-

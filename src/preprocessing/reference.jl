@@ -1,18 +1,15 @@
 @doc doc"""
 Remove a template signal from each column of an array
 
-### Input
+### Arguments
 
-* signals: Original signals to be modified
-* template: Template to remove from each signal
+* `signals`: Original signals to be modified
+* `template`: Template to remove from each signal
 
-### Output
-
-* signals: Signals with template removed
-
+### Returns
+Signals with template removed
 """ ->
 function remove_template{T <: FloatingPoint}(signals::Array{T, 2}, template::Array{T, 1})
-
     if size(signals, 1) != size(template, 1)
         critical("Templace to be removed is different length to signal")
     end
@@ -21,7 +18,7 @@ function remove_template{T <: FloatingPoint}(signals::Array{T, 2}, template::Arr
         signals[:, chan] = signals[:, chan] - template
     end
 
-    signals
+    return signals
 end
 
 
@@ -30,15 +27,14 @@ Re reference a signals to specific signal channel by index.
 
 If multiple channels are specififed, their average is used as the reference.
 
-### Input
+### Arguments
 
-* signals: Original signals to be modified
-* refChan: Index of channels to be used as reference
+* `signals`: Original signals to be modified
+* `refChan`: Index of channels to be used as reference
 
-### Output
+### Returns
 
-* signals: Rereferenced signals
-
+Rereferenced signals
 """ ->
 function rereference{T <: FloatingPoint}(signals::Array{T, 2}, refChan::Union(Int, Array{Int}))
 
@@ -57,21 +53,20 @@ end
 
 
 @doc doc"""
-Re reference a signals to specific signal channel by name.
+Re-reference a signals to specific signal channel by name.
 
 If multiple channels are specififed, their average is used as the reference.
 Or you can specify to use the `average` reference.
 
-### Input
+### Arguments
 
-* signals: Original signals to be modified
-* refChan: List of channels to be used as reference or `average`
-* chanNames: List of channel names associated with signals array
+* `signals`: Original signals to be modified
+* `refChan`: List of channels to be used as reference or `average`
+* `chanNames`: List of channel names associated with signals array
 
-### Output
+### Returns
 
-* signals: Rereferenced signals
-
+Rereferenced signals
 """ ->
 function rereference{S <: AbstractString, T <: FloatingPoint}(signals::Array{T, 2}, refChan::Union(S, Array{S}),
             chanNames::Array{S})

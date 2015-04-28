@@ -1,24 +1,25 @@
 module EEG
 
-using Logging  # For user feedback
-using Docile   # For documentation
-using Compat   # For backward julia compatability
-using SIUnits  # Smarter units
-using SIUnits.ShortUnits
-using Synchrony
-using DataFrames
-using Distances
-using ProgressMeter
-using AWS
-using AWS.S3
-using BDF
-using DSP
-using Distributions
-using Winston, Gadfly
-using MinMaxFilter
-using BDF
-using MAT
+using Logging,  # For user feedback
+      Docile,   # For documentation
+      Compat,   # For backward julia compatability
+      SIUnits,  # Smarter units
+      SIUnits.ShortUnits,
+      Synchrony,
+      DataFrames,
+      Distances,
+      ProgressMeter,
+      AWS,
+      AWS.S3,
+      BDF,
+      DSP,
+      Distributions,
+      Winston, Gadfly,
+      MinMaxFilter,
+      BDF,
+      MAT
 
+import Winston: oplot
 
 export # Helper functions
        append_strings,
@@ -126,17 +127,22 @@ export # Helper functions
 include("miscellaneous/helper.jl")
 
 # File type reading and writing
-include("read_write/read.jl")
-include("read_write/write.jl")
-include("read_write/biosemi.jl")
-include("read_write/besa.jl")
+include("read_write/avr.jl")
+include("read_write/bdf.jl")
+include("read_write/bsa.jl")
+include("read_write/dat.jl")
+include("read_write/elp.jl")
+include("read_write/evt.jl")
 include("read_write/rba.jl")
+include("read_write/sfp.jl")
 
 # Pre-processing
 include("preprocessing/data_rejection.jl")
 include("preprocessing/filtering.jl")
 include("preprocessing/reference.jl")
 include("preprocessing/triggers.jl")
+
+# Reshaping of data
 include("reshaping/epochs.jl")
 include("reshaping/sweeps.jl")
 

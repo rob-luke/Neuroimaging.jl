@@ -1,15 +1,13 @@
-@doc md"""
+@doc doc"""
 Phase locked index of waveforms two time series cut in to epochs.
 
 Calculated using [Synchrony.jl](https://github.com/simonster/Synchrony.jl)
 
-### Input
+### Arguments
 
-- data: samples x channels x epochs as described in
-  [multitaper documentation](https://github.com/simonster/Synchrony.jl/blob/master/src/multitaper.jl)  
-- freqrange: range of frequencies to analyse  
-- fs: sample rate
-
+* `data`: samples x channels x epochs as described in [multitaper documentation](https://github.com/simonster/Synchrony.jl/blob/master/src/multitaper.jl)
+* `freqrange`: range of frequencies to analyse
+* `fs`: sample rate
 """ ->
 function phase_lag_index(data::Array, freq_of_interest::Real, fs::Real)
 
@@ -32,5 +30,3 @@ function phase_lag_index(data::Array, freq_of_interest::Real, fs::Real)
 
     return result[idx]
 end
-
-

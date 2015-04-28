@@ -1,11 +1,11 @@
-@doc md"""
-Extract epoch data from SSR.
+@doc doc"""
+## Extract epoch data from SSR
 
-### Optional arguments
-
-* valid_triggers: Trigger numbers that are considered valid ([1,2])
-* remove_first: Remove the first n triggers (0).
-* remove_last: Remove the last n triggers (0)
+### Arguments
+* `a`: A SSR object
+* `valid_triggers`: Trigger numbers that are considered valid ([1,2])
+* `remove_first`: Remove the first n triggers (0)
+* `remove_last`: Remove the last n triggers (0)
 
 ### Example
 

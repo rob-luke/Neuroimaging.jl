@@ -4,7 +4,9 @@
 #
 #######################################
 
-@doc md"""
+@doc doc"""
+## Phase Lag Index
+
 Calculate phase lag index between SSR sensors.
 
 This is a wrapper function for the SSR type.
@@ -106,7 +108,16 @@ end
 # Save results
 #
 
-# Save synchrony results to file
+@doc doc"""
+Save synchrony results to file
+
+### Arguments
+* `a`: A SSR object
+* `name_extension`: string appended at the end of the saved file name
+
+### Returns
+The same object `a`
+""" ->
 function save_synchrony_results(a::SSR; name_extension::String="-synchrony", kwargs...)
 
     file_name = string(a.file_name, name_extension, ".csv")
@@ -137,5 +148,3 @@ function save_synchrony_results(a::SSR; name_extension::String="-synchrony", kwa
 
     return a
 end
-
-
