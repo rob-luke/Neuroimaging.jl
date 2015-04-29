@@ -17,6 +17,7 @@ using Distributions
 using Winston, Gadfly
 using MinMaxFilter
 using BDF
+using MAT
 
 
 export # Helper functions
