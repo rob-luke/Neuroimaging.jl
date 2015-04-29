@@ -116,7 +116,7 @@ export # Helper functions
 
 
 
-@docstrings [ :manual => ["../doc/manual.md"] ]
+@document(manual = ["../doc/manual.md"])
 
 
 # Helper functions
