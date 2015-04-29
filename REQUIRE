@@ -1,8 +1,8 @@
 AWS
-DSP
+DSP # Requires master for filter coeffients to be exported
 BDF
 DataFrames
-SIUnits
+SIUnits # Requires master
 ProgressMeter
 Distributions
 MAT
