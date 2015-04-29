@@ -47,13 +47,13 @@ function plot_ftest(s::SSR; freq_of_interest::Real=modulationrate(s), side_freq:
     spectrum = compensate_for_filter(s.processing, spectrum, samplingrate(s))
     frequencies = linspace(0, 1, int(size(spectrum, 1)))*samplingrate(s)/2
 
-    plot_ftest(spectrum, frequencies, freq_of_interest, side_freq, spill_bins, min_plot_freq, max_plot_freq, plot_channel, fig_name)
+    plot_ftest(spectrum, frequencies, freq_of_interest, side_freq, spill_bins, min_plot_freq, max_plot_freq, plot_channel)
 end
 
 
 function plot_ftest{T <: FloatingPoint}(sweeps::Array{T, 3}, fs::Real,
     freq_of_interest::Real, side_freq::Real, spill_bins::Int, min_plot_freq::Real, max_plot_freq::Real,
-    plot_channel::Int, fig_name::String)
+    plot_channel::Int)
 
     spectrum    = EEG._ftest_spectrum(sweeps)
     # Does not compensate for filtering
@@ -79,7 +79,6 @@ Dots indicate the noise and signal power.
 * min_plot_freq: Minimum frequency to plot in Hz
 * max_plot_freq: Maximum frequency to plot in Hz
 * plot_channel: If there are multiple dimensions, this specifies which to plot
-* fig_name: Figure name to save the pdf to
 
 ### Output
 
@@ -87,7 +86,7 @@ Saves a pdf to disk
 """ ->
 function plot_ftest{T <: FloatingPoint}(spectrum::Array{Complex{T},2}, frequencies::AbstractArray,
     freq_of_interest::Real, side_freq::Real, spill_bins::Int, min_plot_freq::Real, max_plot_freq::Real,
-    plot_channel::Int, fig_name::String)
+    plot_channel::Int)
 
     spectrum = spectrum[:, plot_channel]
 
@@ -117,13 +116,11 @@ function plot_ftest{T <: FloatingPoint}(spectrum::Array{Complex{T},2}, frequenci
     noi_pnt  = layer(x=[min_plot_freq], y=[noise_power], Geom.point, Theme(default_color=color("red")))
     sig_pnt  = layer(x=[min_plot_freq], y=[signal_power], Geom.point, Theme(default_color=color("green")))
 
-    p = plot(noi_plot, sig_plot, raw_plot, noi_pnt, sig_pnt,
+    plot(noi_plot, sig_plot, raw_plot, noi_pnt, sig_pnt,
         Scale.x_continuous(minvalue=min_plot_freq, maxvalue=max_plot_freq),
         Scale.y_log10(),
         Guide.ylabel("Power (uV^2)"), Guide.xlabel("Frequency (Hz)"),
-        Guide.title("SNR = $(round(snrDb[1], 3)) (dB)")
-        )
-    draw(PDF(fig_name, 26cm, 17cm), p)
+        Guide.title("SNR = $(round(snrDb[1], 3)) (dB)"))
 end
 
 
