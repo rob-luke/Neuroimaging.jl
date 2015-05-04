@@ -227,60 +227,89 @@ end
 #
 # Plot time series
 #
+# Automatic plotting for single channel (with units) or multichannel (with channel names) time series
+#
 #######################################
 
-# Single channel passed in as vector
-function plot_timeseries(signal::Vector, fs::Real; titletext::String="")
+@doc doc"""
+Plot a single channel time series
 
-    time = linspace(0,length(signal)/fs,length(signal))
+### Input
 
-    time_plot = FramedPlot(
-                            title = titletext,
-                            xlabel = "Time (s)",
-                            ylabel = "Amplitude (uV)"
-                        )
-    add(time_plot, Curve( time, signal ))
+* signal: Vector of data
+* fs: Sample rate
+* channels: Name of channel to plot
+* plot_points: Number of points to plot, they will be equally spread. Used to speed up plotting
+* Other optional arguements are passed to gadfly plot function
 
-    return time_plot
+
+### Output
+
+Returns a figure
+
+""" ->
+function plot_single_channel_timeseries{T <: Number}(signal::AbstractVector{T}, fs::Number;
+        xlabel::String="Time (s)", ylabel::String="Amplitude (uV)", plot_points::Int=8192, kwargs...)
+
+    debug("Plotting single channel waveform of size $(size(signal))")
+
+    time = [1:size(signal, 1)]/fs                        # Create time axis
+    idx = floor(linspace(1, length(time), plot_points))   # Choose which points to plot
+    time = time[idx]                                      # Reduce the time axis
+    signals = signal[idx, :]                             # Reduce the data axis
+
+    Gadfly.plot(x=time, y=signal,
+        Geom.line,
+        Theme(default_color=color("black")),
+        Guide.xlabel(xlabel), Guide.ylabel(ylabel),
+        Scale.x_continuous(minvalue=minimum(time), maxvalue=maximum(time)))   # Tight fit on time axis
 end
 
+@doc doc"""
+Plot a multi channel time series
 
-# Multiple channels passed in as an array
-function plot_timeseries(signals::Array,
-                         fs::Real;
-                         titletext::String="",
-                         chanLabels::Array=[],
-                         plot_points::Int=1024)
+### Input
 
-    total_time = size(signals)[1]/fs
+* signals: Array of data
+* fs: Sample rate
+* channels: Name of channels
+* plot_points: Number of points to plot, they will be equally spread. Used to speed up plotting
+* Other optional arguements are passed to gadfly plot function
 
-    fs = fs/plot_points
 
-    plot_points = floor(linspace(1, size(signals)[1], plot_points))
-    signals = signals[plot_points, :]
+### Output
 
-    time = linspace(1, total_time, length(plot_points))
+Returns a figure
 
-    variances = var(signals,1)
-    mean_variance = mean(variances)
+""" ->
+function plot_multi_channel_timeseries{T <: Number}(signals::Array{T, 2}, fs::Number, channels::Array{ASCIIString};
+        xlabel::String="Time (s)", ylabel::String="Amplitude (uV)", plot_points::Int=8192, kwargs...)
 
-    time_plot = FramedPlot(title = titletext,
-                           xlabel = "Time (s)",
-                           ylabel = "Channels",
-                           yrange = (0, size(signals)[end]+1))
+    debug("Plotting multi channel waveform of size $(size(signals))")
 
-    for chan in 1:size(signals)[end]
-        # Variance is set to 1, each channel is offset but 1 from the previous
-        add(time_plot, Curve( time, convert(Array{Float64}, vec(signals[:, chan] / mean_variance .+ chan))))
+    time = [1:size(signals, 1)]/fs                        # Create time axis
+    idx = floor(linspace(1, length(time), plot_points))   # Choose which points to plot
+    time = time[idx]                                      # Reduce the time axis
+    signals = signals[idx, :]                             # Reduce the data axis
+
+    variances = var(signals,1)          # Variance of each figure for rescaling
+    mean_variance = mean(variances)     # Calculate for rescaling figures
+
+    l = Array(Layer, size(signals, 2), 1)                        # Create array to store figure layers
+    for c in 1:size(signals, 2)                                  # Plot each channel
+        signals[:, c] = signals[:, c] - mean(signals[:, c])      # Remove mean
+        signals[:, c] = signals[:, c] / mean_variance .+ (c-1)   # Rescale and shift so all chanels are visible
+        l[c] = layer(x=time, y=signals[:, c], Geom.line, Theme(default_color=color("black")))[1]  # Create image layer
     end
 
-    #=chanLabels = convert(Array{ASCIIString}, chanLabels[1:64])=#
-
-    setattr(time_plot.y1, draw_ticks=false, ticklabels=[""])
-    setattr(time_plot, xrange=(0, total_time))
-
-    return time_plot
+    Gadfly.plot(vec(l), Guide.xlabel(xlabel), Guide.ylabel(ylabel),
+        Scale.y_continuous(minvalue=-0.5, maxvalue=size(signals, 2)-0.5,      # Ensure all channels are plotted
+            labels=y -> @sprintf("%s", channels[y+1])),                       # Label each channel
+        Guide.yticks(ticks=[0:size(signals, 2)-1]),
+        Scale.x_continuous(minvalue=minimum(time), maxvalue=maximum(time)))   # Tight fit on time axis
 end
+
+
 
 
 #######################################
@@ -453,28 +482,12 @@ end
 
 #######################################
 #
-# Type SSR
+# Spectrum
 #
 #######################################
 
 
-# Plot whole all data
-function plot_timeseries(eeg::SSR; titletext::String="")
 
-    p = plot_timeseries(eeg.data, eeg.header["sampRate"][1], titletext=titletext)
-
-    return p
-end
-
-# Plot a single channel
-function plot_timeseries(eeg::SSR, chanName::String; titletext::String="")
-
-    idx = findfirst(eeg.header["chanLabels"], chanName)
-
-    p = plot_timeseries(vec(eeg.data[:, idx]), eeg.header["sampRate"][1], titletext=titletext)
-
-    return p
-end
 
 
 function plot_spectrum(eeg::SSR, chan::Int; targetFreq::Number=0)

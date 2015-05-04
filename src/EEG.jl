@@ -109,6 +109,8 @@ export # Helper functions
        plot_dat,
        plot_spectrum,
        plot_timeseries,
+       plot_single_channel_timeseries,
+       plot_multi_channel_timeseries,
        oplot_dipoles,
        SSR_spectrogram,
        plot_filter_response,
@@ -162,5 +164,6 @@ include("source_analysis/projection.jl")
 
 # Plotting functions
 include("plotting/plot.jl")
+include("types/SSR/plotting.jl")
 
 end # module

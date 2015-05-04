@@ -1,0 +1,49 @@
+@doc doc"""
+Plot an SSR recording.
+
+Plot detailed single channel or general multichanel figure depending on how many channels are requested.
+
+### Input
+
+* s: SSR type
+* channels: The channels you want to plot, all if not specified
+* fs: Sample rate
+* Other optional arguements are passed to gadfly plot function
+
+
+### Output
+
+Returns a figure
+
+
+### Example
+
+plot1 = plot_timeseries(s, channels=["P6", "Cz"], plot_points=8192*4)
+draw(PDF("timeseries.pdf", 10inch, 6inch), plot1)
+
+
+""" ->
+function plot_timeseries(s::SSR; channels::Union(ASCIIString, Array{ASCIIString})=s.channel_names,
+        fs::Number=samplingrate(s), kwargs...)
+
+    if isa(channels, ASCIIString) || length(channels) == 1 || size(s.data, 2) == 1
+
+        debug("Plotting single channel waveform for channel $channels  from channels $(s.channel_names)")
+
+        fig = plot_single_channel_timeseries(vec(keep_channel!(deepcopy(s), [channels]).data), samplingrate(s); kwargs...)
+
+    else
+
+        # Find index of requested channels
+        idx = [findfirst(s.channel_names, n) for n in channels]
+        idx = idx[idx .!= 0]   # But if you cant find channels then plot what you can
+        if length(idx) != length(channels)
+            warn("Cant find index of all requested channels")
+        end
+
+        debug("Plotting multi channel waveform for channels $(s.channel_names[idx])")
+        fig = plot_multi_channel_timeseries(s.data[:, idx], samplingrate(s), s.channel_names[idx]; kwargs...)
+    end
+
+    return fig
+end
