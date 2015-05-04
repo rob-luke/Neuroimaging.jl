@@ -4,3 +4,8 @@ site_description:    Process electrophysiological recordings in Julia.
 site_author:         Robert Luke
 theme:               readthedocs
 markdown_extensions: [tables, fenced_code]
+pages:
+    - ['index.md', 'Introduction']
+    - ['manual.md', 'Manual', 'Overview']
+    - ['examples/ASSR.md', 'Examples', 'Auditory Steady State Responses']
+    - ['examples/waveforms.md', 'Examples', 'Plotting Examples']
