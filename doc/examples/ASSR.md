@@ -1,6 +1,3 @@
-# Examples
-
-
 ## Auditory Steady State Responses
 
 ### Harmonic Analysis
