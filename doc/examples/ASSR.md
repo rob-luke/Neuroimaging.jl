@@ -1,6 +1,4 @@
-## Auditory Steady State Responses
-
-### Harmonic Analysis
+## Harmonic Analysis
 
 
 ```julia

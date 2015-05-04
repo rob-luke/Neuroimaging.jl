@@ -1,5 +1,3 @@
-# Plotting Signals
-
 ## Single and multi channel data
 
 ```julia
