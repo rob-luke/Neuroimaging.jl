@@ -24,7 +24,7 @@ Pkg.clone("git://github.com/codles/EEG.jl.git")
 
 ## Documentation
 
-See [documentation](http://codles.github.io/EEG.jl/).  
+See [documentation](https://eegjl.readthedocs.org/) or [old api documentation](http://codles.github.io/EEG.jl/) (in transition).  
 
 
 
