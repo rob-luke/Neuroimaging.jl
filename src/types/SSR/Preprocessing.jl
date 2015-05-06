@@ -71,6 +71,33 @@ end
 
 #######################################
 #
+# Downsample
+#
+#######################################
+
+function downsample(s::SSR, ratio::Rational)
+
+    info("Downsampling SSR by ratio $ratio")
+
+    dec_filter  = DSP.FIRFilter([1], ratio)
+
+    new_data = zeros(typeof(s.data[1, 1]), int(size(s.data, 1)*ratio), size(s.data, 2))
+
+    for c in 1:size(s.data, 2)
+
+        new_data[:, c] = DSP.filt(dec_filter, vec(s.data[:, c]))
+    end
+
+    s.data = new_data
+
+    s.samplingrate = float(samplingrate(s) * ratio) * Hertz
+
+    return s
+end
+
+
+#######################################
+#
 # Change reference channels
 #
 #######################################
@@ -83,6 +110,3 @@ function rereference(a::SSR, refChan::Union(String, Array{ASCIIString}); kwargs.
 
     return a
 end
-
-
-

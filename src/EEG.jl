@@ -54,6 +54,7 @@ export # Helper functions
        clean_triggers,
        validate_triggers,
        extra_triggers,
+       downsample,
        # Reshaping of data
        extract_epochs,
        average_epochs,
