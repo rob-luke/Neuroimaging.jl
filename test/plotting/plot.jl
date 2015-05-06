@@ -24,7 +24,7 @@ draw(PDF(joinpath(dirname(@__FILE__), "../data/tmp", "timeseries-plot-2.pdf"), 8
 
 
 s = rereference(s, "Cz")
-plot3 = plot_timeseries(s, channels=["40Hz_SWN_70dB_R", "Cz"], plot_points=8192*4)
+plot3 = plot_timeseries(s, channels=["40Hz_SWN_70dB_R", "Cz"])
 draw(PDF(joinpath(dirname(@__FILE__), "../data/tmp", "timeseries-plot-3.pdf"), 10inch, 6inch), plot3)
 
 

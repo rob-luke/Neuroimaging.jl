@@ -249,14 +249,11 @@ Returns a figure
 
 """ ->
 function plot_single_channel_timeseries{T <: Number}(signal::AbstractVector{T}, fs::Number;
-        xlabel::String="Time (s)", ylabel::String="Amplitude (uV)", plot_points::Int=8192, kwargs...)
+        xlabel::String="Time (s)", ylabel::String="Amplitude (uV)", kwargs...)
 
     debug("Plotting single channel waveform of size $(size(signal))")
 
-    time = [1:size(signal, 1)]/fs                        # Create time axis
-    idx = floor(linspace(1, length(time), plot_points))   # Choose which points to plot
-    time = time[idx]                                      # Reduce the time axis
-    signals = signal[idx, :]                             # Reduce the data axis
+    time = [1:size(signal, 1)]/fs                         # Create time axis
 
     Gadfly.plot(x=time, y=signal,
         Geom.line,
@@ -283,14 +280,11 @@ Returns a figure
 
 """ ->
 function plot_multi_channel_timeseries{T <: Number}(signals::Array{T, 2}, fs::Number, channels::Array{ASCIIString};
-        xlabel::String="Time (s)", ylabel::String="Amplitude (uV)", plot_points::Int=8192, kwargs...)
+        xlabel::String="Time (s)", ylabel::String="Amplitude (uV)", kwargs...)
 
     debug("Plotting multi channel waveform of size $(size(signals))")
 
     time = [1:size(signals, 1)]/fs                        # Create time axis
-    idx = floor(linspace(1, length(time), plot_points))   # Choose which points to plot
-    time = time[idx]                                      # Reduce the time axis
-    signals = signals[idx, :]                             # Reduce the data axis
 
     variances = var(signals,1)          # Variance of each figure for rescaling
     mean_variance = mean(variances)     # Calculate for rescaling figures
