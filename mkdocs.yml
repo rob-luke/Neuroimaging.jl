@@ -7,5 +7,6 @@ markdown_extensions: [tables, fenced_code]
 pages:
     - ['index.md', 'Introduction']
     - ['manual.md', 'Manual', 'Overview']
-    - ['examples/ASSR.md', 'Examples', 'Auditory Steady State Responses']
-    - ['examples/waveforms.md', 'Examples', 'Plotting Examples']
+    - ['examples/waveforms.md', 'Examples', 'Plotting Waveforms']
+    - ['examples/ftest-plot.md', 'Examples', 'Plotting Spectrum and Statistics']
+    - ['examples/ASSR.md', 'Examples', 'Auditory Steady State Responses Statistics']
