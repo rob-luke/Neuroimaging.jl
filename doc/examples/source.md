@@ -13,5 +13,4 @@ Winston.savefig(f, "source.pdf", height = 600, width=600)
 
 ```
 
-![PDF](https://raw.githubusercontent.com/codles/EEG.jl/master/doc/images/sources.pdf)
 ![PNG](https://raw.githubusercontent.com/codles/EEG.jl/master/doc/images/sources.png)
