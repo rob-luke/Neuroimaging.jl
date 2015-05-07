@@ -165,6 +165,7 @@ include("source_analysis/projection.jl")
 
 # Plotting functions
 include("plotting/plot.jl")
+include("plotting/winston.jl")
 include("types/SSR/plotting.jl")
 
 end # module
