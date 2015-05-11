@@ -11,3 +11,4 @@ pages:
     - ['examples/ftest-plot.md', 'Examples', 'Plotting Spectrum and Statistics']
     - ['examples/ASSR.md', 'Examples', 'Auditory Steady State Responses Statistics']
     - ['examples/source.md', 'Examples', 'Estimated Source Activity']
+    - ['API.md', 'API']

@@ -1,4 +1,3 @@
-using EEG
-using Lexicon
+using EEG, Lexicon
 
-save("site/index.html", EEG)
+save("doc/API.md", EEG)
