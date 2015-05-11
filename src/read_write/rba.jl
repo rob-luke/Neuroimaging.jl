@@ -1,3 +1,12 @@
+#######################################
+#
+# rba file
+#
+#######################################
+
+@doc doc"""
+Read rba from MAT file
+""" ->
 function read_rba_mat(mat_path)
     # Define variables here so that they can be accessed within the scope of try constructs
     modulation_frequency  = NaN

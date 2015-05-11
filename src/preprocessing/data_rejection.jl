@@ -1,13 +1,13 @@
 @doc doc"""
 Reject epochs based on the maximum peak to peak voltage within an epoch across all channels
 
-### Input
+### Arguments
 
-* epochs: Array containing the epoch data in the format samples x epochs x channels
-* retain_percentage: The percentage of epochs to retain
-* rejection_method: Method to be used for epoch rejection (peak2peak)
+* `epochs`: Array containing the epoch data in the format samples x epochs x channels
+* `retain_percentage`: The percentage of epochs to retain
+* `rejection_method`: Method to be used for epoch rejection (peak2peak)
 
-### Output
+### Returns
 
 * An array with a reduced amount of entries in the epochs dimension
 """ ->
@@ -28,7 +28,9 @@ function epoch_rejection{T <: Number}(epochs::Array{T, 3}, retain_percentage::Fl
     epochs = epochs[:, epoch_values .< cut_off_value, :]
 end
 
-# Find the peak to peak value for each epoch to be returned to epoch_rejection()
+@doc doc"""
+Find the peak to peak value for each epoch to be returned to epoch_rejection()
+""" ->
 function peak2peak(epochs)
 
     epochsNum = size(epochs)[2]
@@ -47,15 +49,15 @@ Reject channels with too great a variance.
 
 Rejection can be based on a threshold or dynamicly chosen based on the variation of all channels.
 
-### Input
+### Arguments
 
-* signals: Array of data in format samples x channels
-* threshold_abs: Absolute threshold to remove channels with variance above this value
-* threshold_std: Reject channels with a variance more than n times the std of all channels
+* `signals`: Array of data in format samples x channels
+* `threshold_abs`: Absolute threshold to remove channels with variance above this value
+* `threshold_std`: Reject channels with a variance more than n times the std of all channels
 
-### Output
+### Returns
 
-Returns an array indicating the channels to be kept
+An array indicating the channels to be kept
 """ ->
 function channel_rejection{T <: Number}(sigs::Array{T}, threshold_abs::Number, threshold_var::Number)
 

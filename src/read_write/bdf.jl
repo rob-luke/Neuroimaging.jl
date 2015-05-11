@@ -1,9 +1,12 @@
 #######################################
 #
-# Read BDF file
+# BDF file
 #
 #######################################
 
+@doc doc"""
+Import Biosemi files
+""" ->
 function import_biosemi(fname::Union(String, IO); kwargs...)
 
     info("Importing BIOSEMI data file")
@@ -39,11 +42,8 @@ function import_biosemi(fname::Union(String, IO); kwargs...)
     return  data', triggers, system_codes, sample_rate, reference_channel, header
 end
 
-#######################################
-#
 # Create events from channel
-#
-#######################################
+############################
 
 function create_events(channel::Array{Int16,1}, fs::Number; kwargs...)
 
@@ -58,12 +58,8 @@ function create_events(channel::Array{Int16,1}, fs::Number; kwargs...)
 
 end
 
-
-#######################################
-#
 # Create channel from events
-#
-#######################################
+############################
 
 function create_channel(t::Dict, data::Array, fs::Number; kwargs...)
 
@@ -87,11 +83,7 @@ function create_channel(t::Dict, l::Int, fs::Number; code::String="Code", index:
     return channel
 end
 
-
-#######################################
-#
 # Change biosemi labels to 1020
-#
 #######################################
 
 function channelNames_biosemi_1020(original::String)

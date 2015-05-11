@@ -1,33 +1,32 @@
 typealias FreqHz{T} SIUnits.SIQuantity{T,0,0,-1,0,0,0,0,0,0}
 
 
-@doc md"""
-Steady State Response.
+@doc doc"""
+## Steady State Response
 This composite type contains the information for steady state response recordings and analysis.
 
 ### Fields
 
-* data: contains the recorded data
-* trigers: contains information about timing for creation of epochs
-* system_codes: contains system information
-* samplingrate: the sampling rate of the data
-* modulationrate: the modulation rate of the stimulus
-* reference_channel: the channel the data has been referenced to
-* file_path and file_name: where the file was read in from
-* channel_names: the names of the channels
-* processing: dictionary type to store analysis
-* header: additional information read from the file
+* `data`: contains the recorded data
+* `trigers`: contains information about timing for creation of epochs
+* `system_codes`: contains system information
+* `samplingrate`: the sampling rate of the data
+* `modulationrate`: the modulation rate of the stimulus
+* `reference_channel`: the channel the data has been referenced to
+* `file_path` and `file_name`: where the file was read in from
+* `channel_names`: the names of the channels
+* `processing`: dictionary type to store analysis
+* `header`: additional information read from the file
 
-### Processing Fields
+### `processing` Fields
 The following standard names are used when saving data to the processing dictionary.
 
-* Name: The identifier for the participant
-* Side: Side of stimulation
-* Carrier_Frequency: Carrier frequency of the stimulus
-* Amplitude: Amplitude of the stimulus
-* epochs: The epochs extracted from the recording
-* sweeps: The extracted sweeps from the recording
-
+* `Name`: The identifier for the participant
+* `Side`: Side of stimulation
+* `Carrier_Frequency`: Carrier frequency of the stimulus
+* `Amplitude`: Amplitude of the stimulus
+* `epochs`: The epochs extracted from the recording
+* `sweeps`: The extracted sweeps from the recording
 """ ->
 type SSR
     data::Array
@@ -50,7 +49,7 @@ end
 #
 #######################################
 
-@doc md"""
+@doc doc"""
 Return the sampling rate of a steady state type.
 If no type is provided, the sampling rate is returned as a floating point.
 
@@ -59,15 +58,15 @@ If no type is provided, the sampling rate is returned as a floating point.
 Return the sampling rate of a recording
 
 ```julia
-    s = read_SSR(filename)
-    samplingrate(s)
+s = read_SSR(filename)
+samplingrate(s)
 ```
 """ ->
 samplingrate(t, s::SSR) = convert(t, float(s.samplingrate))
 samplingrate(s::SSR) = samplingrate(FloatingPoint, s)
 
 
-@doc md"""
+@doc doc"""
 Return the modulation rate of a steady state type.
 If no type is provided, the modulation rate is returned as a floating point.
 
@@ -76,8 +75,8 @@ If no type is provided, the modulation rate is returned as a floating point.
 Return the modulation rate of a recording
 
 ```julia
-    s = read_SSR(filename)
-    modulationrate(s)
+s = read_SSR(filename)
+modulationrate(s)
 ```
 """ ->
 modulationrate(t, s::SSR) = convert(t, float(s.modulationrate))
@@ -118,7 +117,7 @@ end
 #
 #######################################
 
-@doc md"""
+@doc doc"""
 Add a channel to the SSR type with specified channel names.
 
 ### Example
@@ -126,9 +125,9 @@ Add a channel to the SSR type with specified channel names.
 Add a channel called `Merged`
 
 ```julia
-    s = read_SSR(filename)
-    new_channel = mean(s.data, 2)
-    s = add_channel(s, new_channel, "Merged")
+s = read_SSR(filename)
+new_channel = mean(s.data, 2)
+s = add_channel(s, new_channel, "Merged")
 ```
 """ ->
 function add_channel(a::SSR, data::Array, chanLabels::ASCIIString; kwargs...)
@@ -142,7 +141,7 @@ function add_channel(a::SSR, data::Array, chanLabels::ASCIIString; kwargs...)
 end
 
 
-@doc md"""
+@doc doc"""
 Remove specified channels from SSR.
 
 ### Example
@@ -151,7 +150,7 @@ Remove channel Cz and those in the set called `EEG_Vanvooren_2014_Right`
 
 ```julia
 a = read_SSR(filename)
-    remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
+remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
 """ ->
 function remove_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
@@ -185,7 +184,7 @@ function remove_channel!(a::SSR, channel_name::Union(Int, String, ASCIIString); 
     remove_channel!(a, [channel_name]); end
 
 
-@doc md"""
+@doc doc"""
 Remove all channels except those requested from SSR.
 
 ### Example
@@ -194,8 +193,7 @@ Remove all channels except Cz and those in the set called `EEG_Vanvooren_2014_Ri
 
 ```julia
 a = read_SSR(filename)
-    keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
-
+keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
 """ ->
 function keep_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
@@ -223,7 +221,7 @@ end
 #
 #######################################
 
-@doc md"""
+@doc doc"""
 Trim SSR recording by removing data after `stop` specifed samples.
 
 ### Optional Parameters
@@ -237,7 +235,6 @@ Remove the first 8192 samples and everything after 8192*300 samples
 ```julia
 s = trim_channel(s, 8192*300, start=8192)
 ```
-
 """ ->
 function trim_channel(a::SSR, stop::Int; start::Int=1, kwargs...)
 
@@ -267,15 +264,14 @@ end
 #
 #######################################
 
-@doc md"""
-Merge SSR channels listed in `merge_Chans` and label the averaged channel as `new_name`
+@doc doc"""
+Merge `SSR` channels listed in `merge_Chans` and label the averaged channel as `new_name`
 
 ### Example
 
 ```julia
-    s = merge_channels(s, ["P6", "P8"], "P68")
+s = merge_channels(s, ["P6", "P8"], "P68")
 ```
-
 """ ->
 function merge_channels(a::SSR, merge_Chans::Array{ASCIIString}, new_name::String; kwargs...)
 

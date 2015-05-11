@@ -4,28 +4,31 @@
 #
 #######################################
 
-@doc md"""
-Read a file or IO stream and store the data in an SSR type.
+@doc doc"""
+## Read SSR from file or IO stream
+Read a file or IO stream and store the data in an `SSR` type.
 
 Matching .mat files are read and modulation frequency information extracted.
 Failing that, user passed arguments are used or the modulation frequency is extracted from the file name.
 
-### Optional arguments
+### Arguments
 
-* min_epoch_length: Minimum epoch length in samples. Shorter epochs will be removed.
-* max_epoch_length: Maximum epoch length in samples. Longer epochs will be removed.
-* valid_triggers: Triggers that are considered valid, others are removed.
-* stimulation_amplitude: Amplitude of stimulation
-* modulationrate: Modulation frequency of SSR stimulation
-* participant name: Name of participant
-* remove_first: Number of epochs to be removed from start of recording
-* max_epochs: Maximum number of epochs to retain
+* `fname`: Name of the file to be read
+* `min_epoch_length`: Minimum epoch length in samples. Shorter epochs will be removed (0)
+* `max_epoch_length`: Maximum epoch length in samples. Longer epochs will be removed (Inf)
+* `valid_triggers`: Triggers that are considered valid, others are removed ([1,2])
+* `stimulation_amplitude`: Amplitude of stimulation (NaN)
+* `modulationrate`: Modulation frequency of SSR stimulation (NaN)
+* `carrier_frequency`: Carrier frequency (NaN)
+* `participant_name`: Name of participant ("")
+* `remove_first`: Number of epochs to be removed from start of recording (0)
+* `max_epochs`: Maximum number of epochs to retain (Inf)
+* `env` (nothing)
+* `bkt` ("")
 
 ### Supported file formats
 
-* BIOSEMI .bdf
-
-
+* BIOSEMI (.bdf)
 """ ->
 function read_SSR(fname::String;
                   stimulation_amplitude::Number=NaN,   # User can set these
