@@ -9,7 +9,7 @@
 Estimate the value and standard deviation of ASSR response amplitude and phase using bootstrapping on the frequency
 bin across epochs.
 
-### Input
+#### Input
 
 * `s`: Steady state response type
 * `freq_of_interest`: frequency to analyse (modulation rate)
@@ -19,11 +19,11 @@ bin across epochs.
 * `num_resample`: number of bootstrapping interations to make (1000)
 * `results_key`: Where in the processing dictionary to store results ("statistics")
 
-### Output
+#### Output
 
 * Bootstrapping values are added to the processing key `statistics`
 
-### Example
+#### Example
 
 ```julia
 s = bootstrap(s, N=100)

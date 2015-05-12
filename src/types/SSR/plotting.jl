@@ -3,7 +3,7 @@ Plot an SSR recording.
 
 Plot detailed single channel or general multichanel figure depending on how many channels are requested.
 
-### Input
+#### Input
 
 * s: SSR type
 * channels: The channels you want to plot, all if not specified
@@ -11,12 +11,12 @@ Plot detailed single channel or general multichanel figure depending on how many
 * Other optional arguements are passed to gadfly plot function
 
 
-### Output
+#### Output
 
 Returns a figure
 
 
-### Example
+#### Example
 
 plot1 = plot_timeseries(s, channels=["P6", "Cz"], plot_points=8192*4)
 draw(PDF("timeseries.pdf", 10inch, 6inch), plot1)

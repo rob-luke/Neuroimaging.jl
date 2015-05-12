@@ -5,7 +5,7 @@ typealias FreqHz{T} SIUnits.SIQuantity{T,0,0,-1,0,0,0,0,0,0}
 ## Steady State Response
 This composite type contains the information for steady state response recordings and analysis.
 
-### Fields
+#### Fields
 
 * `data`: contains the recorded data
 * `trigers`: contains information about timing for creation of epochs
@@ -18,7 +18,7 @@ This composite type contains the information for steady state response recording
 * `processing`: dictionary type to store analysis
 * `header`: additional information read from the file
 
-### `processing` Fields
+#### `processing` Fields
 The following standard names are used when saving data to the processing dictionary.
 
 * `Name`: The identifier for the participant
@@ -53,7 +53,7 @@ end
 Return the sampling rate of a steady state type.
 If no type is provided, the sampling rate is returned as a floating point.
 
-### Example
+#### Example
 
 Return the sampling rate of a recording
 
@@ -70,7 +70,7 @@ samplingrate(s::SSR) = samplingrate(FloatingPoint, s)
 Return the modulation rate of a steady state type.
 If no type is provided, the modulation rate is returned as a floating point.
 
-### Example
+#### Example
 
 Return the modulation rate of a recording
 
@@ -120,7 +120,7 @@ end
 @doc doc"""
 Add a channel to the SSR type with specified channel names.
 
-### Example
+#### Example
 
 Add a channel called `Merged`
 
@@ -144,7 +144,7 @@ end
 @doc doc"""
 Remove specified channels from SSR.
 
-### Example
+#### Example
 
 Remove channel Cz and those in the set called `EEG_Vanvooren_2014_Right`
 
@@ -187,7 +187,7 @@ function remove_channel!(a::SSR, channel_name::Union(Int, String, ASCIIString); 
 @doc doc"""
 Remove all channels except those requested from SSR.
 
-### Example
+#### Example
 
 Remove all channels except Cz and those in the set called `EEG_Vanvooren_2014_Right`
 
@@ -224,11 +224,11 @@ end
 @doc doc"""
 Trim SSR recording by removing data after `stop` specifed samples.
 
-### Optional Parameters
+#### Optional Parameters
 
 * `start` Remove samples before this value
 
-### Example
+#### Example
 
 Remove the first 8192 samples and everything after 8192*300 samples
 
@@ -267,7 +267,7 @@ end
 @doc doc"""
 Merge `SSR` channels listed in `merge_Chans` and label the averaged channel as `new_name`
 
-### Example
+#### Example
 
 ```julia
 s = merge_channels(s, ["P6", "P8"], "P68")

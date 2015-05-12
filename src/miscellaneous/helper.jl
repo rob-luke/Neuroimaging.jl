@@ -1,12 +1,12 @@
 @doc doc"""
 Concatanate `strings` with a `separator` between each.
 
-### Arguments
+#### Arguments
 
 * `strings`: Array of strings to place one after another
 * `separator`: String to place between each string (Default: ` `)
 
-### Output
+#### Output
 
 String consisting of all input strings
 """ ->
@@ -28,16 +28,16 @@ append_strings(string::String) = string
 Return a new processing key with the number incremented.
 It checks for existing keys and returns a string with the next key to be used.
 
-### Arguments
+#### Arguments
 
 * `d`: Dictionary containing existing keys
 * `key_name`: Base of the
 
-### Returns
+#### Returns
 
 * String with new key name
 
-### Returns
+#### Returns
 
 ```julia
 results_storage = Dict()
@@ -63,16 +63,16 @@ end
 @doc doc"""
 Find dictionary keys containing a string.
 
-### Arguments
+#### Arguments
 
 * `d`: Dictionary containing existing keys
 * `partial_key`: String you want to find in key names
 
-### Returns
+#### Returns
 
 * Array containg the indices of dictionary containing the partial_key
 
-### Returns
+#### Returns
 
 ```julia
 results_storage = Dict()
@@ -96,15 +96,15 @@ end
 @doc doc"""
 Extract the path, filename and extension of a file
 
-### Arguments
+#### Arguments
 
 * `fname`: String with the full path to a file
 
-### Output
+#### Output
 
 * Three strings containing the path, file name and file extension
 
-### Returns
+#### Returns
 
 ```julia
 fileparts("/Users/test/subdir/test-file.bdf")
@@ -132,16 +132,16 @@ end
 @doc doc"""
 Find the closest number to a target in an array and return the index
 
-### Arguments
+#### Arguments
 
 * `list`: Array containing numbers
 * `target`: Number to find closest to in the list
 
-### Output
+#### Output
 
 * Index of the closest number to the target
 
-### Returns
+#### Returns
 
 ```julia
 _find_closest_number_idx([1, 2, 2.7, 3.2, 4, 3.1, 7], 3)

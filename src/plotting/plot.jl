@@ -14,11 +14,11 @@ Dots indicate the noise and signal power.
 
 This wrapper function extracts all required information from the SSR type
 
-### Input
+#### Input
 
 * s: Steady state response type
 
-### Output
+#### Output
 
 Saves a pdf to disk
 """ ->
@@ -64,7 +64,7 @@ Visualise the data used to determine the f statistic.
 The spectrum is plotted in black, the noise estimate is highlited in red, and the signal marked in green.
 Dots indicate the noise and signal power.
 
-### Input
+#### Input
 
 * spectrum: Spectrum of data to plot
 * frequencies: The frequencies associated with each point in the spectrum
@@ -75,7 +75,7 @@ Dots indicate the noise and signal power.
 * max_plot_freq: Maximum frequency to plot in Hz
 * plot_channel: If there are multiple dimensions, this specifies which to plot
 
-### Output
+#### Output
 
 Saves a pdf to disk
 """ ->
@@ -130,7 +130,7 @@ end
 @doc doc"""
 Plot a single channel time series
 
-### Input
+#### Input
 
 * signal: Vector of data
 * fs: Sample rate
@@ -139,7 +139,7 @@ Plot a single channel time series
 * Other optional arguements are passed to gadfly plot function
 
 
-### Output
+#### Output
 
 Returns a figure
 
@@ -161,7 +161,7 @@ end
 @doc doc"""
 Plot a multi channel time series
 
-### Input
+#### Input
 
 * signals: Array of data
 * fs: Sample rate
@@ -170,7 +170,7 @@ Plot a multi channel time series
 * Other optional arguements are passed to gadfly plot function
 
 
-### Output
+#### Output
 
 Returns a figure
 

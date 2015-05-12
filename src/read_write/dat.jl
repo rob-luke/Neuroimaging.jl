@@ -7,17 +7,17 @@
 @doc doc"""
 Read dat files
 
-### Arguments
+#### Arguments
 * `fname`: Name or path for the dat file
 
-### Returns
+#### Returns
 * `x`: Range of x values
 * `y`: Range of y values
 * `z`: Range of z values
 * `complete_data`: Array (x × y × z x t)
 * `sample_times`
 
-### References
+#### References
 File specs were taken from [fieldtrip](https://github.com/fieldtrip/fieldtrip/blob/1cabb512c46cc70e5b734776f20cdc3c181243bd/external/besa/readBESAimage.m)
 """ ->
 function read_dat(fname::String)
@@ -133,7 +133,7 @@ end
 @doc doc"""
 Convert vector format source results to 3d array used in dat files
 
-### Example:
+#### Example:
 ```julia
 x, y, z, s = prepare_dat(d, x, y, z)
 ```

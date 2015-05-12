@@ -9,10 +9,10 @@ Read elp file
 
 (Not yet working, need to convert to 3d coord system)
 
-### Input
+#### Input
 * `fname`: Name or path for the sfp file
 
-### Output
+#### Output
 * `elec`: Electrodes object
 """ ->
 function read_elp(fname::String)

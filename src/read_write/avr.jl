@@ -7,10 +7,10 @@
 @doc doc"""
 Read AVR (.avr) file
 
-### Input
+#### Input
 * `fname`: Name or path for the AVR file
 
-### Output
+#### Output
 * `data`: Array of data read from AVR file. Each column represents a channel, and each row represents a point.
 * `chanNames`: Channel Names
 

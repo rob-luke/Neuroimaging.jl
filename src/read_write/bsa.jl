@@ -7,10 +7,10 @@
 @doc doc"""
 Read Besa's BSA (.bsa) file
 
-### Input
+#### Input
 * `fname`: Name or path for the BSA file
 
-### Output
+#### Output
 * `bsa`: Dipole object
 """ ->
 function read_bsa(fname::String)

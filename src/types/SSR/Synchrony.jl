@@ -111,11 +111,11 @@ end
 @doc doc"""
 Save synchrony results to file
 
-### Arguments
+#### Arguments
 * `a`: A SSR object
 * `name_extension`: string appended at the end of the saved file name
 
-### Returns
+#### Returns
 The same object `a`
 """ ->
 function save_synchrony_results(a::SSR; name_extension::String="-synchrony", kwargs...)

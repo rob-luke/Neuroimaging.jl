@@ -8,7 +8,7 @@
 @doc md"""
 Extract epoch data from array of channels.
 
-### Input
+#### Input
 
 * Array of raw data. Samples x Channels
 * Dictionary of trigger information
@@ -16,7 +16,7 @@ Extract epoch data from array of channels.
 * Number of first triggers to remove
 * Number of end triggers to remove
 
-### Example
+#### Example
 
 ```julia
 epochs = extract_epochs(data, triggers, [1,2], 0, 0)

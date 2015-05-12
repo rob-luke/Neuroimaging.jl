@@ -11,7 +11,7 @@ Read a file or IO stream and store the data in an `SSR` type.
 Matching .mat files are read and modulation frequency information extracted.
 Failing that, user passed arguments are used or the modulation frequency is extracted from the file name.
 
-### Arguments
+#### Arguments
 
 * `fname`: Name of the file to be read
 * `min_epoch_length`: Minimum epoch length in samples. Shorter epochs will be removed (0)
@@ -26,7 +26,7 @@ Failing that, user passed arguments are used or the modulation frequency is extr
 * `env` (nothing)
 * `bkt` ("")
 
-### Supported file formats
+#### Supported file formats
 
 * BIOSEMI (.bdf)
 """ ->

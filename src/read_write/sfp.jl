@@ -7,10 +7,10 @@
 @doc doc"""
 Read sfp file
 
-### Input
+#### Input
 * `fname`: Name or path for the sfp file
 
-### Output
+#### Output
 * `elec`: Electrodes object
 """ ->
 function read_sfp(fname::String)

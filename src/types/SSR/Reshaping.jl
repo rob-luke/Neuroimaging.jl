@@ -1,13 +1,13 @@
 @doc doc"""
 ## Extract epoch data from SSR
 
-### Arguments
+#### Arguments
 * `a`: A SSR object
 * `valid_triggers`: Trigger numbers that are considered valid ([1,2])
 * `remove_first`: Remove the first n triggers (0)
 * `remove_last`: Remove the last n triggers (0)
 
-### Example
+#### Example
 
 ```julia
 epochs = extract_epochs(SSR, valid_triggers=[1,2])

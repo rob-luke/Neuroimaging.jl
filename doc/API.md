@@ -4,16 +4,16 @@
 ### _find_closest_number_idx{T<:Number}(list::Array{T<:Number, 1}, target::Number)
 Find the closest number to a target in an array and return the index
 
-### Arguments
+#### Arguments
 
 * `list`: Array containing numbers
 * `target`: Number to find closest to in the list
 
-### Output
+#### Output
 
 * Index of the closest number to the target
 
-### Returns
+#### Returns
 
 ```julia
 _find_closest_number_idx([1, 2, 2.7, 3.2, 4, 3.1, 7], 3)
@@ -23,14 +23,14 @@ _find_closest_number_idx([1, 2, 2.7, 3.2, 4, 3.1, 7], 3)
 
 
 *source:*
-[EEG/src/miscellaneous/helper.jl:151](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/miscellaneous/helper.jl#L151)
+[EEG/src/miscellaneous/helper.jl:151](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/miscellaneous/helper.jl#L151)
 
 ---
 
 ### add_channel(a::SSR, data::Array{T, N}, chanLabels::ASCIIString)
 Add a channel to the SSR type with specified channel names.
 
-### Example
+#### Example
 
 Add a channel called `Merged`
 
@@ -42,25 +42,25 @@ s = add_channel(s, new_channel, "Merged")
 
 
 *source:*
-[EEG/src/types/SSR/SSR.jl:132](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/types/SSR/SSR.jl#L132)
+[EEG/src/types/SSR/SSR.jl:132](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/types/SSR/SSR.jl#L132)
 
 ---
 
-### append_strings(strings::Union(Array{ASCIIString, N}, Array{String, N}))
+### append_strings(strings::Union(Array{String, N}, Array{ASCIIString, N}))
 Concatanate `strings` with a `separator` between each.
 
-### Arguments
+#### Arguments
 
 * `strings`: Array of strings to place one after another
 * `separator`: String to place between each string (Default: ` `)
 
-### Output
+#### Output
 
 String consisting of all input strings
 
 
 *source:*
-[EEG/src/miscellaneous/helper.jl:12](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/miscellaneous/helper.jl#L12)
+[EEG/src/miscellaneous/helper.jl:12](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/miscellaneous/helper.jl#L12)
 
 ---
 
@@ -69,7 +69,7 @@ Band pass filter
 
 
 *source:*
-[EEG/src/preprocessing/filtering.jl:68](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/preprocessing/filtering.jl#L68)
+[EEG/src/preprocessing/filtering.jl:68](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/preprocessing/filtering.jl#L68)
 
 ---
 
@@ -78,20 +78,20 @@ Find best dipole relative to reference location.
 
 Finds the largest dipole within a specified distance of a reference location
 
-### Input
+#### Input
 
 * ref: Reference coordinate or dipole
 * dips: Dipoles to find the best dipole from
 * maxdist: Maximum distance a dipole can be from the reference
 
-### Output
+#### Output
 
 * dip: The best dipole
 
 
 
 *source:*
-[EEG/src/source_analysis/dipoles.jl:141](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/source_analysis/dipoles.jl#L141)
+[EEG/src/source_analysis/dipoles.jl:141](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/source_analysis/dipoles.jl#L141)
 
 ---
 
@@ -99,7 +99,7 @@ Finds the largest dipole within a specified distance of a reference location
 Estimate the value and standard deviation of ASSR response amplitude and phase using bootstrapping on the frequency
 bin across epochs.
 
-### Input
+#### Input
 
 * `s`: Steady state response type
 * `freq_of_interest`: frequency to analyse (modulation rate)
@@ -109,11 +109,11 @@ bin across epochs.
 * `num_resample`: number of bootstrapping interations to make (1000)
 * `results_key`: Where in the processing dictionary to store results ("statistics")
 
-### Output
+#### Output
 
 * Bootstrapping values are added to the processing key `statistics`
 
-### Example
+#### Example
 
 ```julia
 s = bootstrap(s, N=100)
@@ -121,7 +121,7 @@ s = bootstrap(s, N=100)
 
 
 *source:*
-[EEG/src/types/SSR/Statistics.jl:31](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/types/SSR/Statistics.jl#L31)
+[EEG/src/types/SSR/Statistics.jl:31](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/types/SSR/Statistics.jl#L31)
 
 ---
 
@@ -130,19 +130,19 @@ Reject channels with too great a variance.
 
 Rejection can be based on a threshold or dynamicly chosen based on the variation of all channels.
 
-### Arguments
+#### Arguments
 
 * `signals`: Array of data in format samples x channels
 * `threshold_abs`: Absolute threshold to remove channels with variance above this value
 * `threshold_std`: Reject channels with a variance more than n times the std of all channels
 
-### Returns
+#### Returns
 
 An array indicating the channels to be kept
 
 
 *source:*
-[EEG/src/preprocessing/data_rejection.jl:61](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/preprocessing/data_rejection.jl#L61)
+[EEG/src/preprocessing/data_rejection.jl:61](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/preprocessing/data_rejection.jl#L61)
 
 ---
 
@@ -151,50 +151,50 @@ Clean trigger channel
 
 
 *source:*
-[EEG/src/preprocessing/triggers.jl:39](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/preprocessing/triggers.jl#L39)
+[EEG/src/preprocessing/triggers.jl:39](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/preprocessing/triggers.jl#L39)
 
 ---
 
 ### compensate_for_filter(filter::FilterCoefficients, spectrum::AbstractArray{T, N}, frequencies::AbstractArray{T, N}, fs::Real)
 Recover the spectrum of signal by compensating for filtering done.
 
-### Arguments
+#### Arguments
 
 * `filter`: The filter used on the spectrum
 * `spectrum`: Spectrum of signal
 * `frequencies`: Array of frequencies you want to apply the compensation to
 * `fs`: Sampling rate
 
-### Returns
+#### Returns
 
 Spectrum of the signal after comensating for the filter
 
-### TODO
+#### TODO
 
 Extend this to arbitrary number of dimensions rather than the hard coded 3
 
 
 *source:*
-[EEG/src/preprocessing/filtering.jl:132](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/preprocessing/filtering.jl#L132)
+[EEG/src/preprocessing/filtering.jl:132](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/preprocessing/filtering.jl#L132)
 
 ---
 
 ### epoch_rejection{T<:Number}(epochs::Array{T<:Number, 3}, retain_percentage::FloatingPoint)
 Reject epochs based on the maximum peak to peak voltage within an epoch across all channels
 
-### Arguments
+#### Arguments
 
 * `epochs`: Array containing the epoch data in the format samples x epochs x channels
 * `retain_percentage`: The percentage of epochs to retain
 * `rejection_method`: Method to be used for epoch rejection (peak2peak)
 
-### Returns
+#### Returns
 
 * An array with a reduced amount of entries in the epochs dimension
 
 
 *source:*
-[EEG/src/preprocessing/data_rejection.jl:13](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/preprocessing/data_rejection.jl#L13)
+[EEG/src/preprocessing/data_rejection.jl:13](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/preprocessing/data_rejection.jl#L13)
 
 ---
 
@@ -205,20 +205,20 @@ A new trigger with `new_trigger_code` will be placed `new_trigger_time` seconds 
 
 
 *source:*
-[EEG/src/preprocessing/triggers.jl:131](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/preprocessing/triggers.jl#L131)
+[EEG/src/preprocessing/triggers.jl:131](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/preprocessing/triggers.jl#L131)
 
 ---
 
 ### extract_epochs(a::SSR)
 ## Extract epoch data from SSR
 
-### Arguments
+#### Arguments
 * `a`: A SSR object
 * `valid_triggers`: Trigger numbers that are considered valid ([1,2])
 * `remove_first`: Remove the first n triggers (0)
 * `remove_last`: Remove the last n triggers (0)
 
-### Example
+#### Example
 
 ```julia
 epochs = extract_epochs(SSR, valid_triggers=[1,2])
@@ -226,14 +226,14 @@ epochs = extract_epochs(SSR, valid_triggers=[1,2])
 
 
 *source:*
-[EEG/src/types/SSR/Reshaping.jl:15](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/types/SSR/Reshaping.jl#L15)
+[EEG/src/types/SSR/Reshaping.jl:15](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/types/SSR/Reshaping.jl#L15)
 
 ---
 
 ### extract_epochs(data::Array{T, N}, triggers::Dict{K, V}, valid_triggers::AbstractArray{T, 1}, remove_first::Int64, remove_last::Int64)
 Extract epoch data from array of channels.
 
-### Input
+#### Input
 
 * Array of raw data. Samples x Channels
 * Dictionary of trigger information
@@ -241,7 +241,7 @@ Extract epoch data from array of channels.
 * Number of first triggers to remove
 * Number of end triggers to remove
 
-### Example
+#### Example
 
 ```julia
 epochs = extract_epochs(data, triggers, [1,2], 0, 0)
@@ -249,22 +249,22 @@ epochs = extract_epochs(data, triggers, [1,2], 0, 0)
 
 
 *source:*
-[EEG/src/reshaping/epochs.jl:24](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/reshaping/epochs.jl#L24)
+[EEG/src/reshaping/epochs.jl:24](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/reshaping/epochs.jl#L24)
 
 ---
 
 ### fileparts(fname::String)
 Extract the path, filename and extension of a file
 
-### Arguments
+#### Arguments
 
 * `fname`: String with the full path to a file
 
-### Output
+#### Output
 
 * Three strings containing the path, file name and file extension
 
-### Returns
+#### Returns
 
 ```julia
 fileparts("/Users/test/subdir/test-file.bdf")
@@ -274,7 +274,7 @@ fileparts("/Users/test/subdir/test-file.bdf")
 
 
 *source:*
-[EEG/src/miscellaneous/helper.jl:114](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/miscellaneous/helper.jl#L114)
+[EEG/src/miscellaneous/helper.jl:114](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/miscellaneous/helper.jl#L114)
 
 ---
 
@@ -283,36 +283,36 @@ Find all dipole in an activity map.
 
 Determines the local maxima in a 3 dimensional array
 
-### Input
+#### Input
 
 * s: Activity in 3d matrix
 * window: Windowing to use in each dimension for min max filter
 * x,y,z: Coordinates associated with s matrix
 
-### Output
+#### Output
 
 * dips: An array of dipoles
 
 
 
 *source:*
-[EEG/src/source_analysis/dipoles.jl:59](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/source_analysis/dipoles.jl#L59)
+[EEG/src/source_analysis/dipoles.jl:59](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/source_analysis/dipoles.jl#L59)
 
 ---
 
 ### find_keys_containing(d::Dict{K, V}, partial_key::String)
 Find dictionary keys containing a string.
 
-### Arguments
+#### Arguments
 
 * `d`: Dictionary containing existing keys
 * `partial_key`: String you want to find in key names
 
-### Returns
+#### Returns
 
 * Array containg the indices of dictionary containing the partial_key
 
-### Returns
+#### Returns
 
 ```julia
 results_storage = Dict()
@@ -329,15 +329,15 @@ find_keys_containing(results_storage, "FTest")
 
 
 *source:*
-[EEG/src/miscellaneous/helper.jl:89](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/miscellaneous/helper.jl#L89)
+[EEG/src/miscellaneous/helper.jl:89](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/miscellaneous/helper.jl#L89)
 
 ---
 
-### ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter{I}, Nothing), spill_bins::Int64)
+### ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Nothing, Filter{I}), spill_bins::Int64)
 Calculates the F test as is commonly implemented in SSR research.  
 TODO: Add references to MASTER and Luts et al
 
-### Parameters
+#### Parameters
 
 * Sweep measurements. Samples x Sweeps x Channels
 * Frequency(ies) of interest (Hz)
@@ -346,7 +346,7 @@ TODO: Add references to MASTER and Luts et al
 * Filter used on the sweep data. If provided then is compensated for
 * The number of bins to ignore on each side of the frequency of interest
 
-### Returns
+#### Returns
 
 * Signal to noise ratio in dB
 * Signal phase at frequency of interest
@@ -357,7 +357,7 @@ TODO: Add references to MASTER and Luts et al
 
 
 *source:*
-[EEG/src/statistics/ftest.jl:22](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/statistics/ftest.jl#L22)
+[EEG/src/statistics/ftest.jl:22](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/statistics/ftest.jl#L22)
 
 ---
 
@@ -366,21 +366,21 @@ High pass filter applied in forward and reverse direction
 
 Simply a wrapper for the DSP.jl functions
 
-### Arguments
+#### Arguments
 
 * `signals`: Signal data in the format samples x channels
 * `cutOff`: Cut off frequency in Hz
 * `fs`: Sampling rate
 * `order`: Filter orde
 
-### Returns
+#### Returns
 
 * filtered signal
 * filter used on signal
 
 
 *source:*
-[EEG/src/preprocessing/filtering.jl:17](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/preprocessing/filtering.jl#L17)
+[EEG/src/preprocessing/filtering.jl:17](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/preprocessing/filtering.jl#L17)
 
 ---
 
@@ -389,14 +389,14 @@ Import Biosemi files
 
 
 *source:*
-[EEG/src/read_write/bdf.jl:9](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/read_write/bdf.jl#L9)
+[EEG/src/read_write/bdf.jl:9](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/read_write/bdf.jl#L9)
 
 ---
 
 ### keep_channel!(a::SSR, channel_names::Array{ASCIIString, N})
 Remove all channels except those requested from SSR.
 
-### Example
+#### Example
 
 Remove all channels except Cz and those in the set called `EEG_Vanvooren_2014_Right`
 
@@ -407,7 +407,7 @@ keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 
 
 *source:*
-[EEG/src/types/SSR/SSR.jl:198](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/types/SSR/SSR.jl#L198)
+[EEG/src/types/SSR/SSR.jl:198](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/types/SSR/SSR.jl#L198)
 
 ---
 
@@ -416,28 +416,28 @@ Low pass filter applied in forward and reverse direction
 
 Simply a wrapper for the DSP.jl functions
 
-### Input
+#### Input
 
 * `signals`: Signal data in the format samples x channels
 * `cutOff`: Cut off frequency in Hz
 * `fs`: Sampling rate
 * `order`: Filter orde
 
-### Output
+#### Output
 
 * filtered signal
 * filter used on signal
 
 
 *source:*
-[EEG/src/preprocessing/filtering.jl:50](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/preprocessing/filtering.jl#L50)
+[EEG/src/preprocessing/filtering.jl:50](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/preprocessing/filtering.jl#L50)
 
 ---
 
 ### merge_channels(a::SSR, merge_Chans::Array{ASCIIString, N}, new_name::String)
 Merge `SSR` channels listed in `merge_Chans` and label the averaged channel as `new_name`
 
-### Example
+#### Example
 
 ```julia
 s = merge_channels(s, ["P6", "P8"], "P68")
@@ -445,7 +445,7 @@ s = merge_channels(s, ["P6", "P8"], "P68")
 
 
 *source:*
-[EEG/src/types/SSR/SSR.jl:275](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/types/SSR/SSR.jl#L275)
+[EEG/src/types/SSR/SSR.jl:275](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/types/SSR/SSR.jl#L275)
 
 ---
 
@@ -453,7 +453,7 @@ s = merge_channels(s, ["P6", "P8"], "P68")
 Return the modulation rate of a steady state type.
 If no type is provided, the modulation rate is returned as a floating point.
 
-### Example
+#### Example
 
 Return the modulation rate of a recording
 
@@ -464,7 +464,7 @@ modulationrate(s)
 
 
 *source:*
-[EEG/src/types/SSR/SSR.jl:81](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/types/SSR/SSR.jl#L81)
+[EEG/src/types/SSR/SSR.jl:81](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/types/SSR/SSR.jl#L81)
 
 ---
 
@@ -472,16 +472,16 @@ modulationrate(s)
 Return a new processing key with the number incremented.
 It checks for existing keys and returns a string with the next key to be used.
 
-### Arguments
+#### Arguments
 
 * `d`: Dictionary containing existing keys
 * `key_name`: Base of the
 
-### Returns
+#### Returns
 
 * String with new key name
 
-### Returns
+#### Returns
 
 ```julia
 results_storage = Dict()
@@ -495,7 +495,7 @@ results_storage[new_processing_key(results_storage, "FTest")] = 49
 
 
 *source:*
-[EEG/src/miscellaneous/helper.jl:51](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/miscellaneous/helper.jl#L51)
+[EEG/src/miscellaneous/helper.jl:51](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/miscellaneous/helper.jl#L51)
 
 ---
 
@@ -509,7 +509,7 @@ The calculation of PLI is calculated using [Synchrony.jl](www.github.com/.....)
 
 
 *source:*
-[EEG/src/types/SSR/Synchrony.jl:14](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/types/SSR/Synchrony.jl#L14)
+[EEG/src/types/SSR/Synchrony.jl:14](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/types/SSR/Synchrony.jl#L14)
 
 ---
 
@@ -518,7 +518,7 @@ Phase locked index of waveforms two time series cut in to epochs.
 
 Calculated using [Synchrony.jl](https://github.com/simonster/Synchrony.jl)
 
-### Arguments
+#### Arguments
 
 * `data`: samples x channels x epochs as described in [multitaper documentation](https://github.com/simonster/Synchrony.jl/blob/master/src/multitaper.jl)
 * `freqrange`: range of frequencies to analyse
@@ -526,14 +526,14 @@ Calculated using [Synchrony.jl](https://github.com/simonster/Synchrony.jl)
 
 
 *source:*
-[EEG/src/synchrony/phase_lag_index.jl:11](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/synchrony/phase_lag_index.jl#L11)
+[EEG/src/synchrony/phase_lag_index.jl:11](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/synchrony/phase_lag_index.jl#L11)
 
 ---
 
 ### plot_dat{T<:Number}(x::Array{T<:Number, 1}, y::Array{T<:Number, 1}, z::Array{T<:Number, 1}, dat_data::Array{T<:Number, N})
 Plot a dat file from three views.
 
-### Optional Arguments
+#### Optional Arguments
 
 * threshold_ratio(1/1000): locations smaller than this are not plotted
 * ncols(2): number of colums used for output plot
@@ -542,7 +542,7 @@ Plot a dat file from three views.
 
 
 *source:*
-[EEG/src/plotting/winston.jl:16](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/plotting/winston.jl#L16)
+[EEG/src/plotting/winston.jl:16](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/plotting/winston.jl#L16)
 
 ---
 
@@ -554,17 +554,17 @@ Dots indicate the noise and signal power.
 
 This wrapper function extracts all required information from the SSR type
 
-### Input
+#### Input
 
 * s: Steady state response type
 
-### Output
+#### Output
 
 Saves a pdf to disk
 
 
 *source:*
-[EEG/src/plotting/plot.jl:24](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/plotting/plot.jl#L24)
+[EEG/src/plotting/plot.jl:24](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/plotting/plot.jl#L24)
 
 ---
 
@@ -574,7 +574,7 @@ Visualise the data used to determine the f statistic.
 The spectrum is plotted in black, the noise estimate is highlited in red, and the signal marked in green.
 Dots indicate the noise and signal power.
 
-### Input
+#### Input
 
 * spectrum: Spectrum of data to plot
 * frequencies: The frequencies associated with each point in the spectrum
@@ -585,20 +585,20 @@ Dots indicate the noise and signal power.
 * max_plot_freq: Maximum frequency to plot in Hz
 * plot_channel: If there are multiple dimensions, this specifies which to plot
 
-### Output
+#### Output
 
 Saves a pdf to disk
 
 
 *source:*
-[EEG/src/plotting/plot.jl:81](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/plotting/plot.jl#L81)
+[EEG/src/plotting/plot.jl:81](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/plotting/plot.jl#L81)
 
 ---
 
 ### plot_multi_channel_timeseries{T<:Number}(signals::Array{T<:Number, 2}, fs::Number, channels::Array{ASCIIString, N})
 Plot a multi channel time series
 
-### Input
+#### Input
 
 * signals: Array of data
 * fs: Sample rate
@@ -607,21 +607,21 @@ Plot a multi channel time series
 * Other optional arguements are passed to gadfly plot function
 
 
-### Output
+#### Output
 
 Returns a figure
 
 
 
 *source:*
-[EEG/src/plotting/plot.jl:177](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/plotting/plot.jl#L177)
+[EEG/src/plotting/plot.jl:177](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/plotting/plot.jl#L177)
 
 ---
 
 ### plot_single_channel_timeseries{T<:Number}(signal::AbstractArray{T<:Number, 1}, fs::Number)
 Plot a single channel time series
 
-### Input
+#### Input
 
 * signal: Vector of data
 * fs: Sample rate
@@ -630,14 +630,14 @@ Plot a single channel time series
 * Other optional arguements are passed to gadfly plot function
 
 
-### Output
+#### Output
 
 Returns a figure
 
 
 
 *source:*
-[EEG/src/plotting/plot.jl:146](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/plotting/plot.jl#L146)
+[EEG/src/plotting/plot.jl:146](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/plotting/plot.jl#L146)
 
 ---
 
@@ -646,7 +646,7 @@ Plot an SSR recording.
 
 Plot detailed single channel or general multichanel figure depending on how many channels are requested.
 
-### Input
+#### Input
 
 * s: SSR type
 * channels: The channels you want to plot, all if not specified
@@ -654,12 +654,12 @@ Plot detailed single channel or general multichanel figure depending on how many
 * Other optional arguements are passed to gadfly plot function
 
 
-### Output
+#### Output
 
 Returns a figure
 
 
-### Example
+#### Example
 
 plot1 = plot_timeseries(s, channels=["P6", "Cz"], plot_points=8192*4)
 draw(PDF("timeseries.pdf", 10inch, 6inch), plot1)
@@ -668,21 +668,21 @@ draw(PDF("timeseries.pdf", 10inch, 6inch), plot1)
 
 
 *source:*
-[EEG/src/types/SSR/plotting.jl:25](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/types/SSR/plotting.jl#L25)
+[EEG/src/types/SSR/plotting.jl:25](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/types/SSR/plotting.jl#L25)
 
 ---
 
 ### prepare_dat(d::Array{T, 1}, x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1})
 Convert vector format source results to 3d array used in dat files
 
-### Example:
+#### Example:
 ```julia
 x, y, z, s = prepare_dat(d, x, y, z)
 ```
 
 
 *source:*
-[EEG/src/read_write/dat.jl:140](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/read_write/dat.jl#L140)
+[EEG/src/read_write/dat.jl:140](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/read_write/dat.jl#L140)
 
 ---
 
@@ -693,7 +693,7 @@ Read a file or IO stream and store the data in an `SSR` type.
 Matching .mat files are read and modulation frequency information extracted.
 Failing that, user passed arguments are used or the modulation frequency is extracted from the file name.
 
-### Arguments
+#### Arguments
 
 * `fname`: Name of the file to be read
 * `min_epoch_length`: Minimum epoch length in samples. Shorter epochs will be removed (0)
@@ -708,67 +708,67 @@ Failing that, user passed arguments are used or the modulation frequency is extr
 * `env` (nothing)
 * `bkt` ("")
 
-### Supported file formats
+#### Supported file formats
 
 * BIOSEMI (.bdf)
 
 
 *source:*
-[EEG/src/types/SSR/ReadWrite.jl:32](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/types/SSR/ReadWrite.jl#L32)
+[EEG/src/types/SSR/ReadWrite.jl:32](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/types/SSR/ReadWrite.jl#L32)
 
 ---
 
 ### read_avr(fname::String)
 Read AVR (.avr) file
 
-### Input
+#### Input
 * `fname`: Name or path for the AVR file
 
-### Output
+#### Output
 * `data`: Array of data read from AVR file. Each column represents a channel, and each row represents a point.
 * `chanNames`: Channel Names
 
 
 
 *source:*
-[EEG/src/read_write/avr.jl:17](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/read_write/avr.jl#L17)
+[EEG/src/read_write/avr.jl:17](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/read_write/avr.jl#L17)
 
 ---
 
 ### read_bsa(fname::String)
 Read Besa's BSA (.bsa) file
 
-### Input
+#### Input
 * `fname`: Name or path for the BSA file
 
-### Output
+#### Output
 * `bsa`: Dipole object
 
 
 *source:*
-[EEG/src/read_write/bsa.jl:15](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/read_write/bsa.jl#L15)
+[EEG/src/read_write/bsa.jl:15](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/read_write/bsa.jl#L15)
 
 ---
 
 ### read_dat(fname::String)
 Read dat files
 
-### Arguments
+#### Arguments
 * `fname`: Name or path for the dat file
 
-### Returns
+#### Returns
 * `x`: Range of x values
 * `y`: Range of y values
 * `z`: Range of z values
 * `complete_data`: Array (x × y × z x t)
 * `sample_times`
 
-### References
+#### References
 File specs were taken from [fieldtrip](https://github.com/fieldtrip/fieldtrip/blob/1cabb512c46cc70e5b734776f20cdc3c181243bd/external/besa/readBESAimage.m)
 
 
 *source:*
-[EEG/src/read_write/dat.jl:22](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/read_write/dat.jl#L22)
+[EEG/src/read_write/dat.jl:22](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/read_write/dat.jl#L22)
 
 ---
 
@@ -777,7 +777,7 @@ Read *.evt file and convert to form for EEG.jl
 
 
 *source:*
-[EEG/src/read_write/evt.jl:9](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/read_write/evt.jl#L9)
+[EEG/src/read_write/evt.jl:9](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/read_write/evt.jl#L9)
 
 ---
 
@@ -786,29 +786,29 @@ Read rba from MAT file
 
 
 *source:*
-[EEG/src/read_write/rba.jl:9](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/read_write/rba.jl#L9)
+[EEG/src/read_write/rba.jl:9](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/read_write/rba.jl#L9)
 
 ---
 
 ### read_sfp(fname::String)
 Read sfp file
 
-### Input
+#### Input
 * `fname`: Name or path for the sfp file
 
-### Output
+#### Output
 * `elec`: Electrodes object
 
 
 *source:*
-[EEG/src/read_write/sfp.jl:15](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/read_write/sfp.jl#L15)
+[EEG/src/read_write/sfp.jl:15](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/read_write/sfp.jl#L15)
 
 ---
 
 ### remove_channel!(a::SSR, channel_names::Array{ASCIIString, N})
 Remove specified channels from SSR.
 
-### Example
+#### Example
 
 Remove channel Cz and those in the set called `EEG_Vanvooren_2014_Right`
 
@@ -819,46 +819,46 @@ remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 
 
 *source:*
-[EEG/src/types/SSR/SSR.jl:155](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/types/SSR/SSR.jl#L155)
+[EEG/src/types/SSR/SSR.jl:155](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/types/SSR/SSR.jl#L155)
 
 ---
 
 ### remove_template{T<:FloatingPoint}(signals::Array{T<:FloatingPoint, 2}, template::Array{T<:FloatingPoint, 1})
 Remove a template signal from each column of an array
 
-### Arguments
+#### Arguments
 
 * `signals`: Original signals to be modified
 * `template`: Template to remove from each signal
 
-### Returns
+#### Returns
 Signals with template removed
 
 
 *source:*
-[EEG/src/preprocessing/reference.jl:11](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/preprocessing/reference.jl#L11)
+[EEG/src/preprocessing/reference.jl:11](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/preprocessing/reference.jl#L11)
 
 ---
 
-### rereference{S<:String, T<:FloatingPoint}(signals::Array{T<:FloatingPoint, 2}, refChan::Union(S<:String, Array{S<:String, N}), chanNames::Array{S<:String, N})
+### rereference{S<:String, T<:FloatingPoint}(signals::Array{T<:FloatingPoint, 2}, refChan::Union(Array{S<:String, N}, S<:String), chanNames::Array{S<:String, N})
 Re-reference a signals to specific signal channel by name.
 
 If multiple channels are specififed, their average is used as the reference.
 Or you can specify to use the `average` reference.
 
-### Arguments
+#### Arguments
 
 * `signals`: Original signals to be modified
 * `refChan`: List of channels to be used as reference or `average`
 * `chanNames`: List of channel names associated with signals array
 
-### Returns
+#### Returns
 
 Rereferenced signals
 
 
 *source:*
-[EEG/src/preprocessing/reference.jl:70](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/preprocessing/reference.jl#L70)
+[EEG/src/preprocessing/reference.jl:70](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/preprocessing/reference.jl#L70)
 
 ---
 
@@ -867,18 +867,18 @@ Re reference a signals to specific signal channel by index.
 
 If multiple channels are specififed, their average is used as the reference.
 
-### Arguments
+#### Arguments
 
 * `signals`: Original signals to be modified
 * `refChan`: Index of channels to be used as reference
 
-### Returns
+#### Returns
 
 Rereferenced signals
 
 
 *source:*
-[EEG/src/preprocessing/reference.jl:38](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/preprocessing/reference.jl#L38)
+[EEG/src/preprocessing/reference.jl:38](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/preprocessing/reference.jl#L38)
 
 ---
 
@@ -886,7 +886,7 @@ Rereferenced signals
 Return the sampling rate of a steady state type.
 If no type is provided, the sampling rate is returned as a floating point.
 
-### Example
+#### Example
 
 Return the sampling rate of a recording
 
@@ -897,34 +897,34 @@ samplingrate(s)
 
 
 *source:*
-[EEG/src/types/SSR/SSR.jl:64](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/types/SSR/SSR.jl#L64)
+[EEG/src/types/SSR/SSR.jl:64](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/types/SSR/SSR.jl#L64)
 
 ---
 
 ### save_synchrony_results(a::SSR)
 Save synchrony results to file
 
-### Arguments
+#### Arguments
 * `a`: A SSR object
 * `name_extension`: string appended at the end of the saved file name
 
-### Returns
+#### Returns
 The same object `a`
 
 
 *source:*
-[EEG/src/types/SSR/Synchrony.jl:120](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/types/SSR/Synchrony.jl#L120)
+[EEG/src/types/SSR/Synchrony.jl:120](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/types/SSR/Synchrony.jl#L120)
 
 ---
 
 ### trim_channel(a::SSR, stop::Int64)
 Trim SSR recording by removing data after `stop` specifed samples.
 
-### Optional Parameters
+#### Optional Parameters
 
 * `start` Remove samples before this value
 
-### Example
+#### Example
 
 Remove the first 8192 samples and everything after 8192*300 samples
 
@@ -934,7 +934,7 @@ s = trim_channel(s, 8192*300, start=8192)
 
 
 *source:*
-[EEG/src/types/SSR/SSR.jl:238](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/types/SSR/SSR.jl#L238)
+[EEG/src/types/SSR/SSR.jl:238](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/types/SSR/SSR.jl#L238)
 
 ---
 
@@ -943,7 +943,7 @@ Validate trigger channel
 
 
 *source:*
-[EEG/src/preprocessing/triggers.jl:10](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/preprocessing/triggers.jl#L10)
+[EEG/src/preprocessing/triggers.jl:10](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/preprocessing/triggers.jl#L10)
 
 ---
 
@@ -952,7 +952,7 @@ Write AVR file
 
 
 *source:*
-[EEG/src/read_write/avr.jl:55](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/read_write/avr.jl#L55)
+[EEG/src/read_write/avr.jl:55](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/read_write/avr.jl#L55)
 
 ---
 
@@ -961,7 +961,7 @@ Write dat file
 
 
 *source:*
-[EEG/src/read_write/dat.jl:162](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/read_write/dat.jl#L162)
+[EEG/src/read_write/dat.jl:162](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/read_write/dat.jl#L162)
 
 ---
 
@@ -970,7 +970,7 @@ Dipole type.
 
 Store the location, direction and state of a dipole
 
-### Parameters
+#### Parameters
 
 * coord_system: The coordinate system that the locations are stored in
 * x,y,z: Location of dipole
@@ -982,7 +982,7 @@ Store the location, direction and state of a dipole
 
 
 *source:*
-[EEG/src/source_analysis/dipoles.jl:15](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/source_analysis/dipoles.jl#L15)
+[EEG/src/source_analysis/dipoles.jl:15](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/source_analysis/dipoles.jl#L15)
 
 ---
 
@@ -990,7 +990,7 @@ Store the location, direction and state of a dipole
 ## Steady State Response
 This composite type contains the information for steady state response recordings and analysis.
 
-### Fields
+#### Fields
 
 * `data`: contains the recorded data
 * `trigers`: contains information about timing for creation of epochs
@@ -1003,7 +1003,7 @@ This composite type contains the information for steady state response recording
 * `processing`: dictionary type to store analysis
 * `header`: additional information read from the file
 
-### `processing` Fields
+#### `processing` Fields
 The following standard names are used when saving data to the processing dictionary.
 
 * `Name`: The identifier for the participant
@@ -1015,7 +1015,7 @@ The following standard names are used when saving data to the processing diction
 
 
 *source:*
-[EEG/src/types/SSR/SSR.jl:30](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/types/SSR/SSR.jl#L30)
+[EEG/src/types/SSR/SSR.jl:30](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/types/SSR/SSR.jl#L30)
 
 ## Internal
 ---
@@ -1023,20 +1023,20 @@ The following standard names are used when saving data to the processing diction
 ### beamformer_type4(B::Array{T, N}, E::Array{T, N}, L::Array{T, N})
 Type 4 beamformer as described in Huang et al 2004.
 
-### Input
+#### Input
 
 * Array of data to be beamformed. Channels x Samples
 * Array of noise to be used. Channels x Samples
 * Matrix of leadfield values. Dipole x 3 x Channels
 
-### Optional arguments
+#### Optional arguments
 
 * progress: display progress bar for analysis
 * n: order of covariance matrix to calculate
 
 
 *source:*
-[EEG/src/source_analysis/beamformers.jl:20](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/source_analysis/beamformers.jl#L20)
+[EEG/src/source_analysis/beamformers.jl:20](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/source_analysis/beamformers.jl#L20)
 
 ---
 
@@ -1045,7 +1045,7 @@ Find the peak to peak value for each epoch to be returned to epoch_rejection()
 
 
 *source:*
-[EEG/src/preprocessing/data_rejection.jl:33](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/preprocessing/data_rejection.jl#L33)
+[EEG/src/preprocessing/data_rejection.jl:33](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/preprocessing/data_rejection.jl#L33)
 
 ---
 
@@ -1054,13 +1054,13 @@ Read elp file
 
 (Not yet working, need to convert to 3d coord system)
 
-### Input
+#### Input
 * `fname`: Name or path for the sfp file
 
-### Output
+#### Output
 * `elec`: Electrodes object
 
 
 *source:*
-[EEG/src/read_write/elp.jl:17](https://github.com/codles/EEG.jl/tree/913565146e3ad7b5d558462f262fa174ffb49f69/src/read_write/elp.jl#L17)
+[EEG/src/read_write/elp.jl:17](https://github.com/codles/EEG.jl/tree/8ccccf8393328e49d49da1ad0e36993d4e00fa8d/src/read_write/elp.jl#L17)
 

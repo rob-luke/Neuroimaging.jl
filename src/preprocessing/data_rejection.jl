@@ -1,13 +1,13 @@
 @doc doc"""
 Reject epochs based on the maximum peak to peak voltage within an epoch across all channels
 
-### Arguments
+#### Arguments
 
 * `epochs`: Array containing the epoch data in the format samples x epochs x channels
 * `retain_percentage`: The percentage of epochs to retain
 * `rejection_method`: Method to be used for epoch rejection (peak2peak)
 
-### Returns
+#### Returns
 
 * An array with a reduced amount of entries in the epochs dimension
 """ ->
@@ -49,13 +49,13 @@ Reject channels with too great a variance.
 
 Rejection can be based on a threshold or dynamicly chosen based on the variation of all channels.
 
-### Arguments
+#### Arguments
 
 * `signals`: Array of data in format samples x channels
 * `threshold_abs`: Absolute threshold to remove channels with variance above this value
 * `threshold_std`: Reject channels with a variance more than n times the std of all channels
 
-### Returns
+#### Returns
 
 An array indicating the channels to be kept
 """ ->

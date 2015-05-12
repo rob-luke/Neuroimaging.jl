@@ -3,7 +3,7 @@ Dipole type.
 
 Store the location, direction and state of a dipole
 
-### Parameters
+#### Parameters
 
 * coord_system: The coordinate system that the locations are stored in
 * x,y,z: Location of dipole
@@ -46,13 +46,13 @@ Find all dipole in an activity map.
 
 Determines the local maxima in a 3 dimensional array
 
-### Input
+#### Input
 
 * s: Activity in 3d matrix
 * window: Windowing to use in each dimension for min max filter
 * x,y,z: Coordinates associated with s matrix
 
-### Output
+#### Output
 
 * dips: An array of dipoles
 
@@ -128,13 +128,13 @@ Find best dipole relative to reference location.
 
 Finds the largest dipole within a specified distance of a reference location
 
-### Input
+#### Input
 
 * ref: Reference coordinate or dipole
 * dips: Dipoles to find the best dipole from
 * maxdist: Maximum distance a dipole can be from the reference
 
-### Output
+#### Output
 
 * dip: The best dipole
 

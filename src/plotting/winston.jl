@@ -7,7 +7,7 @@
 @doc md"""
 Plot a dat file from three views.
 
-### Optional Arguments
+#### Optional Arguments
 
 * threshold_ratio(1/1000): locations smaller than this are not plotted
 * ncols(2): number of colums used for output plot

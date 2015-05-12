@@ -2,7 +2,7 @@
 Calculates the F test as is commonly implemented in SSR research.  
 TODO: Add references to MASTER and Luts et al
 
-### Parameters
+#### Parameters
 
 * Sweep measurements. Samples x Sweeps x Channels
 * Frequency(ies) of interest (Hz)
@@ -11,7 +11,7 @@ TODO: Add references to MASTER and Luts et al
 * Filter used on the sweep data. If provided then is compensated for
 * The number of bins to ignore on each side of the frequency of interest
 
-### Returns
+#### Returns
 
 * Signal to noise ratio in dB
 * Signal phase at frequency of interest

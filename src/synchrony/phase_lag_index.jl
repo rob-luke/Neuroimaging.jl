@@ -3,7 +3,7 @@ Phase locked index of waveforms two time series cut in to epochs.
 
 Calculated using [Synchrony.jl](https://github.com/simonster/Synchrony.jl)
 
-### Arguments
+#### Arguments
 
 * `data`: samples x channels x epochs as described in [multitaper documentation](https://github.com/simonster/Synchrony.jl/blob/master/src/multitaper.jl)
 * `freqrange`: range of frequencies to analyse
