@@ -16,7 +16,7 @@ Plot a dat file from three views.
 """ ->
 function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, dat_data::Array{T};
                 threshold_ratio::Number=1/1000, ncols::Int=2, max_size::Union(Number, Nothing)=nothing, min_size=0.2,
-                threshold::Number = 0.01, kwargs...)
+                threshold::Number = 0.01, colorbar::Bool=true, colorbar_title::String="nAm/cm^3", kwargs...)
 
     max_value = maximum(dat_data)
     threshold = minimum([threshold, max_value * threshold_ratio])
@@ -89,43 +89,50 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
     top = scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], c_tmp, "x", label = "Voxel",
         title = "Top", xlabel = "Left - Right (mm)", ylabel = "Posterior - Anterior (mm)"; kwargs...)
 
-
+    p = 0
     # Create a color bar
-    dmin = minimum(s)
-    dmax = maximum(s)
-    p=FramedPlot(aspect_ratio=10.0, xlabel="nAm/cm^3")
-    setattr(p.x, draw_ticks=false)
-    setattr(p.y1, draw_ticks=false)
-    setattr(p.x1, draw_ticklabels=false)
-    setattr(p.y1, draw_ticklabels=false)
-    setattr(p.y2, draw_ticklabels=true)
-    xr=(1,2)
-    yr=(dmin,dmax)
-    y=linspace(dmin, dmax, 256)*1.0
-    data=[y y]
-    setattr(p, :xrange, xr)
-    setattr(p, :yrange, yr)
-    clims = (minimum(data),maximum(data))
-    img = Winston.data2rgb(data, clims, Winston.colormap())
-    add(p, Image(xr, yr, img))
+    if colorbar
+        dmin = minimum(s)
+        dmax = maximum(s)
+        p=FramedPlot(aspect_ratio=10.0, xlabel=colorbar_title)
+        setattr(p.x, draw_ticks=false)
+        setattr(p.y1, draw_ticks=false)
+        setattr(p.x1, draw_ticklabels=false)
+        setattr(p.y1, draw_ticklabels=false)
+        setattr(p.y2, draw_ticklabels=true)
+        xr=(1,2)
+        yr=(dmin,dmax)
+        y=linspace(dmin, dmax, 256)*1.0
+        data=[y y]
+        setattr(p, :xrange, xr)
+        setattr(p, :yrange, yr)
+        clims = (minimum(data),maximum(data))
+        img = Winston.data2rgb(data, clims, Winston.colormap())
+        add(p, Image(xr, yr, img))
 
-    empty=FramedPlot(aspect_ratio=1.0)
-    setattr(empty.x, draw_ticks=false)
-    setattr(empty.y1, draw_ticks=false)
-    setattr(empty.x1, draw_ticklabels=false)
-    setattr(empty.y1, draw_ticklabels=false)
-    setattr(empty.y2, draw_ticklabels=false)
-    setattr(empty.y2, draw_axis=false)
-    setattr(empty.y2, draw_axis=false)
-    setattr(empty.x1, draw_axis=false)
-    setattr(empty.x2, draw_axis=false)
-    setattr(empty.x, draw_axis=false)
-    setattr(empty.y, draw_axis=false)
-    a = Points(0, 0, kind="dot")
-    add(empty, a)
-    add(empty, PlotInset((0.1, 0.1), (0.2, 0.9), p))
+        cb=FramedPlot(aspect_ratio=1.0)
+        setattr(cb.x, draw_ticks=false)
+        setattr(cb.y1, draw_ticks=false)
+        setattr(cb.x1, draw_ticklabels=false)
+        setattr(cb.y1, draw_ticklabels=false)
+        setattr(cb.y2, draw_ticklabels=false)
+        setattr(cb.y2, draw_axis=false)
+        setattr(cb.y2, draw_axis=false)
+        setattr(cb.x1, draw_axis=false)
+        setattr(cb.x2, draw_axis=false)
+        setattr(cb.x, draw_axis=false)
+        setattr(cb.y, draw_axis=false)
+        a = Points(0, 0, kind="dot")
+        add(cb, a)
+        add(cb, PlotInset((0.1, 0.1), (0.2, 0.9), p))
 
-    _place_plots([back, side, top, empty], ncols)
+        p = _place_plots([back, side, top, cb], ncols)
+    else
+
+        p = _place_plots([back, side, top], ncols)
+    end
+
+    p
 end
 
 function plot_dat(dat_data; kwargs...)
