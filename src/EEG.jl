@@ -22,7 +22,6 @@ using Logging,  # For user feedback
 import Winston: oplot
 
 export # Helper functions
-       append_strings,
        new_processing_key,
        find_keys_containing,
        fileparts,

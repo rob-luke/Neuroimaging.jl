@@ -1,30 +1,4 @@
 @doc doc"""
-Concatanate `strings` with a `separator` between each.
-
-#### Arguments
-
-* `strings`: Array of strings to place one after another
-* `separator`: String to place between each string (Default: ` `)
-
-#### Output
-
-String consisting of all input strings
-""" ->
-function append_strings(strings::Union(Array{String}, Array{ASCIIString}); separator::String=" ")
-    newString = strings[1]
-    if length(strings) > 1
-        for n = 2:length(strings)
-            newString = string(newString, separator, strings[n])
-        end
-    end
-
-    return newString
-end
-
-append_strings(string::String) = string
-
-
-@doc doc"""
 Return a new processing key with the number incremented.
 It checks for existing keys and returns a string with the next key to be used.
 

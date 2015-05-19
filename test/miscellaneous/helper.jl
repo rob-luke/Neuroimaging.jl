@@ -1,7 +1,3 @@
-@test append_strings(["Turtle", "smAck", "wam3d"]) == "Turtle smAck wam3d"
-@test append_strings(["Turtle", "smAck", "wam3d"], separator = "*3a") == "Turtle*3asmAck*3awam3d"
-@test append_strings("Turtle") == "Turtle"
-
 results_storage = Dict()
 results_storage[new_processing_key(results_storage, "FTest")] = 4
 results_storage[new_processing_key(results_storage, "Turtle")] = 5
