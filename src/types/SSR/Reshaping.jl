@@ -118,7 +118,7 @@ function channel_rejection(a::SSR; threshold_abs::Number=1000, threshold_var::Nu
 
     valid = channel_rejection(data, threshold_abs, threshold_var)
 
-    info("Rejected $(sum(!valid)) channels $(append_strings(a.channel_names[find(!valid)]))")
+    info("Rejected $(sum(!valid)) channels $(join(a.channel_names[find(!valid)], " "))")
 
     remove_channel!(a, a.channel_names[find(!valid)])
 

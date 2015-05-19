@@ -155,7 +155,8 @@ remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 """ ->
 function remove_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
     remove_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
-    info("Removing channel(s) $(append_strings(channel_names))"); end
+    info("Removing channel(s) $(join(channel_names, " "))")
+end
 
 function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
 
@@ -197,7 +198,7 @@ keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
 """ ->
 function keep_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
-    info("Keeping channel(s) $(append_strings(channel_names))")
+    info("Keeping channel(s) $(join(channel_names, " "))")
     keep_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
 end
 
@@ -281,11 +282,11 @@ function merge_channels(a::SSR, merge_Chans::Array{ASCIIString}, new_name::Strin
     keep_idxs = int(keep_idxs)
 
     if sum(keep_idxs .== 0) > 0
-        warn("Could not merge as these channels don't exist: $(append_strings(vec(merge_Chans[keep_idxs .== 0])))")
+        warn("Could not merge as these channels don't exist: $(join(vec(merge_Chans[keep_idxs .== 0]), " "))")
         keep_idxs = keep_idxs[keep_idxs .> 0]
     end
 
-    info("Merging channels $(append_strings(vec(a.channel_names[keep_idxs,:])))")
+    info("Merging channels $(join(vec(a.channel_names[keep_idxs,:]), " "))")
     debug("Merging channels $keep_idxs")
 
     a = add_channel(a, mean(a.data[:,keep_idxs], 2), new_name; kwargs...)
