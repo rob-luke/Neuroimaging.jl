@@ -23,8 +23,15 @@ File specs were taken from [fieldtrip](https://github.com/fieldtrip/fieldtrip/bl
 function read_dat(fname::String)
     info("Reading dat file = $fname")
 
-    # Open file
-    fid = open(fname, "r")
+    read_dat(open(fname, "r"))
+end
+
+
+function read_dat(fid::IO)
+
+    if isa(fid, IOBuffer)
+        fid.ptr = 1
+    end
 
     # Ensure we are reading version 2
     versionString = match(r"(\S+):(\d.\d)", readline(fid))
@@ -129,6 +136,7 @@ function read_dat(fname::String)
 
     return x, y, z, complete_data, sample_times
 end
+
 
 @doc doc"""
 Convert vector format source results to 3d array used in dat files
