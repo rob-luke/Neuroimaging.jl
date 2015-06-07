@@ -13,7 +13,7 @@
 epochs = extract_epochs(SSR, valid_triggers=[1,2])
 ```
 """ ->
-function extract_epochs(a::SSR; valid_triggers::AbstractArray=[1,2], remove_first::Int=0, remove_last::Int=0, kwargs...)
+function extract_epochs(a::SSR; valid_triggers::Union(AbstractArray, Int)=[1,2], remove_first::Int=0, remove_last::Int=0, kwargs...)
 
     merge!(a.processing, ["epochs" => extract_epochs(a.data, a.triggers, valid_triggers, remove_first, remove_last)])
 
