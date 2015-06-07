@@ -31,3 +31,20 @@ s = extract_epochs(s, valid_triggers = 1)
 
 @test_throws ErrorException extract_epochs(s, valid_triggers = -4)
 
+
+#
+# epoch_rejection
+# ---------------
+#
+
+for r in 0.1 : 0.1 : 1
+
+    s = extract_epochs(s)
+
+    s = epoch_rejection(s, retain_percentage = r)
+
+    @test floor(28 * r) == size(s.processing["epochs"], 2)
+
+end
+
+

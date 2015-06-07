@@ -25,7 +25,7 @@ function epoch_rejection{T <: Number}(epochs::Array{T, 3}, retain_percentage::Fl
     epoch_values = rejection_method(epochs)
 
     cut_off_value = sort(epoch_values)[floor(length(epoch_values) * retain_percentage)]
-    epochs = epochs[:, epoch_values .< cut_off_value, :]
+    epochs = epochs[:, epoch_values .<= cut_off_value, :]
 end
 
 @doc doc"""
