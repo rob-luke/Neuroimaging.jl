@@ -180,7 +180,7 @@ end
 #
 #######################################
 
-function orient_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Number, modulation_frequency)
+function orient_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Number, modulation_frequency; kwargs...)
 
     warn("This function is not used. Check the output carefully")
 
@@ -197,25 +197,25 @@ function orient_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Numbe
     end
 
     a = SSR(dipole_data, triggers, Dict(), fs * Hertz, modulation_frequency, [""], "", "", ["o1", "o2", "o3"], Dict(), Dict())
-    a = extract_epochs(a)
-    a = create_sweeps(a)
-    a = ftest(a)
+    a = extract_epochs(a; kwargs...)
+    a = create_sweeps(a; kwargs...)
+    a = ftest(a; kwargs...)
     a = a.processing["statistics"][:SNRdB]  # Should save ftest with different name incase statistics already used
     a = a ./ maximum(a)
     a = a ./ sum(a)
     convert(Array, dipole_data * a)
 end
 
-function orient_dipole(dipole_data::Array{Float32, 2}, triggers, fs, modulation_frequency)
-    orient_dipole(convert(Array{FloatingPoint, 2}, dipole_data), triggers, fs, modulation_frequency)
+function orient_dipole(dipole_data::Array{Float32, 2}, triggers, fs, modulation_frequency; kwargs...)
+    orient_dipole(convert(Array{FloatingPoint, 2}, dipole_data), triggers, fs, modulation_frequency; kwargs...)
 end
 
-function orient_dipole(dipole_data::Array{Float64, 2}, triggers, fs, modulation_frequency)
-    orient_dipole(convert(Array{FloatingPoint, 2}, dipole_data), triggers, fs, modulation_frequency)
+function orient_dipole(dipole_data::Array{Float64, 2}, triggers, fs, modulation_frequency; kwargs...)
+    orient_dipole(convert(Array{FloatingPoint, 2}, dipole_data), triggers, fs, modulation_frequency; kwargs...)
 end
 
 
-function best_ftest_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Number, modulation_frequency)
+function best_ftest_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Number, modulation_frequency; kwargs...)
 
     warn("This function is not used. Check the output carefully")
 
@@ -232,9 +232,9 @@ function best_ftest_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::N
     end
 
     a = SSR(dipole_data, triggers, Dict(), fs * Hertz, modulation_frequency, [""], "", "", ["o1", "o2", "o3"], Dict(), Dict())
-    a = extract_epochs(a)
-    a = create_sweeps(a)
-    a = ftest(a)
+    a = extract_epochs(a; kwargs...)
+    a = create_sweeps(a; kwargs...)
+    a = ftest(a; kwargs...)
     a = a.processing["statistics"][:SNRdB]  # Should save ftest with different name incase statistics already used
     a = vec(float(a .== maximum(a)))
     convert(Array, dipole_data * a)
