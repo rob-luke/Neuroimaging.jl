@@ -31,13 +31,14 @@ end
 
 function create_sweeps(a::SSR; epochsPerSweep::Int=64, kwargs...)
 
+    if epochsPerSweep >= size(a.processing["epochs"], 2)
+        error("Sweep length is longer than number of epochs will allow")
+    end
+
     merge!(a.processing, ["sweeps" => create_sweeps(a.processing["epochs"], epochsPerSweep)])
 
     return a
 end
-
-
-
 
 
 #######################################
