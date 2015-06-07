@@ -16,7 +16,7 @@ s = channel_rejection(s)
 s = extract_epochs(s)
 s = epoch_rejection(s)
 
-@test size(s.processing["epochs"]) == (8388, 25, 4)
+@test size(s.processing["epochs"]) == (8388, 26, 4)
 
 @test_throws BoundsError epoch_rejection(s, retain_percentage = 1.1)
 @test_throws BoundsError epoch_rejection(s, retain_percentage = -0.1)
