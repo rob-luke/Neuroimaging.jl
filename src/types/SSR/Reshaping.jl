@@ -31,7 +31,7 @@ end
 
 function create_sweeps(a::SSR; epochsPerSweep::Int=64, kwargs...)
 
-    if epochsPerSweep >= size(a.processing["epochs"], 2)
+    if epochsPerSweep > size(a.processing["epochs"], 2)
         error("Sweep length is longer than number of epochs will allow")
     end
 
