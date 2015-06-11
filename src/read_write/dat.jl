@@ -97,7 +97,7 @@ function read_dat(fid::IO)
     description = readline(fid)
     if search(description, "Sample") != 0:-1
 
-        s = match(r"Sample \d+, (\d+.\d+) ms", description)
+        s = match(r"Sample \d+, (-?\d+.\d+) ms", description)
         push!(sample_times, float(s.captures[1]))
 
         file_still_going = true
@@ -119,7 +119,7 @@ function read_dat(fid::IO)
             else
                 t += 1
                 s = readline(fid)               # Sample n, t.tt ms
-                s = match(r"Sample \d+, (\d+.\d+) ms", s)
+                s = match(r"Sample \d+, (-?\d+.\d+) ms", s)
                 push!(sample_times, float(s.captures[1]))
 
                 # There is no nice way to grow a multidimensional array
