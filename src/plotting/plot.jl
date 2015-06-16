@@ -111,7 +111,7 @@ function plot_ftest{T <: FloatingPoint}(spectrum::Array{Complex{T},2}, frequenci
     noi_pnt  = layer(x=[min_plot_freq], y=[noise_power], Geom.point, Theme(default_color=color("red")))
     sig_pnt  = layer(x=[min_plot_freq], y=[signal_power], Geom.point, Theme(default_color=color("green")))
 
-    plot(noi_plot, sig_plot, raw_plot, noi_pnt, sig_pnt,
+    Gadfly.plot(noi_plot, sig_plot, raw_plot, noi_pnt, sig_pnt,
         Scale.x_continuous(minvalue=min_plot_freq, maxvalue=max_plot_freq),
         Scale.y_log10(),
         Guide.ylabel("Power (uV^2)"), Guide.xlabel("Frequency (Hz)"),

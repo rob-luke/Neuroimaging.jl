@@ -19,7 +19,7 @@ using Logging,  # For user feedback
       BDF,
       MAT
 
-import Winston: oplot
+import Winston: oplot, plot
 
 export # Helper functions
        new_processing_key,
@@ -65,6 +65,10 @@ export # Helper functions
        # Synchrony
        phase_lag_index,
        save_synchrony_results,
+       # Type - Volume Image
+       VolumeImage,
+       read_VolumeImage,
+       plot,
        # Type - SSR
        SSR,
        samplingrate,
@@ -151,6 +155,12 @@ include("statistics/gfp.jl")
 
 # Synchrony
 include("synchrony/phase_lag_index.jl")
+
+# Type - Tomography
+include("types/VolumeImage/VolumeImage.jl")
+include("types/VolumeImage/ReadWrite.jl")
+include("types/VolumeImage/Plotting.jl")
+
 
 # Type - SSR
 include("types/SSR/SSR.jl")
