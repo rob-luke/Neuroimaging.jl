@@ -32,7 +32,7 @@ end
 #
 
 
-import Base: +, -, /, show, mean
+import Base: +, -, /, show, mean, maximum
 
 function Base.show(io::IO, vi::VolumeImage)
 
@@ -138,6 +138,46 @@ function mean(vi1::VolumeImage)
     vi1.t = [NaN]
 
     return vi1
+end
+
+function mean(va::Array{VolumeImage,1})
+
+    mean_va = deepcopy(va[1])
+
+    for i in 2:length(va)
+
+        mean_va = mean_va + va[i]
+
+    end
+
+    return mean_va / length(va)
+end
+
+
+# maximum
+
+function maximum(vi::VolumeImage)
+
+    maximum(vi.data)
+end
+
+
+# normalise
+
+function normalise(vi::VolumeImage)
+
+    normalisationi_constant = maximum(vi)
+
+    vi = deepcopy(vi) / normalisationi_constant
+
+    vi.info["NormalisationConstant"] = normalisationi_constant
+
+    return vi
+end
+
+function normalise(va::Array{VolumeImage, 1})
+
+    [normalise(vi) for vi in deepcopy(va)]
 end
 
 

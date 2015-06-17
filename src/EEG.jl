@@ -69,6 +69,7 @@ export # Helper functions
        VolumeImage,
        read_VolumeImage,
        plot,
+       normalise,
        # Type - SSR
        SSR,
        samplingrate,
