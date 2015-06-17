@@ -63,14 +63,49 @@ end
 
 # -
 
-function -(vi1::VolumeImage, vi2::VolumeImage)
+function -(vi1::VolumeImage, vi2::VolumeImage; NonNegative::Bool=true)
 
     dimensions_equal(vi1, vi2)
 
-    vi1.data = vi1.data .- vi2.data
+    m_out = copy(vi1.data)
+    m1 = copy(vi1.data)
+    m2 = copy(vi2.data)
 
-    return vi1
+    min_value = unique(sort(vec(m1)))[2]
+
+    for x in 1:size(m1, 1)
+        for y in 1:size(m1, 2)
+            for z in 1:size(m1, 3)
+                for t in 1:size(m1, 4)
+
+                    if m1[x, y, z, t] > 0
+
+                        diff_value = m1[x, y, z, t] - m2[x, y, z, t]
+
+                        if NonNegative
+
+                            if diff_value < min_value
+                                m_out[x, y, z, t] = min_value
+                            else
+                                m_out[x, y, z, t] = diff_value
+                            end
+
+                        else
+                            m_out[x, y, z, t] = diff_value
+                        end
+                    end
+
+                end
+            end
+        end
+    end
+
+    vi_out = deepcopy(vi1)
+    vi_out.data = m_out
+
+    return vi_out
 end
+
 
 
 # /
