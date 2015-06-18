@@ -16,7 +16,8 @@ Plot a dat file from three views.
 """ ->
 function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, dat_data::Array{T};
                 threshold_ratio::Number=1/1000, ncols::Int=2, max_size::Union(Number, Nothing)=nothing, min_size=0.2,
-                threshold::Number = 0.01, colorbar::Bool=true, colorbar_title::String="nAm/cm^3", kwargs...)
+                threshold::Number = 0.01, colorbar::Bool=true, colorbar_title::String="nAm/cm^3",
+                title_text::String="", non_negative::Bool=true, kwargs...)
 
     max_value = maximum(dat_data)
     threshold = minimum([threshold, max_value * threshold_ratio])
@@ -29,7 +30,7 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
 
     # TODO use metaprogramming here
 
-    s = squeeze(maximum(dat_data, 2), 2)   # Data along dimensions to be plotted
+    s = collapse_dat(dat_data, 2, non_negative)              # Data along dimensions to be plotted
     x_tmp = zeros(T, size(s,1)*size(s,2), 1)   # Allocate arrays
     y_tmp = zeros(T, size(s,1)*size(s,2), 1)
     s_tmp = zeros(T, size(s,1)*size(s,2), 1)
@@ -39,17 +40,18 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
         for yidx = 1:length(z)
             x_tmp[i] = x[xidx]
             y_tmp[i] = z[yidx]
-            if s[xidx,yidx] > threshold
+            if abs(s[xidx,yidx]) > threshold
                 s_tmp[i] = s[xidx, yidx]*size_multiplier
                 c_tmp[i] = s[xidx, yidx]
             end
             i += 1
         end
     end
+    s_tmp = abs(s_tmp)
     back = scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], c_tmp, "x",
         title = "Back", xlabel = "Left - Right (mm)", ylabel = "Inferior - Superior (mm)"; kwargs...)
 
-    s = squeeze(maximum(dat_data, 1), 1)   # Data along dimensions to be plotted
+    s = collapse_dat(dat_data, 1, non_negative)              # Data along dimensions to be plotted
     x_tmp = zeros(T, size(s,1)*size(s,2), 1)   # Allocate arrays
     y_tmp = zeros(T, size(s,1)*size(s,2), 1)
     s_tmp = zeros(T, size(s,1)*size(s,2), 1)
@@ -59,17 +61,18 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
         for yidx = 1:length(z)
             x_tmp[i] = y[xidx]
             y_tmp[i] = z[yidx]
-            if s[xidx,yidx] > threshold
+            if abs(s[xidx,yidx]) > threshold
                 s_tmp[i] = s[xidx, yidx]*size_multiplier
                 c_tmp[i] = s[xidx, yidx]
             end
             i += 1
         end
     end
+    s_tmp = abs(s_tmp)
     side = scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], c_tmp, "x",
-        title = "Side", xlabel = "Posterior - Anterior (mm)", ylabel = "Inferior - Superior (mm)"; kwargs...)
+        title = string("Side  ", title_text), xlabel = "Posterior - Anterior (mm)", ylabel = "Inferior - Superior (mm)"; kwargs...)
 
-    s = squeeze(maximum(dat_data, 3), 3)   # Data along dimensions to be plotted
+    s = collapse_dat(dat_data, 3, non_negative)              # Data along dimensions to be plotted
     x_tmp = zeros(T, size(s,1)*size(s,2), 1)   # Allocate arrays
     y_tmp = zeros(T, size(s,1)*size(s,2), 1)
     s_tmp = zeros(T, size(s,1)*size(s,2), 1)
@@ -79,13 +82,14 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
         for yidx = 1:length(y)
             x_tmp[i] = x[xidx]
             y_tmp[i] = y[yidx]
-            if s[xidx,yidx] > threshold
+            if abs(s[xidx,yidx]) > threshold
                 s_tmp[i] = s[xidx, yidx]*size_multiplier
                 c_tmp[i] = s[xidx, yidx]
             end
             i += 1
         end
     end
+    s_tmp = abs(s_tmp)
     top = scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], c_tmp, "x", label = "Voxel",
         title = "Top", xlabel = "Left - Right (mm)", ylabel = "Posterior - Anterior (mm)"; kwargs...)
 
@@ -134,6 +138,25 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
 
     p
 end
+
+
+function collapse_dat(dat_data, dim, non_negative)
+
+    s = squeeze(maxabs(dat_data, dim), dim)
+
+    if !non_negative
+
+        smin = squeeze(minimum(dat_data, dim), dim)
+
+        negate_me = s .== (smin * -1)
+
+        s[negate_me] = s[negate_me] * -1
+
+    end
+
+    return s
+end
+
 
 function plot_dat(dat_data; kwargs...)
 
