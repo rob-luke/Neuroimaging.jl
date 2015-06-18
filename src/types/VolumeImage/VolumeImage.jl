@@ -12,6 +12,7 @@ This composite type contains volume image information
 #### `processing` Fields
 The following standard names are used when saving data to the info dictionary.
 * `Regularisation`: Regularisation used in tomography
+* `NormalisationConstant`: Value used to normalise image to maximum of 1
 
 """ ->
 type VolumeImage
@@ -32,7 +33,7 @@ end
 #
 
 
-import Base: +, -, /, show, mean, maximum
+import Base: +, -, /, *, show, mean, maximum
 
 function Base.show(io::IO, vi::VolumeImage)
 
@@ -45,6 +46,9 @@ function Base.show(io::IO, vi::VolumeImage)
     if haskey(vi.info, "Regularisation")
         println(io, "  Regularisation: $(vi.info["Regularisation"])")
     end
+    if haskey(vi.info, "NormalisationConstant")
+        println(io, "  Image has been normalised")
+    end
 end
 
 
@@ -55,57 +59,30 @@ function +(vi1::VolumeImage, vi2::VolumeImage)
 
     dimensions_equal(vi1, vi2)
 
-    vi1.data = vi1.data .+ vi2.data
+    debug("Adding two volume images with $(size(vi.data, 4)) time instances")
 
-    return vi1
+    vout = deepcopy(vi1)
+
+    vout.data = vi1.data .+ vi2.data
+
+    return vout
 end
 
 
 # -
 
-function -(vi1::VolumeImage, vi2::VolumeImage; NonNegative::Bool=true)
+function -(vi1::VolumeImage, vi2::VolumeImage)
 
     dimensions_equal(vi1, vi2)
 
-    m_out = copy(vi1.data)
-    m1 = copy(vi1.data)
-    m2 = copy(vi2.data)
+    debug("Subtracting two volume images with $(size(vi.data, 4)) time instances")
 
-    min_value = unique(sort(vec(m1)))[2]
+    vout = deepcopy(vi1)
 
-    for x in 1:size(m1, 1)
-        for y in 1:size(m1, 2)
-            for z in 1:size(m1, 3)
-                for t in 1:size(m1, 4)
+    vout.data = vi1.data .- vi2.data
 
-                    if m1[x, y, z, t] > 0
-
-                        diff_value = m1[x, y, z, t] - m2[x, y, z, t]
-
-                        if NonNegative
-
-                            if diff_value < min_value
-                                m_out[x, y, z, t] = min_value
-                            else
-                                m_out[x, y, z, t] = diff_value
-                            end
-
-                        else
-                            m_out[x, y, z, t] = diff_value
-                        end
-                    end
-
-                end
-            end
-        end
-    end
-
-    vi_out = deepcopy(vi1)
-    vi_out.data = m_out
-
-    return vi_out
+    return vout
 end
-
 
 
 # /
@@ -114,17 +91,34 @@ function /(vi1::VolumeImage, vi2::VolumeImage)
 
     dimensions_equal(vi1, vi2)
 
-    vi1.data = vi1.data ./ vi2.data
+    debug("Dividing two volume images with $(size(vi.data, 4)) time instances")
 
-    return vi1
+    vout = deepcopy(vi1)
+
+    vout.data = vi1.data ./ vi2.data
+
+    return vout
 end
-
 
 function /(vi1::VolumeImage, c::Number)
 
-    vi1.data = vi1.data ./ c
+    vout = deepcopy(vi1)
 
-    return vi1
+    vout.data = vi1.data ./ c
+
+    return vout
+end
+
+
+# *
+
+function *(vi1::VolumeImage, c::Number)
+
+    vout = deepcopy(vi1)
+
+    vout.data = vi1.data .* c
+
+    return vout
 end
 
 
@@ -132,15 +126,21 @@ end
 
 function mean(vi1::VolumeImage)
 
-    vi1.data = mean(vi1.data, 4)
+    debug("Taking mean of one volume images with $(size(vi.data, 4)) time instances")
+
+    vout = deepcopy(vi1)
+
+    vout.data = mean(vout.data, 4)
 
     # Store time as 0 to indicate its been averaged
-    vi1.t = [NaN]
+    vout.t = [NaN]
 
-    return vi1
+    return vout
 end
 
 function mean(va::Array{VolumeImage,1})
+
+    debug("Taking mean of $(length(va)) volume images with $(size(va[1].data, 4)) time instances")
 
     mean_va = deepcopy(va[1])
 
@@ -166,18 +166,26 @@ end
 
 function normalise(vi::VolumeImage)
 
-    normalisationi_constant = maximum(vi)
+    debug("Normalising one volume images with $(size(va[1].data, 4)) time instances")
 
-    vi = deepcopy(vi) / normalisationi_constant
+    normalisation_constant = maximum(vi)
 
-    vi.info["NormalisationConstant"] = normalisationi_constant
+    vi = deepcopy(vi) / normalisation_constant
+
+    vi.info["NormalisationConstant"] = normalisation_constant
 
     return vi
 end
 
 function normalise(va::Array{VolumeImage, 1})
 
-    [normalise(vi) for vi in deepcopy(va)]
+    debug("Normalising $(length(va)) volume images with $(size(va[1].data, 4)) time instances")
+
+    vo = deepcopy(va)
+    for i in 1:length(vo)
+        vo[i] = normalise(vo[i])
+    end
+    return vo
 end
 
 
@@ -186,9 +194,20 @@ end
 # ----------------
 #
 
-function dimensions_equal(vi1::VolumeImage, vi2::VolumeImage)
+function dimensions_equal(vi1::VolumeImage, vi2::VolumeImage; x::Bool=true, y::Bool=true, z::Bool=true, kwargs...)
 
-    if (vi1.x == vi2.x) & (vi1.y == vi2.y) & (vi1.z == vi2.z) & (vi1.t == vi2.t) & (vi1.units == vi2.units)
+    matching = true
+    if x & !(vi1.x == vi2.x)
+        matching = false
+    end
+    if y & !(vi1.y == vi2.y)
+        matching = false
+    end
+    if z & !(vi1.z == vi2.z)
+        matching = false
+    end
+
+    if matching
         return true
     else
         error("VolumeImage dimensions do not match")
