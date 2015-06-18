@@ -59,7 +59,7 @@ function +(vi1::VolumeImage, vi2::VolumeImage)
 
     dimensions_equal(vi1, vi2)
 
-    debug("Adding two volume images with $(size(vi.data, 4)) time instances")
+    debug("Adding two volume images with $(size(vi1.data, 4)) time instances")
 
     vout = deepcopy(vi1)
 
@@ -75,7 +75,7 @@ function -(vi1::VolumeImage, vi2::VolumeImage)
 
     dimensions_equal(vi1, vi2)
 
-    debug("Subtracting two volume images with $(size(vi.data, 4)) time instances")
+    debug("Subtracting two volume images with $(size(vi1.data, 4)) time instances")
 
     vout = deepcopy(vi1)
 
@@ -91,7 +91,7 @@ function /(vi1::VolumeImage, vi2::VolumeImage)
 
     dimensions_equal(vi1, vi2)
 
-    debug("Dividing two volume images with $(size(vi.data, 4)) time instances")
+    debug("Dividing two volume images with $(size(vi1.data, 4)) time instances")
 
     vout = deepcopy(vi1)
 
@@ -100,11 +100,11 @@ function /(vi1::VolumeImage, vi2::VolumeImage)
     return vout
 end
 
-function /(vi1::VolumeImage, c::Number)
+function /(vi::VolumeImage, c::Number)
 
-    vout = deepcopy(vi1)
+    vout = deepcopy(vi)
 
-    vout.data = vi1.data ./ c
+    vout.data = vi.data ./ c
 
     return vout
 end
@@ -112,11 +112,11 @@ end
 
 # *
 
-function *(vi1::VolumeImage, c::Number)
+function *(vi::VolumeImage, c::Number)
 
-    vout = deepcopy(vi1)
+    vout = deepcopy(vi)
 
-    vout.data = vi1.data .* c
+    vout.data = vi.data .* c
 
     return vout
 end
@@ -124,11 +124,11 @@ end
 
 # mean
 
-function mean(vi1::VolumeImage)
+function mean(vi::VolumeImage)
 
     debug("Taking mean of one volume images with $(size(vi.data, 4)) time instances")
 
-    vout = deepcopy(vi1)
+    vout = deepcopy(vi)
 
     vout.data = mean(vout.data, 4)
 
@@ -166,7 +166,7 @@ end
 
 function normalise(vi::VolumeImage)
 
-    debug("Normalising one volume images with $(size(va[1].data, 4)) time instances")
+    debug("Normalising one volume images with $(size(vi.data, 4)) time instances")
 
     normalisation_constant = maximum(vi)
 
