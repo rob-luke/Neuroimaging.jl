@@ -13,6 +13,7 @@ This composite type contains volume image information
 The following standard names are used when saving data to the info dictionary.
 * `Regularisation`: Regularisation used in tomography
 * `NormalisationConstant`: Value used to normalise image to maximum of 1
+* `FileName`: Name of file
 
 """ ->
 type VolumeImage

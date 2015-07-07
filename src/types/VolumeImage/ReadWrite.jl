@@ -13,6 +13,8 @@ function read_VolumeImage(fname::String)
         warn("Unknown file type")
     end
 
+    header["FileName"] = fname
+
     VolumeImage(s, units, x, y, z, t, method, header)
 end
 
