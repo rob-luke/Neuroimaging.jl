@@ -184,6 +184,11 @@ function extra_triggers(t::Dict, old_trigger_code::Union(Int, Array{Int}),
     index = index[v]
     code  = code[v]
 
+    # if there are any two triggers directly on top of each other then remove them
+    valid_idx = [true, diff(index) .!= 0]
+    index = index[valid_idx]
+    code = code[valid_idx]
+
     triggers = ["Index" => vec(int(index)'), "Code" => vec(code .+ trigger_code_offset),
                 "Duration" => vec([0, diff(index)])']
 
