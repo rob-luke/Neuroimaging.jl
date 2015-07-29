@@ -113,6 +113,62 @@ end
 
 #######################################
 #
+# Operate on type
+#
+#######################################
+
+import Base.hcat
+@doc doc"""
+Append one SSR type to another, simulating a longer recording.
+
+#### Example
+
+```julia
+hcat(a, b)
+```
+""" ->
+function hcat(a::SSR, b::SSR)
+
+    if haskey(a.processing, "epochs")
+        warn("Epochs have already been extracted and will no longer be valid")
+    end
+    if haskey(a.processing, "statistics")
+        warn("Statistics have already been calculated and will no longer be valid")
+    end
+
+    debug("Appending two SSRs with $(size(a.data, 2)) & $(size(b.data, 2)) channels and lengths $(size(a.data, 1)) $(size(b.data, 1))")
+
+    join_triggers(a, b)
+    a.data = [a.data; b.data]
+
+    return a
+end
+
+
+@doc doc"""
+Append the trigger information of one SSR type to another.
+Places the trigger information at the end of first file
+
+#### Example
+
+```julia
+join_triggers(a, b)
+```
+""" ->
+function join_triggers(a, b; offset=size(a.data, 1))
+
+    a.triggers["Index"] = [a.triggers["Index"]; (b.triggers["Index"] .+ offset)]
+    a.triggers["Code"] = [a.triggers["Code"]; b.triggers["Code"]]
+    a.triggers["Duration"] = [a.triggers["Duration"]'; b.triggers["Duration"]']'
+
+    a
+end
+
+
+
+
+#######################################
+#
 # Manipulate channels
 #
 #######################################

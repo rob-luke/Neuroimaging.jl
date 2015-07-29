@@ -86,6 +86,7 @@ export # Helper functions
        write_SSR,
        merge_channels,
        bootstrap,
+       hcat,
        # Source analysis
        Electrodes,
            show,
