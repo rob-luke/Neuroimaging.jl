@@ -97,6 +97,10 @@ function read_dat(fid::IO)
     description = readline(fid)
     if search(description, "Sample") != 0:-1
 
+        #
+        # 4D file
+        #
+
         s = match(r"Sample \d+, (-?\d+.\d+) ms", description)
         push!(sample_times, float(s.captures[1]))
 
@@ -129,7 +133,34 @@ function read_dat(fid::IO)
             end
         end
     else
-        warn("Unsported file")
+
+        #
+        # 3D file
+        #
+
+        file_still_going = true
+        idx = 1
+        while file_still_going
+            for zind = 1:length(z)
+
+                for yind = 1:length(y)
+                    d = readline(fid)       # values
+                    m = matchall(r"(-?\d+.\d+)", d)
+                    complete_data[:, yind, zind, t] = float(m)
+                end
+
+                d = readline(fid)           # blank or dashed
+                d = readline(fid)           # blank or dashed
+            end
+
+            if eof(fid)
+                file_still_going = false
+            else
+                println("File should have finished")
+            end
+        end
+
+        sample_times = 0
     end
 
     close(fid)

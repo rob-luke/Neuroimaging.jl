@@ -1,10 +1,3 @@
-using EEG
-using Base.Test
-using Logging
-using MAT, BDF
-using SIUnits, SIUnits.ShortUnits
-
-
 #
 # BIOSEMI
 #
@@ -113,7 +106,26 @@ x2, y2, z2, s2, t2 = read_dat(sname)
 @test t==t2
 
 
+fname = joinpath(dirname(@__FILE__), "data", "test-3d.dat")
+x, y, z, s, t = read_dat(fname)
 
+@test size(x) == (30,)
+@test size(y) == (36,)
+@test size(z) == (28,)
+@test size(s) == (30,36,28,1)
+@test size(t) == ()
+
+@test maximum(x) == 72.5
+@test maximum(y) == 71.220001
+@test maximum(z) == 76.809998
+@test maximum(s) == 33.2692985535
+@test maximum(t) == 0
+
+@test minimum(x) == -72.5
+@test minimum(y) == -103.779999
+@test minimum(z) == -58.189999
+@test minimum(s) == -7.5189352036
+@test minimum(t) == 0
 
 println()
 println("!! Read/Write test passed !!")
