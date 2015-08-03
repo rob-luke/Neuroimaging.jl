@@ -1,6 +1,6 @@
 using Winston
 
-fname = joinpath(dirname(@__FILE__), "../../data", "test.dat")
+fname = joinpath(dirname(@__FILE__), "../../data", "test-4d.dat")
 
 t = read_VolumeImage(fname)
 
@@ -41,7 +41,7 @@ t2 = mean(t2)
 # Test printing
 #
 
-fname = joinpath(dirname(@__FILE__), "../../data", "test.dat")
+fname = joinpath(dirname(@__FILE__), "../../data", "test-4d.dat")
 
 t = read_VolumeImage(fname)
 

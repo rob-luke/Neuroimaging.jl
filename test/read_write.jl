@@ -72,7 +72,7 @@ a2, b2 = read_avr(sname)
 # Test dat files
 #
 
-fname = joinpath(dirname(@__FILE__), "data", "test.dat")
+fname = joinpath(dirname(@__FILE__), "data", "test-4d.dat")
 sname = joinpath(dirname(@__FILE__), "data", "same.dat")
 
 x, y, z, s, t = read_dat(fname)
