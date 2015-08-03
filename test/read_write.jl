@@ -113,7 +113,7 @@ x, y, z, s, t = read_dat(fname)
 @test size(y) == (36,)
 @test size(z) == (28,)
 @test size(s) == (30,36,28,1)
-@test size(t) == ()
+@test size(t) == (1,)
 
 @test maximum(x) == 72.5
 @test maximum(y) == 71.220001

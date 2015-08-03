@@ -70,6 +70,7 @@ export # Helper functions
        read_VolumeImage,
        plot,
        normalise,
+       find_dipoles,
        # Type - SSR
        SSR,
        samplingrate,
@@ -162,6 +163,7 @@ include("synchrony/phase_lag_index.jl")
 include("types/VolumeImage/VolumeImage.jl")
 include("types/VolumeImage/ReadWrite.jl")
 include("types/VolumeImage/Plotting.jl")
+include("types/VolumeImage/Dipoles.jl")
 
 
 # Type - SSR

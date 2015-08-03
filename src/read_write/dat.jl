@@ -66,7 +66,13 @@ function read_dat(fid::IO)
         debug("Regularisation = $regularization")
         debug("Units = $units")
     elseif search(typeline, "MSBF") != 0:-1
-        warn("MSBF type not implemented yet")
+    
+        image_mode = "Single Time"
+        image_type = "Multiple Source Beamformer"
+        units = condition[3:end-1]
+        regularization = "None"
+        
+        warn("MSBF type under development")
     elseif search(typeline, "MSPS") != 0:-1
         warn("MSPS type not implemented yet")
     elseif search(typeline, "Sens") != 0:-1
@@ -160,7 +166,7 @@ function read_dat(fid::IO)
             end
         end
 
-        sample_times = 0
+        sample_times = [0]
     end
 
     close(fid)
