@@ -29,9 +29,9 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
         size_multiplier = 1
     end
    
-    back = subplot_dat(x, z, 2, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold; kwargs...)
-    side = subplot_dat(y, z, 1, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold; kwargs...)
-    top =  subplot_dat(x, y, 3, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold; kwargs...)
+    back = subplot_dat(x, z, 2, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold, "Back", "Left - Right (mm)", "Inferior - Superior (mm)"; kwargs...)
+    side = subplot_dat(y, z, 1, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold, "Side", "Posterior - Anterior (mm)", "Inferior - Superior (mm)"; kwargs...)
+    top =  subplot_dat(x, y, 3, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold, "Top",  "Left - Right (mm)", "Posterior - Anterior (mm)"; kwargs...)
   
     p = 0
     # Create a color bar
@@ -81,7 +81,7 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
     
 end
 
-function subplot_dat(x_dim, y_dim, reduction_dim, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold; kwargs...)
+function subplot_dat(x_dim, y_dim, reduction_dim, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold, title, xlab, ylab; kwargs...)
     
     s = collapse_dat(dat_data, reduction_dim, plot_negative)     # Data along dimensions to be plotted
     x_tmp = zeros(T, size(s, 1) * size(s, 2), 1)                # Preallocate x locations
@@ -113,7 +113,7 @@ function subplot_dat(x_dim, y_dim, reduction_dim, dat_data, plot_negative, size_
     s_tmp = abs(s_tmp)
     
     scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], c_tmp, "x",
-        title = "Back", xlabel = "Left - Right (mm)", ylabel = "Inferior - Superior (mm)"; kwargs...)
+    title = title, xlabel = xlab, ylabel = ylab; kwargs...)
     
 end
 
