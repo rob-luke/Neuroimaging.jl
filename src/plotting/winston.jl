@@ -15,9 +15,10 @@ Plot a dat file from three views.
 
 """ ->
 function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, dat_data::Array{T};
+                min_plot_lim::Number = unique(sort(abs(vec(dat_data))))[2],
                 threshold_ratio::Number=1/1000, ncols::Int=2, max_size::Union(Number, Nothing)=nothing, min_size=0.2,
                 threshold::Number = 0.01, colorbar::Bool=true, colorbar_title::String="nAm/cm^3",
-                title_text::String="", non_negative::Bool=true, kwargs...)
+                title_text::String="", plot_negative::Bool=true, kwargs...)
 
     max_value = maximum(dat_data)
     threshold = minimum([threshold, max_value * threshold_ratio])
@@ -27,75 +28,15 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
     else
         size_multiplier = 1
     end
-
-    # TODO use metaprogramming here
-
-    s = collapse_dat(dat_data, 2, non_negative)              # Data along dimensions to be plotted
-    x_tmp = zeros(T, size(s,1)*size(s,2), 1)   # Allocate arrays
-    y_tmp = zeros(T, size(s,1)*size(s,2), 1)
-    s_tmp = zeros(T, size(s,1)*size(s,2), 1)
-    c_tmp = zeros(T, size(s,1)*size(s,2), 1)
-    i = 1
-    for xidx = 1:length(x)
-        for yidx = 1:length(z)
-            x_tmp[i] = x[xidx]
-            y_tmp[i] = z[yidx]
-            if abs(s[xidx,yidx]) > threshold
-                s_tmp[i] = s[xidx, yidx]*size_multiplier
-                c_tmp[i] = s[xidx, yidx]
-            end
-            i += 1
-        end
-    end
-    s_tmp = abs(s_tmp)
-    back = scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], c_tmp, "x",
-        title = "Back", xlabel = "Left - Right (mm)", ylabel = "Inferior - Superior (mm)"; kwargs...)
-
-    s = collapse_dat(dat_data, 1, non_negative)              # Data along dimensions to be plotted
-    x_tmp = zeros(T, size(s,1)*size(s,2), 1)   # Allocate arrays
-    y_tmp = zeros(T, size(s,1)*size(s,2), 1)
-    s_tmp = zeros(T, size(s,1)*size(s,2), 1)
-    c_tmp = zeros(T, size(s,1)*size(s,2), 1)
-    i = 1
-    for xidx = 1:length(y)
-        for yidx = 1:length(z)
-            x_tmp[i] = y[xidx]
-            y_tmp[i] = z[yidx]
-            if abs(s[xidx,yidx]) > threshold
-                s_tmp[i] = s[xidx, yidx]*size_multiplier
-                c_tmp[i] = s[xidx, yidx]
-            end
-            i += 1
-        end
-    end
-    s_tmp = abs(s_tmp)
-    side = scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], c_tmp, "x",
-        title = string("Side  ", title_text), xlabel = "Posterior - Anterior (mm)", ylabel = "Inferior - Superior (mm)"; kwargs...)
-
-    s = collapse_dat(dat_data, 3, non_negative)              # Data along dimensions to be plotted
-    x_tmp = zeros(T, size(s,1)*size(s,2), 1)   # Allocate arrays
-    y_tmp = zeros(T, size(s,1)*size(s,2), 1)
-    s_tmp = zeros(T, size(s,1)*size(s,2), 1)
-    c_tmp = zeros(T, size(s,1)*size(s,2), 1)
-    i = 1
-    for xidx = 1:length(x)
-        for yidx = 1:length(y)
-            x_tmp[i] = x[xidx]
-            y_tmp[i] = y[yidx]
-            if abs(s[xidx,yidx]) > threshold
-                s_tmp[i] = s[xidx, yidx]*size_multiplier
-                c_tmp[i] = s[xidx, yidx]
-            end
-            i += 1
-        end
-    end
-    s_tmp = abs(s_tmp)
-    top = scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], c_tmp, "x", label = "Voxel",
-        title = "Top", xlabel = "Left - Right (mm)", ylabel = "Posterior - Anterior (mm)"; kwargs...)
-
+   
+    back = subplot_dat(x, z, 2, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold; kwargs...)
+    side = subplot_dat(y, z, 1, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold; kwargs...)
+    top =  subplot_dat(x, y, 3, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold; kwargs...)
+  
     p = 0
     # Create a color bar
     if colorbar
+        s = collapse_dat(dat_data, 3, plot_negative)
         dmin = minimum(s)
         dmax = maximum(s)
         p=FramedPlot(aspect_ratio=10.0, xlabel=colorbar_title)
@@ -130,21 +71,57 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
         add(cb, a)
         add(cb, PlotInset((0.1, 0.1), (0.2, 0.9), p))
 
-        p = _place_plots([back, side, top, cb], ncols)
+        p = EEG._place_plots([back, side, top, cb], ncols)
     else
 
-        p = _place_plots([back, side, top], ncols)
+        p = EEG._place_plots([back, side, top], ncols)
     end
 
     p
+    
 end
 
+function subplot_dat(x_dim, y_dim, reduction_dim, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold; kwargs...)
+    
+    s = collapse_dat(dat_data, reduction_dim, plot_negative)     # Data along dimensions to be plotted
+    x_tmp = zeros(T, size(s, 1) * size(s, 2), 1)                # Preallocate x locations
+    y_tmp = zeros(T, size(s, 1) * size(s, 2), 1)                # Preallocate y locations
+    s_tmp = zeros(T, size(s, 1) * size(s, 2), 1)                # Preallocate scatter size
+    c_tmp = zeros(T, size(s, 1) * size(s, 2), 1)                # Preallocate scatter color
+    
+    i = 1
+    for xidx = 1:length(x_dim)
+        for yidx = 1:length(y_dim)
+            
+            x_tmp[i] = x_dim[xidx]                                    # Scatter require the data in vector format
+            y_tmp[i] = y_dim[yidx]                                    # So reshape x, y, scale and color to vectors
+            
+            if abs(s[xidx,yidx]) > min_plot_lim                       # This ensures the outline of the brain is shown
+                if abs(s[xidx,yidx]) > threshold                      # User set value for highlighting region of interest
+                    
+                    s_tmp[i] = abs(s[xidx, yidx]) * size_multiplier   # 
+                    c_tmp[i] = s[xidx, yidx]
+                    
+                else
+                    s_tmp[i] = min_size
+                    c_tmp[i] = min_size                   
+                end
+            end
+            i += 1
+        end
+    end
+    s_tmp = abs(s_tmp)
+    
+    scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], c_tmp, "x",
+        title = "Back", xlabel = "Left - Right (mm)", ylabel = "Inferior - Superior (mm)"; kwargs...)
+    
+end
 
-function collapse_dat(dat_data, dim, non_negative)
+function collapse_dat(dat_data, dim, plot_negative)
 
     s = squeeze(maxabs(dat_data, dim), dim)
 
-    if !non_negative
+    if plot_negative
 
         smin = squeeze(minimum(dat_data, dim), dim)
 
