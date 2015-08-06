@@ -76,12 +76,12 @@ function find_dipoles{T <: Number}(s::Array{T, 3}; window::Array{Int}=[6,6,6], x
     dips = Array(Dipole, (1,length(peaks)))
 
     for l = 1:length(peaks)
-
         xidx, yidx, zidx = ind2sub(size(s), find(s .== peaks[l]))
         dips[l] = Dipole("Unknown", x[xidx[1]], y[yidx[1]], z[zidx[1]], 0, 0, 0, 0, 0, peaks[l])
     end
-
-    return dips
+    
+    # Sort dipoles by size
+    dips[:, sortperm([dip.size for dip in dips], rev=true)]
 end
 
 
