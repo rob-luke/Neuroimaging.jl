@@ -5,34 +5,50 @@
 #######################################
 
 @doc md"""
-Plot a dat file from three views.
+Plot a 3d image file from three views (back, side and top).
+
+#### Arguments
+
+* x, y, z: Axis dimensions
+* dat_data: Activity at each location
 
 #### Optional Arguments
 
-* threshold_ratio(1/1000): locations smaller than this are not plotted
-* ncols(2): number of colums used for output plot
-* max_size(2): maximum size for any point
+* ncols: number of colums used for output plot
+* max_size: maximum size for any point
+* min_size: minimum size for any point
+* min_plot_lim: values smaller than this will not be plotted
+* threshold: values smaller than this will be set to smallest plot size
+* title: places custom text over second plot facet
+* colorbar: should a color bar be plotted  (current implementation is a hack until colorbar support is added to winston)
+* colorbar_title: units to be stated under colorbar
+* plot_negative: should negative values be plotted
 
 """ ->
 function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, dat_data::Array{T};
-                min_plot_lim::Number = unique(sort(abs(vec(dat_data))))[2],
-                threshold_ratio::Number=1/1000, ncols::Int=2, max_size::Union(Number, Nothing)=nothing, min_size=0.2,
-                threshold::Number = 0.01, colorbar::Bool=true, colorbar_title::String="nAm/cm^3",
-                title_text::String="", plot_negative::Bool=true, kwargs...)
+                ncols::Int=3, max_size::Number=1, min_size=0.2,
+                min_plot_lim::Number = unique(sort(abs(vec(dat_data))))[2], threshold::Number = -Inf,
+                colorbar::Bool=false, colorbar_title::String="",
+                title::String="", plot_negative::Bool=true, kwargs...)
 
-    max_value = maximum(dat_data)
-    threshold = minimum([threshold, max_value * threshold_ratio])
+    size_multiplier = max_size / maximum(dat_data)
 
-    if max_size !== nothing
-        size_multiplier = max_size / max_value
+    # Replace the description with a custom title if requested
+    if title == ""
+        middle_title = "Side"
     else
-        size_multiplier = 1
+        middle_title = title
     end
-   
-    back = subplot_dat(x, z, 2, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold, "Back", "Left - Right (mm)", "Inferior - Superior (mm)"; kwargs...)
-    side = subplot_dat(y, z, 1, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold, "Side", "Posterior - Anterior (mm)", "Inferior - Superior (mm)"; kwargs...)
-    top =  subplot_dat(x, y, 3, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold, "Top",  "Left - Right (mm)", "Posterior - Anterior (mm)"; kwargs...)
-  
+
+    back = subplot_dat(x, z, 2, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold,
+                "Back", "Left - Right (mm)", "Inferior - Superior (mm)"; kwargs...)
+
+    side = subplot_dat(y, z, 1, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold,
+                middle_title, "Posterior - Anterior (mm)", "Inferior - Superior (mm)"; kwargs...)
+
+    top =  subplot_dat(x, y, 3, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold,
+                "Top",  "Left - Right (mm)", "Posterior - Anterior (mm)"; kwargs...)
+
     p = 0
     # Create a color bar
     if colorbar
@@ -78,44 +94,44 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
     end
 
     p
-    
 end
 
-function subplot_dat(x_dim, y_dim, reduction_dim, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold, title, xlab, ylab; kwargs...)
-    
-    s = collapse_dat(dat_data, reduction_dim, plot_negative)     # Data along dimensions to be plotted
+function subplot_dat(x_dim, y_dim, reduction_dim, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim,
+            threshold, title, xlab, ylab; kwargs...)
+
+    s = collapse_dat(dat_data, reduction_dim, plot_negative)    # Data along dimensions to be plotted
     x_tmp = zeros(T, size(s, 1) * size(s, 2), 1)                # Preallocate x locations
     y_tmp = zeros(T, size(s, 1) * size(s, 2), 1)                # Preallocate y locations
     s_tmp = zeros(T, size(s, 1) * size(s, 2), 1)                # Preallocate scatter size
     c_tmp = zeros(T, size(s, 1) * size(s, 2), 1)                # Preallocate scatter color
-    
+
     i = 1
     for xidx = 1:length(x_dim)
         for yidx = 1:length(y_dim)
-            
-            x_tmp[i] = x_dim[xidx]                                    # Scatter require the data in vector format
-            y_tmp[i] = y_dim[yidx]                                    # So reshape x, y, scale and color to vectors
-            
-            if abs(s[xidx,yidx]) > min_plot_lim                       # This ensures the outline of the brain is shown
-                if abs(s[xidx,yidx]) > threshold                      # User set value for highlighting region of interest
-                    
-                    s_tmp[i] = abs(s[xidx, yidx]) * size_multiplier   # 
+
+            x_tmp[i] = x_dim[xidx]                              # Scatter require the data in vector format
+            y_tmp[i] = y_dim[yidx]                              # So reshape x, y, scale and color to vectors
+
+            if abs(s[xidx, yidx]) > min_plot_lim                # This ensures the outline of the brain is shown
+                if abs(s[xidx,yidx]) > threshold                # User set value for highlighting region of interest
+
+                    s_tmp[i] = abs(s[xidx, yidx]) * size_multiplier
                     c_tmp[i] = s[xidx, yidx]
-                    
+
                 else
                     s_tmp[i] = min_size
-                    c_tmp[i] = min_size                   
+                    c_tmp[i] = min_size
                 end
             end
             i += 1
         end
     end
     s_tmp = abs(s_tmp)
-    
+
     scatter(x_tmp, y_tmp, [0 < i < min_size ? min_size : i for i in s_tmp], c_tmp, "x",
-    title = title, xlabel = xlab, ylabel = ylab; kwargs...)
-    
+        title = title, xlabel = xlab, ylabel = ylab; kwargs...)
 end
+
 
 function collapse_dat(dat_data, dim, plot_negative)
 
@@ -139,6 +155,7 @@ function plot_dat(dat_data; kwargs...)
 
     plot_dat(1:size(dat_data,1), 1:size(dat_data,2), 1:size(dat_data,3), dat_data; kwargs...)
 end
+
 
 function plot_dat{T <: Number}(dat_data::Array{T, 3}; kwargs...)
 
