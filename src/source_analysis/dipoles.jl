@@ -1,47 +1,4 @@
 @doc doc"""
-Dipole type.
-
-Store the location, direction and state of a dipole
-
-#### Parameters
-
-* coord_system: The coordinate system that the locations are stored in
-* x,y,z: Location of dipole
-* x,y,z/ori: Orientation of dipole
-* color: Color of dipole for plotting
-* state: State of dipol
-* size: size of dipole
-
-""" ->
-type Dipole
-    coord_system::String
-    x::Number
-    y::Number
-    z::Number
-    xori::Number
-    yori::Number
-    zori::Number
-    color::Number
-    state::Number
-    size::Number
-end
-
-
-import Base.show
-function Base.show(io::IO, d::Dipole)
-    @printf("Dipole with coordinates x=% 6.2f, y=% 6.2f, z=% 6.2f, size=% 9.5f\n", d.x, d.y, d.z, d.size)
-end
-
-#
-# Euclidean distance for coordinates and dipoles
-
-import Distances.euclidean
-function euclidean(a::Union(Coordinate, Dipole), b::Union(Coordinate, Dipole))
-    euclidean([a.x, a.y, a.z], [b.x, b.y, b.z])
-end
-
-
-@doc doc"""
 Find all dipole in an activity map.
 
 Determines the local maxima in a 3 dimensional array
@@ -247,3 +204,5 @@ end
 function best_ftest_dipole(dipole_data::Array{Float64, 2}, triggers, fs, modulation_frequency)
     best_ftest_dipole(convert(Array{FloatingPoint, 2}, dipole_data), triggers, fs, modulation_frequency)
 end
+
+

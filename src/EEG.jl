@@ -159,13 +159,6 @@ include("statistics/gfp.jl")
 # Synchrony
 include("synchrony/phase_lag_index.jl")
 
-# Type - Tomography
-include("types/VolumeImage/VolumeImage.jl")
-include("types/VolumeImage/ReadWrite.jl")
-include("types/VolumeImage/Plotting.jl")
-include("types/VolumeImage/Dipoles.jl")
-
-
 # Type - SSR
 include("types/SSR/SSR.jl")
 include("types/SSR/Preprocessing.jl")
@@ -174,13 +167,27 @@ include("types/SSR/Reshaping.jl")
 include("types/SSR/Statistics.jl")
 include("types/SSR/Synchrony.jl")
 
+# Type - Dipole
+include("types/Dipole/Dipole.jl")
+include("types/Dipole/Plotting.jl")
+
 # Source analysis
 include("source_analysis/sensors.jl")
-include("source_analysis/spatial_coordinates.jl")
 include("source_analysis/beamformers.jl")
-include("source_analysis/dipoles.jl")
-include("source_analysis/leadfield.jl")
 include("source_analysis/projection.jl")
+
+# Type - Coordinates
+include("types/Coordinates/Coordinates.jl")
+include("source_analysis/dipoles.jl")           # wrong section
+
+# Type - Leadfield
+include("types/Leadfield/Leadfield.jl")
+
+# Type - Volume Image
+include("types/VolumeImage/VolumeImage.jl")
+include("types/VolumeImage/ReadWrite.jl")
+include("types/VolumeImage/Plotting.jl")
+include("types/VolumeImage/Dipoles.jl")
 
 # Plotting functions
 include("plotting/plot.jl")

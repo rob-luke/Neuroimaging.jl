@@ -192,10 +192,11 @@ function oplot_dipoles(existing_plot, x, y, z;
 end
 
 
-function oplot(existing_plot::Table, dip::Union(Dipole, Coordinate); kwargs...)
+function oplot(existing_plot::Table, dip::Coordinate; kwargs...)
 
     oplot_dipoles(existing_plot, dip.x, dip.y, dip.z; kwargs...)
 end
+
 
 
 

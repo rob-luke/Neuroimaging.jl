@@ -12,7 +12,7 @@ p = plot(t)
 
 Winston.savefig(p, joinpath(dirname(@__FILE__), "../../data/tmp/",
 	"test-plot-VolumeImage.png"), height = 300, width = 900)
-	
+
 Winston.savefig(p, joinpath(dirname(@__FILE__), "../../data/tmp/",
 	"test-plot-VolumeImage.pdf"), height = 300, width = 900)
 
@@ -33,14 +33,14 @@ Winston.savefig(p, joinpath(dirname(@__FILE__), "../../data/tmp/",
 # Custom title
 
 p = plot(t, title = "With Custom Title")
- 
+
 Winston.savefig(p, joinpath(dirname(@__FILE__), "../../data/tmp/",
 	"test-plot-VolumeImage-w-title.png"), height = 300, width = 900)
 
 
 # Add a color bar and shift to 4 columns
 
-p = plot(t, ncols = 4, colorbar = true, title = "with colorbar", colorbar_title = "test") # 
+p = plot(t, ncols = 4, colorbar = true, title = "with colorbar", colorbar_title = "test")
 
 Winston.savefig(p, joinpath(dirname(@__FILE__), "../../data/tmp/",
 	"test-plot-VolumeImage-w-colorbar.png"), height = 300, width = 1200)
@@ -60,8 +60,8 @@ p = plot(t, min_size = 0.5, max_size = 0.5, title = "Same Size Points")
 
 Winston.savefig(p, joinpath(dirname(@__FILE__), "../../data/tmp/",
 	"test-plot-VolumeImage-w-equalsize.pdf"), height = 300, width = 900)
-	
-	
+
+
 #
 # Test plotting of dipoles
 #
@@ -80,7 +80,7 @@ end
 
 Winston.savefig(p, joinpath(dirname(@__FILE__), "../../data/tmp/",
 	"test-plot-VolumeImage-w-dipoles.png"), height = 300, width = 900)
-	
+
 
 println()
 println("!! Volume image plotting test passed !!")
