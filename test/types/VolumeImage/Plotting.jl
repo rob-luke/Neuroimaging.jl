@@ -80,3 +80,8 @@ end
 
 Winston.savefig(p, joinpath(dirname(@__FILE__), "../../data/tmp/",
 	"test-plot-VolumeImage-w-dipoles.png"), height = 300, width = 900)
+	
+
+println()
+println("!! Volume image plotting test passed !!")
+println()

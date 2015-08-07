@@ -29,7 +29,7 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
                 ncols::Int=3, max_size::Number=1, min_size=0.2,
                 min_plot_lim::Number = unique(sort(abs(vec(dat_data))))[2], threshold::Number = -Inf,
                 colorbar::Bool=false, colorbar_title::String="",
-                title::String="", plot_negative::Bool=true, kwargs...)
+                title::String="", plot_negative::Bool=true, units::String="?", kwargs...)
 
     size_multiplier = max_size / maximum(dat_data)
 
@@ -41,13 +41,13 @@ function plot_dat{T <: Number}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, d
     end
 
     back = subplot_dat(x, z, 2, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold,
-                "Back", "Left - Right (mm)", "Inferior - Superior (mm)"; kwargs...)
+                "Back", string("Left - Right (", units, ")"), string("Inferior - Superior (" , units, ")"); kwargs...)
 
     side = subplot_dat(y, z, 1, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold,
-                middle_title, "Posterior - Anterior (mm)", "Inferior - Superior (mm)"; kwargs...)
+                middle_title, string("Posterior - Anterior (", units, ")"), string("Inferior - Superior (", units, ")"); kwargs...)
 
     top =  subplot_dat(x, y, 3, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim, threshold,
-                "Top",  "Left - Right (mm)", "Posterior - Anterior (mm)"; kwargs...)
+                "Top",  string("Left - Right (", units, ")"), string("Posterior - Anterior (", units, ")"); kwargs...)
 
     p = 0
     # Create a color bar
