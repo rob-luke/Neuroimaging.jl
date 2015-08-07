@@ -172,9 +172,11 @@ include("types/Dipole/Dipole.jl")
 include("types/Dipole/Plotting.jl")
 
 # Source analysis
-include("source_analysis/sensors.jl")
 include("source_analysis/beamformers.jl")
 include("source_analysis/projection.jl")
+
+# Type - Sensors
+include("types/Sensors/Sensors.jl")
 
 # Type - Coordinates
 include("types/Coordinates/Coordinates.jl")

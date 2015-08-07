@@ -72,3 +72,4 @@ EEG_Vanvooren_2014 = ["TP7", "P9", "P7", "P5", "P3", "P1", "PO7", "PO3", "O1", "
 EEG_Vanvooren_2014_Left  = ["TP7", "P9", "P7", "P5", "P3", "P1", "PO7", "PO3", "O1"]
 
 EEG_Vanvooren_2014_Right = ["P2", "P4", "P6", "P10", "TP8", "PO4", "PO8", "O2", "TP8"]
+
