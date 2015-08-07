@@ -15,7 +15,9 @@ function read_VolumeImage(fname::String)
 
     header["FileName"] = fname
 
-    VolumeImage(s, units, x, y, z, t, method, header)
+    coord_system = "?"
+
+    VolumeImage(s, units, x, y, z, t, method, header, coord_system)
 end
 
 

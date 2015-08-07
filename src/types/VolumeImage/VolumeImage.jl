@@ -25,6 +25,7 @@ type VolumeImage
     t::Array{SIUnits.SIQuantity{FloatingPoint,0,0,1,0,0,0,0,0,0}, 1}  #(s)
     method::String
     info::Dict
+    coord_system::String
 end
 
 
