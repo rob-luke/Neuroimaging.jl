@@ -56,10 +56,10 @@ Winston.savefig(p, joinpath(dirname(@__FILE__), "../../data/tmp/",
 
 # All point sizes the same
 
-p = plot(t, max_size = 0.2, title = "Same Size Points")
+p = plot(t, min_size = 0.5, max_size = 0.5, title = "Same Size Points")
 
 Winston.savefig(p, joinpath(dirname(@__FILE__), "../../data/tmp/",
-	"test-plot-VolumeImage-w-equalsize.png"), height = 300, width = 900)
+	"test-plot-VolumeImage-w-equalsize.pdf"), height = 300, width = 900)
 	
 	
 #
