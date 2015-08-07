@@ -1,4 +1,4 @@
-function plot(vi::VolumeImage; colorbar_title::String = vi.units, plotting_units = Milli*Meter, kwargs...)
+function plot(vi::VolumeImage; colorbar_title::String = vi.units, plotting_units = Milli * Meter, kwargs...)
 
     debug("Plotting volume image with $(size(vi.data, 4)) time instances")
 

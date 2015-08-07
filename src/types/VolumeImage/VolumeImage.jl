@@ -17,7 +17,7 @@ The following standard names are used when saving data to the info dictionary.
 
 """ ->
 type VolumeImage
-    data::Array
+    data::Array{FloatingPoint}
     units::String
     x::Array{SIUnits.SIQuantity{FloatingPoint,1,0,0,0,0,0,0,0,0}, 1}  #(m)
     y::Array{SIUnits.SIQuantity{FloatingPoint,1,0,0,0,0,0,0,0,0}, 1}  #(m)
