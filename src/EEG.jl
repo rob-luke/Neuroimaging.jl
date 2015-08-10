@@ -190,6 +190,7 @@ include("types/VolumeImage/VolumeImage.jl")
 include("types/VolumeImage/ReadWrite.jl")
 include("types/VolumeImage/Plotting.jl")
 include("types/VolumeImage/Dipoles.jl")
+include("types/VolumeImage/Operations.jl")
 
 # Plotting functions
 include("plotting/plot.jl")
