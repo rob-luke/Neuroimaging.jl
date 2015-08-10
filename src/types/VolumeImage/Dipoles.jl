@@ -1,5 +1,7 @@
 function find_dipoles(vi::VolumeImage; kwargs...)
 
+    info("Finding dipoles for volume image")
+
     if size(vi.data, 4) > 1
         warn("Can not squeeze 4d volume image to 3d. Please reduce first.")
     end

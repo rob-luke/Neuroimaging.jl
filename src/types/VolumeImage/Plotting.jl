@@ -1,6 +1,7 @@
 function plot(vi::VolumeImage; colorbar_title::String = vi.units, plotting_units = Milli * Meter, kwargs...)
 
-    debug("Plotting volume image with $(size(vi.data, 4)) time instances")
+    info("Plotting volume image")
+    debug("Plotting volume image with size $(size(vi.data))")
 
     x = [x / (1 * plotting_units) for x in vi.x]
     y = [y / (1 * plotting_units) for y in vi.y]
@@ -11,7 +12,7 @@ function plot(vi::VolumeImage; colorbar_title::String = vi.units, plotting_units
     x = convert(Array{FloatingPoint}, x)
     y = convert(Array{FloatingPoint}, y)
     z = convert(Array{FloatingPoint}, z)
-    s = convert(Array{Float64, 3}, s)
+    s = convert(Array{Float64, 3}, s)     # TODO This wont work on 32 bit system. Fix in v0.4
 
     if plotting_units == Milli * Meter
         units = "mm"
