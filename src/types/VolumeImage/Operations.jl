@@ -1,4 +1,4 @@
-import Base: +, -, /, *, mean, maximum
+import Base: +, -, /, *, mean, maximum, minimum
 
 
 # +
@@ -108,6 +108,25 @@ function maximum(vi::VolumeImage)
 
     maximum(vi.data)
 end
+
+function maximum(vis::Array{VolumeImage})
+
+    maximum([maximum(vi) for vi in vis])
+end
+
+
+# minimum
+
+function minimum(vi::VolumeImage)
+
+    minimum(vi.data)
+end
+
+function minimum(vis::Array{VolumeImage})
+
+    minimum([minimum(vi) for vi in vis])
+end
+
 
 
 # normalise
