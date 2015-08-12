@@ -3,6 +3,7 @@
 #
 
 fname = joinpath(dirname(@__FILE__), "data", "test_Hz19.5-testing.bdf")
+fname_out = joinpath(dirname(@__FILE__), "data", "tmp", "testwrite.bdf")
 
 dats, evtTab, trigs, statusChan = readBDF(fname);
 sampRate = readBDFHeader(fname)["sampRate"][1]
@@ -15,11 +16,11 @@ sampRate = readBDFHeader(fname)["sampRate"][1]
 
 s  = read_SSR(fname)
 s.header["subjID"] = "test"
-write_SSR(s, "testwrite.bdf")
+write_SSR(s, fname_out)
 s  = read_SSR(fname, valid_triggers=[-1000:10000])
 s.header["subjID"] = "test"
-write_SSR(s, "testwrite.bdf")
-s2 = read_SSR("testwrite.bdf", valid_triggers=[-1000:10000])
+write_SSR(s, fname_out)
+s2 = read_SSR(fname_out, valid_triggers=[-1000:10000])
 
 show(s)
 show(s2)
@@ -56,7 +57,7 @@ channel = create_channel(events, dats, sampRate)
 #
 
 fname = joinpath(dirname(@__FILE__), "data", "test.avr")
-sname = joinpath(dirname(@__FILE__), "data", "same.avr")
+sname = joinpath(dirname(@__FILE__), "data", "tmp", "same.avr")
 
 a, b = read_avr(fname)
 
@@ -73,7 +74,7 @@ a2, b2 = read_avr(sname)
 #
 
 fname = joinpath(dirname(@__FILE__), "data", "test-4d.dat")
-sname = joinpath(dirname(@__FILE__), "data", "same.dat")
+sname = joinpath(dirname(@__FILE__), "data", "tmp", "same.dat")
 
 x, y, z, s, t = read_dat(fname)
 
