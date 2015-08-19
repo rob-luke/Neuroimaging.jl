@@ -54,7 +54,7 @@ function extract_epochs(data::Array, triggers::Dict, valid_triggers::Union(Abstr
     while end_indices[end] > size(data, 1)
         pop!(start_indices)
         pop!(end_indices)
-        warn("Removed end epoch as its not complete")
+        debug("Removed end epoch as its not complete")
     end
 
     # Create variable for epochs

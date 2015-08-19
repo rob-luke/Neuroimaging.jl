@@ -14,7 +14,8 @@ using Logging,  # For user feedback
       BDF,
       DSP,
       Distributions,
-      Winston, Gadfly,
+      Winston,
+      Gadfly,
       MinMaxFilter,
       BDF,
       MAT
