@@ -37,9 +37,6 @@ function read_bsa(fname::String)
     while !eof(file)
         dm = match(regexp, readline(file))
 
-        println(coordinate_system)
-        println(float(dm.captures[2]))
-
         dip = Dipole(coordinate_system, float(dm.captures[2])/1000, float(dm.captures[3])/1000, float(dm.captures[4])/1000,
                                         float(dm.captures[5]), float(dm.captures[6]), float(dm.captures[7]),
                                         float(dm.captures[8]), float(dm.captures[9]), float(dm.captures[10]))
