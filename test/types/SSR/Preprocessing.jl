@@ -5,12 +5,12 @@ s = highpass_filter(s)
 s = rereference(s, "Cz")
     keep_channel!(s, "40Hz_SWN_70dB_R")
 s = extract_epochs(s)
-s = bootstrap(s)
+s = bootstrap(s, num_resamples = 5000)
 
 s = lowpass_filter(s, cutOff = 200)
 s = downsample(s, 1//8)
 s = extract_epochs(s)
-s = bootstrap(s)
+s = bootstrap(s, num_resamples = 5000)
 
 @test_approx_eq_eps s.processing["statistics"][:AnalysisFrequency][1] s.processing["statistics"][:AnalysisFrequency][2] 0.5
 @test_approx_eq_eps s.processing["statistics"][:SNRdB][1] s.processing["statistics"][:SNRdB][2] 0.2
