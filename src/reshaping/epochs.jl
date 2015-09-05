@@ -22,7 +22,8 @@ Extract epoch data from array of channels.
 epochs = extract_epochs(data, triggers, [1,2], 0, 0)
 ```
 """ ->
-function extract_epochs(data::Array, triggers::Dict, valid_triggers::Union(AbstractVector, Int), remove_first::Int, remove_last::Int)
+function extract_epochs{T <: Number}(data::Array{T, 2}, triggers::Dict, valid_triggers::Union(AbstractVector, Int),
+    remove_first::Int, remove_last::Int, trigger_offset::Int = 252)
 
     debug("Extracting epochs for $(size(data)[end]) channels using triggers $(valid_triggers)")
 
@@ -33,7 +34,7 @@ function extract_epochs(data::Array, triggers::Dict, valid_triggers::Union(Abstr
     #=triggers = convert(DataFrame, triggers)=#
 
     # Change offset so numbers are manageable
-    triggers[:Code] = triggers[:Code] - 252
+    triggers[:Code] = triggers[:Code] - trigger_offset
 
     # Determine indices of triggers which are valid
     valid_triggers = any(triggers[:Code] .== valid_triggers', 2)
