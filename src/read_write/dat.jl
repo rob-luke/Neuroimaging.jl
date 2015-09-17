@@ -107,7 +107,7 @@ function read_dat(fid::IO)
 
                 for yind = 1:length(y)
                     d = readline(fid)       # values
-                    m = matchall(r"(\d+.\d+)", d)
+                    m = matchall(r"(-?\d+.\d+)", d)
                     complete_data[:, yind, zind, t] = float(m)
                 end
 
