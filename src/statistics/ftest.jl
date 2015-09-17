@@ -1,5 +1,5 @@
 @doc md"""
-Calculates the F test as is commonly implemented in SSR research.  
+Calculates the F test as is commonly implemented in SSR research.
 TODO: Add references to MASTER and Luts et al
 
 #### Parameters
@@ -97,5 +97,3 @@ end
 function _ftest_spectrum(sweeps::Array{Float64,3};ref=0); _ftest_spectrum(squeeze(mean(sweeps,2),2),ref=ref); end
 #=function _ftest_spectrum(s::Array{Float32}; ref=0); _ftest_spectrum(convert(Array{FloatingPoint}, s), ref=ref); end=#
 #=function _ftest_spectrum(s::Array{Float64}; ref=0); _ftest_spectrum(convert(Array{FloatingPoint}, s), ref=ref); end=#
-
-

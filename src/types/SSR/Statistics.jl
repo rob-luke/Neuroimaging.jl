@@ -160,9 +160,9 @@ function ftest(s::SSR; freq_of_interest::Union(Real, AbstractArray)=modulationra
                            ModulationRate     = copy(modulationrate(s)),
                            AnalysisType       = "F-test",
                            AnalysisFrequency  = freq,
-                           SignalPower        = vec(signal),
+                           SignalAmplitude    = vec(sqrt(signal)),
                            SignalPhase        = vec(phase),
-                           NoisePower         = vec(noise),
+                           NoiseAmplitude     = vec(sqrt(noise)),
                            SNRdB              = vec(snrDb),
                            Statistic          = vec(statistic))
 
