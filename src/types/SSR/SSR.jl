@@ -258,6 +258,9 @@ function keep_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
     keep_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
 end
 
+function keep_channel!(a::SSR, channel_name::ASCIIString; kwargs...)
+    keep_channel!(a, [channel_name]; kwargs...)
+end
 
 function keep_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
 

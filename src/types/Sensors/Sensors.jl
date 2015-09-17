@@ -2,16 +2,16 @@ type Electrodes
     coord_system::String
     kind::String
     label::Array
-    xloc::Array
-    yloc::Array
-    zloc::Array
+    x::Array
+    y::Array
+    z::Array
 end
 
 
 function show(elec::Electrodes)
     println("Electrodes: $(elec.coord_system) - $(elec.kind) - # $(length(elec.label))")
     for sens = 1:length(elec.label)
-        @printf("| %6s | %5.2f | %5.2f | %5.2f |\n", elec.label[sens], elec.xloc[sens], elec.yloc[sens], elec.zloc[sens])
+        @printf("| %6s | %5.2f | %5.2f | %5.2f |\n", elec.label[sens], elec.x[sens], elec.y[sens], elec.z[sens])
     end
 end
 
@@ -29,9 +29,9 @@ function match_sensors(sens::Electrodes, labels::Array{String})
     end
 
     sens.label = sens.label[valid_idx]
-    sens.xloc  = sens.xloc[valid_idx]
-    sens.yloc  = sens.yloc[valid_idx]
-    sens.zloc  = sens.zloc[valid_idx]
+    sens.x  = sens.x[valid_idx]
+    sens.y  = sens.y[valid_idx]
+    sens.z  = sens.z[valid_idx]
 
     return sens, valid_idx
 end
@@ -72,3 +72,4 @@ EEG_Vanvooren_2014 = ["TP7", "P9", "P7", "P5", "P3", "P1", "PO7", "PO3", "O1", "
 EEG_Vanvooren_2014_Left  = ["TP7", "P9", "P7", "P5", "P3", "P1", "PO7", "PO3", "O1"]
 
 EEG_Vanvooren_2014_Right = ["P2", "P4", "P6", "P10", "TP8", "PO4", "PO8", "O2", "TP8"]
+

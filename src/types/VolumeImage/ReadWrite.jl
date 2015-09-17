@@ -1,5 +1,7 @@
 function read_VolumeImage(fname::String)
 
+    info("Creating volume image from file $fname")
+
     if contains(fname, ".dat")
         x, y, z, s, t = read_dat(fname)
         method = "CLARA"
@@ -15,7 +17,9 @@ function read_VolumeImage(fname::String)
 
     header["FileName"] = fname
 
-    VolumeImage(s, units, x, y, z, t, method, header)
+    coord_system = "?"
+
+    VolumeImage(s, units, x, y, z, t, method, header, coord_system)
 end
 
 

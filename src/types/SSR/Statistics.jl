@@ -16,7 +16,7 @@ bin across epochs.
 * `ID`: value to store as ID (" ")
 * `data_type`: what to run the fft on (epochs)
 * `fs`: sampling rate (SSR sampling rate)
-* `num_resample`: number of bootstrapping interations to make (1000)
+* `num_resamples`: number of bootstrapping interations to make (1000)
 * `results_key`: Where in the processing dictionary to store results ("statistics")
 
 #### Output
@@ -26,7 +26,7 @@ bin across epochs.
 #### Example
 
 ```julia
-s = bootstrap(s, N=100)
+s = bootstrap(s, num_resamples=100)
 ```
 """ ->
 function bootstrap(s::SSR; freq_of_interest::Union(Real, AbstractArray) = modulationrate(s), ID::String = "",

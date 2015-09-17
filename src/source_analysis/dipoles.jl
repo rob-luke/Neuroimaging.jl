@@ -1,47 +1,4 @@
 @doc doc"""
-Dipole type.
-
-Store the location, direction and state of a dipole
-
-#### Parameters
-
-* coord_system: The coordinate system that the locations are stored in
-* x,y,z: Location of dipole
-* x,y,z/ori: Orientation of dipole
-* color: Color of dipole for plotting
-* state: State of dipol
-* size: size of dipole
-
-""" ->
-type Dipole
-    coord_system::String
-    x::Number
-    y::Number
-    z::Number
-    xori::Number
-    yori::Number
-    zori::Number
-    color::Number
-    state::Number
-    size::Number
-end
-
-
-import Base.show
-function Base.show(io::IO, d::Dipole)
-    @printf("Dipole with coordinates x=% 6.2f, y=% 6.2f, z=% 6.2f, size=% 9.5f\n", d.x, d.y, d.z, d.size)
-end
-
-#
-# Euclidean distance for coordinates and dipoles
-
-import Distances.euclidean
-function euclidean(a::Union(Coordinate, Dipole), b::Union(Coordinate, Dipole))
-    euclidean([a.x, a.y, a.z], [b.x, b.y, b.z])
-end
-
-
-@doc doc"""
 Find all dipole in an activity map.
 
 Determines the local maxima in a 3 dimensional array
@@ -73,15 +30,15 @@ function find_dipoles{T <: Number}(s::Array{T, 3}; window::Array{Int}=[6,6,6], x
     peaks = peaks[peaks .>= 0.1 * maximum(peaks)]
 
     # Store dipoles in an array
-    dips = Array(Dipole, (1,length(peaks)))
+    dips = Dipole[]
 
     for l = 1:length(peaks)
-
         xidx, yidx, zidx = ind2sub(size(s), find(s .== peaks[l]))
-        dips[l] = Dipole("Unknown", x[xidx[1]], y[yidx[1]], z[zidx[1]], 0, 0, 0, 0, 0, peaks[l])
+        push!(dips, Dipole("Unknown", x[xidx[1]], y[yidx[1]], z[zidx[1]], 0, 0, 0, 0, 0, peaks[l]))
     end
 
-    return dips
+    # Sort dipoles by size
+    dips[sortperm([dip.size for dip in dips], rev=true)]
 end
 
 
@@ -247,3 +204,5 @@ end
 function best_ftest_dipole(dipole_data::Array{Float64, 2}, triggers, fs, modulation_frequency)
     best_ftest_dipole(convert(Array{FloatingPoint, 2}, dipole_data), triggers, fs, modulation_frequency)
 end
+
+

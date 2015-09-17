@@ -7,7 +7,7 @@
 [![Documentation Status](https://readthedocs.org/projects/eegjl/badge/?version=latest)](https://eegjl.readthedocs.org/en/latest/)
 
 
-Process EEG files in Julia.
+Process EEG files in [Julia](http://julialang.org/).
 
 *If you use this software let me know, and I will stop making breaking changes.*
 
@@ -131,13 +131,11 @@ If you have source activity saved in a *.dat file (eg BESA) you can plot the est
 ```julia
 using EEG, Winston
 
-x, y, z, s, t = read_dat("example.dat")
+t = read_VolumeImage("example.dat")
 
-s = squeeze(mean(s, 4), 4)
+p = plot(t)
 
-f = plot_dat(x, y, z, s, ncols=2, threshold=0, max_size=1)
-
-Winston.savefig(f, "source.pdf", height = 600, width=600)
+Winston.savefig(p, "source.pdf", height = 600, width=600)
 
 ```
 

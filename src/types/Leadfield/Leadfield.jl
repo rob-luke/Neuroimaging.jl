@@ -46,3 +46,4 @@ end
 function find_location(l, d::Union(Dipole, Coordinate))
     find_location(l, d.x, d.y, d.z)
 end
+

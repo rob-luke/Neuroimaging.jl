@@ -21,7 +21,9 @@ function lowpass_filter(a::SSR; cutOff::Number=150, order::Int=3, tolerance::Num
 
     _filter_check(f, modulationrate(a), samplingrate(a), tolerance)
 
-    _append_filter(a, f)
+    #= _append_filter(a, f) =#
+
+    return a
 end
 
 
@@ -61,7 +63,7 @@ function _append_filter(a::SSR, f::FilterCoefficients; name::String="filter")
     # Put the filter information in the SSR processing structure
     #
 
-    key_name = new_processing_key(a.processing, "filter")
+    key_name = new_processing_key(a.processing, name)
     merge!(a.processing, [key_name => f])
 
     return a
@@ -89,6 +91,11 @@ function downsample(s::SSR, ratio::Rational)
     end
 
     s.data = new_data
+
+    s.triggers["Index"] = int(round(s.triggers["Index"] .* ratio))
+    if s.triggers["Index"][1] == 0
+        s.triggers["Index"][1] = 1
+    end
 
     s.samplingrate = float(samplingrate(s) * ratio) * Hertz
 

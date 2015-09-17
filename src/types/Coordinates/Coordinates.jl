@@ -1,4 +1,3 @@
-
 abstract Coordinate
 
 type BrainVision <: Coordinate
@@ -114,3 +113,11 @@ function conv_spm_mni2tal(elec::Electrodes)
     return elecNew
 end
 
+
+
+# Euclidean distance for coordinates and dipoles
+
+import Distances.euclidean
+function euclidean(a::Union(Coordinate, Dipole), b::Union(Coordinate, Dipole))
+    euclidean([a.x, a.y, a.z], [b.x, b.y, b.z])
+end
