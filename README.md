@@ -7,7 +7,7 @@
 [![Documentation Status](https://readthedocs.org/projects/eegjl/badge/?version=latest)](https://eegjl.readthedocs.org/en/latest/)
 
 
-Process EEG files in Julia.
+Process EEG files in [Julia](http://julialang.org/).
 
 *If you use this software let me know, and I will stop making breaking changes.*
 
