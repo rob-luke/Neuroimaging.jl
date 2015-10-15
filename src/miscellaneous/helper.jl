@@ -123,7 +123,7 @@ _find_closest_number_idx([1, 2, 2.7, 3.2, 4, 3.1, 7], 3)
 # 6
 ```
 """ ->
-function _find_closest_number_idx{T <: Number}(list::Array{T, 1}, target::Number)
+function _find_closest_number_idx{T <: Number}(list::AbstractArray{T, 1}, target::Number)
     diff_array = abs(list .- target)
     targetIdx  = findfirst(diff_array , minimum(diff_array))
 end
