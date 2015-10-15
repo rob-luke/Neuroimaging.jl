@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc doc"""
+@doc """
 ## Phase Lag Index
 
 Calculate phase lag index between SSR sensors.
@@ -108,7 +108,7 @@ end
 # Save results
 #
 
-@doc doc"""
+@doc """
 Save synchrony results to file
 
 #### Arguments

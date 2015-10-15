@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc doc"""
+@doc """
 Import Biosemi files
 """ ->
 function import_biosemi(fname::Union(String, IO); kwargs...)

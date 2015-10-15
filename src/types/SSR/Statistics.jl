@@ -5,7 +5,7 @@
 #######################################
 
 
-@doc doc"""
+@doc """
 Estimate the value and standard deviation of ASSR response amplitude and phase using bootstrapping on the frequency
 bin across epochs.
 

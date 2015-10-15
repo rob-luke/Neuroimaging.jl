@@ -1,4 +1,4 @@
-@doc doc"""
+@doc """
 ## Extract epoch data from SSR
 
 #### Arguments

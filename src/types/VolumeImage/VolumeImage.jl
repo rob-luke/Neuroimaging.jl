@@ -1,4 +1,4 @@
-@doc doc"""
+@doc """
 ## Volume Image
 This composite type contains volume image information
 

@@ -1,4 +1,4 @@
-@doc doc"""
+@doc """
 Remove a template signal from each column of an array
 
 #### Arguments
@@ -22,7 +22,7 @@ function remove_template{T <: FloatingPoint}(signals::Array{T, 2}, template::Arr
 end
 
 
-@doc doc"""
+@doc """
 Re reference a signals to specific signal channel by index.
 
 If multiple channels are specififed, their average is used as the reference.
@@ -52,7 +52,7 @@ function rereference{T <: FloatingPoint}(signals::Array{T, 2}, refChan::Union(In
 end
 
 
-@doc doc"""
+@doc """
 Re-reference a signals to specific signal channel by name.
 
 If multiple channels are specififed, their average is used as the reference.

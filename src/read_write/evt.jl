@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc doc"""
+@doc """
 Read *.evt file and convert to form for EEG.jl
 """ ->
 function read_evt(fname::String, fs::Number; kwargs...)

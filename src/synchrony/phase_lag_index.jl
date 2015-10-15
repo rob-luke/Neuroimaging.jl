@@ -1,4 +1,4 @@
-@doc doc"""
+@doc """
 Phase locked index of waveforms two time series cut in to epochs.
 
 Calculated using [Synchrony.jl](https://github.com/simonster/Synchrony.jl)

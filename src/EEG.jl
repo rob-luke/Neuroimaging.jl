@@ -5,7 +5,7 @@ using Logging,  # For user feedback
       Compat,   # For backward julia compatability
       SIUnits,  # Smarter units
       SIUnits.ShortUnits,
-      Synchrony,
+      #= Synchrony, =#
       DataFrames,
       Distances,
       ProgressMeter,

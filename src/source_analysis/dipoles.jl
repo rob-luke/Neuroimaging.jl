@@ -1,4 +1,4 @@
-@doc doc"""
+@doc """
 Find all dipole in an activity map.
 
 Determines the local maxima in a 3 dimensional array
@@ -80,7 +80,7 @@ end
 #######################################
 
 
-@doc doc"""
+@doc """
 Find best dipole relative to reference location.
 
 Finds the largest dipole within a specified distance of a reference location

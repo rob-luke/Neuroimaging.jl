@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc doc"""
+@doc """
 Read rba from MAT file
 """ ->
 function read_rba_mat(mat_path)

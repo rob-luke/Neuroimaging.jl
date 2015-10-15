@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc doc"""
+@doc """
 Read Besa's BSA (.bsa) file
 
 #### Input

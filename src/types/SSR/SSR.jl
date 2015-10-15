@@ -1,7 +1,7 @@
 typealias FreqHz{T} SIUnits.SIQuantity{T,0,0,-1,0,0,0,0,0,0}
 
 
-@doc doc"""
+@doc """
 ## Steady State Response
 This composite type contains the information for steady state response recordings and analysis.
 
@@ -49,7 +49,7 @@ end
 #
 #######################################
 
-@doc doc"""
+@doc """
 Return the sampling rate of a steady state type.
 If no type is provided, the sampling rate is returned as a floating point.
 
@@ -66,7 +66,7 @@ samplingrate(t, s::SSR) = convert(t, float(s.samplingrate))
 samplingrate(s::SSR) = samplingrate(FloatingPoint, s)
 
 
-@doc doc"""
+@doc """
 Return the modulation rate of a steady state type.
 If no type is provided, the modulation rate is returned as a floating point.
 
@@ -118,7 +118,7 @@ end
 #######################################
 
 import Base.hcat
-@doc doc"""
+@doc """
 Append one SSR type to another, simulating a longer recording.
 
 #### Example
@@ -145,7 +145,7 @@ function hcat(a::SSR, b::SSR)
 end
 
 
-@doc doc"""
+@doc """
 Append the trigger information of one SSR type to another.
 Places the trigger information at the end of first file
 
@@ -173,7 +173,7 @@ end
 #
 #######################################
 
-@doc doc"""
+@doc """
 Add a channel to the SSR type with specified channel names.
 
 #### Example
@@ -197,7 +197,7 @@ function add_channel(a::SSR, data::Array, chanLabels::ASCIIString; kwargs...)
 end
 
 
-@doc doc"""
+@doc """
 Remove specified channels from SSR.
 
 #### Example
@@ -241,7 +241,7 @@ function remove_channel!(a::SSR, channel_name::Union(Int, String, ASCIIString); 
     remove_channel!(a, [channel_name]); end
 
 
-@doc doc"""
+@doc """
 Remove all channels except those requested from SSR.
 
 #### Example
@@ -281,7 +281,7 @@ end
 #
 #######################################
 
-@doc doc"""
+@doc """
 Trim SSR recording by removing data after `stop` specifed samples.
 
 #### Optional Parameters
@@ -324,7 +324,7 @@ end
 #
 #######################################
 
-@doc doc"""
+@doc """
 Merge `SSR` channels listed in `merge_Chans` and label the averaged channel as `new_name`
 
 #### Example

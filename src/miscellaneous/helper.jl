@@ -1,4 +1,4 @@
-@doc doc"""
+@doc """
 Return a new processing key with the number incremented.
 It checks for existing keys and returns a string with the next key to be used.
 
@@ -34,7 +34,7 @@ function new_processing_key(d::Dict, key_name::String)
 end
 
 
-@doc doc"""
+@doc """
 Find dictionary keys containing a string.
 
 #### Arguments
@@ -67,7 +67,7 @@ function find_keys_containing(d::Dict, partial_key::String)
 end
 
 
-@doc doc"""
+@doc """
 Extract the path, filename and extension of a file
 
 #### Arguments
@@ -103,7 +103,7 @@ function fileparts(fname::String)
 end
 
 
-@doc doc"""
+@doc """
 Find the closest number to a target in an array and return the index
 
 #### Arguments

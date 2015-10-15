@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc doc"""
+@doc """
 ## Read SSR from file or IO stream
 Read a file or IO stream and store the data in an `SSR` type.
 

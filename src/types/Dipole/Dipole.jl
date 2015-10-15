@@ -1,4 +1,4 @@
-@doc doc"""
+@doc """
 Dipole type.
 
 

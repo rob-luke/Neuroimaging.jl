@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc doc"""
+@doc """
 Read dat files
 
 #### Arguments
@@ -175,7 +175,7 @@ function read_dat(fid::IO)
 end
 
 
-@doc doc"""
+@doc """
 Convert vector format source results to 3d array used in dat files
 
 #### Example:
@@ -202,7 +202,7 @@ function prepare_dat(d::Vector, x::Vector, y::Vector, z::Vector)
 end
 
 
-@doc doc"""
+@doc """
 Write dat file
 """ ->
 function write_dat(fname::String,

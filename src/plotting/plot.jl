@@ -6,7 +6,7 @@
 #
 #######################################
 
-@doc doc"""
+@doc """
 Visualise the data used to determine the f statistic.
 
 The spectrum is plotted in black, the noise estimate is highlited in red, and the signal marked in green.
@@ -58,7 +58,7 @@ function plot_ftest{T <: FloatingPoint}(sweeps::Array{T, 3}, fs::Real,
 end
 
 
-@doc doc"""
+@doc """
 Visualise the data used to determine the f statistic.
 
 The spectrum is plotted in black, the noise estimate is highlited in red, and the signal marked in green.
@@ -127,7 +127,7 @@ end
 #
 #######################################
 
-@doc doc"""
+@doc """
 Plot a single channel time series
 
 #### Input
@@ -158,7 +158,7 @@ function plot_single_channel_timeseries{T <: Number}(signal::AbstractVector{T}, 
         Scale.x_continuous(minvalue=minimum(time), maxvalue=maximum(time)))   # Tight fit on time axis
 end
 
-@doc doc"""
+@doc """
 Plot a multi channel time series
 
 #### Input
