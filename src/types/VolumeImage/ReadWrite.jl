@@ -19,7 +19,7 @@ function read_VolumeImage(fname::String)
 
     coord_system = "?"
 
-    VolumeImage(s, units, x, y, z, t, method, header, coord_system)
+    VolumeImage(s, units, collect(x), collect(y), collect(z), collect(t), method, header, coord_system)
 end
 
 
