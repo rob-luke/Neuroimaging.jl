@@ -8,7 +8,7 @@ s = extract_epochs(s)
 s = bootstrap(s, num_resamples = 5000)
 
 s = lowpass_filter(s, cutOff = 200)
-s = downsample(s, 1//8)
+s = downsample(s, 1//4)
 s = extract_epochs(s)
 s = bootstrap(s, num_resamples = 5000)
 

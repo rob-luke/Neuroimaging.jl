@@ -24,7 +24,7 @@ s = extract_epochs(s, valid_triggers = 1)
 
 @test size(s.processing["epochs"]) == (16776,14,6)
 
-@test_throws ErrorException extract_epochs(s, valid_triggers = -4)
+@test_throws ArgumentError extract_epochs(s, valid_triggers = -4)
 
 
 #
