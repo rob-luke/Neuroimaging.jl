@@ -33,7 +33,7 @@ function bootstrap(s::SSR; freq_of_interest::Union(Real, AbstractArray) = modula
     data_type::String="epochs", fs::Number=samplingrate(s), results_key::String="statistics", kwargs...)
 
     if !haskey(s.processing, "epochs")
-        warn("You need to calculate epochs to create sweeps. Doing this for you.")
+        Logging.warn("You need to calculate epochs to create sweeps. Doing this for you.")
         s = extract_epochs(s; kwargs...)
     end
 
@@ -220,7 +220,7 @@ function save_results(a::SSR; name_extension::String="", kwargs...)
     writetable(file_name, to_save)
     end
 
-    info("File saved to $file_name")
+    Logging.info("File saved to $file_name")
 
     return a
 end

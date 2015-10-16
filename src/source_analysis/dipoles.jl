@@ -47,7 +47,7 @@ function find_dipoles{T <: Number}(s::Array{T, 4}; window::Array{Int}=[6,6,6,20]
                       x=1:size(s,1), y=1:size(s,2),
                       z=1:size(s,3), t=1:size(s,4))
 
-    info("4d dipole finding")
+    Logging.info("4d dipole finding")
 
     minval, maxval = minmax_filter(s, window, verbose=false)
 
@@ -98,7 +98,7 @@ Finds the largest dipole within a specified distance of a reference location
 """ ->
 function best_dipole(ref::Union(Coordinate, Dipole), dips::Array{Dipole}; maxdist::Number=30)
 
-    info("Calculating best dipole for $(length(dips)) dipoles")
+    Logging.info("Calculating best dipole for $(length(dips)) dipoles")
 
     # Find all dipoles within distance
     dists = [euclidean(ref, dip) for dip=dips]
@@ -139,14 +139,14 @@ end
 
 function orient_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Number, modulation_frequency; kwargs...)
 
-    warn("This function is not used. Check the output carefully")
+    Logging.warn("This function is not used. Check the output carefully")
 
     #
     # Input:  Signal projected on to orthogonal orientations and necessary parameters
     # Output: Single signal of orientations projected on to SNR optimal vector
     #
 
-    info("Optimising dipole orientation")
+    Logging.info("Optimising dipole orientation")
 
     if size(dipole_data, 2) > size(dipole_data, 1)
         debug("Transposing. Channels should be in the second dimension.")
@@ -174,14 +174,14 @@ end
 
 function best_ftest_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Number, modulation_frequency; kwargs...)
 
-    warn("This function is not used. Check the output carefully")
+    Logging.warn("This function is not used. Check the output carefully")
 
     #
     # Input:  Signal projected on to orthogonal orientations and necessary parameters
     # Output: Signal with the largest ftest SNR
     #
 
-    info("Optimising dipole orientation")
+    Logging.info("Optimising dipole orientation")
 
     if size(dipole_data, 2) > size(dipole_data, 1)
         debug("Transposing. Channels should be in the second dimension.")

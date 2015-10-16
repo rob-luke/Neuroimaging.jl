@@ -69,7 +69,7 @@ end
 
 function add_triggers(a::SSR, mod_freq::Number, epochIndex; cycle_per_epoch::Int=1, kwargs...)
 
-    info("Adding triggers to reduce SSR. Reducing $(mod_freq)Hz to $cycle_per_epoch cycle(s).")
+    Logging.info("Adding triggers to reduce SSR. Reducing $(mod_freq)Hz to $cycle_per_epoch cycle(s).")
 
     # Existing epochs
     existing_epoch_length   = median(diff(epochIndex[:Index]))     # samples
@@ -119,7 +119,7 @@ function channel_rejection(a::SSR; threshold_abs::Number=1000, threshold_var::Nu
 
     valid = channel_rejection(data, threshold_abs, threshold_var)
 
-    info("Rejected $(sum(!valid)) channels $(join(a.channel_names[find(!valid)], " "))")
+    Logging.info("Rejected $(sum(!valid)) channels $(join(a.channel_names[find(!valid)], " "))")
 
     remove_channel!(a, a.channel_names[find(!valid)])
 

@@ -1,7 +1,7 @@
 function plot(vi::VolumeImage; colorbar_title::String = vi.units, plotting_units = Milli * Meter, kwargs...)
 
-    info("Plotting volume image")
-    debug("Plotting volume image with size $(size(vi.data))")
+    Logging.info("Plotting volume image")
+    Logging.debug("Plotting volume image with size $(size(vi.data))")
 
     x = [x / (1 * plotting_units) for x in vi.x]
     y = [y / (1 * plotting_units) for y in vi.y]

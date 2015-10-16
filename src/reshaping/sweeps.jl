@@ -26,7 +26,7 @@ function create_sweeps(epochs::Array, epochsPerSweep::Int)
         sweep += 1
     end
 
-    info("Generated $sweepNum sweeps of length $sweepLen for $chansNum channels")
+    Logging.info("Generated $sweepNum sweeps of length $sweepLen for $chansNum channels")
 
     return sweeps
 end

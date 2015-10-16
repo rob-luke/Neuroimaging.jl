@@ -188,7 +188,7 @@ s = add_channel(s, new_channel, "Merged")
 """ ->
 function add_channel(a::SSR, data::Array, chanLabels::ASCIIString; kwargs...)
 
-    info("Adding channel $chanLabels")
+    Logging.info("Adding channel $chanLabels")
 
     a.data = hcat(a.data, data)
     push!(a.channel_names, chanLabels)
@@ -211,14 +211,14 @@ remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 """ ->
 function remove_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
     remove_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
-    info("Removing channel(s) $(join(channel_names, " "))")
+    Logging.info("Removing channel(s) $(join(channel_names, " "))")
 end
 
 function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
 
     channel_idx = channel_idx[channel_idx .!= 0]
 
-    info("Removing channel(s) $channel_idx")
+    Logging.info("Removing channel(s) $channel_idx")
 
     keep_idx = [1:size(a.data)[end]; ]
     for c = sort(channel_idx, rev=true)
@@ -254,7 +254,7 @@ keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
 """ ->
 function keep_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
-    info("Keeping channel(s) $(join(channel_names, " "))")
+    Logging.info("Keeping channel(s) $(join(channel_names, " "))")
     keep_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
 end
 
@@ -298,7 +298,7 @@ s = trim_channel(s, 8192*300, start=8192)
 """ ->
 function trim_channel(a::SSR, stop::Int; start::Int=1, kwargs...)
 
-    info("Trimming $(size(a.data)[end]) channels between $start and $stop")
+    Logging.info("Trimming $(size(a.data)[end]) channels between $start and $stop")
 
     a.data = a.data[start:stop,:]
 
@@ -345,7 +345,7 @@ function merge_channels(a::SSR, merge_Chans::Array{ASCIIString}, new_name::Strin
         keep_idxs = keep_idxs[keep_idxs .> 0]
     end
 
-    info("Merging channels $(join(vec(a.channel_names[keep_idxs,:]), " "))")
+    Logging.info("Merging channels $(join(vec(a.channel_names[keep_idxs,:]), " "))")
     debug("Merging channels $keep_idxs")
 
     a = add_channel(a, mean(a.data[:,keep_idxs], 2), new_name; kwargs...)

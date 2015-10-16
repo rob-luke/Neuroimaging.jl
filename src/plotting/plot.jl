@@ -27,10 +27,10 @@ function plot_ftest(s::SSR; freq_of_interest::Real=modulationrate(s), side_freq:
     fig_name::String="ftest.pdf", kwargs...)
 
     if !haskey(s.processing, "sweeps")
-        warn("You need to calculate sweeps before you can display the ftest spectrum")
+        Logging.warn("You need to calculate sweeps before you can display the ftest spectrum")
 
         if !haskey(s.processing, "epochs")
-            warn("You need to calculate epochs to create sweeps")
+            Logging.warn("You need to calculate epochs to create sweeps")
 
             s = extract_epochs(s; kwargs...)
         end
