@@ -114,7 +114,7 @@ function bootstrap{T <: FloatingPoint}(epochs::Array{T,3}, freq::Number, fs::Num
             # Calculate the phase and amplitude for this realisation
             boots_amp[n, c] = abs(tmp_spec_mean[:, c])[1]
             boots_pha[n, c] = angle(tmp_spec_mean[:, c])[1]
-            boots_noi[n, c] = std([tmp_spec[:, c], tmp_spec_mean[:, c]]) / sqrt(size(tmp_spec, 1))
+            boots_noi[n, c] = std([tmp_spec[:, c]; tmp_spec_mean[:, c]]) / sqrt(size(tmp_spec, 1))
             boots_snr[n, c] = (boots_amp[n, c] .^2) / real(boots_noi[n, c] .^2)
         end
     end
