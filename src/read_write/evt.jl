@@ -19,9 +19,9 @@ function read_evt(fname::String, fs::Number; kwargs...)
     d = [d[1,1] => d[2:end, 1], d[1,2] => d[2:end, 2], d[1,3] => d[2:end, 3]]
 
     if haskey(d, "Tmu")
-        d["Index"] = round(float(d["Tmu"]) * (1 / 1000000) * float(fs)) + 1
+        d["Index"] = [1 + round(i * (1 / 1000000) * float(fs)) for i in d["Tmu"]]
     elseif haskey(d, "Tsec")
-        d["Index"] = round(float(d["Tsec"])  * float(fs)) + 1
+        d["Index"] = [1 + round(i  * float(fs)) for i in d["Tsec"]]
     else
         warn("Unknown time scale in evt file")
     end
