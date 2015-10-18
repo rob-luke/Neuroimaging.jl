@@ -91,7 +91,7 @@ modulationrate(s::SSR) = modulationrate(FloatingPoint, s)
 
 import Base.show
 function Base.show(io::IO, a::SSR)
-    time_length = round(size(a.data,1) / a.samplingrate / 60, 2)
+    time_length = round(size(a.data,1) / samplingrate(a) / 60, 2)
     println(io, "SSR measurement of $time_length mins with $(size(a.data,2)) channels sampled at $(a.samplingrate)")
     println(io, "  Modulation frequency: $(a.modulationrate )")
 
