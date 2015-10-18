@@ -8,7 +8,7 @@
 Read *.evt file and convert to form for EEG.jl
 """ ->
 function read_evt(fname::String, fs::Number; kwargs...)
-    info("Reading evt file: $fname")
+    Logging.info("Reading evt file: $fname")
 
     d = readdlm(fname)
 
@@ -28,7 +28,7 @@ function read_evt(fname::String, fs::Number; kwargs...)
 
     d["Duration"] = ones(length(d["Code"]))
 
-    info("Imported $(length(d["Code"])) events")
+    Logging.info("Imported $(length(d["Code"])) events")
 
     return ["Code" => d["Code"] + 252, "Index" => d["Index"], "Duration" => d["Duration"]]
 end
