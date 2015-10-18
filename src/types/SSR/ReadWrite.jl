@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc doc"""
+@doc """
 ## Read SSR from file or IO stream
 Read a file or IO stream and store the data in an `SSR` type.
 
@@ -46,7 +46,7 @@ function read_SSR(fname::String;
                   kwargs...)
 
 
-    info("Importing SSR from file: $fname")
+    Logging.info("Importing SSR from file: $fname")
 
     file_path, file_name, ext = fileparts(fname)
 
@@ -175,7 +175,7 @@ end
 function write_SSR(a::SSR, fname::String; chanLabels=a.channel_names, subjID=a.header["subjID"],
                    startDate=a.header["startDate"], startTime=a.header["startTime"], kwargs...)
 
-    info("Saving $(size(a.data)[end]) channels to $fname")
+    Logging.info("Saving $(size(a.data)[end]) channels to $fname")
 
     writeBDF(fname, a.data', trigger_channel(a), system_code_channel(a), samplingrate(Int, a), chanLabels=chanLabels,
              startDate=startDate, startTime=startTime, subjID=subjID)

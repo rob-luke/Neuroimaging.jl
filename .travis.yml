@@ -2,10 +2,11 @@ language: julia
 os:
   - linux
 julia:
-  - release
-  # - nightly
+  - 0.3
+  - 0.4
 notifications:
   email: false
+sudo: true
 before_install:
   - "export DISPLAY=:99.0"                                         # Required for graphics
   - "sh -e /etc/init.d/xvfb start"                                 # Required for graphics
@@ -16,4 +17,4 @@ before_install:
 script:
   - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("EEG"); Pkg.test("EEG"; coverage=true)'
 after_success:
- - if [ $TRAVIS_JULIA_VERSION = "release" ]; then julia -e 'cd(Pkg.dir("EEG")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'; fi
+  - julia -e 'cd(Pkg.dir("EEG")); Pkg.add("EEG"); using Coverage; Coveralls.submit(Coveralls.process_folder())'

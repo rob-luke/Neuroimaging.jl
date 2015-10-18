@@ -1,4 +1,4 @@
-@doc doc"""
+@doc """
 Reject epochs based on the maximum peak to peak voltage within an epoch across all channels
 
 #### Arguments
@@ -15,10 +15,10 @@ function epoch_rejection{T <: Number}(epochs::Array{T, 3}, retain_percentage::Fl
                          rejection_method::Function=peak2peak)
 
     if (0 > retain_percentage) || (1 < retain_percentage)
-        warn("Non valid percentage value for retaining epochs $(retain_percentage)")
+        Logging.warn("Non valid percentage value for retaining epochs $(retain_percentage)")
     end
 
-    info("Rejected $(int(round((1 - retain_percentage) * 100)))% of epochs based on $(string(rejection_method))")
+    Logging.info("Rejected $(int(round((1 - retain_percentage) * 100)))% of epochs based on $(string(rejection_method))")
 
     # Epoch value should be a value or score per epoch where a lower value is better
     # The lowest `retain_percentage` amount of epoch values will be kept
@@ -28,7 +28,7 @@ function epoch_rejection{T <: Number}(epochs::Array{T, 3}, retain_percentage::Fl
     epochs = epochs[:, epoch_values .<= cut_off_value, :]
 end
 
-@doc doc"""
+@doc """
 Find the peak to peak value for each epoch to be returned to epoch_rejection()
 """ ->
 function peak2peak(epochs)
@@ -44,7 +44,7 @@ function peak2peak(epochs)
 end
 
 
-@doc doc"""
+@doc """
 Reject channels with too great a variance.
 
 Rejection can be based on a threshold or dynamicly chosen based on the variation of all channels.

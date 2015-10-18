@@ -1,4 +1,4 @@
-@doc doc"""
+@doc """
 Plot an SSR recording.
 
 Plot detailed single channel or general multichanel figure depending on how many channels are requested.

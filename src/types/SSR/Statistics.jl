@@ -5,7 +5,7 @@
 #######################################
 
 
-@doc doc"""
+@doc """
 Estimate the value and standard deviation of ASSR response amplitude and phase using bootstrapping on the frequency
 bin across epochs.
 
@@ -33,7 +33,7 @@ function bootstrap(s::SSR; freq_of_interest::Union(Real, AbstractArray) = modula
     data_type::String="epochs", fs::Number=samplingrate(s), results_key::String="statistics", kwargs...)
 
     if !haskey(s.processing, "epochs")
-        warn("You need to calculate epochs to create sweeps. Doing this for you.")
+        Logging.warn("You need to calculate epochs to create sweeps. Doing this for you.")
         s = extract_epochs(s; kwargs...)
     end
 
@@ -114,7 +114,7 @@ function bootstrap{T <: FloatingPoint}(epochs::Array{T,3}, freq::Number, fs::Num
             # Calculate the phase and amplitude for this realisation
             boots_amp[n, c] = abs(tmp_spec_mean[:, c])[1]
             boots_pha[n, c] = angle(tmp_spec_mean[:, c])[1]
-            boots_noi[n, c] = std([tmp_spec[:, c], tmp_spec_mean[:, c]]) / sqrt(size(tmp_spec, 1))
+            boots_noi[n, c] = std([tmp_spec[:, c]; tmp_spec_mean[:, c]]) / sqrt(size(tmp_spec, 1))
             boots_snr[n, c] = (boots_amp[n, c] .^2) / real(boots_noi[n, c] .^2)
         end
     end
@@ -220,7 +220,7 @@ function save_results(a::SSR; name_extension::String="", kwargs...)
     writetable(file_name, to_save)
     end
 
-    info("File saved to $file_name")
+    Logging.info("File saved to $file_name")
 
     return a
 end

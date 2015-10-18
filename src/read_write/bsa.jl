@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc doc"""
+@doc """
 Read Besa's BSA (.bsa) file
 
 #### Input
@@ -14,7 +14,7 @@ Read Besa's BSA (.bsa) file
 * `bsa`: Dipole object
 """ ->
 function read_bsa(fname::String)
-    info("Reading BSA file = $fname")
+    Logging.info("Reading BSA file = $fname")
 
     # Open file
     file = open(fname, "r")

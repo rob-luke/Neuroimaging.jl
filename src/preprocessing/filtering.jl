@@ -1,4 +1,4 @@
-@doc doc"""
+@doc """
 High pass filter applied in forward and reverse direction
 
 Simply a wrapper for the DSP.jl functions
@@ -31,7 +31,7 @@ end
 
 
 
-@doc doc"""
+@doc """
 Low pass filter applied in forward and reverse direction
 
 Simply a wrapper for the DSP.jl functions
@@ -63,7 +63,7 @@ function lowpass_filter{T <: FloatingPoint}(signals::Array{T}, Wn::Number, order
 end
 
 
-@doc doc"""
+@doc """
 Band pass filter
 """ ->
 function bandpass_filter(signals::Array, lower::Number, upper::Number, fs::Number, n::Int, rp::Number)
@@ -74,7 +74,7 @@ function bandpass_filter(signals::Array, lower::Number, upper::Number, fs::Numbe
 
     f = digitalfilter(Bandpass(lower, upper, fs=fs), Chebyshev1(n, rp))
 
-    info("Bandpass filtering $(size(signals)[end]) channels.     $lower < Hz < $upper")
+    Logging.info("Bandpass filtering $(size(signals)[end]) channels.     $lower < Hz < $upper")
     debug("Filter order = $n, fs = $fs")
 
     signals = filt(f, signals)
@@ -112,7 +112,7 @@ function compensate_for_filter(d::Dict, spectrum::AbstractArray, fs::Real)
 end
 
 
-@doc doc"""
+@doc """
 Recover the spectrum of signal by compensating for filtering done.
 
 #### Arguments

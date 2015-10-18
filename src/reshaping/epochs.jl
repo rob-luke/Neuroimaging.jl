@@ -69,7 +69,7 @@ function extract_epochs{T <: Number}(data::Array{T, 2}, triggers::Dict, valid_tr
         epochs[:, si, :] = data[start_indices[si]: end_indices[si], :]
     end
 
-    info("Generated $numEpochs epochs of length $lenEpochs for $numChans channels")
+    Logging.info("Generated $numEpochs epochs of length $lenEpochs for $numChans channels")
 
     return epochs
 end
@@ -83,7 +83,7 @@ end
 
 function average_epochs(ep::Array)
 
-    info("Averaging down epochs to 1 epoch of length $(size(ep,1)) from $(size(ep,2)) epochs on $(size(ep,3)) channels")
+    Logging.info("Averaging down epochs to 1 epoch of length $(size(ep,1)) from $(size(ep,2)) epochs on $(size(ep,3)) channels")
 
     squeeze(mean(ep, 2), 2)
 end

@@ -1,7 +1,7 @@
 typealias FreqHz{T} SIUnits.SIQuantity{T,0,0,-1,0,0,0,0,0,0}
 
 
-@doc doc"""
+@doc """
 ## Steady State Response
 This composite type contains the information for steady state response recordings and analysis.
 
@@ -49,7 +49,7 @@ end
 #
 #######################################
 
-@doc doc"""
+@doc """
 Return the sampling rate of a steady state type.
 If no type is provided, the sampling rate is returned as a floating point.
 
@@ -66,7 +66,7 @@ samplingrate(t, s::SSR) = convert(t, float(s.samplingrate))
 samplingrate(s::SSR) = samplingrate(FloatingPoint, s)
 
 
-@doc doc"""
+@doc """
 Return the modulation rate of a steady state type.
 If no type is provided, the modulation rate is returned as a floating point.
 
@@ -91,7 +91,7 @@ modulationrate(s::SSR) = modulationrate(FloatingPoint, s)
 
 import Base.show
 function Base.show(io::IO, a::SSR)
-    time_length = round(size(a.data,1) / a.samplingrate / 60, 2)
+    time_length = round(size(a.data,1) / samplingrate(a) / 60, 2)
     println(io, "SSR measurement of $time_length mins with $(size(a.data,2)) channels sampled at $(a.samplingrate)")
     println(io, "  Modulation frequency: $(a.modulationrate )")
 
@@ -118,7 +118,7 @@ end
 #######################################
 
 import Base.hcat
-@doc doc"""
+@doc """
 Append one SSR type to another, simulating a longer recording.
 
 #### Example
@@ -145,7 +145,7 @@ function hcat(a::SSR, b::SSR)
 end
 
 
-@doc doc"""
+@doc """
 Append the trigger information of one SSR type to another.
 Places the trigger information at the end of first file
 
@@ -173,7 +173,7 @@ end
 #
 #######################################
 
-@doc doc"""
+@doc """
 Add a channel to the SSR type with specified channel names.
 
 #### Example
@@ -188,7 +188,7 @@ s = add_channel(s, new_channel, "Merged")
 """ ->
 function add_channel(a::SSR, data::Array, chanLabels::ASCIIString; kwargs...)
 
-    info("Adding channel $chanLabels")
+    Logging.info("Adding channel $chanLabels")
 
     a.data = hcat(a.data, data)
     push!(a.channel_names, chanLabels)
@@ -197,7 +197,7 @@ function add_channel(a::SSR, data::Array, chanLabels::ASCIIString; kwargs...)
 end
 
 
-@doc doc"""
+@doc """
 Remove specified channels from SSR.
 
 #### Example
@@ -211,14 +211,14 @@ remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 """ ->
 function remove_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
     remove_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
-    info("Removing channel(s) $(join(channel_names, " "))")
+    Logging.info("Removing channel(s) $(join(channel_names, " "))")
 end
 
 function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
 
     channel_idx = channel_idx[channel_idx .!= 0]
 
-    info("Removing channel(s) $channel_idx")
+    Logging.info("Removing channel(s) $channel_idx")
 
     keep_idx = [1:size(a.data)[end]; ]
     for c = sort(channel_idx, rev=true)
@@ -241,7 +241,7 @@ function remove_channel!(a::SSR, channel_name::Union(Int, String, ASCIIString); 
     remove_channel!(a, [channel_name]); end
 
 
-@doc doc"""
+@doc """
 Remove all channels except those requested from SSR.
 
 #### Example
@@ -254,7 +254,7 @@ keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
 """ ->
 function keep_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
-    info("Keeping channel(s) $(join(channel_names, " "))")
+    Logging.info("Keeping channel(s) $(join(channel_names, " "))")
     keep_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
 end
 
@@ -281,7 +281,7 @@ end
 #
 #######################################
 
-@doc doc"""
+@doc """
 Trim SSR recording by removing data after `stop` specifed samples.
 
 #### Optional Parameters
@@ -298,7 +298,7 @@ s = trim_channel(s, 8192*300, start=8192)
 """ ->
 function trim_channel(a::SSR, stop::Int; start::Int=1, kwargs...)
 
-    info("Trimming $(size(a.data)[end]) channels between $start and $stop")
+    Logging.info("Trimming $(size(a.data)[end]) channels between $start and $stop")
 
     a.data = a.data[start:stop,:]
 
@@ -324,7 +324,7 @@ end
 #
 #######################################
 
-@doc doc"""
+@doc """
 Merge `SSR` channels listed in `merge_Chans` and label the averaged channel as `new_name`
 
 #### Example
@@ -345,7 +345,7 @@ function merge_channels(a::SSR, merge_Chans::Array{ASCIIString}, new_name::Strin
         keep_idxs = keep_idxs[keep_idxs .> 0]
     end
 
-    info("Merging channels $(join(vec(a.channel_names[keep_idxs,:]), " "))")
+    Logging.info("Merging channels $(join(vec(a.channel_names[keep_idxs,:]), " "))")
     debug("Merging channels $keep_idxs")
 
     a = add_channel(a, mean(a.data[:,keep_idxs], 2), new_name; kwargs...)

@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc doc"""
+@doc """
 Read dat files
 
 #### Arguments
@@ -21,7 +21,7 @@ Read dat files
 File specs were taken from [fieldtrip](https://github.com/fieldtrip/fieldtrip/blob/1cabb512c46cc70e5b734776f20cdc3c181243bd/external/besa/readBESAimage.m)
 """ ->
 function read_dat(fname::String)
-    info("Reading dat file = $fname")
+    Logging.info("Reading dat file = $fname")
 
     read_dat(open(fname, "r"))
 end
@@ -40,7 +40,7 @@ function read_dat(fid::IO)
 
     # Use @assert here?
     if version != 2
-        warn("Unknown dat file version")
+        Logging.warn("Unknown dat file version")
         return
     end
 
@@ -72,13 +72,13 @@ function read_dat(fid::IO)
         units = condition[3:end-1]
         regularization = "None"
         
-        warn("MSBF type under development")
+        Logging.warn("MSBF type under development")
     elseif search(typeline, "MSPS") != 0:-1
-        warn("MSPS type not implemented yet")
+        Logging.warn("MSPS type not implemented yet")
     elseif search(typeline, "Sens") != 0:-1
-        warn("Sens type not implemented yet")
+        Logging.warn("Sens type not implemented yet")
     else
-        warn("Unknown type")
+        Logging.warn("Unknown type")
     end
 
     readline(fid) # Empty line
@@ -175,7 +175,7 @@ function read_dat(fid::IO)
 end
 
 
-@doc doc"""
+@doc """
 Convert vector format source results to 3d array used in dat files
 
 #### Example:
@@ -190,7 +190,7 @@ function prepare_dat(d::Vector, x::Vector, y::Vector, z::Vector)
     Y = [sort(unique(y))]
     Z = [sort(unique(z))]
 
-    info("Converting $(size(d)) sources to dat file format with size $(length(X)) x $(length(Y)) x $(length(Z))")
+    Logging.info("Converting $(size(d)) sources to dat file format with size $(length(X)) x $(length(Y)) x $(length(Z))")
 
     S = zeros(length(X), length(Y), length(Z), 1)
 
@@ -202,7 +202,7 @@ function prepare_dat(d::Vector, x::Vector, y::Vector, z::Vector)
 end
 
 
-@doc doc"""
+@doc """
 Write dat file
 """ ->
 function write_dat(fname::String,
@@ -211,12 +211,12 @@ function write_dat(fname::String,
                    data_file::String="NA", condition::String="NA", method::String="NA", regularization::String="NA",
                    units::String="NA")
 
-    if size(S,1) != length(X); warn("Data and x sizes do not match"); end
-    if size(S,2) != length(Y); warn("Data and y sizes do not match"); end
-    if size(S,3) != length(Z); warn("Data and z sizes do not match"); end
-    if size(S,4) != length(T); warn("Data and t sizes do not match"); end
+    if size(S,1) != length(X); Logging.warn("Data and x sizes do not match"); end
+    if size(S,2) != length(Y); Logging.warn("Data and y sizes do not match"); end
+    if size(S,3) != length(Z); Logging.warn("Data and z sizes do not match"); end
+    if size(S,4) != length(T); Logging.warn("Data and t sizes do not match"); end
 
-    info("Saving dat to $fname")
+    Logging.info("Saving dat to $fname")
 
     open(fname, "w") do fid
         @printf(fid, "BESA_SA_IMAGE:2.0\n")

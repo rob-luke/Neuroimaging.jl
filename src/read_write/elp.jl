@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc doc"""
+@doc """
 Read elp file
 
 (Not yet working, need to convert to 3d coord system)

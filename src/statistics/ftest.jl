@@ -34,7 +34,7 @@ end
 function ftest{T <: FloatingPoint}(spectrum::Array{Complex{T},2}, frequencies::AbstractArray,
             freq_of_interest::Real, side_freq::Real, spill_bins::Int)
 
-    info("Calculating F statistic on $(size(spectrum)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
+    Logging.info("Calculating F statistic on $(size(spectrum)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
 
     idx      = _find_closest_number_idx(frequencies, freq_of_interest)
     idx_Low  = _find_closest_number_idx(frequencies, freq_of_interest - side_freq)

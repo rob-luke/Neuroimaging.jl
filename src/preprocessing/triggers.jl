@@ -5,7 +5,7 @@
 # Duration: Duration of trigger
 
 
-@doc doc"""
+@doc """
 Validate trigger channel
 """ ->
 function validate_triggers(t::Dict; kwargs...)
@@ -34,7 +34,7 @@ function validate_triggers(t::Dict; kwargs...)
 end
 
 
-@doc doc"""
+@doc """
 Clean trigger channel
 """ ->
 function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::Int, max_epoch_length::Number,
@@ -54,13 +54,13 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
 
     # Check for not valid indices and throw a warning
     if sum([in(i, [0; valid_triggers]) for i = epochIndex[:Code]]) != length(epochIndex[:Code])
-        warn("Non valid triggers found")
+        Logging.warn("Non valid triggers found")
         validity = Bool[]
         for e in epochIndex[:Code]
             push!(validity, in(e, valid_triggers))
         end
         non_valid = sort(unique(epochIndex[:Code][!validity]))
-        warn("Non valid triggers: $non_valid")
+        Logging.warn("Non valid triggers: $non_valid")
     end
 
     # Just take valid indices
@@ -100,8 +100,8 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
 
         # Sanity check
         if std(epochIndex[:Length][2:end]) > 1
-            warn("Your epoch lengths vary too much")
-            warn(string("Length: median=$(median(epochIndex[:Length][2:end])) sd=$(std(epochIndex[:Length][2:end])) ",
+            Logging.warn("Your epoch lengths vary too much")
+            Logging.warn(string("Length: median=$(median(epochIndex[:Length][2:end])) sd=$(std(epochIndex[:Length][2:end])) ",
                   "min=$(minimum(epochIndex[:Length][2:end]))"))
             debug(epochIndex)
         end
@@ -111,7 +111,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
     # If the trigger has been signalled by 0 status then offset this
     # Otherwise when saving and reading again, nothing will be detected
     if sum(epochIndex[:Code]) == 0
-        warn("Trigger status indicated by 0, shifting to 1 for further processing")
+        Logging.warn("Trigger status indicated by 0, shifting to 1 for further processing")
         epochIndex[:Code] = epochIndex[:Code] .+ 1
     end
 
@@ -124,7 +124,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
 end
 
 
-@doc doc"""
+@doc """
 Place extra triggers a set time after existing triggers.
 
 A new trigger with `new_trigger_code` will be placed `new_trigger_time` seconds after exisiting `old_trigger_code` triggers.
