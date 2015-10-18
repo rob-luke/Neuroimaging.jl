@@ -6,7 +6,7 @@ julia:
   - 0.4
 notifications:
   email: false
-sudo: false
+sudo: true
 before_install:
   - "export DISPLAY=:99.0"                                         # Required for graphics
   - "sh -e /etc/init.d/xvfb start"                                 # Required for graphics
