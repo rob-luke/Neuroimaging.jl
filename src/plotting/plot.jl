@@ -52,7 +52,7 @@ function plot_ftest{T <: AbstractFloat}(sweeps::Array{T, 3}, fs::Real,
 
     spectrum    = EEG._ftest_spectrum(sweeps)
     # Does not compensate for filtering
-    frequencies = linspace(0, 1, int(size(spectrum, 1)))*float(fs)/2
+    frequencies = linspace(0, 1, Int(size(spectrum, 1)))*float(fs)/2
 
     plot_ftest(spectrum, frequencies, freq_of_interest, side_freq, spill_bins; kwargs...)
 end
