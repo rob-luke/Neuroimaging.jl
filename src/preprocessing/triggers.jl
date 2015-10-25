@@ -8,7 +8,7 @@
 @doc """
 Validate trigger channel
 """ ->
-function validate_triggers(t::Dict; kwargs...)
+function validate_triggers(t::Dict)
 
     debug("Validating trigger information")
 
@@ -115,7 +115,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
         epochIndex[:Code] = epochIndex[:Code] .+ 1
     end
 
-    triggers = Dict("Index" => vec(int(epochIndex[:Index])'), "Code" => vec(epochIndex[:Code] .+ 252),
+    triggers = Dict("Index" => vec(Int(epochIndex[:Index])'), "Code" => vec(epochIndex[:Code] .+ 252),
                 "Duration" => vec(epochIndex[:Duration])')
 
     validate_triggers(triggers)
@@ -170,7 +170,7 @@ function extra_triggers(t::Dict, old_trigger_code::Union{Int, Array{Int}},
             while offset < valid_trip_index[vt+1] && counter < max_inserted
 
                 push!(code, new_trigger_code)
-                push!(index, int(round(offset)))  # Round and take integer here to minimise the drift
+                push!(index, Int(round(offset)))  # Round and take integer here to minimise the drift
 
                 offset  += new_trigger_delay
                 counter += 1
@@ -189,7 +189,7 @@ function extra_triggers(t::Dict, old_trigger_code::Union{Int, Array{Int}},
     index = index[valid_idx]
     code = code[valid_idx]
 
-    triggers = Dict("Index" => vec(int(index)'), "Code" => vec(code .+ trigger_code_offset),
+    triggers = Dict("Index" => vec(Int(index)'), "Code" => vec(code .+ trigger_code_offset),
                 "Duration" => vec([0, diff(index)])')
 
     validate_triggers(triggers)
