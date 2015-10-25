@@ -106,7 +106,6 @@ export # Helper functions
        conv_spm_mni2tal,
        beamformer_lcmv,
        Dipole,
-       find_dipoles,
        best_dipole,
        orient_dipole,
        best_ftest_dipole,
