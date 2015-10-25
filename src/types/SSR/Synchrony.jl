@@ -69,7 +69,7 @@ function phase_lag_index(a::SSR, ChannelOrigin::AbstractString, ChannelDestinati
 
     debug("Converted channel names to indices $ChannelOrigin $ChannelDestination")
 
-    a = phase_lag_index(a, ChannelOrigin, ChannelDestination, freq_of_interest, ID=ID; kwargs... )
+    a = phase_lag_index(a, ChannelOrigin, ChannelDestination, modulationrate(a); kwargs... )
 
 end
 
