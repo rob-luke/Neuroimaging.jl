@@ -21,7 +21,7 @@ TODO: Add references to MASTER and Luts et al
 
 """ ->
 function ftest(sweeps::Union{Array{Float64, 3}, Array{Float32, 3}}, freq_of_interest::Real,
-                fs::Real, side_freq::Real, used_filter::Union{Filter, Nothing}, spill_bins::Int)
+                fs::Real, side_freq::Real, used_filter::Union{Filter, Void}, spill_bins::Int)
 
     spectrum    = EEG._ftest_spectrum(sweeps)
     # No compensation is made here for prior filtering. See SSR.jl for an example of how to compensate filtering.
