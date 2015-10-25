@@ -34,10 +34,10 @@ type SSR
     system_codes::Dict
     samplingrate::FreqHz{Number}
     modulationrate::FreqHz{Number}
-    reference_channel::Array{AbstractString}
+    reference_channel::Array{AbstractString, 1}
     file_path::AbstractString
     file_name::AbstractString
-    channel_names::Array{AbstractString}
+    channel_names::Array{AbstractString, 1}
     processing::Dict
     header::Dict
 end
