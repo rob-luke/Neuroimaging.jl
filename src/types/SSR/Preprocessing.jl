@@ -92,7 +92,7 @@ function downsample(s::SSR, ratio::Rational)
 
     s.data = new_data
 
-    s.triggers["Index"] = int(round(s.triggers["Index"] .* ratio))
+    s.triggers["Index"] = round(Int, s.triggers["Index"] .* ratio)
     if s.triggers["Index"][1] == 0
         s.triggers["Index"][1] = 1
     end

@@ -340,7 +340,7 @@ function merge_channels(a::SSR, merge_Chans::Array{AbstractString}, new_name::Ab
     debug("Total origin channels: $(length(a.channel_names))")
 
     keep_idxs = [findfirst(a.channel_names, i) for i = merge_Chans]
-    keep_idxs = int(keep_idxs)
+    keep_idxs = Int(keep_idxs)
 
     if sum(keep_idxs .== 0) > 0
         warn("Could not merge as these channels don't exist: $(join(vec(merge_Chans[keep_idxs .== 0]), " "))")

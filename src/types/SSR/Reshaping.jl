@@ -92,7 +92,7 @@ function add_triggers(a::SSR, mod_freq::Number, epochIndex; cycle_per_epoch::Int
 
     # Place in dict
     new_code = round(Int, ones(1, length(new_indx))) .+ 252
-    a.triggers = Dict("Index" => vec(int(new_indx)'), "Code" => vec(new_code), "Duration" => ones(length(new_code), 1)')
+    a.triggers = Dict("Index" => vec((new_indx)'), "Code" => vec(new_code), "Duration" => ones(length(new_code), 1)')
     #TODO Possible the trigger duration of one is not long enough
 
     return a

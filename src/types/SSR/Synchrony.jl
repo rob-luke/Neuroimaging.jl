@@ -64,8 +64,8 @@ end
 # Analyse between two sensors by name
 function phase_lag_index(a::SSR, ChannelOrigin::AbstractString, ChannelDestination::AbstractString; kwargs... )
 
-    ChannelOrigin =      int(findfirst(a.channel_names, ChannelOrigin))
-    ChannelDestination = int(findfirst(a.channel_names, ChannelDestination))
+    ChannelOrigin =      Int(findfirst(a.channel_names, ChannelOrigin))
+    ChannelDestination = Int(findfirst(a.channel_names, ChannelDestination))
 
     debug("Converted channel names to indices $ChannelOrigin $ChannelDestination")
 
@@ -90,7 +90,7 @@ end
 # Analyse list of sensors provided by name
 function phase_lag_index(a::SSR, ChannelOrigin::Array{AbstractString}; kwargs...)
 
-    idxs = [int(findfirst(a.channel_names, co)) for co in ChannelOrigin]
+    idxs = [Int(findfirst(a.channel_names, co)) for co in ChannelOrigin]
 
     phase_lag_index(a, idxs; kwargs...)
 end
