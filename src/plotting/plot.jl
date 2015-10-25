@@ -90,11 +90,11 @@ function plot_ftest{T <: AbstractFloat}(spectrum::Array{Complex{T},2}, frequenci
     idx_High = _find_closest_number_idx(frequencies, freq_of_interest + side_freq)
 
     # Determine signal power
-    signal_power = abs(spectrum[idx, :]).^2
+    signal_power = abs(spectrum[idx]).^2
 
     # Determine noise power
     noise_idxs   = [idx_Low - div(spill_bins, 2) : idx - spill_bins; idx + spill_bins : idx_High + div(spill_bins, 2)]
-    noise_bins   = spectrum[noise_idxs,:]
+    noise_bins   = spectrum[noise_idxs]
     noise_bins   = abs(noise_bins)
     noise_power  = sum(noise_bins .^2, 1) ./ size(noise_bins,1)
 
@@ -105,9 +105,9 @@ function plot_ftest{T <: AbstractFloat}(spectrum::Array{Complex{T},2}, frequenci
     idx_low_plot  = _find_closest_number_idx(frequencies, min_plot_freq)
     idx_high_plot = _find_closest_number_idx(frequencies, max_plot_freq)
 
-    raw_plot = layer(x=frequencies[idx_low_plot:idx_high_plot], y=abs(spectrum[idx_low_plot:idx_high_plot, :]).^2, Geom.line, Theme(default_color = colorant"black"))
+    raw_plot = layer(x=frequencies[idx_low_plot:idx_high_plot], y=abs(spectrum[idx_low_plot:idx_high_plot]).^2, Geom.line, Theme(default_color = colorant"black"))
     noi_plot = layer(x=frequencies[noise_idxs], y=noise_bins.^2, Geom.line, Theme(default_color = colorant"red"))
-    sig_plot = layer(x=frequencies[idx-1:idx+1], y=abs(spectrum[idx-1:idx+1, :]).^2, Geom.line, Theme(default_color = colorant"green"))
+    sig_plot = layer(x=frequencies[idx-1:idx+1], y=abs(spectrum[idx-1:idx+1]).^2, Geom.line, Theme(default_color = colorant"green"))
     noi_pnt  = layer(x=collect(min_plot_freq), y=collect(noise_power), Geom.point, Theme(default_color = colorant"red"))
     sig_pnt  = layer(x=collect(min_plot_freq), y=collect(signal_power), Geom.point, Theme(default_color = colorant"green" ))
 
