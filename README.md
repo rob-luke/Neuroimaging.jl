@@ -19,7 +19,7 @@ To install this package, run the following command into Julia's command line:
 
 
 ```julia
-Pkg.clone("git://github.com/codles/EEG.jl.git")
+Pkg.add("EEG")
 ```
 
 ## Documentation
