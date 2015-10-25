@@ -15,14 +15,14 @@ Failing that, user passed arguments are used or the modulation frequency is extr
 
 * `fname`: Name of the file to be read
 * `min_epoch_length`: Minimum epoch length in samples. Shorter epochs will be removed (0)
-* `max_epoch_length`: Maximum epoch length in samples. Longer epochs will be removed (Inf)
+* `max_epoch_length`: Maximum epoch length in samples. Longer epochs will be removed (0 = all)
 * `valid_triggers`: Triggers that are considered valid, others are removed ([1,2])
 * `stimulation_amplitude`: Amplitude of stimulation (NaN)
 * `modulationrate`: Modulation frequency of SSR stimulation (NaN)
 * `carrier_frequency`: Carrier frequency (NaN)
 * `participant_name`: Name of participant ("")
 * `remove_first`: Number of epochs to be removed from start of recording (0)
-* `max_epochs`: Maximum number of epochs to retain (Inf)
+* `max_epochs`: Maximum number of epochs to retain (0 = all)
 * `env` (nothing)
 * `bkt` ("")
 
@@ -38,9 +38,9 @@ function read_SSR(fname::AbstractString;
                   participant_name::AbstractString="",
                   valid_triggers::Array{Int}=[1,2],
                   min_epoch_length::Int=0,
-                  max_epoch_length::Number=Inf,
+                  max_epoch_length::Int=0,
                   remove_first::Int=0,
-                  max_epochs::Number=Inf,
+                  max_epochs::Int=0,
                   env=nothing,
                   bkt="",
                   kwargs...)

@@ -37,8 +37,8 @@ end
 @doc """
 Clean trigger channel
 """ ->
-function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::Int, max_epoch_length::Number,
-                        remove_first::Int, max_epochs::Number)
+function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::Int, max_epoch_length::Int,
+                        remove_first::Int, max_epochs::Int)
 
     debug("Cleaning triggers")
 
@@ -56,8 +56,8 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
     if sum([in(i, [0; valid_triggers]) for i = epochIndex[:Code]]) != length(epochIndex[:Code])
         Logging.warn("Non valid triggers found")
         validity = Bool[]
-        for e in epochIndex[:Code]
-            push!(validity, in(e, valid_triggers))
+        for ep in epochIndex[:Code]
+            push!(validity, in(ep, valid_triggers))
         end
         non_valid = sort(unique(epochIndex[:Code][!validity]))
         Logging.warn("Non valid triggers: $non_valid")
@@ -72,7 +72,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
         epochIndex = epochIndex[remove_first+1:end,:]
         debug("Trimming first $remove_first triggers")
     end
-    if max_epochs < Inf
+    if max_epochs != 0
         epochIndex = epochIndex[1:minimum([max_epochs, length(epochIndex[:Index])]),:]
         debug("Trimming to $max_epochs triggers")
     end
@@ -89,7 +89,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
             end
         end
         epochIndex[:Length] = [0, diff(epochIndex[:Index]); ]
-        if max_epoch_length < Inf
+        if max_epoch_length != 0
             epochIndex[:valid_length] = epochIndex[:Length] .< max_epoch_length
             num_non_valid = sum(!epochIndex[:valid_length])
             if num_non_valid > 0
@@ -131,7 +131,7 @@ A new trigger with `new_trigger_code` will be placed `new_trigger_time` seconds 
 """ ->
 function extra_triggers(t::Dict, old_trigger_code::Union{Int, Array{Int}},
                         new_trigger_code::Int, new_trigger_time::Number, fs::Number;
-                        trigger_code_offset::Int=252, max_inserted::Number=Inf)
+                        trigger_code_offset::Int=252, max_inserted::Int=Inf)
 
     # Scan through existing triggers, when you find one that has been specified to trip on
     # then add a new trigger at a set time after the trip
