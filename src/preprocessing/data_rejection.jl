@@ -12,7 +12,7 @@ Reject epochs based on the maximum peak to peak voltage within an epoch across a
 * An array with a reduced amount of entries in the epochs dimension
 """ ->
 function epoch_rejection{T <: Number}(epochs::Array{T, 3}, retain_percentage::AbstractFloat;
-                         rejection_method::Function=peak2peak)
+                         rejection_method::Function=EEG.peak2peak)
 
     if (0 > retain_percentage) || (1 < retain_percentage)
         Logging.warn("Non valid percentage value for retaining epochs $(retain_percentage)")
@@ -35,12 +35,12 @@ function peak2peak(epochs)
 
     epochsNum = size(epochs)[2]
 
-    values = Array(AbstractFloat, epochsNum)
+    peakvalues = Array(AbstractFloat, epochsNum)
     for epoch in 1:epochsNum
-        values[epoch] = abs(maximum(epochs[:, epoch, :]) - minimum(epochs[:, epoch, :]))
+        peakvalues[epoch] = abs(maximum(epochs[:, epoch, :]) - minimum(epochs[:, epoch, :]))
     end
 
-    return values
+    return peakvalues
 end
 
 

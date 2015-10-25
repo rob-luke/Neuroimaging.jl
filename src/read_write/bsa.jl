@@ -33,7 +33,7 @@ function read_bsa(fname::AbstractString)
     readline(file)
 
     # Read dipoles
-    dips = Dipole[]
+    dips = EEG.Dipole[]
     while !eof(file)
         dm = match(regexp, readline(file))
 
