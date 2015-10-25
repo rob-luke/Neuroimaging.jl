@@ -115,7 +115,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
         epochIndex[:Code] = epochIndex[:Code] .+ 1
     end
 
-    triggers = Dict("Index" => vec(Int(epochIndex[:Index])'), "Code" => vec(epochIndex[:Code] .+ 252),
+    triggers = Dict("Index" => vec((epochIndex[:Index])'), "Code" => vec(epochIndex[:Code] .+ 252),
                 "Duration" => vec(epochIndex[:Duration])')
 
     validate_triggers(triggers)
