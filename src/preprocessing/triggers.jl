@@ -131,7 +131,7 @@ A new trigger with `new_trigger_code` will be placed `new_trigger_time` seconds 
 """ ->
 function extra_triggers(t::Dict, old_trigger_code::Union{Int, Array{Int}},
                         new_trigger_code::Int, new_trigger_time::Number, fs::Number;
-                        trigger_code_offset::Int=252, max_inserted::Int=Inf)
+                        trigger_code_offset::Int=252, max_inserted::AbstractFloat=Inf)
 
     # Scan through existing triggers, when you find one that has been specified to trip on
     # then add a new trigger at a set time after the trip
