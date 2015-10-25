@@ -15,7 +15,7 @@ Read AVR (.avr) file
 * `chanNames`: Channel Names
 
 """ ->
-function read_avr(fname::String)
+function read_avr(fname::AbstractString)
     Logging.info("Reading AVR file: $fname")
 
     # Open file
@@ -53,7 +53,7 @@ end
 @doc """
 Write AVR file
 """ ->
-function write_avr(fname::String, data::Array, chanNames::Array, fs::Number)
+function write_avr(fname::AbstractString, data::Array, chanNames::Array, fs::Number)
 
     Logging.info("Saving avr to $fname")
 

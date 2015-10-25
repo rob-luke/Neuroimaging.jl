@@ -9,7 +9,7 @@ It checks for existing keys and returns a string with the next key to be used.
 
 #### Returns
 
-* String with new key name
+* AbstractString with new key name
 
 #### Returns
 
@@ -23,7 +23,7 @@ results_storage[new_processing_key(results_storage, "FTest")] = 49
 #   "FTest2" => 49
 ```
 """ ->
-function new_processing_key(d::Dict, key_name::String)
+function new_processing_key(d::Dict, key_name::AbstractString)
     key_numb = 1
     key = string(key_name, key_numb)
     while haskey(d, key)
@@ -40,7 +40,7 @@ Find dictionary keys containing a string.
 #### Arguments
 
 * `d`: Dictionary containing existing keys
-* `partial_key`: String you want to find in key names
+* `partial_key`: AbstractString you want to find in key names
 
 #### Returns
 
@@ -61,7 +61,7 @@ find_keys_containing(results_storage, "FTest")
 #  3
 ```
 """ ->
-function find_keys_containing(d::Dict, partial_key::String)
+function find_keys_containing(d::Dict, partial_key::AbstractString)
     valid_keys = [startswith(i, partial_key) for i = collect(keys(d))]
     findin(valid_keys, true)
 end
@@ -72,7 +72,7 @@ Extract the path, filename and extension of a file
 
 #### Arguments
 
-* `fname`: String with the full path to a file
+* `fname`: AbstractString with the full path to a file
 
 #### Output
 
@@ -86,7 +86,7 @@ fileparts("/Users/test/subdir/test-file.bdf")
 # ("/Users/test/subdir/","test-file","bdf")
 ```
 """ ->
-function fileparts(fname::String)
+function fileparts(fname::AbstractString)
     if fname==""
         pathname  = ""
         filename  = ""

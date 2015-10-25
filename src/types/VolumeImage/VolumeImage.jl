@@ -6,7 +6,7 @@ This composite type contains volume image information
 
 * `data`: contains the recorded data
 * `x`, `y`, `z`, `t` Arrays containing spatial and time information
-* `method` String of method used to compute tomography
+* `method` AbstractString of method used to compute tomography
 * `info`: additional information in dictionary
 
 #### `processing` Fields
@@ -17,15 +17,15 @@ The following standard names are used when saving data to the info dictionary.
 
 """ ->
 type VolumeImage
-    data::Array{FloatingPoint}
-    units::String
-    x::Array{SIUnits.SIQuantity{FloatingPoint,1,0,0,0,0,0,0,0,0}, 1}  #(m)
-    y::Array{SIUnits.SIQuantity{FloatingPoint,1,0,0,0,0,0,0,0,0}, 1}  #(m)
-    z::Array{SIUnits.SIQuantity{FloatingPoint,1,0,0,0,0,0,0,0,0}, 1}  #(m)
-    t::Array{SIUnits.SIQuantity{FloatingPoint,0,0,1,0,0,0,0,0,0}, 1}  #(s)
-    method::String
+    data::Array{AbstractFloat}
+    units::AbstractString
+    x::Array{SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0}, 1}  #(m)
+    y::Array{SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0}, 1}  #(m)
+    z::Array{SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0}, 1}  #(m)
+    t::Array{SIUnits.SIQuantity{AbstractFloat,0,0,1,0,0,0,0,0,0}, 1}  #(s)
+    method::AbstractString
     info::Dict
-    coord_system::String
+    coord_system::AbstractString
 end
 
 

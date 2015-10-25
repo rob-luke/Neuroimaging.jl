@@ -34,10 +34,10 @@ type SSR
     system_codes::Dict
     samplingrate::FreqHz{Number}
     modulationrate::FreqHz{Number}
-    reference_channel::Array{ASCIIString}
-    file_path::ASCIIString
-    file_name::ASCIIString
-    channel_names::Array{ASCIIString}
+    reference_channel::Array{AbstractString}
+    file_path::AbstractString
+    file_name::AbstractString
+    channel_names::Array{AbstractString}
     processing::Dict
     header::Dict
 end
@@ -63,7 +63,7 @@ samplingrate(s)
 ```
 """ ->
 samplingrate(t, s::SSR) = convert(t, float(s.samplingrate))
-samplingrate(s::SSR) = samplingrate(FloatingPoint, s)
+samplingrate(s::SSR) = samplingrate(AbstractFloat, s)
 
 
 @doc """
@@ -80,7 +80,7 @@ modulationrate(s)
 ```
 """ ->
 modulationrate(t, s::SSR) = convert(t, float(s.modulationrate))
-modulationrate(s::SSR) = modulationrate(FloatingPoint, s)
+modulationrate(s::SSR) = modulationrate(AbstractFloat, s)
 
 
 #######################################
@@ -186,7 +186,7 @@ new_channel = mean(s.data, 2)
 s = add_channel(s, new_channel, "Merged")
 ```
 """ ->
-function add_channel(a::SSR, data::Array, chanLabels::ASCIIString; kwargs...)
+function add_channel(a::SSR, data::Array, chanLabels::AbstractString; kwargs...)
 
     Logging.info("Adding channel $chanLabels")
 
@@ -210,15 +210,15 @@ remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
 """ ->
 function remove_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
+    Logging.info("4 Removing channel(s) $(join(channel_names, " "))")
     remove_channel!(a, round(Int, [findfirst(a.channel_names, c) for c=channel_names]))
-    Logging.info("Removing channel(s) $(join(channel_names, " "))")
 end
 
 function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
 
     channel_idx = channel_idx[channel_idx .!= 0]
 
-    Logging.info("Removing channel(s) $channel_idx")
+    Logging.info("3 Removing channel(s) $channel_idx")
 
     keep_idx = [1:size(a.data)[end]; ]
     for c = sort(channel_idx, rev=true)
@@ -234,10 +234,12 @@ function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
     return a
 end
 
-function remove_channel!(a::SSR, channel_names::Union{Array{String}}; kwargs...)
+function remove_channel!(a::SSR, channel_names::Union{Array{AbstractString}}; kwargs...)
+    Logging.info("2 Removing channel(s) $(join(channel_names, " "))")
     remove_channel!(a, convert(Array{ASCIIString}, channel_names)); end
 
-function remove_channel!(a::SSR, channel_name::Union{Int, String, ASCIIString}; kwargs...)
+function remove_channel!(a::SSR, channel_name::Union{Int, AbstractString, ASCIIString}; kwargs...)
+    Logging.info("1 Removing channel(s) $(join(channel_name, " "))")
     remove_channel!(a, [channel_name]); end
 
 
@@ -258,7 +260,7 @@ function keep_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
     keep_channel!(a, round(Int, [findfirst(a.channel_names, c) for c=channel_names]))
 end
 
-function keep_channel!(a::SSR, channel_name::ASCIIString; kwargs...)
+function keep_channel!(a::SSR, channel_name::AbstractString; kwargs...)
     keep_channel!(a, [channel_name]; kwargs...)
 end
 
@@ -333,7 +335,7 @@ Merge `SSR` channels listed in `merge_Chans` and label the averaged channel as `
 s = merge_channels(s, ["P6", "P8"], "P68")
 ```
 """ ->
-function merge_channels(a::SSR, merge_Chans::Array{ASCIIString}, new_name::String; kwargs...)
+function merge_channels(a::SSR, merge_Chans::Array{AbstractString}, new_name::AbstractString; kwargs...)
 
     debug("Total origin channels: $(length(a.channel_names))")
 
@@ -351,7 +353,7 @@ function merge_channels(a::SSR, merge_Chans::Array{ASCIIString}, new_name::Strin
     a = add_channel(a, mean(a.data[:,keep_idxs], 2), new_name; kwargs...)
 end
 
-function merge_channels(a::SSR, merge_Chans::ASCIIString, new_name::String; kwargs...)
+function merge_channels(a::SSR, merge_Chans::AbstractString, new_name::AbstractString; kwargs...)
     a = merge_channels(a, [merge_Chans], new_name; kwargs...)
 end
 

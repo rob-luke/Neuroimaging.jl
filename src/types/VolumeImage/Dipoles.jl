@@ -11,9 +11,9 @@ function find_dipoles(vi::VolumeImage; kwargs...)
     z = [zi / (1 * Meter) for zi in vi.z]
 
     # List comprehension returns type any which needs to be changed
-    x = convert(Array{FloatingPoint}, x)
-    y = convert(Array{FloatingPoint}, y)
-    z = convert(Array{FloatingPoint}, z)
+    x = convert(Array{AbstractFloat}, x)
+    y = convert(Array{AbstractFloat}, y)
+    z = convert(Array{AbstractFloat}, z)
 
     find_dipoles(squeeze(vi.data, 4), x=x, y=y, z=z; kwargs...)
 end

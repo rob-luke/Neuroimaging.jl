@@ -7,7 +7,7 @@
 @doc """
 Import Biosemi files
 """ ->
-function import_biosemi(fname::Union{String, IO}; kwargs...)
+function import_biosemi(fname::Union{AbstractString, IO}; kwargs...)
 
     Logging.info("Importing BIOSEMI data file")
 
@@ -66,8 +66,8 @@ function create_channel(t::Dict, data::Array, fs::Number; kwargs...)
     create_channel(t, maximum(size(data)), fs; kwargs...)
 end
 
-function create_channel(t::Dict, l::Int, fs::Number; code::String="Code", index::String="Index",
-                        duration::String="Duration", kwargs...)
+function create_channel(t::Dict, l::Int, fs::Number; code::AbstractString="Code", index::AbstractString="Index",
+                        duration::AbstractString="Duration", kwargs...)
 
     debug("Creating trigger channel from data. Length: $l Triggers: $(length(t[index])) Fs: $fs")
 
@@ -86,7 +86,7 @@ end
 # Change biosemi labels to 1020
 #######################################
 
-function channelNames_biosemi_1020(original::String)
+function channelNames_biosemi_1020(original::AbstractString)
 
     if length(original) == 2
         original = join((original[1], "0", original[2]))
@@ -171,9 +171,9 @@ function channelNames_biosemi_1020(original::String)
     return converted
 end
 
-function channelNames_biosemi_1020(original::Array{String})
+function channelNames_biosemi_1020(original::Array{AbstractString})
 
-    converted = Array(String, size(original))
+    converted = Array(AbstractString, size(original))
 
     info("Fixing channel names of $(length(original)) channels")
 

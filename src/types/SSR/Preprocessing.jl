@@ -58,7 +58,7 @@ function _filter_check(f::FilterCoefficients, mod_freq::Number, fs::Number, tole
 end
 
 
-function _append_filter(a::SSR, f::FilterCoefficients; name::String="filter")
+function _append_filter(a::SSR, f::FilterCoefficients; name::AbstractString="filter")
     #
     # Put the filter information in the SSR processing structure
     #
@@ -109,7 +109,7 @@ end
 #
 #######################################
 
-function rereference(a::SSR, refChan::Union{String, Array{ASCIIString}}; kwargs...)
+function rereference(a::SSR, refChan::Union{AbstractString, Array{AbstractString}}; kwargs...)
 
     a.data = rereference(a.data, refChan, a.channel_names)
 

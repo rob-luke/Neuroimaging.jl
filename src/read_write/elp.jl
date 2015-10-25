@@ -15,7 +15,7 @@ Read elp file
 #### Output
 * `elec`: Electrodes object
 """ ->
-function read_elp(fname::String)
+function read_elp(fname::AbstractString)
     # This does not work yet, need to convert to 3d coord system
 
     error("Reading ELPs has not been validated")
@@ -23,7 +23,7 @@ function read_elp(fname::String)
     info("Reading elp file = $fname")
 
     # Create an empty electrode set
-    elec = Electrodes("unknown", "EEG", String[], Float64[], Float64[], Float64[])
+    elec = Electrodes("unknown", "EEG", AbstractString[], Float64[], Float64[], Float64[])
 
     # Read file
     df = readtable(fname, header = false, separator = ' ')

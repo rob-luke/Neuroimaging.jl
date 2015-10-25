@@ -13,10 +13,10 @@ Dipole type.
 
 """ ->
 type Dipole
-    coord_system::String
-    x::SIUnits.SIQuantity{FloatingPoint,1,0,0,0,0,0,0,0,0} # m
-    y::SIUnits.SIQuantity{FloatingPoint,1,0,0,0,0,0,0,0,0} # m
-    z::SIUnits.SIQuantity{FloatingPoint,1,0,0,0,0,0,0,0,0} # m
+    coord_system::AbstractString
+    x::SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0} # m
+    y::SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0} # m
+    z::SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0} # m
     xori::Number
     yori::Number
     zori::Number

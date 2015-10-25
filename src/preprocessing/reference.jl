@@ -9,7 +9,7 @@ Remove a template signal from each column of an array
 #### Returns
 Signals with template removed
 """ ->
-function remove_template{T <: FloatingPoint}(signals::Array{T, 2}, template::Array{T, 1})
+function remove_template{T <: AbstractFloat}(signals::Array{T, 2}, template::Array{T, 1})
     if size(signals, 1) != size(template, 1)
         critical("Templace to be removed is different length to signal")
     end
@@ -36,7 +36,7 @@ If multiple channels are specififed, their average is used as the reference.
 
 Rereferenced signals
 """ ->
-function rereference{T <: FloatingPoint}(signals::Array{T, 2}, refChan::Union{Int, Array{Int}})
+function rereference{T <: AbstractFloat}(signals::Array{T, 2}, refChan::Union{Int, Array{Int}})
 
     debug("Re referencing $(size(signals)[end]) channels to $(length(refChan)) channels")
     debug("Reference channels = $refChan")
@@ -68,14 +68,14 @@ Or you can specify to use the `average` reference.
 
 Rereferenced signals
 """ ->
-function rereference{S <: AbstractString, T <: FloatingPoint}(signals::Array{T, 2}, refChan::Union{S, Array{S}},
+function rereference{S <: AbstractString, T <: AbstractFloat}(signals::Array{T, 2}, refChan::Union{S, Array{S}},
             chanNames::Array{S})
 
     debug("Reference channels = $refChan")
 
     if refChan == "car" || refChan == "average"
         refChan_Idx = collect(1:size(signals)[end])
-    elseif isa(refChan, String)
+    elseif isa(refChan, AbstractString)
         refChan_Idx = findfirst(chanNames, refChan)
     elseif isa(refChan, Array)
         refChan_Idx = [findfirst(chanNames, i) for i = refChan]

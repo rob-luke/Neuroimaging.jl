@@ -1,4 +1,4 @@
-function read_VolumeImage(fname::String)
+function read_VolumeImage(fname::AbstractString)
 
     Logging.info("Creating volume image from file $fname")
 

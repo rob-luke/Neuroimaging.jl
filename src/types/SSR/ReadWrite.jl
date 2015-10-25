@@ -30,12 +30,12 @@ Failing that, user passed arguments are used or the modulation frequency is extr
 
 * BIOSEMI (.bdf)
 """ ->
-function read_SSR(fname::String;
+function read_SSR(fname::AbstractString;
                   stimulation_amplitude::Number=NaN,   # User can set these
                   modulationrate::Number=NaN,          # values, but if not
                   carrier_frequency::Number=NaN,       # then attempt to read
-                  stimulation_side::String="",         # from file name or mat
-                  participant_name::String="",
+                  stimulation_side::AbstractString="",         # from file name or mat
+                  participant_name::AbstractString="",
                   valid_triggers::Array{Int}=[1,2],
                   min_epoch_length::Int=0,
                   max_epoch_length::Number=Inf,
@@ -145,7 +145,7 @@ end
 #
 #######################################
 
-function read_evt(a::SSR, fname::String; kwargs...)
+function read_evt(a::SSR, fname::AbstractString; kwargs...)
     d = read_evt(fname, a.samplingrate; kwargs...)
     validate_triggers(d)
     a.triggers = d
@@ -172,12 +172,15 @@ function system_code_channel(a::SSR; kwargs...)
 end
 
 
-function write_SSR(a::SSR, fname::String; chanLabels=a.channel_names, subjID=a.header["subjID"],
+function write_SSR(a::SSR, fname::AbstractString; chanLabels=a.channel_names, subjID=a.header["subjID"],
                    startDate=a.header["startDate"], startTime=a.header["startTime"], kwargs...)
+
+    fname = convert(ASCIIString, fname)
 
     Logging.info("Saving $(size(a.data)[end]) channels to $fname")
 
-    writeBDF(fname, a.data', trigger_channel(a), system_code_channel(a), samplingrate(Int, a), chanLabels=chanLabels,
-             startDate=startDate, startTime=startTime, subjID=subjID)
+    writeBDF(fname, a.data', trigger_channel(a), system_code_channel(a), samplingrate(Int, a),
+             chanLabels = convert(Array{ASCIIString, 1}, chanLabels),
+             startDate = startDate, startTime = startTime, subjID = subjID)
 
 end

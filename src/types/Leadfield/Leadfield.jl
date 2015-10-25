@@ -6,7 +6,7 @@ type leadfield
     x::Vector
     y::Vector
     z::Vector
-    sensors::Array{String}
+    sensors::Array{AbstractString}
 end
 
 

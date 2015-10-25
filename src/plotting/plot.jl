@@ -24,7 +24,7 @@ Saves a pdf to disk
 """ ->
 function plot_ftest(s::SSR; freq_of_interest::Real=modulationrate(s), side_freq::Real=1, spill_bins::Int=2,
     min_plot_freq::Real=1, max_plot_freq::Real=2.2*modulationrate(s), plot_channel::Int=1,
-    fig_name::String="ftest.pdf", kwargs...)
+    fig_name::AbstractString="ftest.pdf", kwargs...)
 
     if !haskey(s.processing, "sweeps")
         Logging.warn("You need to calculate sweeps before you can display the ftest spectrum")
@@ -46,7 +46,7 @@ function plot_ftest(s::SSR; freq_of_interest::Real=modulationrate(s), side_freq:
 end
 
 
-function plot_ftest{T <: FloatingPoint}(sweeps::Array{T, 3}, fs::Real,
+function plot_ftest{T <: AbstractFloat}(sweeps::Array{T, 3}, fs::Real,
     freq_of_interest::Real, side_freq::Real, spill_bins::Int, min_plot_freq::Real, max_plot_freq::Real,
     plot_channel::Int)
 
@@ -79,7 +79,7 @@ Dots indicate the noise and signal power.
 
 Saves a pdf to disk
 """ ->
-function plot_ftest{T <: FloatingPoint}(spectrum::Array{Complex{T},2}, frequencies::AbstractArray,
+function plot_ftest{T <: AbstractFloat}(spectrum::Array{Complex{T},2}, frequencies::AbstractArray,
     freq_of_interest::Real, side_freq::Real, spill_bins::Int, min_plot_freq::Real, max_plot_freq::Real,
     plot_channel::Int)
 
@@ -145,7 +145,7 @@ Returns a figure
 
 """ ->
 function plot_single_channel_timeseries{T <: Number}(signal::AbstractVector{T}, fs::Number;
-        xlabel::String="Time (s)", ylabel::String="Amplitude (uV)", kwargs...)
+        xlabel::AbstractString="Time (s)", ylabel::AbstractString="Amplitude (uV)", kwargs...)
 
     debug("Plotting single channel waveform of size $(size(signal))")
 
@@ -175,8 +175,8 @@ Plot a multi channel time series
 Returns a figure
 
 """ ->
-function plot_multi_channel_timeseries{T <: Number}(signals::Array{T, 2}, fs::Number, channels::Array{ASCIIString};
-        xlabel::String="Time (s)", ylabel::String="Amplitude (uV)", kwargs...)
+function plot_multi_channel_timeseries{T <: Number}(signals::Array{T, 2}, fs::Number, channels::Array{AbstractString};
+        xlabel::AbstractString="Time (s)", ylabel::AbstractString="Amplitude (uV)", kwargs...)
 
     debug("Plotting multi channel waveform of size $(size(signals))")
 

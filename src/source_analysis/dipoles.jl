@@ -137,7 +137,7 @@ end
 #
 #######################################
 
-function orient_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Number, modulation_frequency; kwargs...)
+function orient_dipole(dipole_data::Array{AbstractFloat, 2}, triggers, fs::Number, modulation_frequency; kwargs...)
 
     Logging.warn("This function is not used. Check the output carefully")
 
@@ -164,15 +164,15 @@ function orient_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Numbe
 end
 
 function orient_dipole(dipole_data::Array{Float32, 2}, triggers, fs, modulation_frequency; kwargs...)
-    orient_dipole(convert(Array{FloatingPoint, 2}, dipole_data), triggers, fs, modulation_frequency; kwargs...)
+    orient_dipole(convert(Array{AbstractFloat, 2}, dipole_data), triggers, fs, modulation_frequency; kwargs...)
 end
 
 function orient_dipole(dipole_data::Array{Float64, 2}, triggers, fs, modulation_frequency; kwargs...)
-    orient_dipole(convert(Array{FloatingPoint, 2}, dipole_data), triggers, fs, modulation_frequency; kwargs...)
+    orient_dipole(convert(Array{AbstractFloat, 2}, dipole_data), triggers, fs, modulation_frequency; kwargs...)
 end
 
 
-function best_ftest_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::Number, modulation_frequency; kwargs...)
+function best_ftest_dipole(dipole_data::Array{AbstractFloat, 2}, triggers, fs::Number, modulation_frequency; kwargs...)
 
     Logging.warn("This function is not used. Check the output carefully")
 
@@ -198,11 +198,11 @@ function best_ftest_dipole(dipole_data::Array{FloatingPoint, 2}, triggers, fs::N
 end
 
 function best_ftest_dipole(dipole_data::Array{Float32, 2}, triggers, fs, modulation_frequency)
-    best_ftest_dipole(convert(Array{FloatingPoint, 2}, dipole_data), triggers, fs, modulation_frequency)
+    best_ftest_dipole(convert(Array{AbstractFloat, 2}, dipole_data), triggers, fs, modulation_frequency)
 end
 
 function best_ftest_dipole(dipole_data::Array{Float64, 2}, triggers, fs, modulation_frequency)
-    best_ftest_dipole(convert(Array{FloatingPoint, 2}, dipole_data), triggers, fs, modulation_frequency)
+    best_ftest_dipole(convert(Array{AbstractFloat, 2}, dipole_data), triggers, fs, modulation_frequency)
 end
 
 

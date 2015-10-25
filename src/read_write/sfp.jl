@@ -13,11 +13,11 @@ Read sfp file
 #### Output
 * `elec`: Electrodes object
 """ ->
-function read_sfp(fname::String)
+function read_sfp(fname::AbstractString)
     info("Reading dat file = $fname")
 
     # Create an empty electrode set
-    elec = Electrodes("unknown", "EEG", String[], Float64[], Float64[], Float64[])
+    elec = Electrodes("unknown", "EEG", AbstractString[], Float64[], Float64[], Float64[])
 
     # Read file
     df = readtable(fname, header = false, separator = ' ')

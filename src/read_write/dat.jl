@@ -20,7 +20,7 @@ Read dat files
 #### References
 File specs were taken from [fieldtrip](https://github.com/fieldtrip/fieldtrip/blob/1cabb512c46cc70e5b734776f20cdc3c181243bd/external/besa/readBESAimage.m)
 """ ->
-function read_dat(fname::String)
+function read_dat(fname::AbstractString)
     Logging.info("Reading dat file = $fname")
 
     read_dat(open(fname, "r"))
@@ -34,8 +34,8 @@ function read_dat(fid::IO)
     end
 
     # Ensure we are reading version 2
-    versionString = match(r"(\S+):(\d.\d)", readline(fid))
-    version = float(versionString.captures[2])
+    versionAbstractString = match(r"(\S+):(\d.\d)", readline(fid))
+    version = float(versionAbstractString.captures[2])
     debug("Version = $version")
 
     # Use @assert here?
@@ -205,11 +205,11 @@ end
 @doc """
 Write dat file
 """ ->
-function write_dat(fname::String,
+function write_dat(fname::AbstractString,
                    X::AbstractVector, Y::AbstractVector, Z::AbstractVector,
                    S::Array{Float64,4}, T::AbstractVector;
-                   data_file::String="NA", condition::String="NA", method::String="NA", regularization::String="NA",
-                   units::String="NA")
+                   data_file::AbstractString="NA", condition::AbstractString="NA", method::AbstractString="NA", regularization::AbstractString="NA",
+                   units::AbstractString="NA")
 
     if size(S,1) != length(X); Logging.warn("Data and x sizes do not match"); end
     if size(S,2) != length(Y); Logging.warn("Data and y sizes do not match"); end

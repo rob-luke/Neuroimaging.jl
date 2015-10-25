@@ -29,8 +29,8 @@ bin across epochs.
 s = bootstrap(s, num_resamples=100)
 ```
 """ ->
-function bootstrap(s::SSR; freq_of_interest::Union{Real, AbstractArray} = modulationrate(s), ID::String = "",
-    data_type::String="epochs", fs::Number=samplingrate(s), results_key::String="statistics", kwargs...)
+function bootstrap(s::SSR; freq_of_interest::Union{Real, AbstractArray} = modulationrate(s), ID::AbstractString = "",
+    data_type::AbstractString="epochs", fs::Number=samplingrate(s), results_key::AbstractString="statistics", kwargs...)
 
     if !haskey(s.processing, "epochs")
         Logging.warn("You need to calculate epochs to create sweeps. Doing this for you.")
@@ -82,17 +82,17 @@ end
 
 
 # Internal function for calculating the bootstrapping
-function bootstrap{T <: FloatingPoint}(epochs::Array{T,3}, freq::Number, fs::Number, processing::Dict;
+function bootstrap{T <: AbstractFloat}(epochs::Array{T,3}, freq::Number, fs::Number, processing::Dict;
     num_resamples::Int=1000, kwargs... )
 
     # Calculations and pre allocation
     len_epoch = size(epochs, 1)
     num_epoch = size(epochs, 2)
     num_chans = size(epochs, 3)
-    boots_amp = Array(FloatingPoint, num_resamples, num_chans)   # Store all the bootsrapped amplitudes
-    boots_pha = Array(FloatingPoint, num_resamples, num_chans)   # Store all the bootsrapped phases
-    boots_noi = Array(FloatingPoint, num_resamples, num_chans)   # Store all the bootsrapped noises
-    boots_snr = Array(FloatingPoint, num_resamples, num_chans)   # Store all the bootsrapped snrs
+    boots_amp = Array(AbstractFloat, num_resamples, num_chans)   # Store all the bootsrapped amplitudes
+    boots_pha = Array(AbstractFloat, num_resamples, num_chans)   # Store all the bootsrapped phases
+    boots_noi = Array(AbstractFloat, num_resamples, num_chans)   # Store all the bootsrapped noises
+    boots_snr = Array(AbstractFloat, num_resamples, num_chans)   # Store all the bootsrapped snrs
 
     # Calculate spectrum to bootstrap on. This is faster than randomising the epochs and calculating an FFT each time
     spectrum = (2 / len_epoch) * fft(epochs, 1)[1:len_epoch / 2 + 1, :, :]
@@ -144,7 +144,7 @@ end
 
 
 function ftest(s::SSR; freq_of_interest::Union{Real, AbstractArray}=modulationrate(s), side_freq::Number=0.5,
-    ID::String="", spill_bins::Int=2, results_key::String="statistics", kwargs... )
+    ID::AbstractString="", spill_bins::Int=2, results_key::AbstractString="statistics", kwargs... )
 
     # Do calculation here once, instead of in each low level call
     spectrum    = EEG._ftest_spectrum(s.processing["sweeps"])
@@ -195,7 +195,7 @@ end
 
 
 # Save ftest results to file
-function save_results(a::SSR; name_extension::String="", kwargs...)
+function save_results(a::SSR; name_extension::AbstractString="", kwargs...)
 
     file_name = string(a.file_name, name_extension, ".csv")
 

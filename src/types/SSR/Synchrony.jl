@@ -13,7 +13,7 @@ This is a wrapper function for the SSR type.
 The calculation of PLI is calculated using [Synchrony.jl](www.github.com/.....)
 """ ->
 function phase_lag_index(a::SSR, ChannelOrigin::Int, ChannelDestination::Int, freq_of_interest::Real;
-     ID::String="", kwargs... )
+     ID::AbstractString="", kwargs... )
 
     err("PLI code has not been validated. Do not use")
 
@@ -56,13 +56,13 @@ end
 # If you dont specify an analysis frequency, use modulation frequency
 function phase_lag_index(a::SSR, ChannelOrigin::Int, ChannelDestination::Int;
         freq_of_interest::Union{Real, AbstractArray}=[modulationrate(a)],
-        ID::String="", kwargs...)
+        ID::AbstractString="", kwargs...)
     phase_lag_index(a, ChannelOrigin, ChannelDestination, freq_of_interest, ID=ID; kwargs...)
 end
 
 
 # Analyse between two sensors by name
-function phase_lag_index(a::SSR, ChannelOrigin::String, ChannelDestination::String; kwargs... )
+function phase_lag_index(a::SSR, ChannelOrigin::AbstractString, ChannelDestination::AbstractString; kwargs... )
 
     ChannelOrigin =      int(findfirst(a.channel_names, ChannelOrigin))
     ChannelDestination = int(findfirst(a.channel_names, ChannelDestination))
@@ -88,7 +88,7 @@ end
 
 
 # Analyse list of sensors provided by name
-function phase_lag_index(a::SSR, ChannelOrigin::Array{ASCIIString}; kwargs...)
+function phase_lag_index(a::SSR, ChannelOrigin::Array{AbstractString}; kwargs...)
 
     idxs = [int(findfirst(a.channel_names, co)) for co in ChannelOrigin]
 
@@ -118,7 +118,7 @@ Save synchrony results to file
 #### Returns
 The same object `a`
 """ ->
-function save_synchrony_results(a::SSR; name_extension::String="-synchrony", kwargs...)
+function save_synchrony_results(a::SSR; name_extension::AbstractString="-synchrony", kwargs...)
 
     file_name = string(a.file_name, name_extension, ".csv")
 

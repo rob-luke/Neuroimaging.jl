@@ -25,11 +25,11 @@ Plot a 3d image file from three views (back, side and top).
 * plot_negative: should negative values be plotted
 
 """ ->
-function plot_dat{T <: FloatingPoint}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, dat_data::Array{Float64, 3};
+function plot_dat{T <: AbstractFloat}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, dat_data::Array{Float64, 3};
                 ncols::Int=3, max_size::Number=1, min_size=0.2,
                 min_plot_lim::Number = unique(sort(abs(vec(dat_data))))[2], threshold::Number = -Inf,
-                colorbar::Bool=false, colorbar_title::String="",
-                title::String="", plot_negative::Bool=true, units::String="?", kwargs...)
+                colorbar::Bool=false, colorbar_title::AbstractString="",
+                title::AbstractString="", plot_negative::Bool=true, units::AbstractString="?", kwargs...)
 
     size_multiplier = max_size / maximum(dat_data)
 
@@ -174,8 +174,8 @@ end
 #######################################
 
 function oplot_dipoles(existing_plot, x, y, z;
-                        color::String="red",
-                        symbolkind::String="filled circle",
+                        color::AbstractString="red",
+                        symbolkind::AbstractString="filled circle",
                         ncols::Int=2,
                         size::Number=1)
 
@@ -207,8 +207,8 @@ end
 #######################################
 
 function oplot(existing_plot, elec::Electrodes;
-                        color::String="red",
-                        symbolkind::String="filled circle",
+                        color::AbstractString="red",
+                        symbolkind::AbstractString="filled circle",
                         ncols::Int=2, kwargs...)
 
     p = oplot(existing_plot, elec.xloc, elec.yloc, elec.zloc, color=color, symbolkind=symbolkind, ncols=ncols; kwargs...)
@@ -217,8 +217,8 @@ function oplot(existing_plot, elec::Electrodes;
 end
 
 function oplot(existing_plot, x, y, z;
-                        color::String="red",
-                        symbolkind::String="filled circle",
+                        color::AbstractString="red",
+                        symbolkind::AbstractString="filled circle",
                         ncols::Int=2, kwargs...)
 
     p = _extract_plots(existing_plot)
@@ -243,7 +243,7 @@ end
 
 function plot_spectrum(signal::Vector,
                         fs::Real;
-                        titletext::String="",
+                        titletext::AbstractString="",
                         Fmin::Int=0,
                         Fmax::Int=90,
                         targetFreq::Float64=0,
@@ -365,7 +365,7 @@ function plot_spectrum(eeg::SSR, chan::Int; targetFreq::Number=0)
     return p
 end
 
-function plot_spectrum(eeg::SSR, chan::String; targetFreq::Number=0)
+function plot_spectrum(eeg::SSR, chan::AbstractString; targetFreq::Number=0)
 
     return plot_spectrum(eeg, findfirst(eeg.header["chanLabels"], chan), targetFreq=targetFreq)
 end
@@ -411,7 +411,7 @@ function SSR_spectrogram(eeg::SSR, channel::Int, lower::Number, upper::Number; s
     return t2
 end
 
-function SSR_spectrogram(eeg::SSR, channel::String, lower::Number, upper::Number; seconds::Int=32)
+function SSR_spectrogram(eeg::SSR, channel::AbstractString, lower::Number, upper::Number; seconds::Int=32)
 
 
     SSR_spectrogram(eeg, findfirst(eeg.header["chanLabels"], channel), lower, upper, seconds=seconds)

@@ -1,6 +1,6 @@
 type Electrodes
-    coord_system::String
-    kind::String
+    coord_system::AbstractString
+    kind::AbstractString
     label::Array
     x::Array
     y::Array
@@ -16,7 +16,7 @@ function show(elec::Electrodes)
 end
 
 
-function match_sensors(sens::Electrodes, labels::Array{String})
+function match_sensors(sens::Electrodes, labels::Array{AbstractString})
     # Match a set of electrodes to those provided
     #
     # usage: lf, valid = match_sensors(electrodes, sensor_labels)
@@ -37,7 +37,7 @@ function match_sensors(sens::Electrodes, labels::Array{String})
 end
 
 
-function match_sensors(lf::Array, lf_labels::Array{String}, labels::Array{String})
+function match_sensors(lf::Array, lf_labels::Array{AbstractString}, labels::Array{AbstractString})
     # Match the sensors in a leadfield array to those provided
     #
     # usage: lf, valid = match_sensors(leadfield, leadfield_labels, sensor_labels)

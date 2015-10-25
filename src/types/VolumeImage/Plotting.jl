@@ -1,4 +1,4 @@
-function plot(vi::VolumeImage; colorbar_title::String = vi.units, plotting_units = Milli * Meter, kwargs...)
+function plot(vi::VolumeImage; colorbar_title::AbstractString = vi.units, plotting_units = Milli * Meter, kwargs...)
 
     Logging.info("Plotting volume image")
     Logging.debug("Plotting volume image with size $(size(vi.data))")
@@ -9,9 +9,9 @@ function plot(vi::VolumeImage; colorbar_title::String = vi.units, plotting_units
     s = squeeze(mean(vi.data, 4), 4)
 
     # List comprehension returns type any which needs to be changed
-    x = convert(Array{FloatingPoint}, x)
-    y = convert(Array{FloatingPoint}, y)
-    z = convert(Array{FloatingPoint}, z)
+    x = convert(Array{AbstractFloat}, x)
+    y = convert(Array{AbstractFloat}, y)
+    z = convert(Array{AbstractFloat}, z)
     s = convert(Array{Float64, 3}, s)     # TODO This wont work on 32 bit system. Fix in v0.4
 
     if plotting_units == Milli * Meter
