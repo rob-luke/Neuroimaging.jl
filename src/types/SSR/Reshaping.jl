@@ -80,7 +80,7 @@ function add_triggers(a::SSR, mod_freq::Number, epochIndex; cycle_per_epoch::Int
     new_epoch_length_s = cycle_per_epoch / mod_freq
     new_epochs_num     = round(existing_epoch_length_s / new_epoch_length_s) - 2
     new_epoch_times    = collect(1:new_epochs_num)*new_epoch_length_s
-    new_epoch_indx     = [0, round(new_epoch_times * samplingrate(a))]
+    new_epoch_indx     = [0; round(new_epoch_times * samplingrate(a))]
     debug("New epoch length = $new_epoch_length_s")
     debug("New # epochs     = $new_epochs_num")
 
@@ -91,7 +91,7 @@ function add_triggers(a::SSR, mod_freq::Number, epochIndex; cycle_per_epoch::Int
     debug("Now $(length(new_indx)) indices")
 
     # Place in dict
-    new_code = int(ones(1, length(new_indx))) .+ 252
+    new_code = round(Int, ones(1, length(new_indx))) .+ 252
     a.triggers = Dict("Index" => vec(int(new_indx)'), "Code" => vec(new_code), "Duration" => ones(length(new_code), 1)')
     #TODO Possible the trigger duration of one is not long enough
 

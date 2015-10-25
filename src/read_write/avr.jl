@@ -29,7 +29,7 @@ function read_avr(fname::AbstractString)
     di     = m.captures[3] # Omit?
     sb    = m.captures[4] # Omit?
     sc    = m.captures[5] # Omit?
-    nchan = int(ascii(m.captures[6])) # Number of channels
+    nchan = parse(Int, ascii(m.captures[6])) # Number of channels
 
     # Channel line
     names_exp = r"(\w+)"

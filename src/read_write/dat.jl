@@ -89,7 +89,7 @@ function read_dat(fid::IO)
     xrange = match(regexp, readline(fid))
     x = linspace(float(xrange.captures[1]), float(xrange.captures[2]), parse(Int, xrange.captures[3]))
     yrange = match(regexp, readline(fid))
-    y = linspace(float(yrange.captures[1]), float(yrange.captures[2]), int(yrange.captures[3]))
+    y = linspace(float(yrange.captures[1]), float(yrange.captures[2]), parse(Int, yrange.captures[3]))
     zrange = match(regexp, readline(fid))
     z = linspace(float(zrange.captures[1]), float(zrange.captures[2]), int(zrange.captures[3]))
 
