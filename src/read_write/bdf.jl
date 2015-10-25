@@ -7,7 +7,7 @@
 @doc """
 Import Biosemi files
 """ ->
-function import_biosemi(fname::Union{AbstractString, IO}; kwargs...)
+function import_biosemi(fname::Union{AbstractString, IO})
 
     Logging.info("Importing BIOSEMI data file")
 
@@ -45,7 +45,7 @@ end
 # Create events from channel
 ############################
 
-function create_events(channel::Array{Int16,1}, fs::Number; kwargs...)
+function create_events(channel::Array{Int16,1}, fs::Number)
 
     startPoints = vcat(1, find(diff(channel) .!= 0).+1)
     stopPoints = vcat(find(diff(channel) .!= 0), length(channel))
@@ -67,7 +67,7 @@ function create_channel(t::Dict, data::Array, fs::Number; kwargs...)
 end
 
 function create_channel(t::Dict, l::Int, fs::Number; code::AbstractString="Code", index::AbstractString="Index",
-                        duration::AbstractString="Duration", kwargs...)
+                        duration::AbstractString="Duration")
 
     debug("Creating trigger channel from data. Length: $l Triggers: $(length(t[index])) Fs: $fs")
 
