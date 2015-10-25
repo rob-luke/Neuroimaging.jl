@@ -24,7 +24,7 @@ Saves a pdf to disk
 """ ->
 function plot_ftest(s::SSR; freq_of_interest::Real=modulationrate(s), side_freq::Real=1, spill_bins::Int=2,
     min_plot_freq::Real=1, max_plot_freq::Real=2.2*modulationrate(s), plot_channel::Int=1,
-    fig_name::AbstractString="ftest.pdf", kwargs...)
+    kwargs...)
 
     if !haskey(s.processing, "sweeps")
         Logging.warn("You need to calculate sweeps before you can display the ftest spectrum")
@@ -48,7 +48,7 @@ end
 
 function plot_ftest{T <: AbstractFloat}(sweeps::Array{T, 3}, fs::Real,
     freq_of_interest::Real, side_freq::Real, spill_bins::Int, min_plot_freq::Real, max_plot_freq::Real,
-    plot_channel::Int)
+    plot_channel::Int; kwargs...)
 
     spectrum    = EEG._ftest_spectrum(sweeps)
     # Does not compensate for filtering
