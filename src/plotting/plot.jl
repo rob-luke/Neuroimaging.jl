@@ -149,9 +149,9 @@ function plot_single_channel_timeseries{T <: Number}(signal::AbstractVector{T}, 
 
     debug("Plotting single channel waveform of size $(size(signal))")
 
-    time = [1:size(signal, 1)]/fs                         # Create time axis
+    time_s = [1:size(signal, 1)]/fs                         # Create time axis
 
-    Gadfly.plot(x=time, y=signal,
+    Gadfly.plot(x=time_s, y=signal,
         Geom.line,
         Theme(default_color=color("black")),
         Guide.xlabel(xlabel), Guide.ylabel(ylabel),
@@ -180,7 +180,7 @@ function plot_multi_channel_timeseries{T <: Number}(signals::Array{T, 2}, fs::Nu
 
     debug("Plotting multi channel waveform of size $(size(signals))")
 
-    time = [1:size(signals, 1)]/fs                        # Create time axis
+    time_s = [1:size(signals, 1)]/fs                        # Create time axis
 
     variances = var(signals,1)          # Variance of each figure for rescaling
     mean_variance = mean(variances)     # Calculate for rescaling figures
@@ -189,12 +189,12 @@ function plot_multi_channel_timeseries{T <: Number}(signals::Array{T, 2}, fs::Nu
     for c in 1:size(signals, 2)                                  # Plot each channel
         signals[:, c] = signals[:, c] - mean(signals[:, c])      # Remove mean
         signals[:, c] = signals[:, c] / mean_variance .+ (c-1)   # Rescale and shift so all chanels are visible
-        l[c] = layer(x=time, y=signals[:, c], Geom.line, Theme(default_color=color("black")))[1]  # Create image layer
+        l[c] = layer(x=time_s, y=signals[:, c], Geom.line, Theme(default_color=color("black")))[1]  # Create image layer
     end
 
     Gadfly.plot(vec(l), Guide.xlabel(xlabel), Guide.ylabel(ylabel),
         Scale.y_continuous(minvalue=-0.5, maxvalue=size(signals, 2)-0.5,      # Ensure all channels are plotted
             labels=y -> @sprintf("%s", channels[y+1])),                       # Label each channel
         Guide.yticks(ticks=[0:size(signals, 2)-1]),
-        Scale.x_continuous(minvalue=minimum(time), maxvalue=maximum(time)))   # Tight fit on time axis
+        Scale.x_continuous(minvalue=minimum(time_s), maxvalue=maximum(time_s)))   # Tight fit on time axis
 end
