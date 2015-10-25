@@ -246,7 +246,7 @@ function plot_spectrum(signal::Vector,
                         titletext::AbstractString="",
                         Fmin::Int=0,
                         Fmax::Int=90,
-                        targetFreq::Float64=0,
+                        targetFreq::Float64=0.0,
                         dBPlot::Bool=true,
                         noise_level::Number=0,
                         signal_level::Number=0)
@@ -258,7 +258,7 @@ function plot_spectrum(signal::Vector,
 
     # Determine fft frequencies
     signal_length = length(signal)
-    frequencies = linspace(0, 1, int(signal_length / 2 + 1))*fs/2
+    frequencies = linspace(0, 1, Int(signal_length / 2 + 1))*fs/2
 
     # Calculate fft and convert to power
     fftSweep = 2 / signal_length * fft(signal)
