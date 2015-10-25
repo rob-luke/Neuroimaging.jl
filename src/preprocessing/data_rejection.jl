@@ -24,7 +24,7 @@ function epoch_rejection{T <: Number}(epochs::Array{T, 3}, retain_percentage::Ab
     # The lowest `retain_percentage` amount of epoch values will be kept
     epoch_values = rejection_method(epochs)
 
-    cut_off_value = sort(epoch_values)[floor(length(epoch_values) * retain_percentage)]
+    cut_off_value = sort(epoch_values)[floor(Int, length(epoch_values) * retain_percentage)]
     epochs = epochs[:, epoch_values .<= cut_off_value, :]
 end
 

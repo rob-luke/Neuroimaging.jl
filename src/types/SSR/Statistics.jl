@@ -95,7 +95,7 @@ function bootstrap{T <: AbstractFloat}(epochs::Array{T,3}, freq::Number, fs::Num
     boots_snr = Array(AbstractFloat, num_resamples, num_chans)   # Store all the bootsrapped snrs
 
     # Calculate spectrum to bootstrap on. This is faster than randomising the epochs and calculating an FFT each time
-    spectrum = (2 / len_epoch) * fft(epochs, 1)[1:len_epoch / 2 + 1, :, :]
+    spectrum = (2 / len_epoch) * fft(epochs, 1)[1:div(len_epoch,  2) + 1, :, :]
     spectrum = compensate_for_filter(processing, spectrum, fs)
     frequencies = linspace(0, 1, size(spectrum, 1)) * fs / 2
 

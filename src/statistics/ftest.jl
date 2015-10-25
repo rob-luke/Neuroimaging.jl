@@ -47,10 +47,10 @@ function ftest{T <: AbstractFloat}(spectrum::Array{Complex{T},2}, frequencies::A
     signal_power = abs(spectrum[idx, :]).^2                            # Biased response power
 
     # Determine noise power
-    noise_idxs      = [idx_Low-spill_bins/2 : idx-spill_bins; idx+spill_bins : idx_High+spill_bins/2]
-    noise_bins      = spectrum[noise_idxs,:]
-    noise_bins      = abs(noise_bins)
-    noise_power     = sum(noise_bins .^2, 1) ./ size(noise_bins,1)     # Recording noise power
+    noise_idxs  = [idx_Low - div(spill_bins, 2) : idx - spill_bins; idx + spill_bins : idx_High + div(spill_bins, 2)]
+    noise_bins  = spectrum[noise_idxs,:]
+    noise_bins  = abs(noise_bins)
+    noise_power = sum(noise_bins .^2, 1) ./ size(noise_bins,1)     # Recording noise power
 
     # Calculate SNR
     snr = (signal_power ./ noise_power)                                # Biased recording SNR
@@ -82,7 +82,7 @@ function _ftest_spectrum(sweep::Union{Array{Float64,1}, Array{Float64,2}}; ref::
 
     # Calculate amplitude sweepe at each frequency along first dimension
     fftSweep    = 2 / sweepLen * fft(sweep, 1)
-    spectrum    = fftSweep[1:sweepLen / 2 + 1, :]
+    spectrum    = fftSweep[1:round(Int, sweepLen / 2 + 1), :]
 
     if ref > 0
         refspec = spectrum[:,ref]

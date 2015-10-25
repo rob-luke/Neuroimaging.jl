@@ -93,10 +93,10 @@ function plot_ftest{T <: AbstractFloat}(spectrum::Array{Complex{T},2}, frequenci
     signal_power = abs(spectrum[idx, :]).^2
 
     # Determine noise power
-    noise_idxs      = [idx_Low-spill_bins/2 : idx-spill_bins; idx+spill_bins : idx_High+spill_bins/2]
-    noise_bins      = spectrum[noise_idxs,:]
-    noise_bins      = abs(noise_bins)
-    noise_power     = sum(noise_bins .^2, 1) ./ size(noise_bins,1)
+    noise_idxs   = [idx_Low - div(spill_bins, 2) : idx - spill_bins; idx + spill_bins : idx_High + div(spill_bins, 2)]
+    noise_bins   = spectrum[noise_idxs,:]
+    noise_bins   = abs(noise_bins)
+    noise_power  = sum(noise_bins .^2, 1) ./ size(noise_bins,1)
 
     # Calculate SNR
     snr = (signal_power ./ noise_power)
