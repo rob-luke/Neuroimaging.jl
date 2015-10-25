@@ -29,7 +29,7 @@ bin across epochs.
 s = bootstrap(s, num_resamples=100)
 ```
 """ ->
-function bootstrap(s::SSR; freq_of_interest::Union(Real, AbstractArray) = modulationrate(s), ID::String = "",
+function bootstrap(s::SSR; freq_of_interest::Union{Real, AbstractArray} = modulationrate(s), ID::String = "",
     data_type::String="epochs", fs::Number=samplingrate(s), results_key::String="statistics", kwargs...)
 
     if !haskey(s.processing, "epochs")
@@ -69,7 +69,7 @@ function bootstrap(s::SSR; freq_of_interest::Union(Real, AbstractArray) = modula
     return s
 end
 
-function bootstrap(s::SSR, freq_of_interest::Union(Real, AbstractArray); kwargs...)
+function bootstrap(s::SSR, freq_of_interest::Union{Real, AbstractArray}; kwargs...)
 
     bootstrap(s, freq_of_interest=freq_of_interest; kwargs...)
 end
@@ -77,7 +77,7 @@ end
 
 # Generate random selection with replacement for bootstrapping
 function generate_sample_selection(N::Int)
-    int(round(rand(N) * (N-1) + 1))
+    round(Int, rand(N) * (N-1) + 1)
 end
 
 
@@ -143,13 +143,13 @@ end
 #######################################
 
 
-function ftest(s::SSR; freq_of_interest::Union(Real, AbstractArray)=modulationrate(s), side_freq::Number=0.5,
+function ftest(s::SSR; freq_of_interest::Union{Real, AbstractArray}=modulationrate(s), side_freq::Number=0.5,
     ID::String="", spill_bins::Int=2, results_key::String="statistics", kwargs... )
 
     # Do calculation here once, instead of in each low level call
     spectrum    = EEG._ftest_spectrum(s.processing["sweeps"])
     spectrum    = compensate_for_filter(s.processing, spectrum, samplingrate(s))
-    frequencies = linspace(0, 1, int(size(spectrum, 1)))*samplingrate(s)/2
+    frequencies = linspace(0, 1, Int(size(spectrum, 1)))*samplingrate(s)/2
 
     for freq in freq_of_interest
 
@@ -204,7 +204,7 @@ function save_results(a::SSR; name_extension::String="", kwargs...)
 
     # Index of keys to be exported
     result_idx = find_keys_containing(results, "ftest")
-    result_idx = [result_idx, find_keys_containing(results, "hotelling")]
+    result_idx = [result_idx; find_keys_containing(results, "hotelling")]
 
     if length(result_idx) > 0
 

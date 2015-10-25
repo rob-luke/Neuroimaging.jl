@@ -56,7 +56,7 @@ end
 #
 #######################################
 
-function conv_bv2tal(Xbv::Union(AbstractArray, Number), Ybv::Union(AbstractArray, Number), Zbv::Union(AbstractArray, Number); offset::Number=128)
+function conv_bv2tal(Xbv::Union{AbstractArray, Number}, Ybv::Union{AbstractArray, Number}, Zbv::Union{AbstractArray, Number}; offset::Number=128)
 
     X = -Zbv .+ offset
     Y = -Xbv .+ offset
@@ -74,7 +74,7 @@ end
 #
 #######################################
 
-function conv_spm_mni2tal(Xspm::Union(AbstractArray, Number), Yspm::Union(AbstractArray, Number), Zspm::Union(AbstractArray, Number))
+function conv_spm_mni2tal(Xspm::Union{AbstractArray, Number}, Yspm::Union{AbstractArray, Number}, Zspm::Union{AbstractArray, Number})
 
     # Convert MNI ICMB152 coordinates as used in spm99 to talairach
     # http://onlinelibrary.wiley.com/doi/10.1002/hbm.20345/abstract
@@ -118,6 +118,6 @@ end
 # Euclidean distance for coordinates and dipoles
 
 import Distances.euclidean
-function euclidean(a::Union(Coordinate, Dipole), b::Union(Coordinate, Dipole))
+function euclidean(a::Union{Coordinate, Dipole}, b::Union{Coordinate, Dipole})
     euclidean([a.x, a.y, a.z], [b.x, b.y, b.z])
 end

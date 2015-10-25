@@ -64,7 +64,7 @@ function _append_filter(a::SSR, f::FilterCoefficients; name::String="filter")
     #
 
     key_name = new_processing_key(a.processing, name)
-    merge!(a.processing, [key_name => f])
+    merge!(a.processing, Dict(key_name => f))
 
     return a
 end
@@ -83,7 +83,7 @@ function downsample(s::SSR, ratio::Rational)
 
     dec_filter  = DSP.FIRFilter([1], ratio)
 
-    new_data = zeros(typeof(s.data[1, 1]), int(size(s.data, 1)*ratio), size(s.data, 2))
+    new_data = zeros(typeof(s.data[1, 1]), round(Int, size(s.data, 1)*ratio), size(s.data, 2))
 
     for c in 1:size(s.data, 2)
 
@@ -109,7 +109,7 @@ end
 #
 #######################################
 
-function rereference(a::SSR, refChan::Union(String, Array{ASCIIString}); kwargs...)
+function rereference(a::SSR, refChan::Union{String, Array{ASCIIString}}; kwargs...)
 
     a.data = rereference(a.data, refChan, a.channel_names)
 

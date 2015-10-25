@@ -115,8 +115,8 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
         epochIndex[:Code] = epochIndex[:Code] .+ 1
     end
 
-    triggers = ["Index" => vec(int(epochIndex[:Index])'), "Code" => vec(epochIndex[:Code] .+ 252),
-                "Duration" => vec(epochIndex[:Duration])']
+    triggers = Dict("Index" => vec(int(epochIndex[:Index])'), "Code" => vec(epochIndex[:Code] .+ 252),
+                "Duration" => vec(epochIndex[:Duration])')
 
     validate_triggers(triggers)
 
@@ -129,7 +129,7 @@ Place extra triggers a set time after existing triggers.
 
 A new trigger with `new_trigger_code` will be placed `new_trigger_time` seconds after exisiting `old_trigger_code` triggers.
 """ ->
-function extra_triggers(t::Dict, old_trigger_code::Union(Int, Array{Int}),
+function extra_triggers(t::Dict, old_trigger_code::Union{Int, Array{Int}},
                         new_trigger_code::Int, new_trigger_time::Number, fs::Number;
                         trigger_code_offset::Int=252, max_inserted::Number=Inf)
 
@@ -189,8 +189,8 @@ function extra_triggers(t::Dict, old_trigger_code::Union(Int, Array{Int}),
     index = index[valid_idx]
     code = code[valid_idx]
 
-    triggers = ["Index" => vec(int(index)'), "Code" => vec(code .+ trigger_code_offset),
-                "Duration" => vec([0, diff(index)])']
+    triggers = Dict("Index" => vec(int(index)'), "Code" => vec(code .+ trigger_code_offset),
+                "Duration" => vec([0, diff(index)])')
 
     validate_triggers(triggers)
 

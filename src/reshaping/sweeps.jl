@@ -12,7 +12,7 @@ function create_sweeps(epochs::Array, epochsPerSweep::Int)
     chansNum  = size(epochs)[3]
 
     sweepLen = epochsLen * epochsPerSweep
-    sweepNum = int(floor(epochsNum / epochsPerSweep))
+    sweepNum = round(Int, floor(epochsNum / epochsPerSweep))
     sweeps = zeros(Float64, (sweepLen, sweepNum, chansNum))
 
     sweep = 1

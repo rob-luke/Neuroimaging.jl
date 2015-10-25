@@ -40,7 +40,7 @@ function plot_ftest(s::SSR; freq_of_interest::Real=modulationrate(s), side_freq:
 
     spectrum = EEG._ftest_spectrum(s.processing["sweeps"])
     spectrum = compensate_for_filter(s.processing, spectrum, samplingrate(s))
-    frequencies = linspace(0, 1, int(size(spectrum, 1)))*samplingrate(s)/2
+    frequencies = linspace(0, 1, Int(size(spectrum, 1)))*samplingrate(s)/2
 
     plot_ftest(spectrum, frequencies, freq_of_interest, side_freq, spill_bins, min_plot_freq, max_plot_freq, plot_channel)
 end
@@ -93,7 +93,7 @@ function plot_ftest{T <: FloatingPoint}(spectrum::Array{Complex{T},2}, frequenci
     signal_power = abs(spectrum[idx, :]).^2
 
     # Determine noise power
-    noise_idxs      = [idx_Low-spill_bins/2 : idx-spill_bins, idx+spill_bins : idx_High+spill_bins/2]
+    noise_idxs      = [idx_Low-spill_bins/2 : idx-spill_bins; idx+spill_bins : idx_High+spill_bins/2]
     noise_bins      = spectrum[noise_idxs,:]
     noise_bins      = abs(noise_bins)
     noise_power     = sum(noise_bins .^2, 1) ./ size(noise_bins,1)
@@ -108,8 +108,8 @@ function plot_ftest{T <: FloatingPoint}(spectrum::Array{Complex{T},2}, frequenci
     raw_plot = layer(x=frequencies[idx_low_plot:idx_high_plot], y=abs(spectrum[idx_low_plot:idx_high_plot, :]).^2, Geom.line, Theme(default_color=color("black")))
     noi_plot = layer(x=frequencies[noise_idxs], y=noise_bins.^2, Geom.line, Theme(default_color=color("red")))
     sig_plot = layer(x=frequencies[idx-1:idx+1], y=abs(spectrum[idx-1:idx+1, :]).^2, Geom.line, Theme(default_color=color("green")))
-    noi_pnt  = layer(x=[min_plot_freq], y=[noise_power], Geom.point, Theme(default_color=color("red")))
-    sig_pnt  = layer(x=[min_plot_freq], y=[signal_power], Geom.point, Theme(default_color=color("green")))
+    noi_pnt  = layer(x=collect(min_plot_freq), y=collect(noise_power), Geom.point, Theme(default_color=color("red")))
+    sig_pnt  = layer(x=collect(min_plot_freq), y=collect(signal_power), Geom.point, Theme(default_color=color("green")))
 
     Gadfly.plot(noi_plot, sig_plot, raw_plot, noi_pnt, sig_pnt,
         Scale.x_continuous(minvalue=min_plot_freq, maxvalue=max_plot_freq),

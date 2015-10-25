@@ -7,7 +7,7 @@
 @doc """
 Import Biosemi files
 """ ->
-function import_biosemi(fname::Union(String, IO); kwargs...)
+function import_biosemi(fname::Union{String, IO}; kwargs...)
 
     Logging.info("Importing BIOSEMI data file")
 
@@ -27,9 +27,9 @@ function import_biosemi(fname::Union(String, IO); kwargs...)
     reference_channel = "Raw"
 
     # Tidy the trigger channel to standard names
-    triggers = ["Code"     => triggers["code"],
+    triggers = Dict("Code"     => triggers["code"],
                 "Index"    => triggers["idx"],
-                "Duration" => triggers["dur"]]
+                "Duration" => triggers["dur"])
 
     # Tidy channel names if required
     if header["chanLabels"][1] == "A1"
@@ -52,9 +52,9 @@ function create_events(channel::Array{Int16,1}, fs::Number; kwargs...)
     trigDurs = (stopPoints - startPoints)/fs
 
     evt = channel[startPoints]
-    evtTab = (String=>Any)["Code" => evt,
-                           "Index" => startPoints,
-                           "Duration" => trigDurs]
+    evtTab = Dict("Code" => evt,
+                  "Index" => startPoints,
+                  "Duration" => trigDurs)
 
 end
 

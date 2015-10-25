@@ -36,7 +36,7 @@ function phase_lag_index(a::SSR, ChannelOrigin::Int, ChannelDestination::Int, fr
     result = add_dataframe_static_rows(result, kwargs)
 
     key_name = new_processing_key(a.processing, "pli")
-    merge!(a.processing, [key_name => result])
+    merge!(a.processing, Dict(key_name => result))
 
     return a
 end
@@ -55,7 +55,7 @@ end
 
 # If you dont specify an analysis frequency, use modulation frequency
 function phase_lag_index(a::SSR, ChannelOrigin::Int, ChannelDestination::Int;
-        freq_of_interest::Union(Real, AbstractArray)=[modulationrate(a)],
+        freq_of_interest::Union{Real, AbstractArray}=[modulationrate(a)],
         ID::String="", kwargs...)
     phase_lag_index(a, ChannelOrigin, ChannelDestination, freq_of_interest, ID=ID; kwargs...)
 end

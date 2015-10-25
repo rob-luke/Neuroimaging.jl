@@ -62,7 +62,7 @@ find_keys_containing(results_storage, "FTest")
 ```
 """ ->
 function find_keys_containing(d::Dict, partial_key::String)
-    valid_keys = [beginswith(i, partial_key) for i = collect(keys(d))]
+    valid_keys = [startswith(i, partial_key) for i = collect(keys(d))]
     findin(valid_keys, true)
 end
 

@@ -36,7 +36,7 @@ If multiple channels are specififed, their average is used as the reference.
 
 Rereferenced signals
 """ ->
-function rereference{T <: FloatingPoint}(signals::Array{T, 2}, refChan::Union(Int, Array{Int}))
+function rereference{T <: FloatingPoint}(signals::Array{T, 2}, refChan::Union{Int, Array{Int}})
 
     debug("Re referencing $(size(signals)[end]) channels to $(length(refChan)) channels")
     debug("Reference channels = $refChan")
@@ -68,13 +68,13 @@ Or you can specify to use the `average` reference.
 
 Rereferenced signals
 """ ->
-function rereference{S <: AbstractString, T <: FloatingPoint}(signals::Array{T, 2}, refChan::Union(S, Array{S}),
+function rereference{S <: AbstractString, T <: FloatingPoint}(signals::Array{T, 2}, refChan::Union{S, Array{S}},
             chanNames::Array{S})
 
     debug("Reference channels = $refChan")
 
     if refChan == "car" || refChan == "average"
-        refChan_Idx = [1:size(signals)[end]]
+        refChan_Idx = collect(1:size(signals)[end])
     elseif isa(refChan, String)
         refChan_Idx = findfirst(chanNames, refChan)
     elseif isa(refChan, Array)

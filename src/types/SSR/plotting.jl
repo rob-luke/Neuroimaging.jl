@@ -23,7 +23,7 @@ draw(PDF("timeseries.pdf", 10inch, 6inch), plot1)
 
 
 """ ->
-function plot_timeseries(s::SSR; channels::Union(ASCIIString, Array{ASCIIString})=s.channel_names,
+function plot_timeseries(s::SSR; channels::Union{ASCIIString, Array{ASCIIString}}=s.channel_names,
         fs::Number=samplingrate(s), kwargs...)
 
     if isa(channels, ASCIIString) || length(channels) == 1 || size(s.data, 2) == 1

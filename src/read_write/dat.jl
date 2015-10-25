@@ -87,7 +87,7 @@ function read_dat(fid::IO)
     # Read in the dimensions
     regexp = r"[X-Z]:\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+(-?\d+)"
     xrange = match(regexp, readline(fid))
-    x = linspace(float(xrange.captures[1]), float(xrange.captures[2]), int(xrange.captures[3]))
+    x = linspace(float(xrange.captures[1]), float(xrange.captures[2]), parse(Int, xrange.captures[3]))
     yrange = match(regexp, readline(fid))
     y = linspace(float(yrange.captures[1]), float(yrange.captures[2]), int(yrange.captures[3]))
     zrange = match(regexp, readline(fid))

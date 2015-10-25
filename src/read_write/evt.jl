@@ -16,7 +16,7 @@ function read_evt(fname::String, fs::Number; kwargs...)
         warn("EVT file has too many columns")
     end
 
-    d = [d[1,1] => d[2:end, 1], d[1,2] => d[2:end, 2], d[1,3] => d[2:end, 3]]
+    d = Dict(d[1,1] => d[2:end, 1], d[1,2] => d[2:end, 2], d[1,3] => d[2:end, 3])
 
     if haskey(d, "Tmu")
         d["Index"] = [1 + round(i * (1 / 1000000) * float(fs)) for i in d["Tmu"]]
@@ -30,5 +30,5 @@ function read_evt(fname::String, fs::Number; kwargs...)
 
     Logging.info("Imported $(length(d["Code"])) events")
 
-    return ["Code" => d["Code"] + 252, "Index" => d["Index"], "Duration" => d["Duration"]]
+    return Dict("Code" => d["Code"] + 252, "Index" => d["Index"], "Duration" => d["Duration"])
 end

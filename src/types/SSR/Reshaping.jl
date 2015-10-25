@@ -13,9 +13,9 @@
 epochs = extract_epochs(SSR, valid_triggers=[1,2])
 ```
 """ ->
-function extract_epochs(a::SSR; valid_triggers::Union(AbstractArray, Int)=[1,2], remove_first::Int=0, remove_last::Int=0, kwargs...)
+function extract_epochs(a::SSR; valid_triggers::Union{AbstractArray, Int}=[1,2], remove_first::Int=0, remove_last::Int=0, kwargs...)
 
-    merge!(a.processing, ["epochs" => extract_epochs(a.data, a.triggers, valid_triggers, remove_first, remove_last)])
+    merge!(a.processing, Dict("epochs" => extract_epochs(a.data, a.triggers, valid_triggers, remove_first, remove_last)))
 
     return a
 end
@@ -35,7 +35,7 @@ function create_sweeps(a::SSR; epochsPerSweep::Int=64, kwargs...)
         error("Sweep length is longer than number of epochs will allow")
     end
 
-    merge!(a.processing, ["sweeps" => create_sweeps(a.processing["epochs"], epochsPerSweep)])
+    merge!(a.processing, Dict("sweeps" => create_sweeps(a.processing["epochs"], epochsPerSweep)))
 
     return a
 end
@@ -79,7 +79,7 @@ function add_triggers(a::SSR, mod_freq::Number, epochIndex; cycle_per_epoch::Int
     # New epochs
     new_epoch_length_s = cycle_per_epoch / mod_freq
     new_epochs_num     = round(existing_epoch_length_s / new_epoch_length_s) - 2
-    new_epoch_times    = [1:new_epochs_num]*new_epoch_length_s
+    new_epoch_times    = collect(1:new_epochs_num)*new_epoch_length_s
     new_epoch_indx     = [0, round(new_epoch_times * samplingrate(a))]
     debug("New epoch length = $new_epoch_length_s")
     debug("New # epochs     = $new_epochs_num")
@@ -92,7 +92,7 @@ function add_triggers(a::SSR, mod_freq::Number, epochIndex; cycle_per_epoch::Int
 
     # Place in dict
     new_code = int(ones(1, length(new_indx))) .+ 252
-    a.triggers = ["Index" => vec(int(new_indx)'), "Code" => vec(new_code), "Duration" => ones(length(new_code), 1)']
+    a.triggers = Dict("Index" => vec(int(new_indx)'), "Code" => vec(new_code), "Duration" => ones(length(new_code), 1)')
     #TODO Possible the trigger duration of one is not long enough
 
     return a

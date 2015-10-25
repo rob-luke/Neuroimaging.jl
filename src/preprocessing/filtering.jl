@@ -78,8 +78,8 @@ function bandpass_filter(signals::Array, lower::Number, upper::Number, fs::Numbe
     debug("Filter order = $n, fs = $fs")
 
     signals = filt(f, signals)
-    signals = filt(f, flipud(signals))
-    signals = flipud(signals)
+    signals = filt(f, flipdim(signals, 1))
+    signals = flipdim(signals, 1)
 
     return signals, f
 end
@@ -92,7 +92,7 @@ end
 #######################################
 
 function compensate_for_filter(d::Dict, spectrum::AbstractArray, fs::Real)
-    frequencies = linspace(0, 1, int(size(spectrum, 1))) * fs / 2
+    frequencies = linspace(0, 1, Int(size(spectrum, 1))) * fs / 2
 
     key_name = "filter"
     key_numb = 1

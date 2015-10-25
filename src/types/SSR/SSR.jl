@@ -210,7 +210,7 @@ remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
 """ ->
 function remove_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
-    remove_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
+    remove_channel!(a, round(Int, [findfirst(a.channel_names, c) for c=channel_names]))
     Logging.info("Removing channel(s) $(join(channel_names, " "))")
 end
 
@@ -234,10 +234,10 @@ function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
     return a
 end
 
-function remove_channel!(a::SSR, channel_names::Union(Array{String}); kwargs...)
+function remove_channel!(a::SSR, channel_names::Union{Array{String}}; kwargs...)
     remove_channel!(a, convert(Array{ASCIIString}, channel_names)); end
 
-function remove_channel!(a::SSR, channel_name::Union(Int, String, ASCIIString); kwargs...)
+function remove_channel!(a::SSR, channel_name::Union{Int, String, ASCIIString}; kwargs...)
     remove_channel!(a, [channel_name]); end
 
 
@@ -255,7 +255,7 @@ keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 """ ->
 function keep_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
     Logging.info("Keeping channel(s) $(join(channel_names, " "))")
-    keep_channel!(a, int([findfirst(a.channel_names, c) for c=channel_names]))
+    keep_channel!(a, round(Int, [findfirst(a.channel_names, c) for c=channel_names]))
 end
 
 function keep_channel!(a::SSR, channel_name::ASCIIString; kwargs...)

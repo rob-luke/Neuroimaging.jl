@@ -20,12 +20,12 @@ TODO: Add references to MASTER and Luts et al
 * F statistic
 
 """ ->
-function ftest(sweeps::Union(Array{Float64, 3}, Array{Float32, 3}), freq_of_interest::Real,
-                fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int)
+function ftest(sweeps::Union{Array{Float64, 3}, Array{Float32, 3}}, freq_of_interest::Real,
+                fs::Real, side_freq::Real, used_filter::Union{Filter, Nothing}, spill_bins::Int)
 
     spectrum    = EEG._ftest_spectrum(sweeps)
     # No compensation is made here for prior filtering. See SSR.jl for an example of how to compensate filtering.
-    frequencies = linspace(0, 1, int(size(spectrum, 1)))*float(fs)/2
+    frequencies = linspace(0, 1, Int(size(spectrum, 1)))*float(fs)/2
 
     ftest(spectrum, frequencies, freq_of_interest, side_freq, spill_bins)
 end
@@ -47,7 +47,7 @@ function ftest{T <: FloatingPoint}(spectrum::Array{Complex{T},2}, frequencies::A
     signal_power = abs(spectrum[idx, :]).^2                            # Biased response power
 
     # Determine noise power
-    noise_idxs      = [idx_Low-spill_bins/2 : idx-spill_bins, idx+spill_bins : idx_High+spill_bins/2]
+    noise_idxs      = [idx_Low-spill_bins/2 : idx-spill_bins; idx+spill_bins : idx_High+spill_bins/2]
     noise_bins      = spectrum[noise_idxs,:]
     noise_bins      = abs(noise_bins)
     noise_power     = sum(noise_bins .^2, 1) ./ size(noise_bins,1)     # Recording noise power
@@ -75,7 +75,7 @@ end
 
 
 # Calculates the spectrum for ftest and plotting
-function _ftest_spectrum(sweep::Union(Array{Float64,1}, Array{Float64,2}); ref::Int=0)
+function _ftest_spectrum(sweep::Union{Array{Float64,1}, Array{Float64,2}}; ref::Int=0)
     # First dimension is samples, second dimension if existing is channels
 
     sweepLen      = size(sweep)[1]

@@ -24,7 +24,7 @@ function read_avr(fname::String)
     # Header line
     header_exp = r"Npts= (\d*)\s+TSB= ([-+]?[0-9]*\.?[0-9]+)\s+DI= ([-+]?[0-9]*\.?[0-9]+)\s+SB= ([-+]?[0-9]*\.?[0-9]+)\s+SC= ([-+]?[0-9]*\.?[0-9]+)\s+Nchan= (\d*)"
     m     = match(header_exp, readline(file))
-    npts  = int(ascii(m.captures[1])) # Number of points
+    npts  = parse(Int, ascii(m.captures[1])) # Number of points
     tsb   = m.captures[2] # Omit?
     di     = m.captures[3] # Omit?
     sb    = m.captures[4] # Omit?

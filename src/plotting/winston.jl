@@ -319,11 +319,11 @@ function plot_spectrum(signal::Vector,
 
     if signal_level != 0 || noise_level != 0
         if signal_level != 0 && noise_level != 0
-            l = Legend(.85, .9, {s,n})
+            l = Legend(.85, .9, Any[s,n])
         elseif signal_level != 0
-            l = Legend(.85, .9, {s})
+            l = Legend(.85, .9, Any[s])
         elseif noise_level != 0
-            l = Legend(.85, .9, {n})
+            l = Legend(.85, .9, Any[n])
         end
         add(spectrum_plot, l)
     end
@@ -483,14 +483,14 @@ function _place_plots(plots::Array, ncols::Int)
     =#
 
     # Generate table
-    nrows = int(ceil(length(plots)/ncols))
+    nrows = round(Int, ceil(length(plots)/ncols))
     t = Table(nrows, ncols)
 
     # Fill table with plots
     for idx = 1:length(plots)
 
-        row = int(ceil(idx/ ncols))
-        col = int(idx - (row-1)*ncols)
+        row = round(Int, ceil(idx/ ncols))
+        col = round(Int, idx - (row-1)*ncols)
 
         t[row, col] = plots[idx]
 

@@ -18,7 +18,7 @@ function epoch_rejection{T <: Number}(epochs::Array{T, 3}, retain_percentage::Fl
         Logging.warn("Non valid percentage value for retaining epochs $(retain_percentage)")
     end
 
-    Logging.info("Rejected $(int(round((1 - retain_percentage) * 100)))% of epochs based on $(string(rejection_method))")
+    Logging.info("Rejected $(round(Int, (1 - retain_percentage) * 100))% of epochs based on $(string(rejection_method))")
 
     # Epoch value should be a value or score per epoch where a lower value is better
     # The lowest `retain_percentage` amount of epoch values will be kept
