@@ -131,7 +131,7 @@ A new trigger with `new_trigger_code` will be placed `new_trigger_time` seconds 
 """ ->
 function extra_triggers(t::Dict, old_trigger_code::Union{Int, Array{Int}},
                         new_trigger_code::Int, new_trigger_time::Number, fs::Number;
-                        trigger_code_offset::Int=252, max_inserted::AbstractFloat=Inf)
+                        trigger_code_offset::Int=252, max_inserted::Number=Inf)
 
     # Scan through existing triggers, when you find one that has been specified to trip on
     # then add a new trigger at a set time after the trip
@@ -143,7 +143,7 @@ function extra_triggers(t::Dict, old_trigger_code::Union{Int, Array{Int}},
     # Find triggers we want to trip on
     valid_trip       = any(t["Code"]-trigger_code_offset .== old_trigger_code', 2)
     valid_trip_idx   = find(valid_trip)
-    valid_trip_index = [t["Index"][valid_trip_idx], 0]  # Place a 0 at end so we dont use the last epoch
+    valid_trip_index = [t["Index"][valid_trip_idx]; 0]  # Place a 0 at end so we dont use the last epoch
     valid_trip_code  = t["Code"][valid_trip_idx]
 
     debug("Found $(length(valid_trip_code)) exisiting valid triggers")
@@ -185,12 +185,12 @@ function extra_triggers(t::Dict, old_trigger_code::Union{Int, Array{Int}},
     code  = code[v]
 
     # if there are any two triggers directly on top of each other then remove them
-    valid_idx = [true, diff(index) .!= 0]
+    valid_idx = [true; diff(index) .!= 0]
     index = index[valid_idx]
     code = code[valid_idx]
 
-    triggers = Dict("Index" => vec(Int(index)'), "Code" => vec(code .+ trigger_code_offset),
-                "Duration" => vec([0, diff(index)])')
+    triggers = Dict("Index" => vec((index)'), "Code" => vec(code .+ trigger_code_offset),
+                "Duration" => vec([0; diff(index)])')
 
     validate_triggers(triggers)
 
