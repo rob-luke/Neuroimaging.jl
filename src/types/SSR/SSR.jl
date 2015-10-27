@@ -335,12 +335,11 @@ Merge `SSR` channels listed in `merge_Chans` and label the averaged channel as `
 s = merge_channels(s, ["P6", "P8"], "P68")
 ```
 """ ->
-function merge_channels(a::SSR, merge_Chans::Array{AbstractString}, new_name::AbstractString; kwargs...)
+function merge_channels(a::SSR, merge_Chans::Array{ASCIIString}, new_name::ASCIIString; kwargs...)
 
     debug("Total origin channels: $(length(a.channel_names))")
 
     keep_idxs = [findfirst(a.channel_names, i) for i = merge_Chans]
-    keep_idxs = Int(keep_idxs)
 
     if sum(keep_idxs .== 0) > 0
         warn("Could not merge as these channels don't exist: $(join(vec(merge_Chans[keep_idxs .== 0]), " "))")
@@ -353,7 +352,7 @@ function merge_channels(a::SSR, merge_Chans::Array{AbstractString}, new_name::Ab
     a = add_channel(a, mean(a.data[:,keep_idxs], 2), new_name; kwargs...)
 end
 
-function merge_channels(a::SSR, merge_Chans::AbstractString, new_name::AbstractString; kwargs...)
+function merge_channels(a::SSR, merge_Chans::ASCIIString, new_name::ASCIIString; kwargs...)
     a = merge_channels(a, [merge_Chans], new_name; kwargs...)
 end
 
