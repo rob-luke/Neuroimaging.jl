@@ -10,7 +10,9 @@ Logging.configure(level=DEBUG)
 tests = AbstractString[]
 function add_test(fname)
     global tests
-    push!(tests, fname)
+    if endswith(fname, ".jl")
+        push!(tests, fname)
+    end
 end
 FileFind.find(".", add_test)
 
