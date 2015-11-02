@@ -11,7 +11,6 @@ Logging.configure(level=DEBUG)
 using Winston
 
 fname = joinpath(dirname(@__FILE__), "../data", "test.dat")
-fname = "/Users/rluke/Data/EEG/BDFs/NH/Organised/DATs/BavoVautmans_40Hz_SWN_70dB_BI.dat"
 
 x, y, z, s, t = read_dat(fname)
 
