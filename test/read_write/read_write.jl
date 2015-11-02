@@ -2,8 +2,8 @@
 # BIOSEMI
 #
 
-fname = joinpath(dirname(@__FILE__), "data", "test_Hz19.5-testing.bdf")
-fname_out = joinpath(dirname(@__FILE__), "data", "tmp", "testwrite.bdf")
+fname = joinpath(dirname(@__FILE__), "..", "data", "test_Hz19.5-testing.bdf")
+fname_out = joinpath(dirname(@__FILE__), "..", "data", "tmp", "testwrite.bdf")
 
 dats, evtTab, trigs, statusChan = readBDF(fname);
 sampRate = readBDFHeader(fname)["sampRate"][1]
@@ -35,15 +35,15 @@ show(s2)
 # BESA
 #
 
-s = read_SSR(  joinpath(dirname(@__FILE__), "data", "test_Hz19.5-testing.bdf"))
-s = read_evt(s, joinpath(dirname(@__FILE__), "data", "test.evt"))
+s = read_SSR(  joinpath(dirname(@__FILE__), "..", "data", "test_Hz19.5-testing.bdf"))
+s = read_evt(s, joinpath(dirname(@__FILE__), "..", "data", "test.evt"))
 
 
 #
 # Convert between events and channels
 #
 
-fname = joinpath(dirname(@__FILE__), "data", "test_Hz19.5-testing.bdf")
+fname = joinpath(dirname(@__FILE__), "..", "data", "test_Hz19.5-testing.bdf")
 dats, evtTab, trigs, statusChan = readBDF(fname);
 
 events  = create_events(trigs, sampRate)
@@ -56,8 +56,8 @@ channel = create_channel(events, dats, sampRate)
 # Test avr files
 #
 
-fname = joinpath(dirname(@__FILE__), "data", "test.avr")
-sname = joinpath(dirname(@__FILE__), "data", "tmp", "same.avr")
+fname = joinpath(dirname(@__FILE__), "..", "data", "test.avr")
+sname = joinpath(dirname(@__FILE__), "..", "data", "tmp", "same.avr")
 
 a, b = read_avr(fname)
 
@@ -73,8 +73,8 @@ a2, b2 = read_avr(sname)
 # Test dat files
 #
 
-fname = joinpath(dirname(@__FILE__), "data", "test-4d.dat")
-sname = joinpath(dirname(@__FILE__), "data", "tmp", "same.dat")
+fname = joinpath(dirname(@__FILE__), "..", "data", "test-4d.dat")
+sname = joinpath(dirname(@__FILE__), "..", "data", "tmp", "same.dat")
 
 x, y, z, s, t = read_dat(fname)
 
@@ -107,7 +107,7 @@ x2, y2, z2, s2, t2 = read_dat(sname)
 @test t==t2
 
 
-fname = joinpath(dirname(@__FILE__), "data", "test-3d.dat")
+fname = joinpath(dirname(@__FILE__), "..", "data", "test-3d.dat")
 x, y, z, s, t = read_dat(fname)
 
 @test size(x) == (30,)
