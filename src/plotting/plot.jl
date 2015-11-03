@@ -149,13 +149,13 @@ function plot_single_channel_timeseries{T <: Number}(signal::AbstractVector{T}, 
 
     debug("Plotting single channel waveform of size $(size(signal))")
 
-    time_s = [1:size(signal, 1)]/fs                         # Create time axis
+    time_s = collect(1:size(signal, 1))/fs                         # Create time axis
 
-    Gadfly.plot(x=time_s, y=signal,
+    Gadfly.plot(x = time_s, y = signal,
         Geom.line,
-        Theme(default_color=color("black")),
+        Theme(default_color = colorant"black" ),
         Guide.xlabel(xlabel), Guide.ylabel(ylabel),
-        Scale.x_continuous(minvalue=minimum(time), maxvalue=maximum(time)))   # Tight fit on time axis
+        Scale.x_continuous(minvalue = minimum(time_s), maxvalue = maximum(time_s)))   # Tight fit on time axis
 end
 
 @doc """

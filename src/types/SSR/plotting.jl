@@ -30,7 +30,7 @@ function plot_timeseries{S <: AbstractString}(s::SSR; channels::Union{S, Array{S
 
         debug("Plotting single channel waveform for channel $channels  from channels $(s.channel_names)")
 
-        fig = plot_single_channel_timeseries(vec(keep_channel!(deepcopy(s), [channels]).data), samplingrate(s); kwargs...)
+        fig = plot_single_channel_timeseries(vec(keep_channel!(deepcopy(s), channels).data), samplingrate(s); kwargs...)
 
     else
 

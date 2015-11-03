@@ -255,9 +255,9 @@ a = read_SSR(filename)
 keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
 """ ->
-function keep_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
+function keep_channel!{S <: AbstractString}(a::SSR, channel_names::Array{S}; kwargs...)
     Logging.info("Keeping channel(s) $(join(channel_names, " "))")
-    keep_channel!(a, round(Int, [findfirst(a.channel_names, c) for c=channel_names]))
+    keep_channel!(a, round(Int, [findfirst(a.channel_names, c) for c = channel_names]))
 end
 
 function keep_channel!(a::SSR, channel_name::AbstractString; kwargs...)
@@ -268,7 +268,7 @@ function keep_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
 
     remove_channels = [1:size(a.data,2); ]
 
-    channel_idx = sort(channel_idx, rev=true)
+    channel_idx = sort(channel_idx, rev = true)
     for c = channel_idx
         splice!(remove_channels, c)
     end
