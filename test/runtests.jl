@@ -11,7 +11,9 @@ tests = AbstractString[]
 function add_test(fname)
     global tests
     if endswith(fname, ".jl")
-        push!(tests, fname)
+        if !contains(fname, "runtests")
+            push!(tests, fname)
+        end
     end
 end
 FileFind.find(".", add_test)
