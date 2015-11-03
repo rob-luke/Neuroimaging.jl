@@ -20,6 +20,9 @@ To install this package, run the following command into Julia's command line:
 
 ```julia
 Pkg.add("EEG")
+
+# For the latest developements
+Pkg.checkout("EEG")
 ```
 
 ## Documentation
