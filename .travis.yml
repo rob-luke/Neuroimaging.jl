@@ -6,6 +6,7 @@ julia:
   - 0.4
 notifications:
   email: false
+  irc: "irc.freenode.org#eeg.jl"
 sudo: true
 before_install:
   - "export DISPLAY=:99.0"                                         # Required for graphics
