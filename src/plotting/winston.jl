@@ -25,7 +25,7 @@ Plot a 3d image file from three views (back, side and top).
 * plot_negative: should negative values be plotted
 
 """ ->
-function plot_dat{T <: AbstractFloat}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, dat_data::Array{Float64, 3};
+function plot_dat{T <: AbstractFloat}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T, 1}, dat_data::Array{T, 3};
                 ncols::Int=3, max_size::Number=1, min_size=0.2,
                 min_plot_lim::Number = unique(sort(abs(vec(dat_data))))[2], threshold::Number = -Inf,
                 colorbar::Bool=false, colorbar_title::AbstractString="",
@@ -94,6 +94,11 @@ function plot_dat{T <: AbstractFloat}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T
     end
 
     p
+end
+
+function plot_dat{T <: AbstractFloat}(x::LinSpace{T}, y::LinSpace{T}, z::LinSpace{T}, dat_data::Array{T, 3}; kwargs...)
+
+    plot_dat(collect(x), collect(y), collect(z), dat_data; kwargs...)
 end
 
 function subplot_dat(x_dim, y_dim, reduction_dim, dat_data, plot_negative, size_multiplier, min_size, T, min_plot_lim,
