@@ -113,6 +113,7 @@ export # Helper functions
        find_location,
        project,
        # Plotting
+       plot,
        oplot,
        plot_dat,
        plot_spectrum,
