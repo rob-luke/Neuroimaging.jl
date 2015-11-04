@@ -15,6 +15,7 @@ before_install:
   - julia -e 'Pkg.clone("https://github.com/codles/MinMaxFilter.jl.git")'
   - julia -e 'Pkg.add("DSP"); Pkg.checkout("DSP")'
   - julia -e 'Pkg.add("SIUnits"); Pkg.checkout("SIUnits")'
+  - julia -e 'Pkg.add("Tk"); Pkg.checkout("Tk")'
 script:
   - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("EEG"); Pkg.test("EEG"; coverage=true)'
 after_success:
