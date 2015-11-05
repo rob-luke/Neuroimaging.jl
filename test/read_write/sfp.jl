@@ -1,13 +1,3 @@
-using EEG
-using Base.Test
-using Logging
-using MAT, BDF
-using SIUnits, SIUnits.ShortUnits
-using FileFind
-
-Logging.configure(level=DEBUG)
-
-
 fname = joinpath(dirname(@__FILE__), "..", "data", "test.sfp")
 
 s = read_sfp(fname)
