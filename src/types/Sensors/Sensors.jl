@@ -16,7 +16,7 @@ function show(elec::Electrodes)
 end
 
 
-function match_sensors(sens::Electrodes, labels::Array{AbstractString})
+function match_sensors{S <: AbstractString}(sens::Electrodes, labels::Array{S})
     # Match a set of electrodes to those provided
     #
     # usage: lf, valid = match_sensors(electrodes, sensor_labels)
@@ -37,7 +37,7 @@ function match_sensors(sens::Electrodes, labels::Array{AbstractString})
 end
 
 
-function match_sensors(lf::Array, lf_labels::Array{AbstractString}, labels::Array{AbstractString})
+function match_sensors{S <: AbstractString}(lf::Array, lf_labels::Array{S}, labels::Array{S})
     # Match the sensors in a leadfield array to those provided
     #
     # usage: lf, valid = match_sensors(leadfield, leadfield_labels, sensor_labels)
