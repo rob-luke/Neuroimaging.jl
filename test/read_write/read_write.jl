@@ -12,15 +12,15 @@ sampRate = readBDFHeader(fname)["sampRate"][1]
 
 @test trigs !== trigger_channel(read_SSR(fname))
 
-@test trigs == trigger_channel(read_SSR(fname, valid_triggers=[-1000:10000]))
+@test trigs == trigger_channel(read_SSR(fname, valid_triggers = collect(-1000:10000)))
 
 s  = read_SSR(fname)
 s.header["subjID"] = "test"
 write_SSR(s, fname_out)
-s  = read_SSR(fname, valid_triggers=[-1000:10000])
+s  = read_SSR(fname, valid_triggers = collect(-1000:10000))
 s.header["subjID"] = "test"
 write_SSR(s, fname_out)
-s2 = read_SSR(fname_out, valid_triggers=[-1000:10000])
+s2 = read_SSR(fname_out, valid_triggers = collect(-1000:10000))
 
 show(s)
 show(s2)
