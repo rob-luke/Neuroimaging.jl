@@ -49,6 +49,7 @@ function match_tests(fname)
     end
 end
 
-FileFind.find("/Users/rluke/.julia/v0.4/EEG/src/", match_tests)
+
+FileFind.find(joinpath(dirname(@__FILE__), "..", "src"), match_tests)
 
 @test length(missing) <= 1
