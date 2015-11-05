@@ -42,6 +42,7 @@ function match_tests(fname)
         if !contains(fname, excluded[1]) & !contains(fname, excluded[2]) & !contains(fname, excluded[3])
             matched = replace(fname, "/src/", "/test/")
             if !isfile(matched)
+                println("Missing file: $matched")
                 push!(missing, matched)
             end
         end
