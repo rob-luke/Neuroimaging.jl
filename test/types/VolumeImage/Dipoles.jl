@@ -1,5 +1,3 @@
-using Winston
-
 fname = joinpath(dirname(@__FILE__), "../../data", "test-4d.dat")
 
 t = read_VolumeImage(fname)
