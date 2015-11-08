@@ -129,6 +129,10 @@ hcat(a, b)
 """ ->
 function hcat(a::SSR, b::SSR)
 
+    if a.channel_names != b.channel_names
+        throw(ArgumentError(string("Channels do not match $(a.channel_names) != $(b.channel_names)")))
+    end
+
     if haskey(a.processing, "epochs")
         warn("Epochs have already been extracted and will no longer be valid")
     end

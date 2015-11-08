@@ -12,11 +12,15 @@ s = read_SSR(fname)
 @test modulationrate(s) == 19.5
 @test isa(modulationrate(s), AbstractFloat)
 
+s = merge_channels(s, "Cz", "MergedCz")
+s = merge_channels(s, ["Cz" "10Hz_SWN_70dB_R"], "Merged")
+
+
 s2 = hcat(deepcopy(s), deepcopy(s))
 
 @test size(s2.data, 1) == 2 * size(s.data, 1)
 @test size(s2.data, 2) == size(s.data, 2)
 
-s = merge_channels(s, "Cz", "MergedCz")
+    keep_channel!(s, ["Cz" "10Hz_SWN_70dB_R"])
 
-s = merge_channels(s, ["Cz" "10Hz_SWN_70dB_R"], "Merged")
+@test_throws ArgumentError hcat(s, s2)
