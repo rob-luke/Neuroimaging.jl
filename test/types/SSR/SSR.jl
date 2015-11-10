@@ -1,8 +1,12 @@
 Logging.configure(level=DEBUG)
 
-fname = joinpath(dirname(@__FILE__), "../../data", "test_Hz19.5-testing.bdf")
 
-s = read_SSR(fname)
+fname = joinpath(dirname(@__FILE__), "../../data", "test_Hz19.5-testing.bdf")
+fname2 = joinpath(dirname(@__FILE__), "../../data", "test_Hz19.5-copy.bdf")
+
+cp(fname, fname2, remove_destination = true)  # So doesnt use .mat file
+
+s = read_SSR(fname2)
 
 @test samplingrate(s) == 8192.0
 @test samplingrate(Int, s) == 8192

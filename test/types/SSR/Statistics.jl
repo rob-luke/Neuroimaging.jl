@@ -1,6 +1,7 @@
 fname = joinpath(dirname(@__FILE__), "../../data", "test_Hz19.5-testing.bdf")
 
 s = read_SSR(fname)
+s.modulationrate = 19.5
 s = bootstrap(s, num_resamples = 5000)
 
 # Use approx equal as the bootstrapping varies due to the random sampling
