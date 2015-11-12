@@ -109,6 +109,7 @@ export # Helper functions
        best_dipole,
        orient_dipole,
        best_ftest_dipole,
+       Leadfield,
        match_leadfield,
        find_location,
        project,

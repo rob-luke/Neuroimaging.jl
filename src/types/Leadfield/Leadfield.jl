@@ -1,16 +1,20 @@
-#
-# leadfield is defined in another module
-#
-type leadfield
-    L::Array
-    x::Vector
-    y::Vector
-    z::Vector
-    sensors::Array{AbstractString}
+type Leadfield{T <: AbstractFloat, S <: AbstractString}
+    L::Array{T, 3}
+    x::Vector{T}
+    y::Vector{T}
+    z::Vector{T}
+    sensors::Vector{S}
 end
 
 
-function match_leadfield(l, s::SSR)
+function Base.show(io::IO, l::Leadfield)
+    @printf "Leadfield\n"
+    @printf "  Number of sources: %d\n" size(l.L, 1)
+    @printf "  Number of sensors: %d\n" size(l.L, 3)
+end
+
+
+function match_leadfield(l::Leadfield, s::SSR)
 
     info("Matching leadfield to SSR")
 
@@ -46,4 +50,3 @@ end
 function find_location(l, d::Union{Dipole, Coordinate})
     find_location(l, d.x, d.y, d.z)
 end
-
