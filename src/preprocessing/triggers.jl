@@ -28,8 +28,12 @@ function validate_triggers(t::Dict)
         critical("Trigger channel does not contain duration information")
     end
 
-    if length(t["Index"]) !== length(t["Code"]) && length(t["Index"]) !== length(t["Duration"])
-        critical("Trigger data lengths are different")
+    if length(t["Index"]) !== length(t["Duration"])
+        critical("Trigger index and duration lengths are different")
+    end
+
+    if length(t["Index"]) !== length(t["Code"])
+        critical("Trigger index and code lengths are different")
     end
 end
 
