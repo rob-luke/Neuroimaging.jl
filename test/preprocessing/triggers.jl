@@ -45,3 +45,7 @@ s = read_SSR(fname, remove_first = 10)
 
 s = read_SSR(fname, max_epochs = 12)
 @test length(s.triggers["Index"]) == 12
+
+s = read_SSR(fname)
+s.triggers = extra_triggers(s.triggers, 1, 7, 0.7, samplingrate(s))
+@test length(s.triggers["Index"]) == 56
