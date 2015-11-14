@@ -8,8 +8,6 @@ s3 = deepcopy(s)
 
 validate_triggers(s.triggers)
 
-s.triggers["test"] = 1
-
 delete!(s1.triggers, "Index")
 
 @test_throws KeyError validate_triggers(s1.triggers)
@@ -21,3 +19,12 @@ delete!(s2.triggers, "Code")
 delete!(s3.triggers, "Duration")
 
 @test_throws KeyError validate_triggers(s3.triggers)
+
+s.triggers["test"] = 1
+
+validate_triggers(s.triggers)
+
+s.triggers["Duration"] = s.triggers["Duration"][1:4]
+s.triggers["Code"] = s.triggers["Code"][1:4]
+
+@test_throws KeyError validate_triggers(s.triggers)

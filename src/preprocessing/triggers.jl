@@ -17,23 +17,23 @@ function validate_triggers(t::Dict)
     end
 
     if !haskey(t, "Index")
-        critical("Trigger channel does not contain index information")
+        throw(KeyError("Trigger channel does not contain index information"))
     end
 
     if !haskey(t, "Code")
-        critical("Trigger channel does not contain code information")
+        throw(KeyError("Trigger channel does not contain code information"))
     end
 
     if !haskey(t, "Duration")
-        critical("Trigger channel does not contain duration information")
+        throw(KeyError("Trigger channel does not contain duration information"))
     end
 
     if length(t["Index"]) !== length(t["Duration"])
-        critical("Trigger index and duration lengths are different")
+        throw(KeyError("Trigger index and duration lengths are different"))
     end
 
     if length(t["Index"]) !== length(t["Code"])
-        critical("Trigger index and code lengths are different")
+        throw(KeyError("Trigger index and code lengths are different"))
     end
 end
 
