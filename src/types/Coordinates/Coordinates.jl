@@ -119,5 +119,5 @@ end
 
 import Distances.euclidean
 function euclidean(a::Union{Coordinate, Dipole}, b::Union{Coordinate, Dipole})
-    euclidean([a.x, a.y, a.z], [b.x, b.y, b.z])
+    euclidean([float(a.x), float(a.y), float(a.z)], [float(b.x), float(b.y), float(b.z)])
 end
