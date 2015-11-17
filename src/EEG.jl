@@ -113,6 +113,7 @@ export # Helper functions
        match_leadfield,
        find_location,
        project,
+       euclidean,
        # Plotting
        plot,
        oplot,
