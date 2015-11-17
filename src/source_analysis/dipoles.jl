@@ -96,7 +96,7 @@ Finds the largest dipole within a specified distance of a reference location
 * dip: The best dipole
 
 """ ->
-function best_dipole(ref::Union{Coordinate, Dipole}, dips::Array{Dipole}; maxdist::Number=30)
+function best_dipole(ref::Union{Coordinate, Dipole}, dips::Array{Dipole}; maxdist::Number=0.30)
 
     Logging.info("Calculating best dipole for $(length(dips)) dipoles")
 
