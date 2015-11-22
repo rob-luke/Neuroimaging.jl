@@ -161,23 +161,24 @@ end
 # ----------------
 #
 
-function dimensions_equal(vi1::VolumeImage, vi2::VolumeImage; x::Bool=true, y::Bool=true, z::Bool=true, kwargs...)
+function dimensions_equal(vi1::VolumeImage, vi2::VolumeImage; x::Bool=true, y::Bool=true, z::Bool=true, t::Bool=true, kwargs...)
 
     matching = true
     if x & !(vi1.x == vi2.x)
-        matching = false
+        throw(KeyError("X dimensions do not match"))
     end
     if y & !(vi1.y == vi2.y)
-        matching = false
+        throw(KeyError("Y dimensions do not match"))
     end
     if z & !(vi1.z == vi2.z)
-        matching = false
+        throw(KeyError("Z dimensions do not match"))
+    end
+    if t & !(vi1.t == vi2.t)
+        throw(KeyError("T dimensions do not match"))
     end
 
     if matching
         return true
-    else
-        error("VolumeImage dimensions do not match")
     end
 end
 
