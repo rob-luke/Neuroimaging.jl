@@ -156,12 +156,6 @@ function collapse_dat(dat_data, dim, plot_negative)
 end
 
 
-function plot_dat(dat_data; kwargs...)
-
-    plot_dat(1:size(dat_data,1), 1:size(dat_data,2), 1:size(dat_data,3), dat_data; kwargs...)
-end
-
-
 function plot_dat{T <: Number}(dat_data::Array{T, 3}; kwargs...)
 
     x = 1:size(dat_data)[1]
