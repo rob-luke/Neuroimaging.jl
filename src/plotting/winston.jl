@@ -158,9 +158,9 @@ end
 
 function plot_dat{T <: Number}(dat_data::Array{T, 3}; kwargs...)
 
-    x = 1:size(dat_data)[1]
-    y = 1:size(dat_data)[2]
-    z = 1:size(dat_data)[3]
+    x = LinSpace(1:size(dat_data)[1])
+    y = LinSpace(1:size(dat_data)[2])
+    z = LinSpace(1:size(dat_data)[3])
 
     plot_dat(x, y, z, dat_data; kwargs...)
 end
