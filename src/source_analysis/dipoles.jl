@@ -19,7 +19,7 @@ function find_dipoles{T <: Number}(s::Array{T, 3}; window::Array{Int}=[6,6,6], x
 
     debug("Finding dipoles for 3d array")
 
-    minval, maxval = minmax_filter(s, window, verbose=false)
+    minval, maxval = minmax_filter(s, window)
 
     # Find the positions matching the maxima
     matching = s[2:size(maxval)[1]+1, 2:size(maxval)[2]+1, 2:size(maxval)[3]+1]
@@ -49,7 +49,7 @@ function find_dipoles{T <: Number}(s::Array{T, 4}; window::Array{Int}=[6,6,6,20]
 
     Logging.info("4d dipole finding")
 
-    minval, maxval = minmax_filter(s, window, verbose=false)
+    minval, maxval = minmax_filter(s, window)
 
     # Find the positions matching the maxima
     matching = s[2:size(maxval)[1]+1, 2:size(maxval)[2]+1, 2:size(maxval)[3]+1, 2:size(maxval)[4]+1]
