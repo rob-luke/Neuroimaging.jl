@@ -195,7 +195,7 @@ end
 
 
 # Save ftest results to file
-function save_results(a::SSR; name_extension::AbstractString="", kwargs...)
+function save_results(a::SSR; name_extension::AbstractString="", results_key::AbstractString="statistics", kwargs...)
 
     file_name = string(a.file_name, name_extension, ".csv")
 
@@ -203,8 +203,7 @@ function save_results(a::SSR; name_extension::AbstractString="", kwargs...)
     results = a.processing
 
     # Index of keys to be exported
-    result_idx = find_keys_containing(results, "ftest")
-    result_idx = [result_idx; find_keys_containing(results, "hotelling")]
+    result_idx = find_keys_containing(results, results_key)
 
     if length(result_idx) > 0
 
