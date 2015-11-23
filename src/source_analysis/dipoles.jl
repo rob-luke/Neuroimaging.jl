@@ -38,7 +38,7 @@ function find_dipoles{T <: Number}(s::Array{T, 3}; window::Array{Int}=[6,6,6], x
     end
 
     # Sort dipoles by size
-    dips[sortperm([dip.size for dip in dips], rev=true)]
+    vec(dips[sortperm([dip.size for dip in dips], rev=true)])
 end
 
 
@@ -59,17 +59,14 @@ function find_dipoles{T <: Number}(s::Array{T, 4}; window::Array{Int}=[6,6,6,20]
     peaks = maxval[matching]
     peaks = peaks[peaks .>= 0.1 * maximum(peaks)]
 
-    dips = Array(Dipole, (1,length(peaks)))
+    dips = Dipole[]
     for l = 1:length(peaks)
         xidx, yidx, zidx, tidx = ind2sub(size(s), find(s .== peaks[l]))
 
-        dips[l] = Dipole("Unknown", x[xidx[1]], y[yidx[1]], z[zidx[1]],
-                         0, 0, 0, 0, 0,
-                         peaks[l])
-
+        push!(dips, Dipole("Unknown", x[xidx[1]], y[yidx[1]], z[zidx[1]], 0, 0, 0, 0, 0, peaks[l]))
     end
 
-    return dips
+    vec(dips[sortperm([dip.size for dip in dips], rev=true)])
 end
 
 
