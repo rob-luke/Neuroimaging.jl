@@ -37,7 +37,7 @@ export # Helper functions
        read_bsa,
        read_dat,
        read_sfp,
-       #read_elp,
+       read_elp,
        write_dat,
        prepare_dat,
        write_avr,

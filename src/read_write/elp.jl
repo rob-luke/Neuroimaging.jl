@@ -18,7 +18,7 @@ Read elp file
 function read_elp(fname::AbstractString)
     # This does not work yet, need to convert to 3d coord system
 
-    error("Reading ELPs has not been validated")
+    critical("Reading ELPs has not been validated")
 
     info("Reading elp file = $fname")
 
@@ -29,8 +29,8 @@ function read_elp(fname::AbstractString)
     df = readtable(fname, header = false, separator = ' ')
 
     # Save locations
-    elec.xloc = df[:x2]  #TODO: Fix elp locations to 3d
-    elec.yloc = df[:x3]
+    elec.x = df[:x2]  #TODO: Fix elp locations to 3d
+    elec.y = df[:x3]
 
     # Convert label to ascii and remove '
     labels = df[:x1]
@@ -38,7 +38,7 @@ function read_elp(fname::AbstractString)
         push!(elec.label, replace(labels[i], "'", "" ))
     end
 
-    debug("Imported $(length(elec.xloc)) locations")
+    debug("Imported $(length(elec.x)) locations")
     debug("Imported $(length(elec.label)) labels")
 
     return elec
