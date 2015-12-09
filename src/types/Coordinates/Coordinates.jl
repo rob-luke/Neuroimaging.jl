@@ -106,7 +106,7 @@ function conv_spm_mni2tal(elec::Electrodes)
 
     elecNew = elec
 
-    elecNew.xloc, elecNew.yloc, elecNew.zloc = conv_spm_mni2tal(elec.xloc, elec.yloc, elec.zloc)
+    elecNew.x, elecNew.y, elecNew.z = conv_spm_mni2tal(elec.x, elec.y, elec.z)
 
     elecNew.coord_system = "Talairach"
 
