@@ -32,4 +32,4 @@ p = plot_spectrum(s, "20Hz_SWN_70dB_R", targetFreq = 3.0)
 #
 
 s = highpass_filter(s)
-p = plot_filter_response(s.processing["filter"], Int(s.samplingrate))
+p = plot_filter_response(s.processing["filter1"], Int(s.samplingrate))
