@@ -22,5 +22,6 @@ p = SSR_spectrogram(s, "20Hz_SWN_70dB_R", 1.0, 50.0, seconds = 2)
 
 s = extract_epochs(s)
 s = create_sweeps(s, epochsPerSweep = 2)
+s = ftest(s)
 
 p = plot_spectrum(s, "20Hz_SWN_70dB_R", targetFreq = 3.0)

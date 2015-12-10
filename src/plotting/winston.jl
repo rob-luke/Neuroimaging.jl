@@ -337,7 +337,7 @@ function plot_spectrum(eeg::SSR, chan::Int; targetFreq::Number=0)
 
     # Check through the processing to see if we have done a statistical test at target frequency
     signal = nothing
-    result_idx = find_keys_containing(eeg.processing, "ftest")
+    result_idx = find_keys_containing(eeg.processing, "statistics")
 
     for r = 1:length(result_idx)
         result = get(eeg.processing, collect(keys(eeg.processing))[result_idx[r]], 0)
