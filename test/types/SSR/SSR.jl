@@ -28,3 +28,13 @@ s2 = hcat(deepcopy(s), deepcopy(s))
     keep_channel!(s, ["Cz" "10Hz_SWN_70dB_R"])
 
 @test_throws ArgumentError hcat(s, s2)
+
+
+
+#
+# Test frequency changes
+#
+
+f = assr_frequency([4, 10, 20, 40, 80])
+
+@test f == [3.90625, 9.76563, 19.5313, 40.0391, 80.0781]
