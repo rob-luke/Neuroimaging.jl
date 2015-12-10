@@ -14,3 +14,7 @@ L = match_leadfield(L, s)
 
 s = merge_channels(s, "Cz", "garbage")
 @test_throws BoundsError match_leadfield(L, s)
+
+# TODO test real data
+
+find_location(L, Talairach(0, 0, 0))
