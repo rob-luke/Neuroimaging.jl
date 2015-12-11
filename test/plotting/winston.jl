@@ -4,6 +4,10 @@ x, y, z, s, t = read_dat(fname)
 
 p = plot_dat(squeeze(s, 4))
 
+elec = Electrodes("Cartesian", "EEG", ["elec1", "elec2"], [3.0, 2.0], [3.0, 2.0], [3.0, 2.0])
+
+oplot(p, elec)
+
 
 #
 # Spectrogram

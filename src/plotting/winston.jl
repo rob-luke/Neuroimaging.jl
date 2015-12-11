@@ -210,7 +210,7 @@ function oplot(existing_plot, elec::Electrodes;
                         symbolkind::AbstractString="filled circle",
                         ncols::Int=2, kwargs...)
 
-    p = oplot(existing_plot, elec.xloc, elec.yloc, elec.zloc, color=color, symbolkind=symbolkind, ncols=ncols; kwargs...)
+    p = oplot(existing_plot, elec.x, elec.y, elec.z, color=color, symbolkind=symbolkind, ncols=ncols; kwargs...)
 
     return p
 end
