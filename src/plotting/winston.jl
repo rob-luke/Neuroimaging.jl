@@ -424,7 +424,7 @@ end
 #######################################
 
 # Plot filter response
-function plot_filter_response(zpk_filter::Filter, fs::Integer;
+function plot_filter_response(zpk_filter::FilterCoefficients, fs::Integer;
               lower::Number=1, upper::Number=30, sample_points::Int=1024)
 
     frequencies = linspace(lower, upper, 1024)
