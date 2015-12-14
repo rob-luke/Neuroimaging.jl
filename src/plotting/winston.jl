@@ -344,8 +344,8 @@ function plot_spectrum(eeg::SSR, chan::Int; targetFreq::Number=0)
         if result[:AnalysisFrequency][1] == targetFreq
 
             result_snr = result[:SNRdB][chan]
-            signal = result[:SignalPower][chan]
-            noise  = result[:NoisePower][chan]
+            signal = result[:SignalAmplitude][chan]^2
+            noise  = result[:NoiseAmplitude][chan]^2
             title  = "Channel $(channel_name). SNR = $(result_snr) dB"
         end
     end

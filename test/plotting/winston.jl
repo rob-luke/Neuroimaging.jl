@@ -31,6 +31,7 @@ s = ftest(s)
 
 p = plot_spectrum(s, "20Hz_SWN_70dB_R", targetFreq = 3.0)
 p = plot_spectrum(vec(s.data[:, 1]), Int(samplingrate(s)), dBPlot = false)
+p = plot_spectrum(s, 3, targetFreq = 40.0390625)
 
 
 #
