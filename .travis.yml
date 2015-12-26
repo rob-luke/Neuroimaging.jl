@@ -12,7 +12,6 @@ before_install:
   - "export DISPLAY=:99.0"                                         # Required for graphics
   - "sh -e /etc/init.d/xvfb start"                                 # Required for graphics
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia -e 'Pkg.clone("https://github.com/codles/MinMaxFilter.jl.git")'
   - julia -e 'Pkg.add("DSP"); Pkg.checkout("DSP")'
   - julia -e 'Pkg.add("SIUnits"); Pkg.checkout("SIUnits")'
   - julia -e 'Pkg.add("Tk"); Pkg.checkout("Tk")'

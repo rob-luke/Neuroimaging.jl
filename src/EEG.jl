@@ -16,7 +16,7 @@ using Logging,  # For user feedback
       Distributions,
       Winston,
       Gadfly,
-      MinMaxFilter,
+      Images,
       BDF,
       MAT
 
