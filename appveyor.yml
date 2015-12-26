@@ -23,4 +23,4 @@ build_script:
 
 test_script:
   - cd test
-  - C:\projects\julia\bin\julia test\runtests.jl
+  - C:\projects\julia\bin\julia runtests.jl
