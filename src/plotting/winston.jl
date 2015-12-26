@@ -69,7 +69,7 @@ function plot_dat{T <: AbstractFloat}(x::Array{T, 1}, y::Array{T, 1}, z::Array{T
         setattr(p, :yrange, yr)
         clims = (minimum(data),maximum(data))
         img = Winston.data2rgb(data, clims, Winston.colormap())
-        add(p, Image(xr, yr, img))
+        add(p, Winston.Image(xr, yr, img))
 
         cb=FramedPlot(aspect_ratio=1.0)
         setattr(cb.x, draw_ticks=false)
