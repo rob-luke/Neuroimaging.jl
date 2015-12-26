@@ -17,9 +17,6 @@ build_script:
 # Need to convert from shallow to complete for Pkg.clone to work
   - IF EXIST .git\shallow (git fetch --unshallow)
   - C:\projects\julia\bin\julia -e "versioninfo(); Pkg.init(); Pkg.clone(\"git://github.com/codles/EEG.jl.git\")"
-  - C:\projects\julia\bin\julia -e "Pkg.clone(\"git://github.com/codles/MinMaxFilter.jl.git\")"
-  - C:\projects\julia\bin\julia -e "Pkg.checkout(\"DSP\")"
-  - C:\projects\julia\bin\julia -e "Pkg.checkout(\"SIUnits\")"
 
 test_script:
   - cd test
