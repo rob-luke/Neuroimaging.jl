@@ -14,13 +14,12 @@ using Logging,  # For user feedback
       BDF,
       DSP,
       Distributions,
-      Winston,
-      Gadfly,
+      Plots,
       Images,
       BDF,
       MAT
 
-import Winston: oplot, plot
+#= import Winston: oplot, plot =#
 
 export # Helper functions
        new_processing_key,
