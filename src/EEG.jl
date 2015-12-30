@@ -19,7 +19,6 @@ using Logging,  # For user feedback
       BDF,
       MAT
 
-#= import Winston: oplot, plot =#
 
 export # Helper functions
        new_processing_key,
@@ -198,5 +197,6 @@ include("types/VolumeImage/Operations.jl")
 include("plotting/plot.jl")
 include("plotting/winston.jl")
 include("types/SSR/plotting.jl")
+include("plotting/plots.jl")
 
 end # module
