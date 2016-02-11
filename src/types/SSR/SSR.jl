@@ -241,14 +241,21 @@ function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
         end
     end
 
-    a.data = a.data[:, keep_idx]
-    a.channel_names = a.channel_names[keep_idx]
     if haskey(a.processing, "epochs")
-        a.processing["epochs"] = a.processing["epochs"][:, :, keep_idx]
+        if size(a.processing["epochs"], 3) == size(a.data, 2)
+            Logging.debug("Removing channel(s) from epoch data")
+            a.processing["epochs"] = a.processing["epochs"][:, :, keep_idx]
+        end
     end
     if haskey(a.processing, "sweeps")
-        a.processing["sweeps"] = a.processing["sweeps"][:, :, keep_idx]
+        if size(a.processing["sweeps"], 3) == size(a.data, 2)
+            Logging.debug("Removing channel(s) from sweep data")
+            a.processing["sweeps"] = a.processing["sweeps"][:, :, keep_idx]
+        end
     end
+
+    a.data = a.data[:, keep_idx]
+    a.channel_names = a.channel_names[keep_idx]
 
     return a
 end
