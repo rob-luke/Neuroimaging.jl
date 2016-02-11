@@ -213,16 +213,26 @@ a = read_SSR(filename)
 remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
 """ ->
-function remove_channel!(a::SSR, channel_names::Array{ASCIIString}; kwargs...)
-    Logging.info("4 Removing channel(s) $(join(channel_names, " "))")
-    remove_channel!(a, round(Int, [findfirst(a.channel_names, c) for c=channel_names]))
+function remove_channel!{S <: AbstractString}(a::SSR, channel_names::Array{S}; kwargs...)
+    Logging.debug("Removing channels $(join(channel_names, " "))")
+    remove_channel!(a, Int[findfirst(a.channel_names, c) for c=channel_names])
 end
+
+function remove_channel!{S <: AbstractString}(a::SSR, channel_name::S; kwargs...)
+    Logging.debug("Removing channel $(channel_name)")
+    remove_channel!(a, [channel_name])
+end
+
+remove_channel!(a::SSR, channel_names::Int; kwargs...) = remove_channel!(a, [channel_names]; kwargs...)
 
 function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
 
     channel_idx = channel_idx[channel_idx .!= 0]
 
-    Logging.info("3 Removing channel(s) $channel_idx")
+    Logging.debug("Removing channel(s) $channel_idx")
+    if any(channel_idx .== 0)
+        Logging.warn("Failed to remove a channel")
+    end
 
     keep_idx = [1:size(a.data)[end]; ]
     for c = sort(channel_idx, rev=true)
@@ -232,19 +242,16 @@ function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
     end
 
     a.data = a.data[:, keep_idx]
-
     a.channel_names = a.channel_names[keep_idx]
+    if haskey(a.processing, "epochs")
+        a.processing["epochs"] = a.processing["epochs"][:, :, keep_idx]
+    end
+    if haskey(a.processing, "sweeps")
+        a.processing["sweeps"] = a.processing["sweeps"][:, :, keep_idx]
+    end
 
     return a
 end
-
-function remove_channel!(a::SSR, channel_names::Union{Array{AbstractString}}; kwargs...)
-    Logging.info("2 Removing channel(s) $(join(channel_names, " "))")
-    remove_channel!(a, convert(Array{ASCIIString}, channel_names)); end
-
-function remove_channel!(a::SSR, channel_name::Union{Int, AbstractString, ASCIIString}; kwargs...)
-    Logging.info("1 Removing channel(s) $(join(channel_name, " "))")
-    remove_channel!(a, [channel_name]); end
 
 
 @doc """
