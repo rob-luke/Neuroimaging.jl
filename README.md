@@ -3,17 +3,11 @@
 Process EEG files in [Julia](http://julialang.org/).  
 **For research only. Not for clinical use. Use at your own risk**
 
-##### Release
-[![EEG](http://pkg.julialang.org/badges/EEG_0.4.svg)](http://pkg.julialang.org/?pkg=EEG)
+##### Release [![EEG](http://pkg.julialang.org/badges/EEG_0.4.svg)](http://pkg.julialang.org/?pkg=EEG)
 
-##### Development
-Linux: [![Build Status](https://travis-ci.org/codles/EEG.jl.svg?branch=master)](https://travis-ci.org/codles/EEG.jl)
-Windows: [![Build status](https://ci.appveyor.com/api/projects/status/ph8d0fas94w0gk8g/branch/master?svg=true)](https://ci.appveyor.com/project/codles/eeg-jl/branch/master)
-Test Coverate: [![Coverage Status](https://img.shields.io/coveralls/codles/EEG.jl.svg)](https://coveralls.io/r/codles/EEG.jl?branch=master)
+##### Development [![Build Status](https://travis-ci.org/codles/EEG.jl.svg?branch=master)](https://travis-ci.org/codles/EEG.jl) [![Build status](https://ci.appveyor.com/api/projects/status/ph8d0fas94w0gk8g/branch/master?svg=true)](https://ci.appveyor.com/project/codles/eeg-jl/branch/master) [![Coverage Status](https://img.shields.io/coveralls/codles/EEG.jl.svg)](https://coveralls.io/r/codles/EEG.jl?branch=master)
 
-##### Info
-[![Join the chat at https://gitter.im/codles/EEG.jl](https://badges.gitter.im/codles/EEG.jl.svg)](https://gitter.im/codles/EEG.jl?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Documentation Status](https://readthedocs.org/projects/eegjl/badge/?version=latest)](https://eegjl.readthedocs.org/en/latest/)
+##### Info [![Join the chat at https://gitter.im/codles/EEG.jl](https://badges.gitter.im/codles/EEG.jl.svg)](https://gitter.im/codles/EEG.jl?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Documentation Status](https://readthedocs.org/projects/eegjl/badge/?version=latest)](https://eegjl.readthedocs.org/en/latest/)
 
 
 ## Installation
