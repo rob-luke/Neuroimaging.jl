@@ -1,5 +1,8 @@
 # EEG
 
+Process EEG files in [Julia](http://julialang.org/).  
+**For research only. Not for clinical use. Use at your own risk**
+
 ##### Release
 [![EEG](http://pkg.julialang.org/badges/EEG_0.4.svg)](http://pkg.julialang.org/?pkg=EEG)
 
@@ -12,12 +15,6 @@ Test Coverate: [![Coverage Status](https://img.shields.io/coveralls/codles/EEG.j
 [![Join the chat at https://gitter.im/codles/EEG.jl](https://badges.gitter.im/codles/EEG.jl.svg)](https://gitter.im/codles/EEG.jl?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Documentation Status](https://readthedocs.org/projects/eegjl/badge/?version=latest)](https://eegjl.readthedocs.org/en/latest/)
 
-
-Process EEG files in [Julia](http://julialang.org/).
-
-*If you use this software let me know, and I will stop making breaking changes.*
-
-(**For research only. Not for clinical use. Use at your own risk**)
 
 ## Installation
 
