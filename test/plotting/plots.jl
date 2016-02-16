@@ -10,6 +10,21 @@ s = trim_channel(s, 8192*3)
 
 
 #
+# Multi channel time series
+#
+
+plot1 = plot_timeseries(s)
+display(plot1)
+
+plot2 = plot_timeseries(s, channels=["40Hz_SWN_70dB_R", "Cz"])
+display(plot2)
+
+s = rereference(s, "car")
+plot3 = plot_timeseries(s, channels=["40Hz_SWN_70dB_R", "Cz"])
+display(plot3)
+
+
+#
 # Plot single channel signal
 #
 
@@ -28,6 +43,7 @@ display(plot6)
 # Plot spectrum
 #
 
+s = read_SSR(fname)
 s = extract_epochs(s)
 s = create_sweeps(s, epochsPerSweep = 2)
 s = ftest(s)

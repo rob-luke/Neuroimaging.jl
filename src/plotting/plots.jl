@@ -95,8 +95,11 @@ function plot_spectrum(eeg::SSR, chan::Int; targetFreq::Number=0)
 
     title = replace(title, "_", " ")
 
-    p = plot_spectrum(convert(Array{Float64}, vec(mean(eeg.processing["sweeps"], 2)[:,chan])),
-                        eeg.header["sampRate"][1];
+    avg_sweep = squeeze(mean(eeg.processing["sweeps"], 2), 2)
+    avg_sweep = avg_sweep[:, chan]
+    avg_sweep = convert(Array{Float64}, vec(avg_sweep ))
+
+    p = plot_spectrum(avg_sweep, eeg.header["sampRate"][1];
                         titletext=title, targetFreq = targetFreq,
                         noise_level = noise, signal_level = signal)
 
@@ -143,4 +146,45 @@ function plot_single_channel_timeseries{T <: Number, S <: AbstractString}(signal
     time_s = collect(1:size(signal, 1))/fs   # Create time axis
 
     Plots.plot(time_s, signal, t=:line, c=:black, lab=lab, xlabel=xlabel, ylabel=ylabel)
+end
+
+
+
+@doc """
+Plot a multi channel time series
+
+#### Input
+
+* signals: Array of data
+* fs: Sample rate
+* channels: Name of channels
+* plot_points: Number of points to plot, they will be equally spread. Used to speed up plotting
+* Other optional arguements are passed to gadfly plot function
+
+
+#### Output
+
+Returns a figure
+
+""" ->
+function plot_multi_channel_timeseries{T <: Number, S <: AbstractString}(signals::Array{T, 2}, fs::Number, channels::Array{S};
+        xlabel::S="Time (s)", ylabel::S="Amplitude (uV)", kwargs...)
+
+    debug("Plotting multi channel waveform of size $(size(signals))")
+
+    time_s = collect(1:size(signals, 1))/fs                        # Create time axis
+
+    variances = var(signals,1)          # Variance of each figure for rescaling
+    mean_variance = mean(variances)     # Calculate for rescaling figures
+
+    p = Plots.plot(t=:line, c=:black, xlabel=xlabel, ylabel=ylabel, ylim=(-0.5, size(signals, 2) - 0.5))
+
+    for c in 1:size(signals, 2)                                  # Plot each channel
+        signals[:, c] = signals[:, c] - mean(signals[:, c])      # Remove mean
+        signals[:, c] = signals[:, c] / mean_variance .+ (c-1)   # Rescale and shift so all chanels are visible
+        p = plot!(time_s, signals[:, c], c=:black, lab="")
+    end
+    #TODO make yticks = labels
+
+    return p
 end
