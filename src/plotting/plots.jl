@@ -188,3 +188,28 @@ function plot_multi_channel_timeseries{T <: Number, S <: AbstractString}(signals
 
     return p
 end
+
+
+
+#######################################
+#
+# Filter response
+#
+#######################################
+
+# Plot filter response
+function plot_filter_response(zpk_filter::FilterCoefficients, fs::Integer;
+              lower::Number=1, upper::Number=30, sample_points::Int=1024)
+
+    frequencies = linspace(lower, upper, 1024)
+    h = freqz(zpk_filter, frequencies, fs)
+    magnitude_dB = 20*log10(convert(Array{Float64}, abs(h)))
+    phase_response = (360/(2*pi))*unwrap(convert(Array{Float64}, angle(h)))
+
+    p = subplot(n=2, ylabel = ["Magnitude (dB)" "Phase (degrees)"], xlabel = "Frequency (Hz)")
+    p = subplot!(frequencies, magnitude_dB,   lab = "")
+    p = subplot!(frequencies, phase_response, lab = "")
+end
+
+
+

@@ -10,6 +10,14 @@ s = trim_channel(s, 8192*3)
 
 
 #
+# Plot filter
+#
+
+p = plot_filter_response(s.processing["filter1"], Int(samplingrate(s)))
+display(p)
+
+
+#
 # Multi channel time series
 #
 
