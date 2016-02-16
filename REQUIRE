@@ -11,9 +11,8 @@ NumericExtensions
 Distances
 Logging
 Docile
-Winston
-Gadfly
 Synchrony
 FileFind
 Images
 Conda
+Plots
