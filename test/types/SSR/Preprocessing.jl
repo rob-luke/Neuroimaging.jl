@@ -13,7 +13,7 @@ s = extract_epochs(s)
 s = bootstrap(s, num_resamples = 5000)
 
 @test_approx_eq_eps s.processing["statistics"][:AnalysisFrequency][1] s.processing["statistics"][:AnalysisFrequency][2] 0.5
-@test_approx_eq_eps s.processing["statistics"][:SNRdB][1] s.processing["statistics"][:SNRdB][2] 0.2
-@test_approx_eq_eps s.processing["statistics"][:SignalAmplitude][1] s.processing["statistics"][:SignalAmplitude][2] 0.1
-@test_approx_eq_eps s.processing["statistics"][:NoiseAmplitude][1] s.processing["statistics"][:NoiseAmplitude][2] 0.1
+@test_approx_eq_eps s.processing["statistics"][:SNRdB][1] s.processing["statistics"][:SNRdB][2] 0.4
+@test_approx_eq_eps s.processing["statistics"][:SignalAmplitude][1] s.processing["statistics"][:SignalAmplitude][2] 0.2
+@test_approx_eq_eps s.processing["statistics"][:NoiseAmplitude][1] s.processing["statistics"][:NoiseAmplitude][2] 0.2
 
