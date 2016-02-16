@@ -184,7 +184,7 @@ function plot_multi_channel_timeseries{T <: Number, S <: AbstractString}(signals
         signals[:, c] = signals[:, c] / mean_variance .+ (c-1)   # Rescale and shift so all chanels are visible
         p = plot!(time_s, signals[:, c], c=:black, lab="")
     end
-    #TODO make yticks = labels
+    p = plot!(yticks = (0:length(channels) - 1, channels))
 
     return p
 end
