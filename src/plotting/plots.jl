@@ -107,3 +107,40 @@ function plot_spectrum(eeg::SSR, chan::AbstractString; targetFreq::Number=0)
 
     return plot_spectrum(eeg, findfirst(eeg.header["chanLabels"], chan), targetFreq=targetFreq)
 end
+
+
+
+#######################################
+#
+# Plot time series
+#
+# Automatic plotting for single channel (with units) or multichannel (with channel names) time series
+#
+#######################################
+
+@doc """
+Plot a single channel time series
+
+#### Input
+
+* signal: Vector of data
+* fs: Sample rate
+* channels: Name of channel to plot
+* plot_points: Number of points to plot, they will be equally spread. Used to speed up plotting
+* Other optional arguements are passed to gadfly plot function
+
+
+#### Output
+
+Returns a figure
+
+""" ->
+function plot_single_channel_timeseries{T <: Number, S <: AbstractString}(signal::AbstractVector{T}, fs::Real;
+        xlabel::S="Time (s)", ylabel::S="Amplitude (uV)", lab::S="", kwargs...)
+
+    debug("Plotting single channel waveform of size $(size(signal))")
+
+    time_s = collect(1:size(signal, 1))/fs   # Create time axis
+
+    Plots.plot(time_s, signal, t=:line, c=:black, lab=lab, xlabel=xlabel, ylabel=ylabel)
+end
