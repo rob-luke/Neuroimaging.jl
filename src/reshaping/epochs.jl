@@ -5,7 +5,7 @@
 #
 #######################################
 
-"""
+@doc """
 Extract epoch data from array of channels.
 
 #### Input
