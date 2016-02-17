@@ -14,13 +14,11 @@ using Logging,  # For user feedback
       BDF,
       DSP,
       Distributions,
-      Winston,
-      Gadfly,
+      Plots,
       Images,
       BDF,
       MAT
 
-import Winston: oplot, plot
 
 export # Helper functions
        new_processing_key,
@@ -172,7 +170,6 @@ include("types/SSR/Synchrony.jl")
 
 # Type - Dipole
 include("types/Dipole/Dipole.jl")
-include("types/Dipole/Plotting.jl")
 
 # Source analysis
 include("source_analysis/beamformers.jl")
@@ -196,8 +193,7 @@ include("types/VolumeImage/Dipoles.jl")
 include("types/VolumeImage/Operations.jl")
 
 # Plotting functions
-include("plotting/plot.jl")
-include("plotting/winston.jl")
 include("types/SSR/plotting.jl")
+include("plotting/plots.jl")
 
 end # module
