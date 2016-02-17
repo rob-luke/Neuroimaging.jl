@@ -17,15 +17,66 @@ The following standard names are used when saving data to the info dictionary.
 
 """ ->
 type VolumeImage
-    data::Array{AbstractFloat}
+    data::Array{AbstractFloat, 4}
     units::AbstractString
-    x::Array{SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0}, 1}  #(m)
-    y::Array{SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0}, 1}  #(m)
-    z::Array{SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0}, 1}  #(m)
-    t::Array{SIUnits.SIQuantity{AbstractFloat,0,0,1,0,0,0,0,0,0}, 1}  #(s)
+    x::Vector{quantity(AbstractFloat, Meter)}
+    y::Vector{quantity(AbstractFloat, Meter)}
+    z::Vector{quantity(AbstractFloat, Meter)}
+    t::Vector{quantity(AbstractFloat, Second)}
     method::AbstractString
     info::Dict
     coord_system::AbstractString
+
+    function VolumeImage{F<:AbstractFloat, S<:AbstractString}(data::Array{F, 4}, units::S,
+                         x::Vector{F}, y::Vector{F}, z::Vector{F}, t::Vector{F},
+                         method::S, info::Dict, coord_system::S)
+
+        @assert size(data, 1) == length(x)
+        @assert size(data, 2) == length(y)
+        @assert size(data, 3) == length(z)
+        @assert size(data, 4) == length(t)
+
+        new(data, units, x, y, z, t, method, info, coord_system)
+    end
+
+    function VolumeImage{F<:AbstractFloat, S<:AbstractString, Met<:quantity(AbstractFloat, Meter),
+                         Sec<:quantity(AbstractFloat, Second)}(data::Array{F, 4}, units::S,
+                         x::Vector{Met}, y::Vector{Met}, z::Vector{Met}, t::Vector{Sec},
+                         method::S, info::Dict, coord_system::S)
+
+        @assert size(data, 1) == length(x)
+        @assert size(data, 2) == length(y)
+        @assert size(data, 3) == length(z)
+        @assert size(data, 4) == length(t)
+
+        new(data, units, x, y, z, t, method, info, coord_system)
+    end
+
+    function VolumeImage{F<:AbstractFloat, S<:AbstractString}(data::Vector{F}, units::S,
+                         x::Vector{F}, y::Vector{F}, z::Vector{F}, t::Vector{F},
+                         method::S, info::Dict, coord_system::S)
+
+        @assert length(x) * length(t) == length(data)
+        @assert length(y) * length(t) == length(data)
+        @assert length(z) * length(t) == length(data)
+
+        newX = sort(unique(x))
+        newY = sort(unique(y))
+        newZ = sort(unique(z))
+        newT = sort(unique(t))
+
+        L = zeros(typeof(data[1]), length(newX), length(newY), length(newZ), length(newT))
+
+        for idx in 1:length(data)
+            idxX = findin(newX, x[idx])[1]
+            idxY = findin(newY, y[idx])[1]
+            idxZ = findin(newZ, z[idx])[1]
+            L[idxX, idxY, idxZ, 1] = data[idx]
+        end
+
+        new(L, units, newX, newY, newZ, newT, method, info, coord_system)
+    end
+
 end
 
 
@@ -52,6 +103,3 @@ function Base.show(io::IO, vi::VolumeImage)
         println(io, "  Image has been normalised")
     end
 end
-
-
-
