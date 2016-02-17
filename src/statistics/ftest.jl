@@ -1,4 +1,4 @@
-@doc md"""
+"""
 Calculates the F test as is commonly implemented in SSR research.
 TODO: Add references to MASTER and Luts et al
 
