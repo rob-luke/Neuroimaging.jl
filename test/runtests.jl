@@ -4,6 +4,7 @@ using Logging
 using MAT, BDF
 using SIUnits, SIUnits.ShortUnits
 using FileFind
+using Plots
 
 Logging.configure(level=DEBUG)
 
