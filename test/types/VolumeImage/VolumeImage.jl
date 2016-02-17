@@ -36,7 +36,11 @@ t2 = mean(t2)
 #= @test_throws ErrorException t + t2 =#
 
 
+#
+# Create image with SIUnits already
+#
 
+n = VolumeImage(t.data, t.units, t.x, t.y, t.z, t.t, t.method, t.info, t.coord_system)
 
 println()
 println("!! Volume image test passed !!")
