@@ -3,7 +3,7 @@ fname = joinpath(dirname(@__FILE__), "../../data", "test-4d.dat")
 t = read_VolumeImage(fname)
 dips = find_dipoles(mean(t))
 show(dips)
-@test size(dips) == (3,)
+@test size(dips) == (5,)
 
 
 fname = joinpath(dirname(@__FILE__), "../../data", "test-3d.dat")
@@ -11,7 +11,7 @@ fname = joinpath(dirname(@__FILE__), "../../data", "test-3d.dat")
 t = read_VolumeImage(fname)
 dips = find_dipoles(mean(t))
 show(dips)
-@test size(dips) == (9,)
+@test size(dips) == (11,)
 
 
 # Test dipoles are returned in order of size
