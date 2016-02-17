@@ -13,7 +13,7 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"                                 # Required for graphics
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
 script:
-  - julia -e 'Pkg.checkout("Plots","dev")'
+  - julia -e 'Pkg.add("Plots"); Pkg.checkout("Plots","dev")'
   - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("EEG"); Pkg.test("EEG"; coverage=true)'
 after_success:
   - julia -e 'cd(Pkg.dir("EEG")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(process_folder()); Codecov.submit(process_folder())'
