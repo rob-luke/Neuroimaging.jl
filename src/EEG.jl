@@ -1,4 +1,3 @@
-VERSION >= v"0.4.0-dev+6521" && __precompile__()
 
 module EEG
 
@@ -184,6 +183,7 @@ include("source_analysis/dipoles.jl")
 
 # Type - Leadfield
 include("types/Leadfield/Leadfield.jl")
+include("types/Leadfield/Operations.jl")
 
 # Type - Volume Image
 include("types/VolumeImage/VolumeImage.jl")

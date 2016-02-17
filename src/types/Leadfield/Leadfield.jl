@@ -34,20 +34,3 @@ function match_leadfield(l::Leadfield, s::SSR)
 end
 
 
-# Find the index in the leadfield that is closest to specified location
-function find_location(l, x::Number, y::Number, z::Number)
-
-    info("Find location ($x, $y, $z) in $(size(l.L,1)) sources")
-
-    dists = [euclidean([l.x[i], l.y[i], l.z[i]], [x, y, z]) for i = 1:length(l.x)]
-
-    idx = findfirst(dists, minimum(dists))
-
-    info("Matched location is ($(l.x[idx]), $(l.y[idx]), $(l.z[idx])) with distance $(minimum(dists))")
-
-    return idx
-end
-
-function find_location(l, d::Union{Dipole, Coordinate})
-    find_location(l, d.x, d.y, d.z)
-end
