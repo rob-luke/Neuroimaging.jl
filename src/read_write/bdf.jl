@@ -32,7 +32,7 @@ function import_biosemi(fname::Union{AbstractString, IO})
                 "Duration" => triggers["dur"])
 
     # Tidy channel names if required
-    if any(header["chanLabels"] .== "A01")
+    if any(header["chanLabels"] .== "A11")
         debug("  Converting names from BIOSEMI to 10-20")
         header["chanLabels"] = channelNames_biosemi_1020(header["chanLabels"])
     end
@@ -89,23 +89,30 @@ end
 function channelNames_biosemi_1020{S <: AbstractString}(original::S)
 
     biosemi_1020 = ["A01" "Fp1"
+                    "A1"  "Fp1"
                     "A05" "F3"
+                    "A5"  "F3"
                     "A09" "FC5"
+                    "A9"  "FC5"
                     "A13" "C3"
                     "A17" "CP5"
                     "A21" "P3"
                     "A25" "PO7"
                     "A29" "Oz"
                     "B01" "Fpz"
+                    "B1"  "Fpz"
                     "B05" "AFz"
-                    "B09" "F6"
+                    "B5"  "AFz"
+                    "B9"  "F6"
                     "B13" "FC4"
                     "B17" "C2"
                     "B21" "TP8"
                     "B25" "P2"
                     "B29" "P10"
                     "A02" "AF7"
+                    "A2"  "AF7"
                     "A06" "F5"
+                    "A6"  "F5"
                     "A10" "FC3"
                     "A14" "C5"
                     "A18" "CP3"
@@ -113,7 +120,9 @@ function channelNames_biosemi_1020{S <: AbstractString}(original::S)
                     "A26" "PO3"
                     "A30" "POz"
                     "B02" "Fp2"
+                    "B2"  "Fp2"
                     "B06" "Fz"
+                    "B6"  "Fz"
                     "B10" "F8"
                     "B14" "FC2"
                     "B18" "C4"
@@ -121,7 +130,9 @@ function channelNames_biosemi_1020{S <: AbstractString}(original::S)
                     "B26" "P4"
                     "B30" "PO8"
                     "A03" "AF3"
+                    "A3"  "AF3"
                     "A07" "F7"
+                    "A7"  "F7"
                     "A11" "FC1"
                     "A15" "T7"
                     "A19" "CP1"
@@ -129,7 +140,9 @@ function channelNames_biosemi_1020{S <: AbstractString}(original::S)
                     "A27" "O1"
                     "A31" "Pz"
                     "B03" "AF8"
+                    "B3"  "AF8"
                     "B07" "F2"
+                    "B7"  "F2"
                     "B11" "FT8"
                     "B15" "FCz"
                     "B19" "C6"
@@ -137,7 +150,9 @@ function channelNames_biosemi_1020{S <: AbstractString}(original::S)
                     "B27" "P6"
                     "B31" "PO4"
                     "A04" "F1"
+                    "A4"  "F1"
                     "A08" "FT7"
+                    "A8"  "FT7"
                     "A12" "C1"
                     "A16" "TP7"
                     "A20" "P1"
@@ -145,7 +160,9 @@ function channelNames_biosemi_1020{S <: AbstractString}(original::S)
                     "A28" "Iz"
                     "A32" "CPz"
                     "B04" "AF4"
+                    "B4"  "AF4"
                     "B08" "F4"
+                    "B8"  "F4"
                     "B12" "FC6"
                     "B16" "Cz"
                     "B20" "T8"
@@ -161,10 +178,6 @@ function channelNames_biosemi_1020{S <: AbstractString}(original::S)
     end
 
     converted = biosemi_1020[idx+size(biosemi_1020)[1]]
-
-    debug(" $original converted to $converted")
-
-    return converted
 end
 
 function channelNames_biosemi_1020{S <: AbstractString}(original::Array{S})
@@ -179,3 +192,4 @@ function channelNames_biosemi_1020{S <: AbstractString}(original::Array{S})
 
     return converted
 end
+
