@@ -171,16 +171,14 @@ include("types/SSR/Synchrony.jl")
 # Type - Dipole
 include("types/Dipole/Dipole.jl")
 
-# Source analysis
-include("source_analysis/beamformers.jl")
-include("source_analysis/projection.jl")
-
 # Type - Sensors
 include("types/Sensors/Sensors.jl")
 
 # Type - Coordinates
 include("types/Coordinates/Coordinates.jl")
-include("source_analysis/dipoles.jl")           # wrong section
+
+# Source analysis
+include("source_analysis/dipoles.jl")
 
 # Type - Leadfield
 include("types/Leadfield/Leadfield.jl")
