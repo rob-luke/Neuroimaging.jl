@@ -20,5 +20,4 @@ build_script:
   - C:\projects\julia\bin\julia -e "Pkg.add(\"Plots\"); Pkg.checkout(\"Plots\",\"dev\")"
 
 test_script:
-  - cd test
-  - C:\projects\julia\bin\julia runtests.jl
+  - C:\projects\julia\bin\julia  -e "Pkg.test(\"EEG\")"
