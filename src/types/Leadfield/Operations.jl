@@ -10,5 +10,15 @@ function find_location(l, x::Number, y::Number, z::Number)
     valid_y = l.y .== y
     valid_z = l.z .== z
 
-    find(valid_x & valid_y & valid_z)[1]
+    idx = find(valid_x & valid_y & valid_z)
+
+    if isempty(idx)
+
+        dists = [euclidean([l.x[i], l.y[i], l.z[i]], [x, y, z]) for i = 1:length(l.x)]
+        idx = findfirst(dists, minimum(dists))
+    else
+        idx = idx[1]
+    end
+
+    return idx
 end
