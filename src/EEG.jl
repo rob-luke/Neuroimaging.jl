@@ -170,7 +170,6 @@ include("types/SSR/Synchrony.jl")
 
 # Type - Dipole
 include("types/Dipole/Dipole.jl")
-#= include("types/Dipole/Plotting.jl") =#
 
 # Source analysis
 include("source_analysis/beamformers.jl")
