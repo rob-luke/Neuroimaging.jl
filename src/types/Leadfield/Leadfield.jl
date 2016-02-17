@@ -10,6 +10,7 @@ end
 function Base.show(io::IO, l::Leadfield)
     @printf "Leadfield\n"
     @printf "  Number of sources: %d\n" size(l.L, 1)
+    @printf "  Number of dimensions + nulls: %d\n" size(l.L, 2)
     @printf "  Number of sensors: %d\n" size(l.L, 3)
 end
 
