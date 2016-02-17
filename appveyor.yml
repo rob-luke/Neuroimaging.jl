@@ -1,23 +1,27 @@
 environment:
   matrix:
-  # Releases
-#  - JULIAVERSION: "stable/win32"  Disabled until bug in SIUnits is fixed https://github.com/Keno/SIUnits.jl/issues/37
-  - JULIAVERSION: "stable/win64"
-  # Nightlies
-#  - JULIAVERSION: "download/win32"
-#  - JULIAVERSION: "download/win64"
+  - JULIAVERSION: "julialang/bin/winnt/x64/0.4/julia-0.4-latest-win64.exe"
+    PYTHONDIR: "C:\\Miniconda-x64" 
+    PYTHON: "C:\\Miniconda-x64\\python.exe"
 
 install:
+  # Install and upate pip
+  - "SET PATH=%PYTHONDIR%;%PYTHONDIR%\\Scripts;%PATH%"
 # Download most recent Julia Windows binary
-  - ps: (new-object net.webclient).DownloadFile($("http://status.julialang.org/"+$env:JULIAVERSION), "C:\projects\julia-binary.exe")
+  - ps: (new-object net.webclient).DownloadFile(
+        $("http://s3.amazonaws.com/"+$env:JULIAVERSION),
+        "C:\projects\julia-binary.exe")
 # Run installer silently, output to C:\projects\julia
   - C:\projects\julia-binary.exe /S /D=C:\projects\julia
 
 build_script:
 # Need to convert from shallow to complete for Pkg.clone to work
   - IF EXIST .git\shallow (git fetch --unshallow)
+  - conda install -y NumPy SciPy matplotlib pip
+  - pip install -e git+https://github.com/mne-tools/mne-python#egg=mne-dev
+  - C:\projects\julia\bin\julia -e "Pkg.add(\"PyCall\"); Pkg.build(\"PyCall\")"
   - C:\projects\julia\bin\julia -e "versioninfo(); Pkg.init(); Pkg.clone(\"git://github.com/codles/EEG.jl.git\")"
   - C:\projects\julia\bin\julia -e "Pkg.add(\"Plots\"); Pkg.checkout(\"Plots\",\"dev\")"
 
 test_script:
-  - C:\projects\julia\bin\julia  -e "Pkg.test(\"EEG\")"
+  - C:\projects\julia\bin\julia -e "Pkg.test(\"EEG\")"
