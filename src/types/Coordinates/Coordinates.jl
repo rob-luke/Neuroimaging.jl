@@ -120,3 +120,11 @@ end
 function Distances.euclidean(a::Union{Coordinate, Dipole}, b::Union{Coordinate, Dipole})
     euclidean([float(a.x), float(a.y), float(a.z)], [float(b.x), float(b.y), float(b.z)])
 end
+
+function Distances.euclidean{V <: AbstractVector}(a::Union{Coordinate, Dipole}, b::V)
+    euclidean([float(a.x), float(a.y), float(a.z)], b)
+end
+
+function Distances.euclidean{V <: AbstractVector}(a::V, b::Union{Coordinate, Dipole})
+    euclidean(a, [float(b.x), float(b.y), float(b.z)])
+end
