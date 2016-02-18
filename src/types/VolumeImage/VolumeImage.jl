@@ -91,10 +91,10 @@ import Base: show
 function Base.show(io::IO, vi::VolumeImage)
 
     println(io, "VolumeImage of method $(vi.method) and units $(vi.units)")
-    println(io, "  Spanning x: $(vi.x[1])) : $(vi.x[end])")
-    println(io, "  Spanning y: $(vi.y[1])) : $(vi.y[end])")
-    println(io, "  Spanning z: $(vi.z[1])) : $(vi.z[end])")
-    println(io, "  Spanning t: $(vi.t[1])) : $(vi.t[end])")
+    println(io, "  Spanning x: $(vi.x[1]) : $(vi.x[end])")
+    println(io, "  Spanning y: $(vi.y[1]) : $(vi.y[end])")
+    println(io, "  Spanning z: $(vi.z[1]) : $(vi.z[end])")
+    println(io, "  Spanning t: $(vi.t[1]) : $(vi.t[end])")
 
     if haskey(vi.info, "Regularisation")
         println(io, "  Regularisation: $(vi.info["Regularisation"])")
