@@ -63,7 +63,7 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Vector{A}, x::Vect
 
     plot_labels = false
     if elp != ""
-        e = read_elp("/Users/rluke/.julia/v0.4/Private/test/data/Standard-10-10-Cap81.elp")
+        e = read_elp(elp)
         plot_labels = true
     end
 
