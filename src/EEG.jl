@@ -194,5 +194,7 @@ include("types/VolumeImage/Operations.jl")
 # Plotting functions
 include("types/SSR/plotting.jl")
 include("plotting/plots.jl")
+include("types/Dipole/Plotting.jl")
+
 
 end # module
