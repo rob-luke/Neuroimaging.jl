@@ -182,3 +182,20 @@ function dimensions_equal(vi1::VolumeImage, vi2::VolumeImage; x::Bool=true, y::B
     end
 end
 
+"""
+Find indicies of location in VolumeImage
+"""
+function find_location(vi::VolumeImage, x::Real, y::Real, z::Real)
+
+    x_loc = find(minimum(abs(vi.x ./ Meter - x)) .== abs(vi.x ./ Meter - x))[1]
+    y_loc = find(minimum(abs(vi.y ./ Meter - y)) .== abs(vi.y ./ Meter - y))[1]
+    z_loc = find(minimum(abs(vi.z ./ Meter - z)) .== abs(vi.z ./ Meter - z))[1]
+
+    if length(size(vi.data)) == 3
+        return [x_loc, y_loc, z_loc]
+    elseif length(size(vi.data)) == 4
+        return [x_loc, y_loc, z_loc, 1]
+    else
+        return [NaN]
+    end
+end
