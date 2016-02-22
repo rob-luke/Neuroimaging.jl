@@ -53,21 +53,18 @@ plot_timeseries(s)
 ### Plot F-test spectrum
 
 ```julia
-using EEG, Gadfly
+using EEG
 
-a = read_SSR("file.bdf")
+s = read_SSR("file.bdf")
+s = highpass_filter(s)
+s = rereference(s, "Cz")
+s = merge_channels(s, EEG_Vanvooren_2014, "Merged")
+    remove_channel!(s, EEG_64_10_20)
+s = extract_epochs(s)
+s = create_sweeps(s, epochsPerSweep = 8)
+s = ftest(s)
 
-# Preprocess data
-a = highpass_filter(a)
-a = rereference(a, "Cz")
-a = merge_channels(a, EEG_Vanvooren_2014, "Merged")
-    remove_channel!(a, EEG_64_10_20)
-a = extract_epochs(a)
-a = create_sweeps(a)
-
-# Plot and save ftest spectrum
-f = plot_ftest(a)
-    draw(PNG("ftest.png", 16inch, 8inch), f)
+plot_spectrum(s, "Merged")
 ```
 
 ![Ftest](https://raw.githubusercontent.com/codles/EEG.jl/master/doc/images/ftest.png)
