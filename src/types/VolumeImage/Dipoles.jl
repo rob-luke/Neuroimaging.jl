@@ -17,3 +17,47 @@ function find_dipoles(vi::VolumeImage; kwargs...)
 
     find_dipoles(squeeze(vi.data, 4), x=x, y=y, z=z; kwargs...)
 end
+
+
+
+function new_dipole_method(vi::VolumeImage; kwargs...)
+
+    old_dips = find_dipoles(vi)
+
+    new_dips = Dipole[]
+
+    for dip in old_dips
+
+        threshold = 0.9 * dip.size
+
+        tmp_vi = deepcopy(vi)
+
+        tmp_vi.data[tmp_vi.data .< threshold] = 0
+
+        val_x = abs(tmp_vi.x .- (dip.x) ) .> (0.015 * Meter)
+        val_y = abs(tmp_vi.y .- (dip.y) ) .> (0.015 * Meter)
+        val_z = abs(tmp_vi.z .- (dip.z) ) .> (0.015 * Meter)
+
+        tmp_vi.data[val_x, :, :] = 0
+        tmp_vi.data[:, val_y, :] = 0
+        tmp_vi.data[:, :, val_z] = 0
+
+        valid = tmp_vi.data .> threshold;
+
+        x_loc = mean(vi.x[find(squeeze(sum(valid, [2, 3]), [2, 3]))]  / (1.0 * SIUnits.Meter))
+
+        y_loc = mean(vi.y[find(squeeze(sum(valid, [1, 3]), [1, 3]))]  / (1.0 * SIUnits.Meter))
+
+        z_loc = mean(vi.z[find(squeeze(sum(valid, [1, 2]), [1, 2]))]  / (1.0 * SIUnits.Meter))
+
+        x, y, z, t = find_location(vi, x_loc, y_loc, z_loc)
+        s = vi.data[x, y, z, t]
+
+        push!(new_dips, Dipole("Talairach", x_loc, y_loc, z_loc, 0, 0, 0, 0, 0, s))
+    end
+    return new_dips
+end
+
+unique_dipoles(dips = Array{Dipoles}) = dips[find(![false; diff([d.size for d in dips]) .== 0])]
+
+lowest_dipole(dips = Array{Dipoles}) = dips[find([d.z for d in dips] .== minimum([d.z for d in dips]))]
