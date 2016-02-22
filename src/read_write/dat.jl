@@ -205,9 +205,9 @@ end
 @doc """
 Write dat file
 """ ->
-function write_dat(fname::AbstractString,
+function write_dat{DataT <: AbstractFloat}(fname::AbstractString,
                    X::AbstractVector, Y::AbstractVector, Z::AbstractVector,
-                   S::Array{Float64,4}, T::AbstractVector;
+                   S::Array{DataT,4}, T::AbstractVector;
                    data_file::AbstractString="NA", condition::AbstractString="NA", method::AbstractString="NA", regularization::AbstractString="NA",
                    units::AbstractString="NA")
 
