@@ -126,16 +126,15 @@ The vertical lines highlight the harmonics of the stimulus and color represents 
 
 ### Plot estimated neural activity
 
-If you have source activity saved in a *.dat file (eg BESA) you can plot the estimated activity.
+If you have source activity saved in a *.dat file (eg BESA) you can plot the estimated activity and local peaks of activity.
 
 ```julia
-using EEG, Winston
+using EEG
 
 t = read_VolumeImage("example.dat")
 
-p = plot(t)
-
-Winston.savefig(p, "source.pdf", height = 600, width=600)
+p = EEG.plot(t)
+p = EEG.plot(t, find_dipoles(t), l = "Peak Activity", c=:blue)
 
 ```
 
