@@ -10,13 +10,9 @@ fname = joinpath(dirname(@__FILE__), "../data", "test_Hz19.5-testing.bdf")
 a = read_SSR(fname)
 a = extract_epochs(a)
 
-Logging.configure(level=DEBUG)
-
 a = phase_lag_index(a, analysis_electrodes, ID="Test", freq_of_interest=[20:25])
 a = phase_lag_index(a, analysis_electrodes, ID="Test")
 a = save_synchrony_results(a)
-
-Logging.configure(level=INFO)
 
 
 #

@@ -1,6 +1,3 @@
-using EEG, Base.Test, Logging
-Logging.configure(level=Logging.DEBUG)
-
 fname = joinpath(dirname(@__FILE__), "../../data", "test_Hz19.5-testing.bdf")
 fname2 = joinpath(dirname(@__FILE__), "../../data", "test_Hz19.5-copy.bdf")
 
