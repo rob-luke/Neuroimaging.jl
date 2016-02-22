@@ -11,9 +11,10 @@
 
 <h1 class='package-header'>EEG</h1>
 
-<p><strong>EEG.jl</strong> is a set of tools for analysing electroencephalography files.</p>
+<div class="markdown"><p><strong>EEG.jl</strong> is a set of tools for analysing electroencephalography files.</p>
 <h3>Installation</h3>
-<pre><code>Pkg.clone("git://github.com/codles/EEG.jl.git")</code></pre><h1 id='module-reference'>Reference</h1>
+<pre><code class="language-julia">Pkg.clone&#40;&quot;git://github.com/codles/EEG.jl.git&quot;&#41;</code></pre>
+</div><h1 id='module-reference'>Reference</h1>
 <ul class='index'>
 <li >
 <strong>methods:</strong>
@@ -21,419 +22,42 @@
 <li >
 <ul >
 <li >
-<a href='#add_channel(a::SSR, data::Array{T, N}, chanLabels::ASCIIString)'>add_channel(a::SSR, data::Array{T, N}, chanLabels::ASCIIString)</a></li>
+<a href='#method_find_location_l___d::union_eeg.coordinate__eeg.dipole__'>find_location(l,  d::Union{EEG.Coordinate, EEG.Dipole})</a></li>
 <li >
-<a href='#append_strings(strings::Union(Array{ASCIIString, N}, Array{String, N}))'>append_strings(strings::Union(Array{ASCIIString, N}, Array{String, N}))</a></li>
-<li >
-<a href='#beamformer_type4(B::Array{T, N}, E::Array{T, N}, L::Array{T, N})'>beamformer_type4(B::Array{T, N}, E::Array{T, N}, L::Array{T, N})</a></li>
-<li >
-<a href='#extra_triggers(t::Dict{K, V}, old_trigger_code::Union(Array{Int64, N}, Int64), new_trigger_code::Int64, new_trigger_time::Number, fs::Number)'>extra_triggers(t::Dict{K, V}, old_trigger_code::Union(Array{Int64, N}, Int64), new_trigger_code::Int64, new_trigger_time::Number, fs::Number)</a></li>
-<li >
-<a href='#extract_epochs(a::SSR)'>extract_epochs(a::SSR)</a></li>
-<li >
-<a href='#extract_epochs(data::Array{T, N}, triggers::Dict{K, V}, valid_triggers::AbstractArray{T, 1}, remove_first::Int64, remove_last::Int64)'>extract_epochs(data::Array{T, N}, triggers::Dict{K, V}, valid_triggers::AbstractArray{T, 1}, remove_first::Int64, remove_last::Int64)</a></li>
-<li >
-<a href='#ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)'>ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)</a></li>
-<li >
-<a href='#keep_channel!(a::SSR, channel_names::Array{ASCIIString, N})'>keep_channel!(a::SSR, channel_names::Array{ASCIIString, N})</a></li>
-<li >
-<a href='#merge_channels(a::SSR, merge_Chans::Array{ASCIIString, N}, new_name::String)'>merge_channels(a::SSR, merge_Chans::Array{ASCIIString, N}, new_name::String)</a></li>
-<li >
-<a href='#modulationrate(t, s::SSR)'>modulationrate(t, s::SSR)</a></li>
-<li >
-<a href='#phase_lag_index(a::SSR, ChannelOrigin::Int64, ChannelDestination::Int64, freq_of_interest::Real)'>phase_lag_index(a::SSR, ChannelOrigin::Int64, ChannelDestination::Int64, freq_of_interest::Real)</a></li>
-<li >
-<a href='#phase_lag_index(data::Array{T, N}, freq_of_interest::Real, fs::Real)'>phase_lag_index(data::Array{T, N}, freq_of_interest::Real, fs::Real)</a></li>
-<li >
-<a href='#plot_dat{T<:Number}(x::Array{T<:Number, 1}, y::Array{T<:Number, 1}, z::Array{T<:Number, 1}, dat_data::Array{T<:Number, N})'>plot_dat{T<:Number}(x::Array{T<:Number, 1}, y::Array{T<:Number, 1}, z::Array{T<:Number, 1}, dat_data::Array{T<:Number, N})</a></li>
-<li >
-<a href='#plot_ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)'>plot_ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)</a></li>
-<li >
-<a href='#read_SSR(fname::Union(IO, String))'>read_SSR(fname::Union(IO, String))</a></li>
-<li >
-<a href='#remove_channel!(a::SSR, channel_names::Array{ASCIIString, N})'>remove_channel!(a::SSR, channel_names::Array{ASCIIString, N})</a></li>
-<li >
-<a href='#samplingrate(t, s::SSR)'>samplingrate(t, s::SSR)</a></li>
-<li >
-<a href='#trim_channel(a::SSR, stop::Int64)'>trim_channel(a::SSR, stop::Int64)</a></li>
-</ul>
-</li>
-<li >
-<strong>types:</strong>
-</li>
-<li >
-<ul >
-<li >
-<a href='#SSR'>SSR</a></li>
+<a href='#method_find_location_vi::eeg.volumeimage___x::real___y::real___z::real_'>find_location(vi::EEG.VolumeImage,  x::Real,  y::Real,  z::Real)</a></li>
 </ul>
 </li>
 </ul>
 <div class='entries'>
 <div class='entry'>
-<div id='add_channel(a::SSR, data::Array{T, N}, chanLabels::ASCIIString)' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> add_channel(a::SSR, data::Array{T, N}, chanLabels::ASCIIString)
+<div id='method_find_location_l___d::union_eeg.coordinate__eeg.dipole__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> find_location(l,  d::Union{EEG.Coordinate, EEG.Dipole})
 </div>
 <div class='entry-body'>
-<p>Add a channel to the SSR type with specified channel names.</p>
-<h3>Example</h3>
-<p>Add a channel called <code>Merged</code></p>
-<pre><code>    s = read_SSR(filename)
-    new_channel = mean(s.data, 2)
-    s = add_channel(s, new_channel, "Merged")</code></pre><div class='entry-meta'>
+<div class="markdown"><p>Find index of location of coordinate or dipole in leadfield</p>
+</div><div class='entry-meta'>
 <strong>Details:</strong>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/types/SSR/SSR.jl#L137'>EEG/src/types/SSR/SSR.jl:137</a></td>
+<a href='https://github.com/codles/EEG.jl/tree/eb6191f8b90faec27cf3846e7ab18e4eed8d9edc/src/types/Leadfield/Operations.jl#L4'>EEG/src/types/Leadfield/Operations.jl:4</a></td>
 </tr>
 </table>
 </div>
 </div>
 </div>
 <div class='entry'>
-<div id='append_strings(strings::Union(Array{ASCIIString, N}, Array{String, N}))' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> append_strings(strings::Union(Array{ASCIIString, N}, Array{String, N}))
+<div id='method_find_location_vi::eeg.volumeimage___x::real___y::real___z::real_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> find_location(vi::EEG.VolumeImage,  x::Real,  y::Real,  z::Real)
 </div>
 <div class='entry-body'>
-<p>Concatanate <code>strings</code> with a <code>separator</code> between each.</p>
-<h3>Input</h3>
-<ul><li>strings: Array of strings to place one after another</li><li>separator: String to place between each string (Default: ` `)</li></ul>
-<h3>Output</h3>
-<p>String consisting of all input strings </p><div class='entry-meta'>
+<div class="markdown"><p>Find indicies of location in VolumeImage</p>
+</div><div class='entry-meta'>
 <strong>Details:</strong>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/miscellaneous/helper.jl#L14'>EEG/src/miscellaneous/helper.jl:14</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='beamformer_type4(B::Array{T, N}, E::Array{T, N}, L::Array{T, N})' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> beamformer_type4(B::Array{T, N}, E::Array{T, N}, L::Array{T, N})
-</div>
-<div class='entry-body'>
-<p>Type 4 beamformer as described in Huang et al 2004.</p>
-<h3>Input</h3>
-<ul><li>Array of data to be beamformed. Channels x Samples</li><li>Array of noise to be used. Channels x Samples</li><li>Matrix of leadfield values. Dipole x 3 x Channels</li></ul>
-<h3>Optional arguments</h3>
-<ul><li>progress: display progress bar for analysis</li><li>n: order of covariance matrix to calculate</li></ul><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/source_analysis/beamformers.jl#L23'>EEG/src/source_analysis/beamformers.jl:23</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='extra_triggers(t::Dict{K, V}, old_trigger_code::Union(Array{Int64, N}, Int64), new_trigger_code::Int64, new_trigger_time::Number, fs::Number)' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> extra_triggers(t::Dict{K, V}, old_trigger_code::Union(Array{Int64, N}, Int64), new_trigger_code::Int64, new_trigger_time::Number, fs::Number)
-</div>
-<div class='entry-body'>
-<p>Place extra triggers a set time after existing triggers.</p>
-<p>A new trigger with <code>new_trigger_code</code> will be placed <code>new_trigger_time</code> seconds after exisiting <code>old_trigger_code</code> triggers. </p><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/preprocessing/triggers.jl#L137'>EEG/src/preprocessing/triggers.jl:137</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='extract_epochs(a::SSR)' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> extract_epochs(a::SSR)
-</div>
-<div class='entry-body'>
-<p>Extract epoch data from SSR.</p>
-<h3>Optional arguments</h3>
-<ul><li>valid_triggers: Trigger numbers that are considered valid ([1,2])</li><li>remove_first: Remove the first n triggers (0).</li><li>remove_last: Remove the last n triggers (0)</li></ul>
-<h3>Example</h3>
-<pre><code>epochs = extract_epochs(SSR, valid_triggers=[1,2])</code></pre><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/types/SSR/Reshaping.jl#L15'>EEG/src/types/SSR/Reshaping.jl:15</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='extract_epochs(data::Array{T, N}, triggers::Dict{K, V}, valid_triggers::AbstractArray{T, 1}, remove_first::Int64, remove_last::Int64)' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> extract_epochs(data::Array{T, N}, triggers::Dict{K, V}, valid_triggers::AbstractArray{T, 1}, remove_first::Int64, remove_last::Int64)
-</div>
-<div class='entry-body'>
-<p>Extract epoch data from array of channels.</p>
-<h3>Input</h3>
-<ul><li>Array of raw data. Samples x Channels</li><li>Dictionary of trigger information</li><li>Vector of valid trigger numbers</li><li>Number of first triggers to remove</li><li>Number of end triggers to remove</li></ul>
-<h3>Example</h3>
-<pre><code>epochs = extract_epochs(data, triggers, [1,2], 0, 0)</code></pre><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/reshaping/epochs.jl#L24'>EEG/src/reshaping/epochs.jl:24</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)
-</div>
-<div class='entry-body'>
-<p>Calculates the F test as is commonly implemented in SSR research.   TODO: Add references to MASTER and Luts et al</p>
-<h3>Parameters</h3>
-<ul><li>Sweep measurements. Samples x Sweeps x Channels</li><li>Frequency(ies) of interest (Hz)</li><li>Sampling rate (Hz)</li><li>The amount of data to use on each side of frequency of interest to estimate noise (Hz)</li><li>Filter used on the sweep data. If provided then is compensated for</li><li>The number of bins to ignore on each side of the frequency of interest</li></ul>
-<h3>Returns</h3>
-<ul><li>Signal to noise ratio in dB</li><li>Signal phase at frequency of interest</li><li>Signal power at frequency of interest</li><li>Noise power estimated of side frequencies</li><li>F statistic</li></ul><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/statistics/ftest.jl#L24'>EEG/src/statistics/ftest.jl:24</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='keep_channel!(a::SSR, channel_names::Array{ASCIIString, N})' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> keep_channel!(a::SSR, channel_names::Array{ASCIIString, N})
-</div>
-<div class='entry-body'>
-<p>Remove all channels except those requested from SSR.</p>
-<h3>Example</h3>
-<p>Remove all channels except Cz and those in the set called <code>EEG_Vanvooren_2014_Right</code></p>
-<pre><code>a = read_SSR(filename)
-    keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
-</code></pre><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/types/SSR/SSR.jl#L204'>EEG/src/types/SSR/SSR.jl:204</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='merge_channels(a::SSR, merge_Chans::Array{ASCIIString, N}, new_name::String)' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> merge_channels(a::SSR, merge_Chans::Array{ASCIIString, N}, new_name::String)
-</div>
-<div class='entry-body'>
-<p>Merge SSR channels listed in <code>merge_Chans</code> and label the averaged channel as <code>new_name</code></p>
-<h3>Example</h3>
-<pre><code>    s = merge_channels(s, ["P6", "P8"], "P68")</code></pre><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/types/SSR/SSR.jl#L283'>EEG/src/types/SSR/SSR.jl:283</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='modulationrate(t, s::SSR)' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> modulationrate(t, s::SSR)
-</div>
-<div class='entry-body'>
-<p>Return the modulation rate of a steady state type. If no type is provided, the modulation rate is returned as a floating point.</p>
-<h3>Example</h3>
-<p>Return the modulation rate of a recording</p>
-<pre><code>    s = read_SSR(filename)
-    modulationrate(s)</code></pre><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/types/SSR/SSR.jl#L86'>EEG/src/types/SSR/SSR.jl:86</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='phase_lag_index(a::SSR, ChannelOrigin::Int64, ChannelDestination::Int64, freq_of_interest::Real)' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> phase_lag_index(a::SSR, ChannelOrigin::Int64, ChannelDestination::Int64, freq_of_interest::Real)
-</div>
-<div class='entry-body'>
-<p>Calculate phase lag index between SSR sensors.</p>
-<p>This is a wrapper function for the SSR type. The calculation of PLI is calculated using <a href="www.github.com/.....">Synchrony.jl</a> </p><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/types/SSR/Synchrony.jl#L12'>EEG/src/types/SSR/Synchrony.jl:12</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='phase_lag_index(data::Array{T, N}, freq_of_interest::Real, fs::Real)' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> phase_lag_index(data::Array{T, N}, freq_of_interest::Real, fs::Real)
-</div>
-<div class='entry-body'>
-<p>Phase locked index of waveforms two time series cut in to epochs.</p>
-<p>Calculated using <a href="https://github.com/simonster/Synchrony.jl">Synchrony.jl</a></p>
-<h3>Input</h3>
-<p>- data: samples x channels x epochs as described in   <a href="https://github.com/simonster/Synchrony.jl/blob/master/src/multitaper.jl">multitaper documentation</a>   - freqrange: range of frequencies to analyse   - fs: sample rate</p><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/synchrony/phase_lag_index.jl#L17'>EEG/src/synchrony/phase_lag_index.jl:17</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='plot_dat{T<:Number}(x::Array{T<:Number, 1}, y::Array{T<:Number, 1}, z::Array{T<:Number, 1}, dat_data::Array{T<:Number, N})' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> plot_dat{T<:Number}(x::Array{T<:Number, 1}, y::Array{T<:Number, 1}, z::Array{T<:Number, 1}, dat_data::Array{T<:Number, N})
-</div>
-<div class='entry-body'>
-<p>Plot a dat file from three views.</p>
-<h3>Optional Arguments</h3>
-<ul><li>threshold_ratio(1/1000): locations smaller than this are not plotted</li><li>ncols(2): number of colums used for output plot</li><li>max_size(2): maximum size for any point</li></ul><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/plotting/plot.jl#L271'>EEG/src/plotting/plot.jl:271</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='plot_ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> plot_ftest(sweeps::Union(Array{Float32, 3}, Array{Float64, 3}), freq_of_interest::Real, fs::Real, side_freq::Real, used_filter::Union(Filter, Nothing), spill_bins::Int64)
-</div>
-<div class='entry-body'>
-<p>VIsualise the data used to determine the f statistic.   The spectrum is plotted in black, the noise estimate is highlited in red, and the signal marked in green. Dots indicate the noise and signal power. </p><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/plotting/ftest.jl#L7'>EEG/src/plotting/ftest.jl:7</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='read_SSR(fname::Union(IO, String))' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> read_SSR(fname::Union(IO, String))
-</div>
-<div class='entry-body'>
-<p>Read a file or IO stream and store the data in an SSR type.</p>
-<p>Matching .mat files are read and modulation frequency information extracted. Failing that, user passed arguments are used or the modulation frequency is extracted from the file name.</p>
-<h3>Optional arguments</h3>
-<ul><li>min_epoch_length: Minimum epoch length in samples. Shorter epochs will be removed.</li><li>max_epoch_length: Maximum epoch length in samples. Longer epochs will be removed.</li><li>valid_triggers: Triggers that are considered valid, others are removed.</li><li>stimulation_amplitude: Amplitude of stimulation</li><li>modulationrate: Modulation frequency of SSR stimulation</li><li>participant name: Name of participant</li><li>remove_first: Number of epochs to be removed from start of recording</li><li>max_epochs: Maximum number of epochs to retain</li></ul>
-<h3>Supported file formats</h3>
-<ul><li>BIOSEMI .bdf</li></ul><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/types/SSR/ReadWrite.jl#L29'>EEG/src/types/SSR/ReadWrite.jl:29</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='remove_channel!(a::SSR, channel_names::Array{ASCIIString, N})' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> remove_channel!(a::SSR, channel_names::Array{ASCIIString, N})
-</div>
-<div class='entry-body'>
-<p>Remove specified channels from SSR.</p>
-<h3>Example</h3>
-<p>Remove channel Cz and those in the set called <code>EEG_Vanvooren_2014_Right</code></p>
-<pre><code>a = read_SSR(filename)
-    remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])</code></pre><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/types/SSR/SSR.jl#L160'>EEG/src/types/SSR/SSR.jl:160</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='samplingrate(t, s::SSR)' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> samplingrate(t, s::SSR)
-</div>
-<div class='entry-body'>
-<p>Return the sampling rate of a steady state type. If no type is provided, the sampling rate is returned as a floating point.</p>
-<h3>Example</h3>
-<p>Return the sampling rate of a recording</p>
-<pre><code>    s = read_SSR(filename)
-    samplingrate(s)</code></pre><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/types/SSR/SSR.jl#L69'>EEG/src/types/SSR/SSR.jl:69</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='trim_channel(a::SSR, stop::Int64)' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> trim_channel(a::SSR, stop::Int64)
-</div>
-<div class='entry-body'>
-<p>Trim SSR recording by removing data after <code>stop</code> specifed samples.</p>
-<h3>Optional Parameters</h3>
-<ul><li>`start` Remove samples before this value</li></ul>
-<h3>Example</h3>
-<p>Remove the first 8192 samples and everything after 8192*300 samples</p>
-<pre><code>s = trim_channel(s, 8192*300, start=8192)</code></pre><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/types/SSR/SSR.jl#L245'>EEG/src/types/SSR/SSR.jl:245</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='SSR' class='entry-name category-type'>
-<div class='category'>[type] &mdash; </div> SSR
-</div>
-<div class='entry-body'>
-<p>Steady State Response. This composite type contains the information for steady state response recordings and analysis.</p>
-<h2>Fields</h2>
-<p>data: contains the recorded data trigers: contains information about timing for creation of epochs system_codes: contains system information samplingrate: the sampling rate of the data modulationrate: the modulation rate of the stimulus reference_channel: the channel the data has been referenced to file_path and file_name: where the file was read in from channel_names: the names of the channels processing: dictionary type to store analysis header: additional information read from the file</p>
-<h2>Processing Fields</h2>
-<p>The following standard names are used when saving data to the processing dictionary.</p>
-<p>Name: The identifier for the participant Side: Side of stimulation Carrier_Frequency: Carrier frequency of the stimulus Amplitude: Amplitude of the stimulus epochs: The epochs extracted from the recording sweeps: The extracted sweeps from the recording</p><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/codles/EEG.jl/tree/194c1a888c0f52416bf410b4f76aee78b28816d9/src/types/SSR/SSR.jl#L35'>EEG/src/types/SSR/SSR.jl:35</a></td>
+<a href='https://github.com/codles/EEG.jl/tree/eb6191f8b90faec27cf3846e7ab18e4eed8d9edc/src/types/VolumeImage/Operations.jl#L188'>EEG/src/types/VolumeImage/Operations.jl:188</a></td>
 </tr>
 </table>
 </div>
