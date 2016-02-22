@@ -70,7 +70,7 @@ end
 
 function plot_spectrum(eeg::SSR, chan::Int; targetFreq::Number=0)
 
-    channel_name = eeg.header["chanLabels"][chan]
+    channel_name = eeg.channel_names[1]
 
     # Check through the processing to see if we have done a statistical test at target frequency
     signal = nothing
@@ -106,9 +106,9 @@ function plot_spectrum(eeg::SSR, chan::Int; targetFreq::Number=0)
     return p
 end
 
-function plot_spectrum(eeg::SSR, chan::AbstractString; targetFreq::Number=0)
+function plot_spectrum(eeg::SSR, chan::AbstractString; targetFreq::Number=modulationrate(eeg))
 
-    return plot_spectrum(eeg, findfirst(eeg.header["chanLabels"], chan), targetFreq=targetFreq)
+    return plot_spectrum(eeg, findfirst(eeg.channel_names, chan), targetFreq=targetFreq)
 end
 
 
