@@ -20,7 +20,7 @@ end
 
 
 
-function new_dipole_method(vi::VolumeImage; kwargs...)
+function new_dipole_method(vi::VolumeImage; min_size::Real = 1, kwargs...)
 
     old_dips = find_dipoles(vi)
 
@@ -55,7 +55,10 @@ function new_dipole_method(vi::VolumeImage; kwargs...)
 
         push!(new_dips, Dipole("Talairach", x_loc, y_loc, z_loc, 0, 0, 0, 0, 0, s))
     end
-    return new_dips
+
+    new_dips = new_dips[find([d.size > min_size for d in new_dips])]
+
+    unique_dipoles(new_dips)
 end
 
 unique_dipoles(dips = Array{Dipoles}) = dips[find(![false; diff([d.size for d in dips]) .== 0])]
