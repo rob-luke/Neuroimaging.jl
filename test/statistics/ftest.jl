@@ -42,7 +42,7 @@ s = ftest(s, [40.0391, 20], side_freq=2.5, ID="A test file", Note="Small test fi
 
 s = save_results(s)
 
-rm(joinpath(dirname(@__FILE__), "..", "test_Hz19.5-testing.csv"))
+rm(joinpath(dirname(@__FILE__), "..", "data", "test_Hz19.5-testing.csv"))
 
 s = add_triggers(s, 40.0391, cycle_per_epoch=3)
 
