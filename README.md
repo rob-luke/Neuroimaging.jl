@@ -24,7 +24,7 @@ Pkg.checkout("EEG")
 
 ## Documentation
 
-See [documentation](https://eegjl.readthedocs.org/) or [old api documentation](http://codles.github.io/EEG.jl/) (in transition).  
+See [documentation](https://eegjl.readthedocs.org/).
 
 
 
