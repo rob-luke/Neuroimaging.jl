@@ -1,5 +1,5 @@
-fname = joinpath(dirname(@__FILE__), "../../data", "test_Hz19.5-testing.bdf")
-fname2 = joinpath(dirname(@__FILE__), "../../data", "test_Hz19.5-copy.bdf")
+fname = joinpath(dirname(@__FILE__),  "..", "..", "data", "test_Hz19.5-testing.bdf")
+fname2 = joinpath(dirname(@__FILE__), "..", "..", "data", "tmp", "test_Hz19.5-copy.bdf")
 
 cp(fname, fname2, remove_destination = true)  # So doesnt use .mat file
 
