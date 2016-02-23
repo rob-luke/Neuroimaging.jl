@@ -13,8 +13,16 @@ s = read_SSR(fname2)
 @test modulationrate(s) == 19.5
 @test isa(modulationrate(s), AbstractFloat)
 
+#
+# merge channels
+#
+
 s = merge_channels(s, "Cz", "MergedCz")
 s = merge_channels(s, ["Cz" "10Hz_SWN_70dB_R"], "Merged")
+
+#
+# hcat
+#
 
 
 s2 = hcat(deepcopy(s), deepcopy(s))
@@ -75,6 +83,43 @@ remove_channel!(s2, ["Cz", "10Hz_SWN_70dB_R"])
 @test size(s2.data, 2) == 4
 
 
+#
+# Test keeping channels
+#
+
+
+s = read_SSR(fname)
+s = extract_epochs(s)
+s = create_sweeps(s, epochsPerSweep = 2)
+
+println((s.channel_names))
+
+s2 = deepcopy(s)
+remove_channel!(s2, [2, 4])
+
+# Check keeping channel is same as removing channels
+s3 = deepcopy(s)
+keep_channel!(s3, [1, 3, 5, 6])
+@test s3.data == s2.data
+@test s3.processing["sweeps"] == s2.processing["sweeps"]
+
+# Check order of removal does not matter
+s3 = deepcopy(s)
+keep_channel!(s3, [3, 5, 1, 6])
+@test s3.data == s2.data
+@test s3.processing["sweeps"] == s2.processing["sweeps"]
+
+# Check can remove by name
+s3 = deepcopy(s)
+keep_channel!(s3, ["20Hz_SWN_70dB_R", "_4Hz_SWN_70dB_R", "Cz", "80Hz_SWN_70dB_R"])
+@test s3.data == s2.data
+@test s3.processing["sweeps"] == s2.processing["sweeps"]
+
+# Check the order of removal does not matter
+s4 = deepcopy(s)
+keep_channel!(s4, ["_4Hz_SWN_70dB_R", "20Hz_SWN_70dB_R", "80Hz_SWN_70dB_R", "Cz"])
+@test s3.data == s4.data
+@test s3.processing["sweeps"] == s4.processing["sweeps"]
 
 #
 # Test frequency changes
