@@ -1,15 +1,14 @@
 ## Plot estimated neural activity
 
+If you have source activity saved in a *.dat file (eg BESA) you can plot the estimated activity and local peaks of activity.
+
 ```julia
-using EEG, Winston
+using EEG
 
-x, y, z, s, t = read_dat("example.dat")
+t = read_VolumeImage("example.dat")
 
-s = squeeze(mean(s, 4), 4)
-
-f = plot_dat(x, y, z, s, ncols=2, threshold=0, max_size=1)
-
-Winston.savefig(f, "source.pdf", height = 600, width=600)
+p = EEG.plot(t)
+p = EEG.plot(t, find_dipoles(t), l = "Peak Activity", c=:blue)
 
 ```
 
