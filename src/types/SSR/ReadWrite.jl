@@ -172,7 +172,7 @@ function system_code_channel(a::SSR; kwargs...)
 end
 
 
-function write_SSR(a::SSR, fname::AbstractString; chanLabels=a.channel_names, subjID=a.header["subjID"],
+function write_SSR(a::SSR, fname::AbstractString; chanLabels=channelnames(a), subjID=a.header["subjID"],
                    startDate=a.header["startDate"], startTime=a.header["startTime"], kwargs...)
 
     fname = convert(ASCIIString, fname)

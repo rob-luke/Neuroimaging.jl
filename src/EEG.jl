@@ -75,6 +75,7 @@ export # Helper functions
        SSR,
        samplingrate,
        modulationrate,
+       channelnames,
        read_SSR,
        trim_channel,
        add_triggers,

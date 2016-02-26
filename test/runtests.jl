@@ -7,6 +7,7 @@ using FileFind
 using Plots
 
 Logging.configure(level=DEBUG)
+Logging.configure(output=open("/Users/rluke/Desktop/EEG.test.log", "a"))
 
 
 #

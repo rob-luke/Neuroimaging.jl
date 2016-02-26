@@ -44,15 +44,15 @@ channel = create_channel(events, dats, sampRate)
 # Change channel names
 #
 
-s.channel_names[1] = "A01"
-s.channel_names[2] = "A05"
-s.channel_names[3] = "A11"
-s.channel_names[4] = "B03"
-s.channel_names[5] = "A17"
-s.channel_names[6] = "B17"
+channelnames(s)[1] = "A01"
+channelnames(s)[2] = "A05"
+channelnames(s)[3] = "A11"
+channelnames(s)[4] = "B03"
+channelnames(s)[5] = "A17"
+channelnames(s)[6] = "B17"
 
 write_SSR(s, fname_out)
 
 s2 = read_SSR(fname_out)
 
-@test s2.channel_names == ["Fp1", "F3", "FC1", "AF8", "CP5", "C2"]
+@test channelnames(s2) == ["Fp1", "F3", "FC1", "AF8", "CP5", "C2"]

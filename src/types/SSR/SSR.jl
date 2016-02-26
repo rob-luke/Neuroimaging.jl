@@ -37,7 +37,7 @@ type SSR
     reference_channel::Array{AbstractString, 1}
     file_path::AbstractString
     file_name::AbstractString
-    channel_names::Array{AbstractString, 1}
+    channelnames::Array{AbstractString, 1}
     processing::Dict
     header::Dict
 end
@@ -81,6 +81,23 @@ modulationrate(s)
 """ ->
 modulationrate(t, s::SSR) = convert(t, float(s.modulationrate))
 modulationrate(s::SSR) = modulationrate(AbstractFloat, s)
+
+
+@doc """
+Return the names of sensors in SSR measurement.
+
+
+#### Example
+
+```julia
+s = read_SSR(filename)
+channelnames(s)
+```
+"""
+function channelnames(s::SSR)
+    s.channelnames
+end
+
 
 
 #######################################
@@ -129,8 +146,8 @@ hcat(a, b)
 """ ->
 function hcat(a::SSR, b::SSR)
 
-    if a.channel_names != b.channel_names
-        throw(ArgumentError(string("Channels do not match $(a.channel_names) != $(b.channel_names)")))
+    if channelnames(a) != channelnames(b)
+        throw(ArgumentError(string("Channels do not match $(channelnames(a)) != $(channelnames(b))")))
     end
 
     if haskey(a.processing, "epochs")
@@ -195,7 +212,7 @@ function add_channel(a::SSR, data::Array, chanLabels::AbstractString; kwargs...)
     Logging.info("Adding channel $chanLabels")
 
     a.data = hcat(a.data, data)
-    push!(a.channel_names, chanLabels)
+    push!(channelnames(a), chanLabels)
 
     return a
 end
@@ -215,7 +232,7 @@ remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 """ ->
 function remove_channel!{S <: AbstractString}(a::SSR, channel_names::Array{S}; kwargs...)
     Logging.debug("Removing channels $(join(channel_names, " "))")
-    remove_channel!(a, Int[findfirst(a.channel_names, c) for c=channel_names])
+    remove_channel!(a, Int[findfirst(channelnames(a), c) for c=channel_names])
 end
 
 function remove_channel!{S <: AbstractString}(a::SSR, channel_name::S; kwargs...)
@@ -255,7 +272,7 @@ function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
     end
 
     a.data = a.data[:, keep_idx]
-    a.channel_names = a.channel_names[keep_idx]
+    a.channelnames = channelnames(a)[keep_idx]
 
     return a
 end
@@ -275,7 +292,7 @@ keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 """ ->
 function keep_channel!{S <: AbstractString}(a::SSR, channel_names::Array{S}; kwargs...)
     Logging.info("Keeping channel(s) $(join(channel_names, " "))")
-    keep_channel!(a, round(Int, [findfirst(a.channel_names, c) for c = channel_names]))
+    keep_channel!(a, round(Int, [findfirst(channelnames(a), c) for c = channel_names]))
 end
 
 function keep_channel!(a::SSR, channel_name::AbstractString; kwargs...)
@@ -355,16 +372,16 @@ s = merge_channels(s, ["P6", "P8"], "P68")
 """ ->
 function merge_channels(a::SSR, merge_Chans::Array{ASCIIString}, new_name::ASCIIString; kwargs...)
 
-    debug("Total origin channels: $(length(a.channel_names))")
+    debug("Total origin channels: $(length(channelnames(a)))")
 
-    keep_idxs = [findfirst(a.channel_names, i) for i = merge_Chans]
+    keep_idxs = [findfirst(channelnames(a), i) for i = merge_Chans]
 
     if sum(keep_idxs .== 0) > 0
         warn("Could not merge as these channels don't exist: $(join(vec(merge_Chans[keep_idxs .== 0]), " "))")
         keep_idxs = keep_idxs[keep_idxs .> 0]
     end
 
-    Logging.info("Merging channels $(join(vec(a.channel_names[keep_idxs,:]), " "))")
+    Logging.info("Merging channels $(join(vec(channelnames(a)[keep_idxs,:]), " "))")
     debug("Merging channels $keep_idxs")
 
     a = add_channel(a, mean(a.data[:,keep_idxs], 2), new_name; kwargs...)
