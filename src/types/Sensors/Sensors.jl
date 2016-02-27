@@ -7,6 +7,7 @@ type Electrode <: Sensor
 end
 
 
+import Base.show
 function show{S <: Sensor}(s::S)
     println("Sensor: $(s.label) $(typeof(s)) - ($(s.coordinate.x), $(s.coordinate.y), $(s.coordinate.z)) ($(typeof(s.coordinate)))")
 end

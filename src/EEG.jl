@@ -157,6 +157,12 @@ include("statistics/gfp.jl")
 # Synchrony
 include("synchrony/phase_lag_index.jl")
 
+# Type - Coordinates
+include("types/Coordinates/Coordinates.jl")
+
+# Type - Sensors
+include("types/Sensors/Sensors.jl")
+
 # Type - SSR
 include("types/SSR/SSR.jl")
 include("types/SSR/Preprocessing.jl")
@@ -168,11 +174,7 @@ include("types/SSR/Synchrony.jl")
 # Type - Dipole
 include("types/Dipole/Dipole.jl")
 
-# Type - Coordinates
-include("types/Coordinates/Coordinates.jl")
 
-# Type - Sensors
-include("types/Sensors/Sensors.jl")
 include("types/Sensors/Operations.jl")
 include("types/Sensors/Sets.jl")
 include("types/Coordinates/Operations.jl")

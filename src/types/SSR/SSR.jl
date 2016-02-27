@@ -30,6 +30,7 @@ The following standard names are used when saving data to the processing diction
 """ ->
 type SSR
     data::Array
+    sensors::Array{Sensor}
     triggers::Dict
     system_codes::Dict
     samplingrate::FreqHz{Number}
@@ -37,7 +38,6 @@ type SSR
     reference_channel::Array{AbstractString, 1}
     file_path::AbstractString
     file_name::AbstractString
-    channelnames::Array{AbstractString, 1}
     processing::Dict
     header::Dict
 end
@@ -86,7 +86,6 @@ modulationrate(s::SSR) = modulationrate(AbstractFloat, s)
 @doc """
 Return the names of sensors in SSR measurement.
 
-
 #### Example
 
 ```julia
@@ -94,8 +93,22 @@ s = read_SSR(filename)
 channelnames(s)
 ```
 """
-function channelnames(s::SSR)
-    s.channelnames
+channelnames(s::SSR) = labels(s.sensors)
+
+@doc """
+Change the names of sensors in SSR measurement.
+
+#### Example
+
+```julia
+s = read_SSR(filename)
+channelnames(s, 1, "Fp1")
+```
+"""
+function channelnames{S <: AbstractString}(s::SSR, i::Int, l::S) 
+    
+    s.sensors[i].label = l
+    return s
 end
 
 
@@ -207,12 +220,12 @@ new_channel = mean(s.data, 2)
 s = add_channel(s, new_channel, "Merged")
 ```
 """ ->
-function add_channel(a::SSR, data::Array, chanLabels::AbstractString; kwargs...)
+function add_channel(a::SSR, data::Vector, chanLabel::AbstractString; kwargs...)
 
-    Logging.info("Adding channel $chanLabels")
+    Logging.info("Adding channel $chanLabel")
 
     a.data = hcat(a.data, data)
-    push!(channelnames(a), chanLabels)
+    push!(a.sensors, Electrode(chanLabel, Talairach(NaN, NaN, NaN), Dict()))
 
     return a
 end
@@ -272,7 +285,7 @@ function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
     end
 
     a.data = a.data[:, keep_idx]
-    a.channelnames = channelnames(a)[keep_idx]
+    a.sensors = a.sensors[keep_idx]
 
     return a
 end
@@ -384,7 +397,7 @@ function merge_channels(a::SSR, merge_Chans::Array{ASCIIString}, new_name::ASCII
     Logging.info("Merging channels $(join(vec(channelnames(a)[keep_idxs,:]), " "))")
     debug("Merging channels $keep_idxs")
 
-    a = add_channel(a, mean(a.data[:,keep_idxs], 2), new_name; kwargs...)
+    a = add_channel(a, vec(mean(a.data[:,keep_idxs], 2)), new_name; kwargs...)
 end
 
 function merge_channels(a::SSR, merge_Chans::ASCIIString, new_name::ASCIIString; kwargs...)

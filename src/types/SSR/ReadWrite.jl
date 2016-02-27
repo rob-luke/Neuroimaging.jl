@@ -94,9 +94,15 @@ function read_SSR(fname::AbstractString;
         warn("File type $ext is unknown")
     end
 
+    # Create electrodes
+    elecs = Electrode[]
+    for e in header["chanLabels"]
+        push!(elecs, Electrode(e, Talairach(NaN, NaN, NaN), Dict()))
+    end
+
     # Create SSR type
-    a = SSR(data, triggers, system_codes, samplingrate * Hertz, modulationrate,
-            [reference_channel], file_path, file_name, header["chanLabels"], Dict(), header)
+    a = SSR(data, elecs, triggers, system_codes, samplingrate * Hertz, modulationrate,
+            [reference_channel], file_path, file_name, Dict(), header)
 
 
     # If a valid mat file was found then store that information with the raw header
