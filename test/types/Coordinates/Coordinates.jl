@@ -18,13 +18,13 @@ tal_true = [68.3, -26.9, 8.3]
 @test_approx_eq_eps tal_true[3] tal.z 1.5
 
 # Test as an electrode
-e = Electrodes("SPM", "EEG", ["test"], [73.7], [-26.0], [7.0])
+e = Electrode("test", SPM(73.7, -26.0, 7.0), Dict())
 e = conv_spm_mni2tal(e)
 
-@test_approx_eq_eps tal_true[1] e.x 1.5
-@test_approx_eq_eps tal_true[2] e.y 1.5
-@test_approx_eq_eps tal_true[3] e.z 1.5
-@test e.coord_system == "Talairach"
+@test_approx_eq_eps tal_true[1] e.coordinate.x 1.5
+@test_approx_eq_eps tal_true[2] e.coordinate.y 1.5
+@test_approx_eq_eps tal_true[3] e.coordinate.z 1.5
+@test typeof(e.coordinate) == EEG.Talairach
 
 
 mni = SPM(6.3, 75.1, 5.9)

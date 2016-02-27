@@ -13,28 +13,27 @@ Read sfp file
 #### Output
 * `elec`: Electrodes object
 """ ->
-function read_sfp(fname::AbstractString)
+function read_sfp(fname::AbstractString; coordinate=Talairach)
     info("Reading dat file = $fname")
 
     # Create an empty electrode set
-    elec = Electrodes("Cartesian", "EEG", AbstractString[], Float64[], Float64[], Float64[])
+    elecs = Electrode[]
 
     # Read file
     df = readtable(fname, header = false, separator = ' ')
 
     # Save locations
-    elec.x = df[:x2]
-    elec.y = df[:x3]
-    elec.z = df[:x4]
+    x = df[:x2]
+    y = df[:x3]
+    z = df[:x4]
 
     # Convert label to ascii and remove '
     labels = df[:x1]
-    for i in eachindex(labels)
-        push!(elec.label, replace(labels[i], "'", "" ))
+    for i = 1:length(labels)
+        push!(elecs, Electrode(replace(labels[i], "'", "" ), coordinate(x[i], y[i], z[i]), Dict()))
     end
 
-    debug("Imported $(length(elec.x)) locations")
-    debug("Imported $(length(elec.label)) labels")
+    debug("Imported $(length(elecs)) electrodes")
 
-    return elec
+    return elecs
 end

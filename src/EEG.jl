@@ -90,7 +90,13 @@ export # Helper functions
        bootstrap,
        hcat,
        # Source analysis
-       Electrodes,
+       Sensor,
+       Electrode,
+           label,
+           labels,
+           x,
+           y,
+           z,
            show,
            match_sensors,
        EEG_64_10_20,
@@ -134,16 +140,6 @@ export # Helper functions
 # Helper functions
 include("miscellaneous/helper.jl")
 
-# File type reading and writing
-include("read_write/avr.jl")
-include("read_write/bdf.jl")
-include("read_write/bsa.jl")
-include("read_write/dat.jl")
-include("read_write/elp.jl")
-include("read_write/evt.jl")
-include("read_write/rba.jl")
-include("read_write/sfp.jl")
-
 # Pre-processing
 include("preprocessing/data_rejection.jl")
 include("preprocessing/filtering.jl")
@@ -172,11 +168,14 @@ include("types/SSR/Synchrony.jl")
 # Type - Dipole
 include("types/Dipole/Dipole.jl")
 
-# Type - Sensors
-include("types/Sensors/Sensors.jl")
-
 # Type - Coordinates
 include("types/Coordinates/Coordinates.jl")
+
+# Type - Sensors
+include("types/Sensors/Sensors.jl")
+include("types/Sensors/Operations.jl")
+include("types/Sensors/Sets.jl")
+include("types/Coordinates/Operations.jl")
 
 # Source analysis
 include("source_analysis/dipoles.jl")
@@ -197,5 +196,14 @@ include("types/SSR/plotting.jl")
 include("plotting/plots.jl")
 include("types/Dipole/Plotting.jl")
 
+# File type reading and writing
+include("read_write/avr.jl")
+include("read_write/bdf.jl")
+include("read_write/bsa.jl")
+include("read_write/dat.jl")
+include("read_write/elp.jl")
+include("read_write/evt.jl")
+include("read_write/rba.jl")
+include("read_write/sfp.jl")
 
 end # module
