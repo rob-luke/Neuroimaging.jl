@@ -17,7 +17,7 @@ using Logging,  # For user feedback
       Plots,
       Images,
       BDF,
-      # MAT,
+      MAT,
       PyCall
 
 
