@@ -16,9 +16,7 @@ using Logging,  # For user feedback
       Distributions,
       Plots,
       Images,
-      BDF,
-      MAT,
-      PyCall
+      BDF
 
 
 export # Helper functions
