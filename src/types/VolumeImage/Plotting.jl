@@ -33,7 +33,7 @@ end
 
 
 function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Vector{A}, x::Vector{A}, y::Vector{A}, z::Vector{A};
-                  title::S="", threshold::Real=-Inf, min_val::Real=Inf, max_val::Real=-Inf, elp::AbstractString="", minsize::Real=3, maxsize::Real=7, kwargs...)
+                  title::S="", threshold::Real=-Inf, min_val::Real=Inf, max_val::Real=-Inf, elp::AbstractString="", minsize::Real=3, maxsize::Real=6, kwargs...)
 
     d = copy(vec(d))
     x = copy(vec(x))
@@ -89,7 +89,7 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Vector{A}, x::Vect
             end
         end
     end
-    p = subplot!(x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "Source", colorbar = false)
+    p = subplot!(x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "Source", colorbar = false, markerstrokewidth = 0.1)
     if plot_labels
         plotlist = ["Fpz", "Fp2", "AF8", "F8", "FT8", "T8", "TP8", "P10", "PO8", "O2", "Oz", "O1", "PO7", "P9", "TP7", "T7", "FT7", "F7", "AF7", "Fp1"]
         for elec in 1:length(e.x)
@@ -106,7 +106,7 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Vector{A}, x::Vect
     for y_i in unique(y)
         for z_i in unique(z)
             idxs = (z .== z_i) & (y .== y_i)
-            if sum(idxs) > 1
+            if sum(idxs) > 0
                 val = maximum(d[idxs])
                 push!(x_tmp, y_i)
                 push!(y_tmp, z_i)
@@ -119,7 +119,7 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Vector{A}, x::Vect
             end
         end
     end
-    p = subplot!(p, x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "Source", colorbar = false)
+    p = subplot!(p, x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "Source", colorbar = false, markerstrokewidth = 0.1)
     if plot_labels
         plotlist = ["Iz", "Oz", "POz", "Pz", "CPz", "Cz", "FCz", "Fz", "AFz", "Fpz"]
         for elec in 1:length(e.x)
@@ -136,7 +136,7 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Vector{A}, x::Vect
     for x_i in unique(x)
         for z_i in unique(z)
             idxs = (x .== x_i) & (z .== z_i)
-            if sum(idxs) > 1
+            if sum(idxs) > 0
                 val = maximum(d[idxs])
                 push!(x_tmp, x_i)
                 push!(y_tmp, z_i)
@@ -149,7 +149,7 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Vector{A}, x::Vect
             end
         end
     end
-    p = subplot!(p, x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "")
+    p = subplot!(p, x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "", markerstrokewidth = 0.1)
     if plot_labels
         plotlist = ["T7", "C5", "C3", "C1", "Cz", "C2", "C4", "C6", "T8"]
         for elec in 1:length(e.x)
