@@ -71,6 +71,8 @@ export # Helper functions
        plot,
        normalise,
        find_dipoles,
+       std,
+       mean,
        # Type - SSR
        SSR,
        samplingrate,
@@ -173,6 +175,7 @@ include("types/SSR/Synchrony.jl")
 
 # Type - Dipole
 include("types/Dipole/Dipole.jl")
+include("types/Dipole/Operations.jl")
 
 
 include("types/Sensors/Operations.jl")
