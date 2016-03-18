@@ -16,7 +16,8 @@ using Logging,  # For user feedback
       Distributions,
       Plots,
       Images,
-      BDF
+      BDF,
+      MAT
 
 
 export # Helper functions

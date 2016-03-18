@@ -89,7 +89,7 @@ function read_SSR(fname::AbstractString;
 
     # Import raw data
     if ext == "bdf"
-        data, triggers, system_codes, samplingrate, reference_channel, header = import_biosemi(fname)
+        data, triggers, system_codes, samplingrate, reference_channel, header = import_biosemi(fname; kwargs...)
     else
         warn("File type $ext is unknown")
     end
