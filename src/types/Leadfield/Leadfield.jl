@@ -19,10 +19,10 @@ function match_leadfield(l::Leadfield, s::SSR)
 
     info("Matching leadfield to SSR")
 
-    idx = [findfirst(l.sensors, name) for name = s.channel_names]
+    idx = [findfirst(l.sensors, name) for name = channelnames(s)]
 
     if length(unique(idx)) < length(idx)
-        error("Not all SSR channels mapped to sensor #SSR=$(length(s.channel_names)), #L=$(length(l.sensors))")
+        error("Not all SSR channels mapped to sensor #SSR=$(length(channelnames(s))), #L=$(length(l.sensors))")
     end
 
     l.L = l.L[:,:,idx]

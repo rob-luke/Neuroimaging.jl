@@ -92,7 +92,7 @@ s = read_SSR(fname)
 s = extract_epochs(s)
 s = create_sweeps(s, epochsPerSweep = 2)
 
-println((s.channel_names))
+println((channelnames(s)))
 
 s2 = deepcopy(s)
 remove_channel!(s2, [2, 4])

@@ -43,8 +43,8 @@ function bootstrap(s::SSR; freq_of_interest::Union{Real, AbstractArray} = modula
 
         SNRdB, SNRdB_SD, pha, pha_SD, amp, amp_SD, noi, noi_SD, actual_freq = bootstrap(s.processing[data_type], freq, fs, s.processing; kwargs...)
 
-        result = DataFrame( ID                  = vec(repmat([ID], length(s.channel_names), 1)),
-                            Channel             = copy(s.channel_names),
+        result = DataFrame( ID                  = vec(repmat([ID], length(channelnames(s)), 1)),
+                            Channel             = copy(channelnames(s)),
                             ModulationRate      = copy(modulationrate(s)),
                             AnalysisType        = "Bootstrapping",
                             AnalysisFrequency   = actual_freq,
@@ -155,8 +155,8 @@ function ftest(s::SSR; freq_of_interest::Union{Real, AbstractArray}=modulationra
 
         snrDb, phase, signal, noise, statistic = ftest(spectrum, frequencies, freq, side_freq, spill_bins)
 
-        result = DataFrame(ID                 = vec(repmat([ID], length(s.channel_names), 1)),
-                           Channel            = copy(s.channel_names),
+        result = DataFrame(ID                 = vec(repmat([ID], length(channelnames(s)), 1)),
+                           Channel            = copy(channelnames(s)),
                            ModulationRate     = copy(modulationrate(s)),
                            AnalysisType       = "F-test",
                            AnalysisFrequency  = freq,

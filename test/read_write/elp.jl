@@ -1,5 +1,5 @@
 e = read_elp(joinpath(dirname(@__FILE__), "..", "data", "test.elp"))
 
-@test length(e.x) == 2
-@test e.label[1] == "Fpz"
-@test e.label[2] == "Fp2"
+@test length(e) == 2
+@test e[1].label == "Fpz"
+@test e[2].label == "Fp2"

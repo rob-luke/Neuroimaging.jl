@@ -167,7 +167,12 @@ function orient_dipole(dipole_data::Array{AbstractFloat, 2}, triggers, fs::Numbe
         dipole_data = dipole_data'
     end
 
-    a = SSR(dipole_data, triggers, Dict(), fs * Hertz, modulation_frequency, [""], "", "", ["o1", "o2", "o3"], Dict(), Dict())
+    sens = Electrode[]
+    push!(sens, Electrode("o1", Talairach(NaN, NaN, NaN), Dict()))
+    push!(sens, Electrode("o2", Talairach(NaN, NaN, NaN), Dict()))
+    push!(sens, Electrode("o3", Talairach(NaN, NaN, NaN), Dict()))
+
+    a = SSR(dipole_data, sens, triggers, Dict(), fs * Hertz, modulation_frequency, [""], "", "", Dict(), Dict())
     a = extract_epochs(a; kwargs...)
     a = create_sweeps(a; kwargs...)
     a = ftest(a; kwargs...)
@@ -202,7 +207,13 @@ function best_ftest_dipole(dipole_data::Array{AbstractFloat, 2}, triggers, fs::N
         dipole_data = dipole_data'
     end
 
-    a = SSR(dipole_data, triggers, Dict(), fs * Hertz, modulation_frequency, [""], "", "", ["o1", "o2", "o3"], Dict(), Dict())
+
+    sens = Electrode[]
+    push!(sens, Electrode("o1", Talairach(NaN, NaN, NaN), Dict()))
+    push!(sens, Electrode("o2", Talairach(NaN, NaN, NaN), Dict()))
+    push!(sens, Electrode("o3", Talairach(NaN, NaN, NaN), Dict()))
+
+    a = SSR(dipole_data, sens, triggers, Dict(), fs * Hertz, modulation_frequency, [""], "", "", Dict(), Dict())
     a = extract_epochs(a; kwargs...)
     a = create_sweeps(a; kwargs...)
     a = ftest(a; kwargs...)

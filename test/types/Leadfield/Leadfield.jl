@@ -14,7 +14,7 @@ L2 = match_leadfield(deepcopy(L), s)
 @test L2.L[:, :, 1] == L1.L[:, :, 1]
 @test L2.L[:, :, 2] == L1.L[:, :, 3]
 @test L2.L[:, :, 4] == L1.L[:, :, 6]
-@test L2.sensors == s.channel_names
+@test L2.sensors == channelnames(s)
 
 s = merge_channels(s, "Cz", "garbage")
 @test_throws BoundsError match_leadfield(L, s)

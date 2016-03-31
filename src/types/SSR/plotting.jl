@@ -23,26 +23,26 @@ draw(PDF("timeseries.pdf", 10inch, 6inch), plot1)
 
 
 """ ->
-function plot_timeseries{S <: AbstractString}(s::SSR; channels::Union{S, Array{S}} = s.channel_names,
+function plot_timeseries{S <: AbstractString}(s::SSR; channels::Union{S, Array{S}} = channelnames(s),
         fs::Number = samplingrate(s), kwargs...)
 
     if isa(channels, AbstractString) || length(channels) == 1 || size(s.data, 2) == 1
 
-        debug("Plotting single channel waveform for channel $channels  from channels $(s.channel_names)")
+        debug("Plotting single channel waveform for channel $channels  from channels $(channelnames(s))")
 
         fig = plot_single_channel_timeseries(vec(keep_channel!(deepcopy(s), channels).data), samplingrate(s); kwargs...)
 
     else
 
         # Find index of requested channels
-        idx = [findfirst(s.channel_names, n) for n in channels]
+        idx = [findfirst(channelnames(s), n) for n in channels]
         idx = idx[idx .!= 0]   # But if you cant find channels then plot what you can
         if length(idx) != length(channels)
             warn("Cant find index of all requested channels")
         end
 
-        debug("Plotting multi channel waveform for channels $(s.channel_names[idx])")
-        fig = plot_multi_channel_timeseries(s.data[:, idx], samplingrate(s), s.channel_names[idx]; kwargs...)
+        debug("Plotting multi channel waveform for channels $(channelnames(s)[idx])")
+        fig = plot_multi_channel_timeseries(s.data[:, idx], samplingrate(s), channelnames(s)[idx]; kwargs...)
     end
 
     return fig

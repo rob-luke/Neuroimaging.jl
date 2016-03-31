@@ -111,7 +111,7 @@ end
 
 function rereference(a::SSR, refChan::Union{AbstractString, Array{AbstractString}}; kwargs...)
 
-    a.data = rereference(a.data, refChan, a.channel_names)
+    a.data = rereference(a.data, refChan, channelnames(a))
 
     a.reference_channel = [refChan]
 

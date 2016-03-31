@@ -1,75 +1,32 @@
-type Electrodes
-    coord_system::AbstractString
-    kind::AbstractString
-    label::Array
-    x::Array
-    y::Array
-    z::Array
+abstract Sensor
+
+type Electrode <: Sensor
+    label::AbstractString
+    coordinate::Coordinate
+    info::Dict
 end
 
 
-function show(elec::Electrodes)
-    println("Electrodes: $(elec.coord_system) - $(elec.kind) - # $(length(elec.label))")
-    for sens = 1:length(elec.label)
-        @printf("| %6s | %5.2f | %5.2f | %5.2f |\n", elec.label[sens], elec.x[sens], elec.y[sens], elec.z[sens])
-    end
+import Base.show
+function show{S <: Sensor}(s::S)
+    println("Sensor: $(s.label) $(typeof(s)) - ($(s.coordinate.x), $(s.coordinate.y), $(s.coordinate.z)) ($(typeof(s.coordinate)))")
+end
+
+function show{S <: Sensor}(s::Array{S})
+    println("$(length(s)) sensors: $(typeof(s[1])) ($(typeof(s[1].coordinate)))")
 end
 
 
-function match_sensors{S <: AbstractString}(sens::Electrodes, labels::Array{S})
-    # Match a set of electrodes to those provided
-    #
-    # usage: lf, valid = match_sensors(electrodes, sensor_labels)
+label{S <: Sensor}(s::S) = s.label
+label{S <: Sensor}(s::Array{S, 1}) = AbstractString[si.label for si in s]
+labels{S <: Sensor}(s::S) = label(s)
+labels{S <: Sensor}(s::Array{S}) = label(s)
 
-    valid_idx = Int[]
-    for label = labels
-        matched_idx = findfirst(sens.label, label)
-        if matched_idx != 0; push!(valid_idx, matched_idx); end
-        debug("Label $label matched to $( matched_idx == 0 ? "!! nothing !!" : sens.label[matched_idx])")
-    end
+x{S <: Sensor}(s::S) = s.coordinate.x
+y{S <: Sensor}(s::S) = s.coordinate.y
+z{S <: Sensor}(s::S) = s.coordinate.z
+x{S <: Sensor}(s::Array{S}) = AbstractFloat[si.coordinate.x for si in s]
+y{S <: Sensor}(s::Array{S}) = AbstractFloat[si.coordinate.y for si in s]
+z{S <: Sensor}(s::Array{S}) = AbstractFloat[si.coordinate.z for si in s]
 
-    sens.label = sens.label[valid_idx]
-    sens.x  = sens.x[valid_idx]
-    sens.y  = sens.y[valid_idx]
-    sens.z  = sens.z[valid_idx]
-
-    return sens, valid_idx
-end
-
-
-function match_sensors{S <: AbstractString}(lf::Array, lf_labels::Array{S}, labels::Array{S})
-    # Match the sensors in a leadfield array to those provided
-    #
-    # usage: lf, valid = match_sensors(leadfield, leadfield_labels, sensor_labels)
-
-    valid_idx = Int[]
-    for label = labels
-        matched_idx = findfirst(lf_labels, label)
-        if matched_idx != 0; push!(valid_idx, matched_idx); end
-        debug("Label $label matched to $( matched_idx == 0 ? "!! nothing !!" : lf_labels[matched_idx])")
-    end
-
-    info("Leadfield had $(length(lf_labels)) channels, now has $(length(valid_idx)) channels")
-
-    lf = lf[:,:,valid_idx]
-    lf_labels = lf_labels[valid_idx]
-
-    return lf, valid_idx
-end
-
-
-#######################################
-#
-# Standard electrode sets
-#
-#######################################
-
-
-EEG_64_10_20 = ["Fp1", "F3", "FC5", "C3", "CP5", "P3", "PO7", "Oz", "Fpz", "AFz", "F6", "FC4", "C2", "TP8", "P2", "P10", "AF7", "F5", "FC3", "C5", "CP3", "P5", "PO3", "POz", "Fp2", "Fz", "F8", "FC2", "C4", "CP6", "P4", "PO8", "AF3", "F7", "FC1", "T7", "CP1", "P7", "O1", "Pz", "AF8", "F2", "FT8", "FCz", "C6", "CP4", "P6", "PO4", "F1", "FT7", "C1", "TP7", "P1", "P9", "Iz", "CPz", "AF4", "F4", "FC6", "Cz", "T8", "CP2", "P8", "O2"]
-
-EEG_Vanvooren_2014 = ["TP7", "P9", "P7", "P5", "P3", "P1", "PO7", "PO3", "O1", "P2", "P4", "P6", "P10", "TP8", "PO4", "PO8", "O2", "TP8"]
-
-EEG_Vanvooren_2014_Left  = ["TP7", "P9", "P7", "P5", "P3", "P1", "PO7", "PO3", "O1"]
-
-EEG_Vanvooren_2014_Right = ["P2", "P4", "P6", "P10", "TP8", "PO4", "PO8", "O2", "TP8"]
 
