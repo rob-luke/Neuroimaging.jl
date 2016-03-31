@@ -6,7 +6,6 @@ DataFrames
 SIUnits # Requires master
 ProgressMeter
 Distributions
-MAT
 NumericExtensions
 Distances
 Logging
@@ -14,6 +13,5 @@ Docile
 Synchrony
 FileFind
 Images
-Conda
+MAT
 Plots
-PyCall

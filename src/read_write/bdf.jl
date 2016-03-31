@@ -7,12 +7,12 @@
 @doc """
 Import Biosemi files
 """ ->
-function import_biosemi(fname::Union{AbstractString, IO})
+function import_biosemi(fname::Union{AbstractString, IO}; kwargs...)
 
     Logging.info("Importing BIOSEMI data file")
 
     # Read raw data using BDF.jl
-    data, triggers, trigger_channel, system_code_channel = readBDF(copy(fname))
+    data, triggers, trigger_channel, system_code_channel = readBDF(copy(fname); kwargs...)
     header = readBDFHeader(copy(fname))
 
     # Check the sample rate
