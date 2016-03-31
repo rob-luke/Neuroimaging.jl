@@ -12,7 +12,7 @@ function import_biosemi(fname::Union{AbstractString, IO}; kwargs...)
     Logging.info("Importing BIOSEMI data file")
 
     # Read raw data using BDF.jl
-    data, triggers, trigger_channel, system_code_channel = readBDF(copy(fname); kwargs...)
+    data, triggers, trigger_channel, system_code_channel = readBDF(copy(fname), transposeData=true; kwargs...)
     header = readBDFHeader(copy(fname))
 
     # Check the sample rate
@@ -39,7 +39,7 @@ function import_biosemi(fname::Union{AbstractString, IO}; kwargs...)
 
     system_codes = create_events(system_code_channel, sample_rate)
 
-    return  data', triggers, system_codes, sample_rate, reference_channel, header
+    return  data, triggers, system_codes, sample_rate, reference_channel, header
 end
 
 # Create events from channel
