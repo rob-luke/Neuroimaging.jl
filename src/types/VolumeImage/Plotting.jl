@@ -11,53 +11,11 @@ function plot(v::VolumeImage; kwargs...)
 end
 
 
-function plot_src{A <: AbstractFloat}(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A}; exclude::A=0.0, kwargs...)
-
-    d_out = A[]
-    x_out = A[]
-    y_out = A[]
-    z_out = A[]
-
-    B = sub(d, 1:size(d, 1), 1:size(d, 2), 1:size(d, 3))
-    for i in eachindex(B)
-        if d[i] != exclude
-            push!(d_out, d[i])
-            push!(x_out, x[i.I[1]])
-            push!(y_out, y[i.I[2]])
-            push!(z_out, z[i.I[3]])
-        end
-    end
-
-    plot_src(d_out, x_out, y_out, z_out; kwargs...)
-end
-
-
-function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Vector{A}, x::Vector{A}, y::Vector{A}, z::Vector{A};
-                  title::S="", threshold::Real=-Inf, min_val::Real=Inf, max_val::Real=-Inf, elp::AbstractString="", minsize::Real=3, maxsize::Real=6, kwargs...)
-
-    d = copy(vec(d))
-    x = copy(vec(x))
-    y = copy(vec(y))
-    z = copy(vec(z))
+function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};  
+            threshold::Real=-Inf, min_val::Real=Inf, max_val::Real=-Inf, minsize::Real=3, maxsize::Real=6,
+            exclude::A=0.0, title::S="", elp::AbstractString="", kwargs...)
 
     cols = [colorant"darkblue", colorant"orange", colorant"darkred"]
-
-    if min_val < minimum(d)
-        # Specify a minimum point to plot
-        Logging.debug("Manually specifying minimum plotting value")
-        push!(d, min_val)
-        push!(x, 200)
-        push!(z, 200)
-        push!(y, 200)
-    end
-
-    if max_val > maximum(d)
-        Logging.debug("Manually specifying maximum plotting value")
-        push!(d, max_val)
-        push!(x, -200)
-        push!(y, -200)
-        push!(z, -200)
-    end
 
     scaleval = maxsize / maximum(d)
 
@@ -73,13 +31,15 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Vector{A}, x::Vect
     y_tmp = AbstractFloat[]
     c_tmp = AbstractFloat[]
     s_tmp = AbstractFloat[]
-    for x_i in unique(x)
-        for y_i in unique(y)
-            idxs = (x .== x_i) & (y .== y_i)
-            if sum(idxs) > 0
-                val = maximum(d[idxs])
-                push!(x_tmp, x_i)
-                push!(y_tmp, y_i)
+    t = copy(d)
+    t = maximum(t, 3)
+    t = squeeze(t, 3)
+    for x_i in 1:size(t, 1)
+        for y_i in 1:size(t, 2)
+            val = t[x_i, y_i]
+            if val != exclude
+                push!(x_tmp, x[x_i])
+                push!(y_tmp, y[y_i])
                 if val > threshold
                     push!(s_tmp, max(scaleval * val, minsize))
                 else
@@ -88,6 +48,20 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Vector{A}, x::Vect
                 push!(c_tmp, val)
             end
         end
+    end
+    if max_val > maximum(c_tmp)
+        Logging.debug("Manually specifying maximum plotting value")
+        push!(s_tmp, max_val)
+        push!(c_tmp, max_val)
+        push!(x_tmp, -200)
+        push!(y_tmp, -200)
+    end
+    if min_val < minimum(c_tmp)
+        Logging.debug("Manually specifying minimum plotting value")
+        push!(s_tmp, min_val)
+        push!(c_tmp, min_val)
+        push!(x_tmp, -200)
+        push!(y_tmp, -200)
     end
     p = subplot!(x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "Source", colorbar = false, markerstrokewidth = 0.1)
     if plot_labels
@@ -103,13 +77,15 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Vector{A}, x::Vect
     y_tmp = AbstractFloat[]
     c_tmp = AbstractFloat[]
     s_tmp = AbstractFloat[]
-    for y_i in unique(y)
-        for z_i in unique(z)
-            idxs = (z .== z_i) & (y .== y_i)
-            if sum(idxs) > 0
-                val = maximum(d[idxs])
-                push!(x_tmp, y_i)
-                push!(y_tmp, z_i)
+    t = copy(d)
+    t = maximum(t, 1)
+    t = squeeze(t, 1)
+    for x_i in 1:size(t, 1)
+        for y_i in 1:size(t, 2)
+            val = t[x_i, y_i]
+            if val != exclude
+                push!(x_tmp, y[x_i])
+                push!(y_tmp, z[y_i])
                 if val > threshold
                     push!(s_tmp, max(scaleval * val, minsize))
                 else
@@ -118,6 +94,20 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Vector{A}, x::Vect
                 push!(c_tmp, val)
             end
         end
+    end
+    if max_val > maximum(c_tmp)
+        Logging.debug("Manually specifying maximum plotting value")
+        push!(s_tmp, max_val)
+        push!(c_tmp, max_val)
+        push!(x_tmp, -200)
+        push!(y_tmp, -200)
+    end
+    if min_val < minimum(c_tmp)
+        Logging.debug("Manually specifying minimum plotting value")
+        push!(s_tmp, min_val)
+        push!(c_tmp, min_val)
+        push!(x_tmp, -200)
+        push!(y_tmp, -200)
     end
     p = subplot!(p, x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "Source", colorbar = false, markerstrokewidth = 0.1)
     if plot_labels
@@ -133,13 +123,15 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Vector{A}, x::Vect
     y_tmp = AbstractFloat[]
     c_tmp = AbstractFloat[]
     s_tmp = AbstractFloat[]
-    for x_i in unique(x)
-        for z_i in unique(z)
-            idxs = (x .== x_i) & (z .== z_i)
-            if sum(idxs) > 0
-                val = maximum(d[idxs])
-                push!(x_tmp, x_i)
-                push!(y_tmp, z_i)
+    t = copy(d)
+    t = maximum(t, 2)
+    t = squeeze(t, 2)
+    for x_i in 1:size(t, 1)
+        for y_i in 1:size(t, 2)
+            val = t[x_i, y_i]
+            if val != exclude
+                push!(x_tmp, x[x_i])
+                push!(y_tmp, z[y_i])
                 if val > threshold
                     push!(s_tmp, max(scaleval * val, minsize))
                 else
@@ -148,6 +140,20 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Vector{A}, x::Vect
                 push!(c_tmp, val)
             end
         end
+    end
+    if max_val > maximum(c_tmp)
+        Logging.debug("Manually specifying maximum plotting value")
+        push!(s_tmp, max_val)
+        push!(c_tmp, max_val)
+        push!(x_tmp, -200)
+        push!(y_tmp, -200)
+    end
+    if min_val < minimum(c_tmp)
+        Logging.debug("Manually specifying minimum plotting value")
+        push!(s_tmp, min_val)
+        push!(c_tmp, min_val)
+        push!(x_tmp, -200)
+        push!(y_tmp, -200)
     end
     p = subplot!(p, x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "", markerstrokewidth = 0.1)
     if plot_labels
@@ -158,7 +164,7 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Vector{A}, x::Vect
             end
         end
     end
-    if backend() == Plots.PyPlotPackage()
+    if backend() == Plots.PyPlotBackend()
         cb = PyPlot.colorbar(p.plts[1].seriesargs[1][:serieshandle])
         cb[:set_label]("Neural Activity Index")
     end
