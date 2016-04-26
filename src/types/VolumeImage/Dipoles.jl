@@ -22,7 +22,7 @@ end
 
 function new_dipole_method(vi::VolumeImage; min_size::Real = 1, kwargs...)
 
-    old_dips = find_dipoles(vi)
+    old_dips = find_dipoles(vi; kwargs...)
 
     new_dips = Dipole[]
 
