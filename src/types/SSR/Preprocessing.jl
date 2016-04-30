@@ -5,21 +5,21 @@
 #######################################
 
 
-function highpass_filter(a::SSR; cutOff::Number=2, order::Int=3, tolerance::Number=0.01, kwargs...)
+function highpass_filter(a::SSR; cutOff::Real=2, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
 
-    a.data, f = highpass_filter(a.data, cutOff, samplingrate(a), order)
+    a.data, f = highpass_filter(a.data, cutOff, fs, order)
 
-    _filter_check(f, modulationrate(a), samplingrate(a), tolerance)
+    _filter_check(f, modulationrate(a), fs, tolerance)
 
     _append_filter(a, f)
 end
 
 
-function lowpass_filter(a::SSR; cutOff::Number=150, order::Int=3, tolerance::Number=0.01, kwargs...)
+function lowpass_filter(a::SSR; cutOff::Real=150, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
 
-    a.data, f = lowpass_filter(a.data, cutOff, samplingrate(a), order)
+    a.data, f = lowpass_filter(a.data, cutOff, fs, order)
 
-    _filter_check(f, modulationrate(a), samplingrate(a), tolerance)
+    _filter_check(f, modulationrate(a), fs, tolerance)
 
     #= _append_filter(a, f) =#
 
