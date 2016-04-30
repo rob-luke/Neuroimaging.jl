@@ -3,7 +3,6 @@ facts("Steady State Responses") do
     fname = joinpath(dirname(@__FILE__),  "..", "..", "data", "test_Hz19.5-testing.bdf")
     fname2 = joinpath(dirname(@__FILE__), "..", "..", "data", "tmp", "test_Hz19.5-copy.bdf")
     cp(fname, fname2, remove_destination = true)  # So doesnt use .mat file
-
     s = read_SSR(fname)
 
     context("Read file") do
@@ -19,6 +18,7 @@ facts("Steady State Responses") do
 	@fact isa(modulationrate(s), AbstractFloat) --> true
 
     end
+
 
     context("Extract epochs") do
 
@@ -46,6 +46,7 @@ facts("Steady State Responses") do
 
     end
 
+
     context("Epoch rejection") do
 
 	s = epoch_rejection(s)
@@ -61,8 +62,8 @@ facts("Steady State Responses") do
 	    @fact floor(28 * r) --> size(s.processing["epochs"], 2)
 
 	end
-
     end
+
 
     context("Create sweeps") do
 
@@ -80,23 +81,27 @@ facts("Steady State Responses") do
 	    @fact size(s.processing["sweeps"], 1) --> l * size(s.processing["epochs"], 1)
 	    @fact size(s.processing["sweeps"], 3) --> size(s.processing["epochs"], 3)
 	end
-
     end
+
 
     context("Low pass filter") do
 
+	s2 = lowpass_filter(deepcopy(s))
 
     end
 
 
     context("High pass filter") do
 
+	s2 = highpass_filter(deepcopy(s))
 
     end
 
 
     context("Downsample") do
 
+	s2 = downsample(deepcopy(s), 1//4)
+	@fact size(s2.data, 1) --> div(size(s.data, 1), 4)
 
     end
 
@@ -108,6 +113,7 @@ facts("Steady State Responses") do
 
     end
 
+
     context("Concatenate") do
 
 	s2 = hcat(deepcopy(s), deepcopy(s))
@@ -118,7 +124,9 @@ facts("Steady State Responses") do
 	    keep_channel!(s2, ["Cz" "10Hz_SWN_70dB_R"])
 
 	@fact_throws ArgumentError hcat(s, s2)
+
     end
+
 
     context("Remove channels") do
 
@@ -167,6 +175,7 @@ facts("Steady State Responses") do
 
     end
 
+
     context("Keep channels") do
 
 	s2 = deepcopy(s)
@@ -197,6 +206,7 @@ facts("Steady State Responses") do
 	@fact s3.processing["sweeps"] --> s4.processing["sweeps"]
 
     end
+
 
     context("Frequency fixing") do
 
