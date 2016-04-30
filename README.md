@@ -5,7 +5,9 @@ Process EEG files in [Julia](http://julialang.org/).
 
 ##### Release: [![EEG](http://pkg.julialang.org/badges/EEG_0.4.svg)](http://pkg.julialang.org/?pkg=EEG)
 
-##### Development: [![Build Status](https://travis-ci.org/codles/EEG.jl.svg?branch=master)](https://travis-ci.org/codles/EEG.jl) [![Build status](https://ci.appveyor.com/api/projects/status/3r96gn3o7owl5psh/branch/master?svg=true)](https://ci.appveyor.com/project/codles/eeg-jl-91eci/branch/master) [![Coverage Status](https://img.shields.io/coveralls/codles/EEG.jl.svg)](https://coveralls.io/r/codles/EEG.jl?branch=master)
+##### Development: [![Build Status](https://travis-ci.org/codles/EEG.jl.svg?branch=master)](https://travis-ci.org/codles/EEG.jl) [![Build status](https://ci.appveyor.com/api/projects/status/3r96gn3o7owl5psh/branch/master?svg=true)](https://ci.appveyor.com/project/codles/eeg-jl-91eci/branch/master) [![Coverage Status](https://coveralls.io/repos/github/codles/EEG.jl/badge.svg?branch=master)](https://coveralls.io/github/codles/EEG.jl?branch=master) [![codecov](https://codecov.io/gh/codles/EEG.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/codles/EEG.jl)
+
+
 
 ##### Info: [![Join the chat at https://gitter.im/codles/EEG.jl](https://badges.gitter.im/codles/EEG.jl.svg)](https://gitter.im/codles/EEG.jl?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Documentation Status](https://readthedocs.org/projects/eegjl/badge/?version=latest)](https://eegjl.readthedocs.org/en/latest/)
 
