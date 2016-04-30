@@ -3,19 +3,18 @@ Remove a template signal from each column of an array
 
 #### Arguments
 
-* `signals`: Original signals to be modified
+* `signals`: Original signals to be modified  (samples x channels)
 * `template`: Template to remove from each signal
 
 #### Returns
 Signals with template removed
 """ ->
 function remove_template{T <: AbstractFloat}(signals::Array{T, 2}, template::Array{T, 1})
-    if size(signals, 1) != size(template, 1)
-        critical("Templace to be removed is different length to signal")
-    end
+
+    @assert size(signals, 1) == size(template, 1)
 
     for chan = 1:size(signals)[end]
-        signals[:, chan] = signals[:, chan] - template
+        signals[:, chan] -=  template
     end
 
     return signals
