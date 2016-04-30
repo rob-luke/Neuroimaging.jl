@@ -8,6 +8,7 @@ using Plots
 using FactCheck
 
 Logging.configure(level=DEBUG)
+Logging.configure(output=open("logfile.log", "a"))
 
 
 #
@@ -29,29 +30,3 @@ for t in tests
     include(t)
 end
 
-
-#
-# Check /test file structure matches /src
-#
-
-missing = AbstractString[]
-function match_tests(fname)
-    global missing
-
-    excluded = ["src/EEG.jl", "src/create_docs.jl", "runtests.jl"]
-
-    if endswith(fname, ".jl")
-        if !contains(fname, excluded[1]) & !contains(fname, excluded[2]) & !contains(fname, excluded[3])
-            matched = replace(fname, "/src/", "/test/")
-            if !isfile(matched)
-                println("Missing file: $matched")
-                push!(missing, matched)
-            end
-        end
-    end
-end
-
-
-FileFind.find(joinpath(dirname(@__FILE__), "..", "src"), match_tests)
-
-@test length(missing) <= 1
