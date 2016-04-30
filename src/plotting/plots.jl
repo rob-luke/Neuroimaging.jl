@@ -21,7 +21,7 @@ function plot_spectrum(signal::Vector,
 
     # Calculate fft and convert to power
     fftSweep = 2 / signal_length * fft(signal)
-    spectrum = abs(fftSweep[1:signal_length / 2 + 1])  # Amplitude
+    spectrum = abs(fftSweep[1:div(signal_length, 2) + 1])  # Amplitude
     spectrum = spectrum.^2
 
     valid_idx = (frequencies .<= Fmax) & (frequencies .>= Fmin)
