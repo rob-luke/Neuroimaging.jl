@@ -83,6 +83,24 @@ facts("Steady State Responses") do
 
     end
 
+    context("Low pass filter") do
+
+
+    end
+
+
+    context("High pass filter") do
+
+
+    end
+
+
+    context("Downsample") do
+
+
+    end
+
+
     context("Merge channels") do
 
 	s2 = merge_channels(deepcopy(s), "Cz", "MergedCz")

@@ -88,7 +88,6 @@ export # Helper functions
        trigger_channel,
        write_SSR,
        merge_channels,
-       bootstrap,
        hcat,
        # Source analysis
        Sensor,
