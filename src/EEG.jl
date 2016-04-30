@@ -113,8 +113,6 @@ export # Helper functions
        conv_spm_mni2tal,
        Dipole,
        best_dipole,
-       orient_dipole,
-       best_ftest_dipole,
        Leadfield,
        match_leadfield,
        find_location,
