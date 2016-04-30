@@ -21,6 +21,8 @@ facts("Referencing") do
 
 	@fact rereference(signals, [1, 2, 3]) --> [-1 0 1] .* ones(5, 3)
 	@fact rereference(signals, ["C2", "C1", "C3"], ["C1", "C2", "C3"]) --> [-1 0 1] .* ones(5, 3)
+	@fact rereference(signals, "car", ["C1", "C2", "C3"]) --> [-1 0 1] .* ones(5, 3)
+	@fact rereference(signals, "average", ["C1", "C2", "C3"]) --> [-1 0 1] .* ones(5, 3)
 
     end
 end

@@ -9,7 +9,7 @@ Remove a template signal from each column of an array
 #### Returns
 Signals with template removed
 """ ->
-function remove_template{T <: AbstractFloat}(signals::Array{T, 2}, template::Array{T, 1})
+function remove_template{T <: AbstractFloat}(signals::Array{T, 2}, template::AbstractVector{T})
 
     @assert size(signals, 1) == size(template, 1)
 
@@ -67,18 +67,27 @@ Or you can specify to use the `average` reference.
 
 Rereferenced signals
 """ ->
-function rereference{S <: AbstractString, T <: AbstractFloat}(signals::Array{T, 2}, refChan::Union{S, Array{S}},
-            chanNames::Array{S})
+function rereference{S <: AbstractString, T <: AbstractFloat}(signals::Array{T, 2}, refChan::S, chanNames::Vector{S})
 
     debug("Reference channels = $refChan")
 
     if refChan == "car" || refChan == "average"
-        refChan_Idx = collect(1:size(signals)[end])
+        refChan_Idx = collect(1:size(signals, 2))
     elseif isa(refChan, AbstractString)
         refChan_Idx = findfirst(chanNames, refChan)
-    elseif isa(refChan, Array)
-        refChan_Idx = [findfirst(chanNames, i) for i = refChan]
     end
+
+    if refChan == 0; error("Requested channel is not in the provided list of channels"); end
+
+    rereference(signals, refChan_Idx)
+end
+
+
+function rereference{S <: AbstractString, T <: AbstractFloat}(signals::Array{T, 2}, refChan::Vector{S}, chanNames::Vector{S})
+
+    debug("Reference channels = $refChan")
+
+    refChan_Idx = [findfirst(chanNames, i) for i = refChan]
 
     if refChan == 0; error("Requested channel is not in the provided list of channels"); end
 
