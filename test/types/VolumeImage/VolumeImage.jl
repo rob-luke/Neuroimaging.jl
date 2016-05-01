@@ -1,47 +1,44 @@
+facts("Volume Image") do
+    fname = joinpath(dirname(@__FILE__), "../../data", "test-4d.dat")
+    t = read_VolumeImage(fname)
+    t2 = read_VolumeImage(fname)
 
-fname = joinpath(dirname(@__FILE__), "../../data", "test-4d.dat")
+    context("Reading") do
+	t = read_VolumeImage(fname)
+	@fact isa(t, EEG.VolumeImage) --> true
+    end
 
-t = read_VolumeImage(fname)
+    context("Create") do
+	n = VolumeImage(t.data, t.units, t.x, t.y, t.z, t.t, t.method, t.info, t.coord_system)
+    end
 
-show(t)
+    context("Maths") do
 
-#
-# Test basic functions
-#
+	@fact isequal(t, t2) --> true
 
-s = t + t
-s = t - t
-s = t / t
-s = t / 3
-s = mean(t)
+        @fact t + t --> t * 2
+	t4 = t * 4
+	@fact t4 / 2 --> t + t
+	@fact t4 / 2 --> t4 - t - t
 
+	t2 = read_VolumeImage(fname)
+	t2.units = "A/m^3"
+	@fact_throws t + t2
 
-#
-# Test error is thrown for mismatched units
-#
+    end
 
-t2 = read_VolumeImage(fname)
-t2.units = "A/m^3"
+    context("Average") do
+	s = mean(t)
+    end
 
-#= @test_throws ErrorException t + t2 =#
+    context("Show") do
+	show(t)
+    end
 
-
-#
-# Test error is thrown for mismatched dimensions
-#
-
-t2 = read_VolumeImage(fname)
-t2 = mean(t2)
-
-#= @test_throws ErrorException t + t2 =#
+    context("Plotting") do
+	EEG.plot(mean(t))
+    end
+end
 
 
-#
-# Create image with SIUnits already
-#
 
-n = VolumeImage(t.data, t.units, t.x, t.y, t.z, t.t, t.method, t.info, t.coord_system)
-
-println()
-println("!! Volume image test passed !!")
-println()

@@ -72,6 +72,8 @@ export # Helper functions
        find_dipoles,
        std,
        mean,
+       isequal,
+       ==,
        # Type - SSR
        SSR,
        samplingrate,

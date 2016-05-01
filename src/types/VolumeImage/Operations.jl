@@ -1,4 +1,4 @@
-import Base: +, -, /, *, mean, maximum, minimum
+import Base: +, -, /, *, mean, maximum, minimum, isequal, ==
 
 
 # +
@@ -153,6 +153,27 @@ function normalise(va::Array{VolumeImage, 1})
         vo[i] = normalise(vo[i])
     end
     return vo
+end
+
+
+# isequal
+
+function isequal(a::VolumeImage, b::VolumeImage)
+
+    a.data == b.data ||
+    a.units == b.units ||
+    a.x == b.x ||
+    a.y == b.y ||
+    a.z == b.z ||
+    a.t == b.t ||
+    a.method == b.method ||
+    a.coord_system == b.coord_system
+
+end
+
+function ==(a::VolumeImage, b::VolumeImage)
+
+    isequal(a, b)
 end
 
 
