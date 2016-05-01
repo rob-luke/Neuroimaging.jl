@@ -1,6 +1,8 @@
 using Plots
 using SIUnits
 
+import Plots.plot
+
 function plot(v::VolumeImage; kwargs...)
 
     x = AbstractFloat[xi / (1 * Milli * Meter) for xi in v.x]
