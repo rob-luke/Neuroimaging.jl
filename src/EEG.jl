@@ -107,6 +107,7 @@ export # Helper functions
            SPM,
            BrainVision,
            Talairach,
+	   UnknownCoordinate,
        convert,
        conv_bv2tal,
        conv_spm_mni2tal,

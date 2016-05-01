@@ -25,3 +25,7 @@ type UnknownCoordinate <: Coordinate
 end
 
 
+import Base.show
+function show{S <: Coordinate}(c::S)
+    println("Coordinate: $(typeof(c)) - ($(c.x), $(c.y), $(c.z))")
+end
