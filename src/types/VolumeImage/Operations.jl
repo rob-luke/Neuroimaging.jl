@@ -161,7 +161,7 @@ end
 # ----------------
 #
 
-function dimensions_equal(vi1::VolumeImage, vi2::VolumeImage; x::Bool=true, y::Bool=true, z::Bool=true, t::Bool=true, kwargs...)
+function dimensions_equal(vi1::VolumeImage, vi2::VolumeImage; x::Bool=true, y::Bool=true, z::Bool=true, t::Bool=true, units::Bool=true, kwargs...)
 
     matching = true
     if x & !(vi1.x == vi2.x)
@@ -175,6 +175,9 @@ function dimensions_equal(vi1::VolumeImage, vi2::VolumeImage; x::Bool=true, y::B
     end
     if t & !(vi1.t == vi2.t)
         throw(KeyError("T dimensions do not match"))
+    end
+    if units & !(vi1.units == vi2.units)
+        throw(KeyError("Units do not match"))
     end
 
     if matching
