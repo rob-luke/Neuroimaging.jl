@@ -14,7 +14,7 @@ Process EEG files in [Julia](http://julialang.org/).
 
 ## Installation
 
-To install this package, run the following command into Julia's command line:
+To install this package, run the following command(s) from the Julia command line:
 
 
 ```julia
@@ -22,6 +22,12 @@ Pkg.add("EEG")
 
 # For the latest developements
 Pkg.checkout("EEG")
+```
+
+Plotting uses [Plots.jl](https://github.com/tbreloff/Plots.jl), but is optimised for the [PyPlot.jl](https://github.com/stevengj/PyPlot.jl) backend
+
+```julia
+Pkg.add("PyPlot")
 ```
 
 ## Documentation
