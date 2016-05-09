@@ -17,6 +17,21 @@ facts("Steady State Responses") do
 	@fact modulationrate(s) --> 19.5
 	@fact isa(modulationrate(s), AbstractFloat) --> true
 
+        s = read_SSR(fname, valid_triggers = [8])
+        s = read_SSR(fname, min_epoch_length = 8388)
+        s = read_SSR(fname, max_epoch_length = 8389)
+
+        s = read_SSR(fname)
+        original_length = length(s.triggers["Index"])
+        s = read_SSR(fname, remove_first = 10)
+        @test original_length - 10 == length(s.triggers["Index"])
+
+        s = read_SSR(fname, max_epochs = 12)
+        @test length(s.triggers["Index"]) == 12
+
+        s = read_SSR(fname)
+        s.triggers = extra_triggers(s.triggers, 1, 7, 0.7, samplingrate(s))
+        @test length(s.triggers["Index"]) == 56
     end
 
 
@@ -53,6 +68,9 @@ facts("Steady State Responses") do
 
 	@fact floor(28 * 0.95) --> size(s.processing["epochs"], 2)
 
+        @fact_throws BoundsError epoch_rejection(s, retain_percentage = 1.1)
+        @fact_throws BoundsError epoch_rejection(s, retain_percentage = -0.1)
+
 	for r in 0.1 : 0.1 : 1
 
 	    s = extract_epochs(s)
@@ -62,6 +80,18 @@ facts("Steady State Responses") do
 	    @fact floor(28 * r) --> size(s.processing["epochs"], 2)
 
 	end
+    end
+
+
+    context("Channel rejection") do
+
+        s1 = channel_rejection(deepcopy(s))
+        @fact size(s1.processing["epochs"]) --> (8388, 28, 5)
+
+        data = randn(400, 10) * diagm([1, 1, 2, 1, 11, 1, 2, 100, 1, 1])
+        valid = channel_rejection(data, 20, 1)
+        @fact valid --> [ true  true  true  true  false  true  true  false  true  true]
+
     end
 
 
@@ -98,11 +128,26 @@ facts("Steady State Responses") do
     end
 
 
+    context("Band pass filter") do
+
+	s2 = bandpass_filter(deepcopy(s))
+
+    end
+
+
     context("Downsample") do
 
 	s2 = downsample(deepcopy(s), 1//4)
 	@fact size(s2.data, 1) --> div(size(s.data, 1), 4)
 
+    end
+
+
+    context("Rereference") do
+
+        s2 = rereference(deepcopy(s), "Cz")
+
+        @fact size(s2.data,1) --> 237568
     end
 
 
