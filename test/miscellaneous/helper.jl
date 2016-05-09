@@ -1,17 +1,28 @@
-results_storage = Dict()
-results_storage[new_processing_key(results_storage, "FTest")] = 4
-results_storage[new_processing_key(results_storage, "Turtle")] = 5
-results_storage[new_processing_key(results_storage, "FTest")] = 49
+facts("Miscellaneous") do
 
-@test new_processing_key(results_storage, "FTest") == "FTest3"
+    context("Results storage") do
+        results_storage = Dict()
+        results_storage[new_processing_key(results_storage, "FTest")] = 4
+        results_storage[new_processing_key(results_storage, "Turtle")] = 5
+        results_storage[new_processing_key(results_storage, "FTest")] = 49
 
-@test find_keys_containing(results_storage, "FTest") == [1, 3]
-@test find_keys_containing(results_storage, "Mum") == []
+        @fact new_processing_key(results_storage, "FTest") --> "FTest3"
 
-a, b, c = fileparts("/Users/test/subdir/test-file.bdf")
+        @fact find_keys_containing(results_storage, "FTest") --> [1, 3]
+        @fact find_keys_containing(results_storage, "Mum") --> []
 
-@test a == "/Users/test/subdir/"
-@test b == "test-file"
-@test c == "bdf"
+    end
 
-@test _find_closest_number_idx([1, 2, 2.7, 3.2, 4, 3.1, 7], 3) == 6
+    context("File parts") do
+
+        a, b, c = fileparts("/Users/test/subdir/test-file.bdf")
+
+        @fact a --> "/Users/test/subdir/"
+        @fact b --> "test-file"
+        @fact c --> "bdf"
+
+        @fact _find_closest_number_idx([1, 2, 2.7, 3.2, 4, 3.1, 7], 3) --> 6
+    end
+
+end
+
