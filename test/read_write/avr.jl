@@ -7,6 +7,6 @@ write_avr(sname, a, b, 8192)
 
 a2, b2 = read_avr(sname)
 
-@test a==a2
-@test b==b2
+@fact a --> a2
+@fact b --> b2
 

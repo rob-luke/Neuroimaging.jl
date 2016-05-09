@@ -2,6 +2,7 @@ facts("Steady State Responses") do
 
     fname = joinpath(dirname(@__FILE__),  "..", "..", "data", "test_Hz19.5-testing.bdf")
     fname2 = joinpath(dirname(@__FILE__), "..", "..", "data", "tmp", "test_Hz19.5-copy.bdf")
+    fname_out = joinpath(dirname(@__FILE__), "..", "..", "data", "tmp", "testwrite.bdf")
     cp(fname, fname2, remove_destination = true)  # So doesnt use .mat file
     s = read_SSR(fname)
 
@@ -32,6 +33,39 @@ facts("Steady State Responses") do
         s = read_SSR(fname)
         s.triggers = extra_triggers(s.triggers, 1, 7, 0.7, samplingrate(s))
         @test length(s.triggers["Index"]) == 56
+    end
+
+
+    context("Channel names") do
+
+        s1 = deepcopy(s)
+        s1 = channelnames(s1, 1, "A01")
+        s1 = channelnames(s1, 2, "A05")
+        s1 = channelnames(s1, 3, "A11")
+        s1 = channelnames(s1, 4, "B03")
+        s1 = channelnames(s1, 5, "A17")
+        s1 = channelnames(s1, 6, "B17")
+        @fact channelnames(s1) --> ["A01", "A05", "A11", "B03", "A17", "B17"]
+
+    end
+
+    context("Triggers") do
+
+        dats, evtTab, trigs, statusChan = readBDF(fname);
+        sampRate = readBDFHeader(fname)["sampRate"][1]
+
+        @fact trigs --> create_channel(evtTab, dats, sampRate, code="code", index="idx", duration="dur")
+        @fact trigs --> not(trigger_channel(read_SSR(fname)))
+        @fact trigs --> trigger_channel(read_SSR(fname, valid_triggers = collect(-1000:10000)))
+
+        # Convert between events and channels
+
+        dats, evtTab, trigs, statusChan = readBDF(fname);
+        events  = create_events(trigs, sampRate)
+        channel = create_channel(events, dats, sampRate)
+
+        @fact channel --> trigs
+
     end
 
 
@@ -257,6 +291,23 @@ facts("Steady State Responses") do
 
 	@fact assr_frequency(4) --> 3.90625
 	@fact assr_frequency([4, 10, 20, 40, 80]) --> [3.90625,9.765625,19.53125,40.0390625,80.078125]
+
+    end
+
+    context("Write files") do
+
+        s  = read_SSR(fname)
+        s.header["subjID"] = "test"
+        write_SSR(s, fname_out)
+        s  = read_SSR(fname, valid_triggers = collect(-1000:10000))
+        s.header["subjID"] = "test"
+        write_SSR(s, fname_out)
+        s2 = read_SSR(fname_out, valid_triggers = collect(-1000:10000))
+
+        @fact s.data --> s2.data
+        @fact s.triggers --> s2.triggers
+        @fact s.samplingrate --> s2.samplingrate
+        @fact contains(s2.header["subjID"], "test") --> true
 
     end
 end
