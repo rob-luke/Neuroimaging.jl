@@ -160,8 +160,7 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Array{A, 3}, x::Ve
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
-    p = subplot!(p, x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "",
-                 markerstrokewidth = 0.1, colorbar = colorbar)
+    p = subplot!(p, x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "", markerstrokewidth = 0.1, colorbar = false)
     if plot_labels
         plotlist = ["T7", "C5", "C3", "C1", "Cz", "C2", "C4", "C6", "T8"]
         for elec in e
@@ -170,7 +169,10 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Array{A, 3}, x::Ve
             end
         end
     end
-    #= cb[:set_label]("Neural Activity Index") =#
+    if (backend() == Plots.PyPlotBackend()) & colorbar
+        cb = PyPlot.colorbar(p.plts[3].seriesargs[1][:serieshandle][1])
+        cb[:set_label]("Neural Activity Index")
+    end
 
     return p
 end
