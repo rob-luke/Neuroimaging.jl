@@ -29,4 +29,4 @@ FileFind.find(".", add_test)
 for t in tests
     include(t)
 end
-
+FactCheck.exitstatus()
