@@ -145,6 +145,19 @@ facts("Steady State Responses") do
 	    @fact size(s.processing["sweeps"], 1) --> l * size(s.processing["epochs"], 1)
 	    @fact size(s.processing["sweeps"], 3) --> size(s.processing["epochs"], 3)
 	end
+
+        s = read_SSR(fname)
+	s = extract_epochs(s)
+        s = create_sweeps(s; epochsPerSweep=4)
+        @fact size(s.processing["sweeps"]) --> (33552,7,6)
+        julia_result = average_epochs(s.processing["sweeps"])
+
+        filen = matopen(joinpath(dirname(@__FILE__), "..", "..", "data", "sweeps.mat"))
+        matlab_sweeps = read(filen, "sweep")
+        close(filen)
+        @fact size(matlab_sweeps[:,1:6]) -->  size(julia_result)
+        @fact matlab_sweeps[:,1:6] -->  roughly(julia_result, atol = 0.01)  # why so different?
+
     end
 
 
