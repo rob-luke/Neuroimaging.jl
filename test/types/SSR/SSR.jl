@@ -18,6 +18,9 @@ facts("Steady State Responses") do
 	@fact modulationrate(s) --> 19.5
 	@fact isa(modulationrate(s), AbstractFloat) --> true
 
+        @fact maximum(s.data[:,2]) --> roughly(54.5939, atol =  0.1)
+        @fact minimum(s.data[:,4]) --> roughly(-175.2503 , atol = 0.1)
+
         s = read_SSR(fname, valid_triggers = [8])
         s = read_SSR(fname, min_epoch_length = 8388)
         s = read_SSR(fname, max_epoch_length = 8389)
@@ -322,5 +325,24 @@ facts("Steady State Responses") do
         @fact s.samplingrate --> s2.samplingrate
         @fact contains(s2.header["subjID"], "test") --> true
 
+    end
+
+    context("Ftest") do
+
+        s = read_SSR(fname)
+        s.modulationrate = 19.5
+        s = rereference(s, "Cz")
+        s = extract_epochs(s)
+        s = create_sweeps(s, epochsPerSweep=4)
+        snrDb, signal_phase, signal_power, noise_power, statistic = ftest(s.processing["sweeps"], 40.0391, 8192, 2.5, nothing, 2)
+
+        @fact isnan(snrDb[1]) --> true
+        @fact isnan(statistic[1]) --> true
+        @fact snrDb[2:end] --> roughly([-7.0915, -7.8101, 2.6462, -10.2675, -4.1863]; atol =  0.001)
+        @fact statistic[2:end] --> roughly([0.8233,  0.8480, 0.1721,   0.9105,  0.6854]; atol = 0.001)
+
+        s = ftest(s, side_freq=2.5, Note="Original channels", Additional_columns = 22)
+        @fact isnan(s.processing["statistics"][:SNRdB][1]) --> true
+        @fact s.processing["statistics"][:SNRdB][2:end] --> roughly([-1.2386, 0.5514, -1.5537, -2.7541, -6.7079]; atol = 0.001)
     end
 end
