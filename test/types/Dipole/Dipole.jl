@@ -1,8 +1,19 @@
-fname = joinpath(dirname(@__FILE__), "../../data", "test-3d.dat")
+facts("Dipoles") do
 
-t = read_VolumeImage(fname)
-dips = find_dipoles(t)
+    dips = Dipole[]
 
-show(dips[1])
-@printf("\n\n")
-show(dips)
+    context("Create") do
+
+        dip1 = Dipole("Talairach", 1, 2, 3, 0, 0, 0, 1, 1, 1)
+        dip2 = Dipole("Talairach", 1, 2, 3, 0, 0, 0, 2, 2, 2)
+
+        dips = push!(dips, dip1)
+        dips = push!(dips, dip2)
+    end
+
+    context("Show") do
+
+        show(dips[1])
+        show(dips)
+    end
+end
