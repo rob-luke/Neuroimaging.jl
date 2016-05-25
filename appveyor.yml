@@ -21,7 +21,6 @@ build_script:
   - pip install -e git+https://github.com/mne-tools/mne-python#egg=mne-dev
   - C:\projects\julia\bin\julia -e "Pkg.add(\"PyCall\"); Pkg.build(\"PyCall\")"
   - C:\projects\julia\bin\julia -e "versioninfo(); Pkg.init(); Pkg.clone(\"git://github.com/codles/EEG.jl.git\")"
-  - C:\projects\julia\bin\julia -e "Pkg.add(\"Plots\"); Pkg.checkout(\"Plots\",\"dev\")"
 
 test_script:
   - C:\projects\julia\bin\julia -e "Pkg.test(\"EEG\")"
