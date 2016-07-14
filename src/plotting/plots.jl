@@ -206,10 +206,8 @@ function plot_filter_response(zpk_filter::FilterCoefficients, fs::Integer;
     magnitude_dB = 20*log10(convert(Array{Float64}, abs(h)))
     phase_response = (360/(2*pi))*unwrap(convert(Array{Float64}, angle(h)))
 
-    p = subplot(n=2, ylabel = ["Magnitude (dB)" "Phase (degrees)"], xlabel = "Frequency (Hz)")
-    p = subplot!(frequencies, magnitude_dB,   lab = "")
-    p = subplot!(frequencies, phase_response, lab = "")
+    p1 = plot(frequencies, magnitude_dB,   lab = "")
+    p2 = plot(frequencies, phase_response, lab = "")
+
+    p = plot(p1,p2, ylabel = ["Magnitude (dB)" "Phase (degrees)"], xlabel = "Frequency (Hz)", layout = @layout([a; b]))
 end
-
-
-

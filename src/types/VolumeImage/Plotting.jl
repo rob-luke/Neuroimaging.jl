@@ -27,7 +27,7 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Array{A, 3}, x::Ve
         plot_labels = true
     end
 
-    subplot(n = 3, nr = 1, xlabel=["Left - Right (mm)" "Posterior - Anterior (mm)" "Left - Right (mm)"], ylabel=["Posterior - Anterior (mm)" "Inferior - Superior (mm)" "Inferior - Superior (mm)"], xlims=[(-100, 100) (-120, 90) (-100, 100)], ylims=[(-120, 90) (-70, 100) (-70, 100)], title=[ "" title ""])
+    # subplot(n = 3, nr = 1, xlabel=["Left - Right (mm)" "Posterior - Anterior (mm)" "Left - Right (mm)"], ylabel=["Posterior - Anterior (mm)" "Inferior - Superior (mm)" "Inferior - Superior (mm)"], xlims=[(-100, 100) (-120, 90) (-100, 100)], ylims=[(-120, 90) (-70, 100) (-70, 100)], title=[ "" title ""])
 
     x_tmp = AbstractFloat[]
     y_tmp = AbstractFloat[]
@@ -66,12 +66,12 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Array{A, 3}, x::Ve
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
-    p = subplot!(x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "Source", colorbar = false, markerstrokewidth = 0.1)
+    p1 = plot(x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "Source", colorbar = false, markerstrokewidth = 0.1, xlabel="Left - Right (mm)", ylabel="Posterior - Anterior (mm)", xlims = (-100, 100), ylims =(-120, 90))
     if plot_labels
         plotlist = ["Fpz", "Fp2", "AF8", "F8", "FT8", "T8", "TP8", "P10", "PO8", "O2", "Oz", "O1", "PO7", "P9", "TP7", "T7", "FT7", "F7", "AF7", "Fp1"]
         for elec in e
             if findfirst(plotlist, elec.label) > 0
-                annotate!(p.plts[1], elec.coordinate.x-5, 1.1*elec.coordinate.y-2, elec.label, colorbar = false)
+                annotate!(p1, elec.coordinate.x-5, 1.1*elec.coordinate.y-2, elec.label, colorbar = false)
             end
         end
     end
@@ -113,12 +113,12 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Array{A, 3}, x::Ve
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
-    p = subplot!(p, x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "Source", colorbar = false, markerstrokewidth = 0.1)
+    p2 = plot(x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, title = title, lab = "Source", colorbar = false, markerstrokewidth = 0.1, xlabel = "Posterior - Anterior (mm)", ylabel = "Inferior - Superior (mm)", xlims = (-120, 90), ylims =(-70, 100))
     if plot_labels
         plotlist = ["Iz", "Oz", "POz", "Pz", "CPz", "Cz", "FCz", "Fz", "AFz", "Fpz"]
         for elec in e
             if findfirst(plotlist, elec.label) > 0
-                annotate!(p.plts[2], elec.coordinate.y-5, elec.coordinate.z, elec.label)
+                annotate!(p2, elec.coordinate.y-5, elec.coordinate.z, elec.label)
             end
         end
     end
@@ -160,19 +160,16 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Array{A, 3}, x::Ve
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
-    p = subplot!(p, x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "", markerstrokewidth = 0.1, colorbar = false)
+    p3 = plot(x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "", markerstrokewidth = 0.1, colorbar = true, xlabel = "Left - Right (mm)", ylabel = "Inferior - Superior (mm)", xlims = (-100, 100), ylims =(-70, 100))
     if plot_labels
         plotlist = ["T7", "C5", "C3", "C1", "Cz", "C2", "C4", "C6", "T8"]
         for elec in e
             if findfirst(plotlist, elec.label) > 0
-                annotate!(p.plts[3], elec.coordinate.x-5, elec.coordinate.z, elec.label)
+                annotate!(p3, elec.coordinate.x-5, elec.coordinate.z, elec.label)
             end
         end
     end
-    if (backend() == Plots.PyPlotBackend()) & colorbar
-        cb = PyPlot.colorbar(p.plts[3].seriesargs[1][:serieshandle][1])
-        cb[:set_label]("Neural Activity Index")
-    end
 
-    return p
+    l  = @layout([a b c])
+    return plot(p1, p2, p3, layout = l)
 end
