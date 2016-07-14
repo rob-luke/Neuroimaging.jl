@@ -37,11 +37,19 @@ facts("Leadfield") do
         @fact_throws ErrorException  match_leadfield(L, s)
 
     end
+
+    context("Operations") do
+        ldf = Leadfield(rand(5, 3, 2), collect(1:5.0), collect(1:5.0), collect(1:5.0), ["ch1", "ch2"])
+
+        context("Find location") do
+            for n = 1:size(ldf.L, 1)
+                @fact n --> find_location(ldf, Talairach(ldf.x[n], ldf.y[n], ldf.z[n]))
+            end
+
+            for n = 1:size(ldf.L, 1)
+                @fact n --> find_location(ldf, Talairach(ldf.x[n]+0.1, ldf.y[n]-0.1, ldf.z[n]))
+            end
+        end
+
+    end
 end
-
-
-
-
-
-
-
