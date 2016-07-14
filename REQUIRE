@@ -3,7 +3,7 @@ AWS
 DSP 0.0.9
 BDF
 DataFrames
-SIUnits # Requires master
+SIUnits 0.0.6
 ProgressMeter
 Distributions
 NumericExtensions
