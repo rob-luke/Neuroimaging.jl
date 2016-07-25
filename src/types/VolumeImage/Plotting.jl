@@ -3,6 +3,29 @@ using SIUnits
 
 import Plots.plot
 
+
+@doc """
+Plot a volume image
+
+#### Arguments
+
+* `v`: A VolumeImage type
+* `threshold`: Minimum value to plot, values smaller than this are plotted as `minsize`
+* `min_val`: Force a minimum value for color and size scaling
+* `max_val`: Force a maximum value for color and size scaling
+* `minsize`: Minimum size a marker can be
+* `maxsize`: Maximum size a marker can be
+* `exclude`: Values not to plot
+* `title`: Figure title
+* `elp`: Path to elp file to overlay channel names
+* `colorbar`: Should a colorbar be plotted
+
+
+#### Returns
+
+* A Plots.jl figure
+
+""" ->
 function plot(v::VolumeImage; kwargs...)
 
     x = AbstractFloat[xi / (1 * Milli * Meter) for xi in v.x]
@@ -27,7 +50,8 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Array{A, 3}, x::Ve
         plot_labels = true
     end
 
-    # subplot(n = 3, nr = 1, xlabel=["Left - Right (mm)" "Posterior - Anterior (mm)" "Left - Right (mm)"], ylabel=["Posterior - Anterior (mm)" "Inferior - Superior (mm)" "Inferior - Superior (mm)"], xlims=[(-100, 100) (-120, 90) (-100, 100)], ylims=[(-120, 90) (-70, 100) (-70, 100)], title=[ "" title ""])
+    #
+    # First facet
 
     x_tmp = AbstractFloat[]
     y_tmp = AbstractFloat[]
@@ -76,6 +100,10 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Array{A, 3}, x::Ve
         end
     end
 
+
+    #
+    # Second facet
+
     x_tmp = AbstractFloat[]
     y_tmp = AbstractFloat[]
     c_tmp = AbstractFloat[]
@@ -123,6 +151,9 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Array{A, 3}, x::Ve
         end
     end
 
+    #
+    # Third facet
+
     x_tmp = AbstractFloat[]
     y_tmp = AbstractFloat[]
     c_tmp = AbstractFloat[]
@@ -160,7 +191,7 @@ function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Array{A, 3}, x::Ve
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
-    p3 = plot(x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "", markerstrokewidth = 0.1, colorbar = true, xlabel = "Left - Right (mm)", ylabel = "Inferior - Superior (mm)", xlims = (-100, 100), ylims =(-70, 100))
+    p3 = plot(x_tmp, y_tmp, zcolor=c_tmp, c=cols, ms=s_tmp, legend=false, l=:scatter, lab = "", markerstrokewidth = 0.1, colorbar = colorbar, xlabel = "Left - Right (mm)", ylabel = "Inferior - Superior (mm)", xlims = (-100, 100), ylims =(-70, 100))
     if plot_labels
         plotlist = ["T7", "C5", "C3", "C1", "Cz", "C2", "C4", "C6", "T8"]
         for elec in e
