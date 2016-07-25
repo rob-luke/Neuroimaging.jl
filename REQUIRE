@@ -1,17 +1,17 @@
-julia 0.4 0.5-
-AWS
-DSP 0.0.9
-BDF
-DataFrames
-SIUnits 0.0.6
-ProgressMeter
-Distributions
-NumericExtensions
-Distances
-Logging
-Docile
-Synchrony
-FileFind
-Images
-MAT
+julia 0.5.0-pre
+AWS                     # Tests not set up
+DSP 0.0.9               # MASTER till tagged again
+BDF                     # compat branch
+DataFrames 0.7.6
+SIUnits                 # Tests fail
+ProgressMeter           # Tests fail
+Distributions 0.10.0
+# NumericExtensions     # Needed? 
+Distances 0.3.1
+Logging 0.2.0
+# Docile                # Documenter.jl?
+Synchrony               # Tests fail
+FileFind                # No tests. Needed?
+Images                  # Master
+MAT                     # Tests fail
 Plots 0.8.0
