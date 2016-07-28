@@ -61,9 +61,6 @@ export # Helper functions
        # Statistics
        ftest,
        gfp,
-       # Synchrony
-       phase_lag_index,
-       save_synchrony_results,
        # Type - Volume Image
        VolumeImage,
        read_VolumeImage,
@@ -155,9 +152,6 @@ include("reshaping/sweeps.jl")
 include("statistics/ftest.jl")
 include("statistics/gfp.jl")
 
-# Synchrony
-include("synchrony/phase_lag_index.jl")
-
 # Type - Coordinates
 include("types/Coordinates/Coordinates.jl")
 
@@ -170,7 +164,6 @@ include("types/SSR/Preprocessing.jl")
 include("types/SSR/ReadWrite.jl")
 include("types/SSR/Reshaping.jl")
 include("types/SSR/Statistics.jl")
-include("types/SSR/Synchrony.jl")
 
 # Type - Dipole
 include("types/Dipole/Dipole.jl")
