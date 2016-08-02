@@ -1,4 +1,4 @@
-# EEG.jl
+# EEG.jl Manual
 
 Process EEG files in Julia.
 
@@ -6,11 +6,14 @@ Process EEG files in Julia.
 
 (**For research only. Not for clinical use. Use at your own risk**)
 
-## Installation
 
-To install this package, run the following command into Julia's command line:
-
-
-```julia
-Pkg.clone("git://github.com/codles/EEG.jl.git")
+```@meta
+CurrentModule = EEG
 ```
+
+## Examples
+```@contents
+Pages = ["examples/ASSR.md", "examples/source.md"]
+Depth = 1
+```
+

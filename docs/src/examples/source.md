@@ -1,4 +1,4 @@
-## Plot estimated neural activity
+# Source
 
 If you have source activity saved in a *.dat file (eg BESA) you can plot the estimated activity and local peaks of activity.
 
