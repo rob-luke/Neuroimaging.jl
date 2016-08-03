@@ -50,8 +50,8 @@ plot_timeseries(s, channels="P6")
 plot_timeseries(s)
 ```
 
-![Single Channel](https://raw.githubusercontent.com/codles/EEG.jl/master/doc/images/singlechannel-timeseries.png)
-![Multi Channel](https://raw.githubusercontent.com/codles/EEG.jl/master/doc/images/multichannel-timeseries.png)
+![Single Channel](https://cloud.githubusercontent.com/assets/748691/17362166/210e53f4-5974-11e6-8df0-c2723c65ba52.png)
+![Multi Channel](https://cloud.githubusercontent.com/assets/748691/17362167/210f9c28-5974-11e6-8a05-62fa399d32d1.png)
 
 
 ### Plot estimated neural activity
@@ -63,9 +63,9 @@ using EEG
 
 t = read_VolumeImage("example.dat")
 
-p = EEG.plot(t)
+p = EEG.plot(t, c=:darkrainbow)
 p = EEG.plot(t, find_dipoles(t), l = "Peak Activity", c=:blue)
 
 ```
 
-![PNG](https://raw.githubusercontent.com/codles/EEG.jl/master/doc/images/sources.png)
+![Source](https://cloud.githubusercontent.com/assets/748691/17363374/523373a0-597a-11e6-94d9-826381617756.png)
