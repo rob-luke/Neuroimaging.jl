@@ -56,9 +56,10 @@ type VolumeImage
                          x::Vector{F}, y::Vector{F}, z::Vector{F}, t::Vector{F},
                          method::S, info::Dict, coord_system::S)
 
-        @assert length(x) * length(t) == length(data)
-        @assert length(y) * length(t) == length(data)
-        @assert length(z) * length(t) == length(data)
+        @assert length(x) == length(data)
+        @assert length(y) == length(data)
+        @assert length(z) == length(data)
+        @assert length(t) == length(data)
 
         newX = sort(unique(x))
         newY = sort(unique(y))

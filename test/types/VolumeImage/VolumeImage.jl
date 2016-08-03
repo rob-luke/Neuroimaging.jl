@@ -9,7 +9,40 @@ facts("Volume Image") do
     end
 
     context("Create") do
+        # Array
 	n = VolumeImage(t.data, t.units, t.x, t.y, t.z, t.t, t.method, t.info, t.coord_system)
+	@fact isa(n, EEG.VolumeImage) --> true
+        @fact isequal(n.data, t.data) --> true
+
+        # Vector
+        d = zeros(length(t.data))
+        x = zeros(length(t.data))
+        y = zeros(length(t.data))
+        z = zeros(length(t.data))
+        s = zeros(length(t.data))  # t is already taken
+        i = 1
+        for xi in 1:length(t.x)
+            for yi in 1:length(t.y)
+                for zi in 1:length(t.z)
+                    for ti in 1:length(t.t)
+                        d[i] = float(t.data[xi, yi, zi, ti])
+                        x[i] = float(t.x[xi])
+                        y[i] = float(t.y[yi])
+                        z[i] = float(t.z[zi])
+                        s[i] = float(t.t[ti])
+                        i += 1
+                    end
+                end
+            end
+        end
+        n2 = VolumeImage(d, t.units, x, y, z, s, t.method, t.info, t.coord_system)
+        @fact isa(n2, EEG.VolumeImage) --> true
+        @fact isequal(n2.data, t.data) --> true
+        @fact isequal(n2.x, t.x) --> true
+        @fact isequal(n2.y, t.y) --> true
+        @fact isequal(n2.z, t.z) --> true
+        @fact isequal(n2.t, t.t) --> true
+
     end
 
     context("Maths") do
