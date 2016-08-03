@@ -6,7 +6,7 @@ Process EEG files in [Julia](http://julialang.org/).
 
 | Release                                                                                  | Documentation                                                                                                                                                                                                                                                                                                  | Development                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 |------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [![EEG](http://pkg.julialang.org/badges/EEG_0.4.svg)](http://pkg.julialang.org/?pkg=EEG) | [![](https://img.shields.io/badge/docs-latest-blue.svg)](https://codles.github.io/EEG.jl/latest)  [![Join the chat at https://gitter.im/codles/EEG.jl](https://badges.gitter.im/codles/EEG.jl.svg)](https://gitter.im/codles/EEG.jl?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) | [![Build Status](https://travis-ci.org/codles/EEG.jl.svg?branch=master)](https://travis-ci.org/codles/EEG.jl) [![Build status](https://ci.appveyor.com/api/projects/status/3r96gn3o7owl5psh/branch/master?svg=true)](https://ci.appveyor.com/project/codles/eeg-jl-91eci/branch/master) <br> [![Coverage Status](https://coveralls.io/repos/github/codles/EEG.jl/badge.svg?branch=master)](https://coveralls.io/github/codles/EEG.jl?branch=master) [![codecov](https://codecov.io/gh/codles/EEG.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/codles/EEG.jl) |
+| [![EEG](http://pkg.julialang.org/badges/EEG_0.4.svg)](http://pkg.julialang.org/?pkg=EEG) | [![](https://img.shields.io/badge/docs-latest-blue.svg)](https://codles.github.io/EEG.jl/latest)  [![Join the chat at https://gitter.im/codles/EEG.jl](https://badges.gitter.im/codles/EEG.jl.svg)](https://gitter.im/codles/EEG.jl?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) | [![Build Status](https://travis-ci.org/codles/EEG.jl.svg?branch=master)](https://travis-ci.org/codles/EEG.jl) [![Build status](https://ci.appveyor.com/api/projects/status/3r96gn3o7owl5psh/branch/master?svg=true)](https://ci.appveyor.com/project/codles/eeg-jl-91eci/branch/master) [![Coverage Status](https://coveralls.io/repos/github/codles/EEG.jl/badge.svg?branch=master)](https://coveralls.io/github/codles/EEG.jl?branch=master) [![codecov](https://codecov.io/gh/codles/EEG.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/codles/EEG.jl) |
 
 
 
@@ -25,15 +25,9 @@ Pkg.add("EEG")
 Pkg.checkout("EEG")
 ```
 
-Plotting uses [Plots.jl](https://github.com/tbreloff/Plots.jl), but is optimised for the [PyPlot.jl](https://github.com/stevengj/PyPlot.jl) backend
-
-```julia
-Pkg.add("PyPlot")
-```
-
 ## Documentation
 
-See [documentation](https://eegjl.readthedocs.org/).
+See [documentation](http://codles.github.io/EEG.jl/latest/).
 
 
 
