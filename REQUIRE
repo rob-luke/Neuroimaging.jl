@@ -9,7 +9,9 @@ Distributions
 NumericExtensions
 Distances
 Logging
+Docile
+Synchrony
 FileFind
 Images
 MAT
-Plots 0.8.0
+Plots 0.8.0 0.9.0
