@@ -64,7 +64,7 @@ using EEG
 t = read_VolumeImage("example.dat")
 
 p = EEG.plot(t, c=:darkrainbow)
-p = EEG.plot(t, find_dipoles(t), l = "Peak Activity", c=:blue)
+p = EEG.plot(t, find_dipoles(t), l = "Peak Activity", c=:black)
 
 ```
 
