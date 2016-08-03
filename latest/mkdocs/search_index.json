@@ -22,12 +22,12 @@
         }, 
         {
             "location": "/examples/source/", 
-            "text": "Source\n\n\nIf you have source activity saved in a *.dat file (eg BESA) you can plot the estimated activity and local peaks of activity.\n\n\nusing EEG\n\nt = read_VolumeImage(\nexample.dat\n)\n\np = EEG.plot(t)\np = EEG.plot(t, find_dipoles(t), l = \nPeak Activity\n, c=:blue)", 
+            "text": "Source\n\n\nIf you have source activity saved in a *.dat file (eg BESA) you can plot the estimated activity and local peaks of activity.\n\n\nusing EEG\n\nt = read_VolumeImage(\nexample.dat\n)\n\np = EEG.plot(t, c=:darkrainbow)\np = EEG.plot(t, find_dipoles(t), l = \nPeak Activity\n, c=:black)", 
             "title": "Source Analysis"
         }, 
         {
             "location": "/examples/source/#source", 
-            "text": "If you have source activity saved in a *.dat file (eg BESA) you can plot the estimated activity and local peaks of activity.  using EEG\n\nt = read_VolumeImage( example.dat )\n\np = EEG.plot(t)\np = EEG.plot(t, find_dipoles(t), l =  Peak Activity , c=:blue)", 
+            "text": "If you have source activity saved in a *.dat file (eg BESA) you can plot the estimated activity and local peaks of activity.  using EEG\n\nt = read_VolumeImage( example.dat )\n\np = EEG.plot(t, c=:darkrainbow)\np = EEG.plot(t, find_dipoles(t), l =  Peak Activity , c=:black)", 
             "title": "Source"
         }
     ]
