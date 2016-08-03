@@ -131,7 +131,8 @@ facts("Volume Image") do
 
     context("Plotting") do
 	EEG.plot(mean(t))
-	EEG.plot(mean(t), min_val = 0.3, max_val = 1.2)
+	EEG.plot(mean(t), min_val = 0, max_val = 50)
+	EEG.plot(mean(t), threshold = 24 )
     end
 end
 
