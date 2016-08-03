@@ -2,18 +2,13 @@
     "docs": [
         {
             "location": "/", 
-            "text": "EEG.jl Manual\n\n\nProcess EEG files in Julia.\n\n\nFor research only. Not for clinical use. Use at your own risk\n.\n\n\n\n\nExamples\n\n\n\n\nASSR\n\n\nSource", 
+            "text": "EEG.jl Manual\n\n\nProcess EEG files in Julia.\n\n\nFor research only. Not for clinical use. Use at your own risk\n.", 
             "title": "Home"
         }, 
         {
             "location": "/#eegjl-manual", 
             "text": "Process EEG files in Julia.  For research only. Not for clinical use. Use at your own risk .", 
             "title": "EEG.jl Manual"
-        }, 
-        {
-            "location": "/#examples", 
-            "text": "ASSR  Source", 
-            "title": "Examples"
         }, 
         {
             "location": "/examples/ASSR/", 
