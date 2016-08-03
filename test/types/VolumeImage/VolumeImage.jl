@@ -76,6 +76,9 @@ facts("Volume Image") do
 	dips = find_dipoles(mean(t))
 	@fact size(dips) --> (11,)
 
+	dips = EEG.new_dipole_method(mean(t))
+	@fact size(dips) --> (9,)
+
 	fname = joinpath(dirname(@__FILE__), "../../data", "test-4d.dat")
 	t2 = read_VolumeImage(fname)
 	dips = find_dipoles(mean(t2))
