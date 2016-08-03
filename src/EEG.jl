@@ -1,8 +1,6 @@
-
 module EEG
 
 using Logging,  # For user feedback
-      Docile,   # For documentation
       Compat,   # For backward julia compatability
       SIUnits,  # Smarter units
       SIUnits.ShortUnits,
@@ -129,10 +127,6 @@ export # Helper functions
        SSR_spectrogram,
        plot_filter_response,
        plot_ftest
-
-
-
-@document(manual = ["../doc/manual.md"])
 
 
 # Helper functions
