@@ -8,11 +8,3 @@ Process EEG files in Julia.
 ```@meta
 CurrentModule = EEG
 ```
-
-## Examples
-
-```@contents
-Pages = ["examples/ASSR.md", "examples/source.md"]
-Depth = 1
-```
-
