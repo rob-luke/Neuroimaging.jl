@@ -8,15 +8,15 @@ facts("Steady State Responses") do
 
     context("Read file") do
 
-	s = read_SSR(fname2)
+    	s = read_SSR(fname2)
 
-	@fact samplingrate(s) --> 8192.0
-	@fact samplingrate(Int, s) --> 8192
-	@fact isa(samplingrate(s), AbstractFloat) --> true
-	@fact isa(samplingrate(Int, s), Int) --> true
+    	@fact samplingrate(s) --> 8192.0
+    	@fact samplingrate(Int, s) --> 8192
+    	@fact isa(samplingrate(s), AbstractFloat) --> true
+    	@fact isa(samplingrate(Int, s), Int) --> true
 
-	@fact modulationrate(s) --> 19.5
-	@fact isa(modulationrate(s), AbstractFloat) --> true
+    	@fact modulationrate(s) --> 19.5
+    	@fact isa(modulationrate(s), AbstractFloat) --> true
 
         @fact maximum(s.data[:,2]) --> roughly(54.5939, atol =  0.1)
         @fact minimum(s.data[:,4]) --> roughly(-175.2503 , atol = 0.1)
@@ -68,6 +68,14 @@ facts("Steady State Responses") do
         channel = create_channel(events, dats, sampRate)
 
         @fact channel --> trigs
+
+    end
+
+
+    context("Extra Triggers") do
+
+        s = read_SSR(fname)
+
 
     end
 
@@ -134,23 +142,23 @@ facts("Steady State Responses") do
 
     context("Create sweeps") do
 
-	s = extract_epochs(s)
+    	s = extract_epochs(s)
 
-	@fact_throws ErrorException create_sweeps(s)
+    	@fact_throws ErrorException create_sweeps(s)
 
-	for l in 4 : 4 : 24
+    	for l in 4 : 4 : 24
 
-	    s = extract_epochs(s)
+    	    s = extract_epochs(s)
 
-	    s = create_sweeps(s, epochsPerSweep = l)
+    	    s = create_sweeps(s, epochsPerSweep = l)
 
-	    @fact size(s.processing["sweeps"], 2) --> floor(28 / l)
-	    @fact size(s.processing["sweeps"], 1) --> l * size(s.processing["epochs"], 1)
-	    @fact size(s.processing["sweeps"], 3) --> size(s.processing["epochs"], 3)
-	end
+    	    @fact size(s.processing["sweeps"], 2) --> floor(28 / l)
+    	    @fact size(s.processing["sweeps"], 1) --> l * size(s.processing["epochs"], 1)
+    	    @fact size(s.processing["sweeps"], 3) --> size(s.processing["epochs"], 3)
+    	end
 
         s = read_SSR(fname)
-	s = extract_epochs(s)
+	    s = extract_epochs(s)
         s = create_sweeps(s; epochsPerSweep=4)
         @fact size(s.processing["sweeps"]) --> (33552,7,6)
         julia_result = average_epochs(s.processing["sweeps"])
@@ -166,29 +174,29 @@ facts("Steady State Responses") do
 
     context("Low pass filter") do
 
-	s2 = lowpass_filter(deepcopy(s))
+    	s2 = lowpass_filter(deepcopy(s))
 
     end
 
 
     context("High pass filter") do
 
-	s2 = highpass_filter(deepcopy(s))
+    	s2 = highpass_filter(deepcopy(s))
 
     end
 
 
     context("Band pass filter") do
 
-	s2 = bandpass_filter(deepcopy(s))
+    	s2 = bandpass_filter(deepcopy(s))
 
     end
 
 
     context("Downsample") do
 
-	s2 = downsample(deepcopy(s), 1//4)
-	@fact size(s2.data, 1) --> div(size(s.data, 1), 4)
+    	s2 = downsample(deepcopy(s), 1//4)
+    	@fact size(s2.data, 1) --> div(size(s.data, 1), 4)
 
     end
 
@@ -203,110 +211,110 @@ facts("Steady State Responses") do
 
     context("Merge channels") do
 
-	s2 = merge_channels(deepcopy(s), "Cz", "MergedCz")
-	s2 = merge_channels(deepcopy(s), ["Cz" "10Hz_SWN_70dB_R"], "Merged")
+    	s2 = merge_channels(deepcopy(s), "Cz", "MergedCz")
+    	s2 = merge_channels(deepcopy(s), ["Cz" "10Hz_SWN_70dB_R"], "Merged")
 
     end
 
 
     context("Concatenate") do
 
-	s2 = hcat(deepcopy(s), deepcopy(s))
+    	s2 = hcat(deepcopy(s), deepcopy(s))
 
-	@fact size(s2.data, 1) --> 2 * size(s.data, 1)
-	@fact size(s2.data, 2) --> size(s.data, 2)
+    	@fact size(s2.data, 1) --> 2 * size(s.data, 1)
+    	@fact size(s2.data, 2) --> size(s.data, 2)
 
-	    keep_channel!(s2, ["Cz" "10Hz_SWN_70dB_R"])
+    	    keep_channel!(s2, ["Cz" "10Hz_SWN_70dB_R"])
 
-	@fact_throws ArgumentError hcat(s, s2)
+    	@fact_throws ArgumentError hcat(s, s2)
 
     end
 
 
     context("Remove channels") do
 
-	s = extract_epochs(s)
-	s = create_sweeps(s, epochsPerSweep = 2)
+    	s = extract_epochs(s)
+    	s = create_sweeps(s, epochsPerSweep = 2)
 
-	s2 = deepcopy(s)
-	remove_channel!(s2, "Cz")
-	@fact size(s2.data, 2) --> 5
-	@fact size(s2.processing["epochs"], 3) --> 5
-	@fact size(s2.processing["epochs"], 1) --> size(s.processing["epochs"], 1)
-	@fact size(s2.processing["epochs"], 2) --> size(s.processing["epochs"], 2)
-	@fact size(s2.processing["sweeps"], 3) --> 5
-	@fact size(s2.processing["sweeps"], 1) --> size(s.processing["sweeps"], 1)
-	@fact size(s2.processing["sweeps"], 2) --> size(s.processing["sweeps"], 2)
+    	s2 = deepcopy(s)
+    	remove_channel!(s2, "Cz")
+    	@fact size(s2.data, 2) --> 5
+    	@fact size(s2.processing["epochs"], 3) --> 5
+    	@fact size(s2.processing["epochs"], 1) --> size(s.processing["epochs"], 1)
+    	@fact size(s2.processing["epochs"], 2) --> size(s.processing["epochs"], 2)
+    	@fact size(s2.processing["sweeps"], 3) --> 5
+    	@fact size(s2.processing["sweeps"], 1) --> size(s.processing["sweeps"], 1)
+    	@fact size(s2.processing["sweeps"], 2) --> size(s.processing["sweeps"], 2)
 
-	s2 = deepcopy(s)
-	remove_channel!(s2, ["10Hz_SWN_70dB_R"])
-	@fact size(s2.data, 2) --> 5
+    	s2 = deepcopy(s)
+    	remove_channel!(s2, ["10Hz_SWN_70dB_R"])
+    	@fact size(s2.data, 2) --> 5
 
-	s2 = deepcopy(s)
-	remove_channel!(s2, [2])
-	@fact size(s2.data, 2) --> 5
-	@fact s2.data[:, 2] --> s.data[:, 3]
+    	s2 = deepcopy(s)
+    	remove_channel!(s2, [2])
+    	@fact size(s2.data, 2) --> 5
+    	@fact s2.data[:, 2] --> s.data[:, 3]
 
-	s2 = deepcopy(s)
-	remove_channel!(s2, 3)
-	@fact size(s2.data, 2) --> 5
-	@fact s2.data[:, 3] --> s.data[:, 4]
+    	s2 = deepcopy(s)
+    	remove_channel!(s2, 3)
+    	@fact size(s2.data, 2) --> 5
+    	@fact s2.data[:, 3] --> s.data[:, 4]
 
-	s2 = deepcopy(s)
-	remove_channel!(s2, [2, 4])
-	@fact size(s2.data, 2) --> 4
-	@fact s2.data[:, 2] --> s.data[:, 3]
-	@fact s2.data[:, 3] --> s.data[:, 5]
-	@fact size(s2.processing["epochs"], 3) --> 4
-	@fact size(s2.processing["epochs"], 1) --> size(s.processing["epochs"], 1)
-	@fact size(s2.processing["epochs"], 2) --> size(s.processing["epochs"], 2)
-	@fact size(s2.processing["sweeps"], 3) --> 4
-	@fact size(s2.processing["sweeps"], 1) --> size(s.processing["sweeps"], 1)
-	@fact size(s2.processing["sweeps"], 2) --> size(s.processing["sweeps"], 2)
+    	s2 = deepcopy(s)
+    	remove_channel!(s2, [2, 4])
+    	@fact size(s2.data, 2) --> 4
+    	@fact s2.data[:, 2] --> s.data[:, 3]
+    	@fact s2.data[:, 3] --> s.data[:, 5]
+    	@fact size(s2.processing["epochs"], 3) --> 4
+    	@fact size(s2.processing["epochs"], 1) --> size(s.processing["epochs"], 1)
+    	@fact size(s2.processing["epochs"], 2) --> size(s.processing["epochs"], 2)
+    	@fact size(s2.processing["sweeps"], 3) --> 4
+    	@fact size(s2.processing["sweeps"], 1) --> size(s.processing["sweeps"], 1)
+    	@fact size(s2.processing["sweeps"], 2) --> size(s.processing["sweeps"], 2)
 
-	s2 = deepcopy(s)
-	remove_channel!(s2, ["Cz", "10Hz_SWN_70dB_R"])
-	@fact size(s2.data, 2) --> 4
+    	s2 = deepcopy(s)
+    	remove_channel!(s2, ["Cz", "10Hz_SWN_70dB_R"])
+    	@fact size(s2.data, 2) --> 4
 
     end
 
 
     context("Keep channels") do
 
-	s2 = deepcopy(s)
-	remove_channel!(s2, [2, 4])
+    	s2 = deepcopy(s)
+    	remove_channel!(s2, [2, 4])
 
-	# Check keeping channel is same as removing channels
-	s3 = deepcopy(s)
-	keep_channel!(s3, [1, 3, 5, 6])
-	@fact s3.data --> s2.data
-	@fact s3.processing["sweeps"] --> s2.processing["sweeps"]
+    	# Check keeping channel is same as removing channels
+    	s3 = deepcopy(s)
+    	keep_channel!(s3, [1, 3, 5, 6])
+    	@fact s3.data --> s2.data
+    	@fact s3.processing["sweeps"] --> s2.processing["sweeps"]
 
-	# Check order of removal does not matter
-	s3 = deepcopy(s)
-	keep_channel!(s3, [3, 5, 1, 6])
-	@fact s3.data --> s2.data
-	@fact s3.processing["sweeps"] --> s2.processing["sweeps"]
+    	# Check order of removal does not matter
+    	s3 = deepcopy(s)
+    	keep_channel!(s3, [3, 5, 1, 6])
+    	@fact s3.data --> s2.data
+    	@fact s3.processing["sweeps"] --> s2.processing["sweeps"]
 
-	# Check can remove by name
-	s3 = deepcopy(s)
-	keep_channel!(s3, ["20Hz_SWN_70dB_R", "_4Hz_SWN_70dB_R", "Cz", "80Hz_SWN_70dB_R"])
-	@fact s3.data --> s2.data
-	@fact s3.processing["sweeps"] --> s2.processing["sweeps"]
+    	# Check can remove by name
+    	s3 = deepcopy(s)
+    	keep_channel!(s3, ["20Hz_SWN_70dB_R", "_4Hz_SWN_70dB_R", "Cz", "80Hz_SWN_70dB_R"])
+    	@fact s3.data --> s2.data
+    	@fact s3.processing["sweeps"] --> s2.processing["sweeps"]
 
-	# Check the order of removal does not matter
-	s4 = deepcopy(s)
-	keep_channel!(s4, ["_4Hz_SWN_70dB_R", "20Hz_SWN_70dB_R", "80Hz_SWN_70dB_R", "Cz"])
-	@fact s3.data --> s4.data
-	@fact s3.processing["sweeps"] --> s4.processing["sweeps"]
+    	# Check the order of removal does not matter
+    	s4 = deepcopy(s)
+    	keep_channel!(s4, ["_4Hz_SWN_70dB_R", "20Hz_SWN_70dB_R", "80Hz_SWN_70dB_R", "Cz"])
+    	@fact s3.data --> s4.data
+    	@fact s3.processing["sweeps"] --> s4.processing["sweeps"]
 
     end
 
 
     context("Frequency fixing") do
 
-	@fact assr_frequency(4) --> 3.90625
-	@fact assr_frequency([4, 10, 20, 40, 80]) --> [3.90625,9.765625,19.53125,40.0390625,80.078125]
+    	@fact assr_frequency(4) --> 3.90625
+    	@fact assr_frequency([4, 10, 20, 40, 80]) --> [3.90625,9.765625,19.53125,40.0390625,80.078125]
 
     end
 
@@ -344,5 +352,10 @@ facts("Steady State Responses") do
         s = ftest(s, side_freq=2.5, Note="Original channels", Additional_columns = 22)
         @fact isnan(s.processing["statistics"][:SNRdB][1]) --> true
         @fact s.processing["statistics"][:SNRdB][2:end] --> roughly([-1.2386, 0.5514, -1.5537, -2.7541, -6.7079]; atol = 0.001)
+
+        context("Save results") do
+
+            save_results(s)
+        end
     end
 end
