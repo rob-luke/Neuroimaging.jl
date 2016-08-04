@@ -27,4 +27,12 @@ facts("Dipoles") do
         @fact b.y --> 2.0 * SIUnits.ShortUnits.m
         @fact b.z --> 2.0 * SIUnits.ShortUnits.m
     end
+
+    context("Std") do
+
+        b = std(dips)
+        @fact b.x --> 0.0 * SIUnits.ShortUnits.m
+        @fact b.y --> 0.0 * SIUnits.ShortUnits.m
+        @fact b.z --> std([1, 3]) * SIUnits.ShortUnits.m
+    end
 end
