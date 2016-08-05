@@ -6,6 +6,12 @@ facts("Steady State Responses") do
     cp(fname, fname2, remove_destination = true)  # So doesnt use .mat file
     s = read_SSR(fname)
 
+    context("Show") do
+
+        show(s)
+
+    end
+
     context("Read file") do
 
     	s = read_SSR(fname2)
