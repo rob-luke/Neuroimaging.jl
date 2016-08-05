@@ -147,6 +147,14 @@ facts("Volume Image") do
     context("Plotting") do
     	EEG.plot(mean(t))
     	EEG.plot(mean(t), min_val = 0, max_val = 50)
-    	EEG.plot(mean(t), threshold = 24 )
+    	p = EEG.plot(mean(t), threshold = 24 )
+
+        context("Overlay dipole") do
+
+            dips = find_dipoles(mean(t))
+            p = plot(p, dips)
+            p = plot(p, dips[1], c = :red)
+
+        end
     end
 end
