@@ -88,53 +88,65 @@ facts("Volume Image") do
 
 
     context("Dimension checks") do
-	t2 = deepcopy(t); t2.x = t2.x[1:3]
-	@fact_throws KeyError EEG.dimensions_equal(t, t2)
-	t2 = deepcopy(t); t2.y = t2.y[1:3]
-	@fact_throws KeyError EEG.dimensions_equal(t, t2)
-	t2 = deepcopy(t); t2.z = t2.z[1:3]
-	@fact_throws KeyError EEG.dimensions_equal(t, t2)
-	t2 = read_VolumeImage(joinpath(dirname(@__FILE__), "../../data", "test-4d.dat"))
-	@fact_throws KeyError EEG.dimensions_equal(t, t2)
+    	t2 = deepcopy(t); t2.x = t2.x[1:3]
+    	@fact_throws KeyError EEG.dimensions_equal(t, t2)
+    	t2 = deepcopy(t); t2.y = t2.y[1:3]
+    	@fact_throws KeyError EEG.dimensions_equal(t, t2)
+    	t2 = deepcopy(t); t2.z = t2.z[1:3]
+    	@fact_throws KeyError EEG.dimensions_equal(t, t2)
+    	t2 = read_VolumeImage(joinpath(dirname(@__FILE__), "../../data", "test-4d.dat"))
+    	@fact_throws KeyError EEG.dimensions_equal(t, t2)
     end
 
 
     context("Average") do
-	s = mean(t)
+    	s = mean(t)
     end
 
     context("Find dipoles") do
 
-	t = read_VolumeImage(fname)
-	dips = find_dipoles(mean(t))
-	@fact size(dips) --> (11,)
+    	t = read_VolumeImage(fname)
+    	dips = find_dipoles(mean(t))
+    	@fact size(dips) --> (11,)
 
-	dips = EEG.new_dipole_method(mean(t))
-	@fact size(dips) --> (9,)
+    	dips = EEG.new_dipole_method(mean(t))
+    	@fact size(dips) --> (9,)
 
-	fname = joinpath(dirname(@__FILE__), "../../data", "test-4d.dat")
-	t2 = read_VolumeImage(fname)
-	dips = find_dipoles(mean(t2))
-	@fact size(dips) --> (5,)
+    	fname = joinpath(dirname(@__FILE__), "../../data", "test-4d.dat")
+    	t2 = read_VolumeImage(fname)
+    	dips = find_dipoles(mean(t2))
+    	@fact size(dips) --> (5,)
 
-	# Test dipoles are returned in order of size
-	@fact issorted([dip.size for dip in dips], rev = true) --> true
+    	# Test dipoles are returned in order of size
+    	@fact issorted([dip.size for dip in dips], rev = true) --> true
     end
 
+    context("Best Dipole") do
+
+        dips = find_dipoles(mean(t))
+        # Plots.pyplot(size=(1400, 400))
+        # p = plot(t, c = :inferno)
+        # p = plot(p, Talairach(-0.04, 0.01, 0.02))
+        dips = find_dipoles((t));
+        bd = best_dipole(Talairach(-0.05, 0, 0.01), dips)
+        #p = plot(p, Talairach(-0.05, 0, 0.01), c = :red)
+
+        @fact float(bd.x) --> roughly(-0.0525, atol =  0.001)
+        @fact float(bd.y) --> roughly(-0.00378, atol =  0.001)
+        @fact float(bd.z) --> roughly(0.0168099, atol =  0.001)
+
+    end
 
     context("Show") do
-	show(t)
-	show(normalise(t))
-	t.info["Regularisation"] = 1.2
-	show(t)
+    	show(t)
+    	show(normalise(t))
+    	t.info["Regularisation"] = 1.2
+    	show(t)
     end
 
     context("Plotting") do
-	EEG.plot(mean(t))
-	EEG.plot(mean(t), min_val = 0, max_val = 50)
-	EEG.plot(mean(t), threshold = 24 )
+    	EEG.plot(mean(t))
+    	EEG.plot(mean(t), min_val = 0, max_val = 50)
+    	EEG.plot(mean(t), threshold = 24 )
     end
 end
-
-
-
