@@ -44,11 +44,9 @@ function new_dipole_method(vi::VolumeImage; min_size::Real = 1, kwargs...)
 
         valid = tmp_vi.data .> threshold;
 
-        x_loc = mean(vi.x[find(squeeze(sum(valid, [2, 3]), [2, 3]))]  / (1.0 * SIUnits.Meter))
-
-        y_loc = mean(vi.y[find(squeeze(sum(valid, [1, 3]), [1, 3]))]  / (1.0 * SIUnits.Meter))
-
-        z_loc = mean(vi.z[find(squeeze(sum(valid, [1, 2]), [1, 2]))]  / (1.0 * SIUnits.Meter))
+        x_loc = mean(vi.x[find(squeeze(sum(valid, [2, 3]), (2, 3)))]  / (1.0 * SIUnits.Meter))
+        y_loc = mean(vi.y[find(squeeze(sum(valid, [1, 3]), (1, 3)))]  / (1.0 * SIUnits.Meter))
+        z_loc = mean(vi.z[find(squeeze(sum(valid, [1, 2]), (1, 2)))]  / (1.0 * SIUnits.Meter))
 
         x, y, z, t = find_location(vi, x_loc, y_loc, z_loc)
         s = vi.data[x, y, z, t]
