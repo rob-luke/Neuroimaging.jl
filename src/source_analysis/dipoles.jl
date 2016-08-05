@@ -51,34 +51,6 @@ function find_dipoles{T <: Number}(s::Array{T, 3}; window::Array{Int}=[6,6,6], x
 end
 
 
-# 4 d version. Not used
-function find_dipoles{T <: Number}(s::Array{T, 4}; window::Array{Int}=[6,6,6,20],
-                      x=1:size(s,1), y=1:size(s,2),
-                      z=1:size(s,3), t=1:size(s,4))
-
-    Logging.info("4d dipole finding")
-
-    minval, maxval = extrema_filter(s, window)
-
-    # Find the positions matching the maxima
-    matching = s[2:size(maxval)[1]+1, 2:size(maxval)[2]+1, 2:size(maxval)[3]+1, 2:size(maxval)[4]+1]
-    matching = matching .== maxval
-
-    # dipoles are defined as maxima locations and within 90% of the maximum
-    peaks = maxval[matching]
-    peaks = peaks[peaks .>= 0.1 * maximum(peaks)]
-
-    dips = Dipole[]
-    for l = 1:length(peaks)
-        xidx, yidx, zidx, tidx = ind2sub(size(s), find(s .== peaks[l]))
-
-        push!(dips, Dipole("Unknown", x[xidx[1]], y[yidx[1]], z[zidx[1]], 0, 0, 0, 0, 0, peaks[l]))
-    end
-
-    vec(dips[sortperm([dip.size for dip in dips], rev=true)])
-end
-
-
 #######################################
 #
 # Find the best dipoles from selection
