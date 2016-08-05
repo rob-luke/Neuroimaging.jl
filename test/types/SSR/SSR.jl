@@ -76,55 +76,54 @@ facts("Steady State Responses") do
 
         s = read_SSR(fname)
 
-
     end
 
 
     context("Extract epochs") do
 
-	s = extract_epochs(s, valid_triggers=[1, 2])
+    	s = extract_epochs(s, valid_triggers=[1, 2])
 
-	@fact size(s.processing["epochs"]) --> (8388,28,6)
+    	@fact size(s.processing["epochs"]) --> (8388,28,6)
 
-	s = extract_epochs(s, valid_triggers = [1])
+    	s = extract_epochs(s, valid_triggers = [1])
 
-	@fact size(s.processing["epochs"]) --> (16776,14,6)
+    	@fact size(s.processing["epochs"]) --> (16776,14,6)
 
-	s = extract_epochs(s, valid_triggers = 1)
+    	s = extract_epochs(s, valid_triggers = 1)
 
-	@fact size(s.processing["epochs"]) --> (16776,14,6)
+    	@fact size(s.processing["epochs"]) --> (16776,14,6)
 
-	s = extract_epochs(s)
+    	s = extract_epochs(s)
 
-	@fact size(s.processing["epochs"]) --> (8388,28,6)
+    	@fact size(s.processing["epochs"]) --> (8388,28,6)
 
-	if VERSION >= VersionNumber(0, 4, 0)
-	    @fact_throws ArgumentError extract_epochs(s, valid_triggers = -4)
-	else
-	    @fact_throws ErrorException extract_epochs(s, valid_triggers = -4)
-	end
+    	if VERSION >= VersionNumber(0, 4, 0)
+    	    @fact_throws ArgumentError extract_epochs(s, valid_triggers = -4)
+    	else
+    	    @fact_throws ErrorException extract_epochs(s, valid_triggers = -4)
+    	end
 
     end
 
 
     context("Epoch rejection") do
 
-	s = epoch_rejection(s)
+    	s = epoch_rejection(s)
 
-	@fact floor(28 * 0.95) --> size(s.processing["epochs"], 2)
+    	@fact floor(28 * 0.95) --> size(s.processing["epochs"], 2)
 
         @fact_throws BoundsError epoch_rejection(s, retain_percentage = 1.1)
         @fact_throws BoundsError epoch_rejection(s, retain_percentage = -0.1)
 
-	for r in 0.1 : 0.1 : 1
+    	for r in 0.1 : 0.1 : 1
 
-	    s = extract_epochs(s)
+    	    s = extract_epochs(s)
 
-	    s = epoch_rejection(s, retain_percentage = r)
+    	    s = epoch_rejection(s, retain_percentage = r)
 
-	    @fact floor(28 * r) --> size(s.processing["epochs"], 2)
+    	    @fact floor(28 * r) --> size(s.processing["epochs"], 2)
 
-	end
+    	end
     end
 
 
@@ -349,7 +348,7 @@ facts("Steady State Responses") do
         @fact snrDb[2:end] --> roughly([-7.0915, -7.8101, 2.6462, -10.2675, -4.1863]; atol =  0.001)
         @fact statistic[2:end] --> roughly([0.8233,  0.8480, 0.1721,   0.9105,  0.6854]; atol = 0.001)
 
-        s = ftest(s, side_freq=2.5, Note="Original channels", Additional_columns = 22)
+        s = ftest(s, side_freq=2.5,  Note="Original channels", Additional_columns = 22)
         @fact isnan(s.processing["statistics"][:SNRdB][1]) --> true
         @fact s.processing["statistics"][:SNRdB][2:end] --> roughly([-1.2386, 0.5514, -1.5537, -2.7541, -6.7079]; atol = 0.001)
 
@@ -358,4 +357,19 @@ facts("Steady State Responses") do
             save_results(s)
         end
     end
+
+
+    context("Adding triggers") do
+
+        for rate in [4, 10, 20, 40]
+
+            s = read_SSR(fname)
+            s.modulationrate = rate
+            s = add_triggers(s)
+            s = extract_epochs(s)
+            @fact size(s.processing["epochs"], 1) * rate / 8192 --> roughly(1; atol=0.005)
+
+        end
+    end
+
 end
