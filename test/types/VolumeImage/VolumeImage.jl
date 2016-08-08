@@ -127,13 +127,30 @@ facts("Volume Image") do
         # Plots.pyplot(size=(1400, 400))
         # p = plot(t, c = :inferno)
         # p = plot(p, Talairach(-0.04, 0.01, 0.02))
-        dips = find_dipoles((t));
         bd = best_dipole(Talairach(-0.05, 0, 0.01), dips)
         #p = plot(p, Talairach(-0.05, 0, 0.01), c = :red)
 
         @fact float(bd.x) --> roughly(-0.0525, atol =  0.001)
         @fact float(bd.y) --> roughly(-0.00378, atol =  0.001)
         @fact float(bd.z) --> roughly(0.0168099, atol =  0.001)
+
+        # Take closest
+        bd = best_dipole(Talairach(-0.05, 0, 0.01), dips, maxdist = 0.0015)
+        @fact float(bd.x) --> roughly(-0.0525, atol =  0.001)
+        @fact float(bd.y) --> roughly(-0.00378, atol =  0.001)
+        @fact float(bd.z) --> roughly(0.0168099, atol =  0.001)
+
+        # Take only valid dipole
+        dists = [euclidean(Talairach(-0.05, 0, 0.01), dip) for dip=dips]
+        println(dips)
+        println(dists)
+        bd = best_dipole(Talairach(-0.05, 0, 0.01), dips, maxdist = 0.015)
+        @fact float(bd.x) --> roughly(-0.0525, atol =  0.001)
+        @fact float(bd.y) --> roughly(-0.00378, atol =  0.001)
+        @fact float(bd.z) --> roughly(0.0168099, atol =  0.001)
+
+        bd = best_dipole(Talairach(-0.05, 0, 0.01), Dipole[])
+        @fact isnan(bd) --> true
 
     end
 
