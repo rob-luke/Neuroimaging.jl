@@ -358,6 +358,8 @@ facts("Steady State Responses") do
         @fact isnan(s.processing["statistics"][:SNRdB][1]) --> true
         @fact s.processing["statistics"][:SNRdB][2:end] --> roughly([-1.2386, 0.5514, -1.5537, -2.7541, -6.7079]; atol = 0.001)
 
+        s = ftest(s, side_freq = 1.2,  Note="SecondTest", Additional_columns = 24)
+
         context("Save results") do
 
             save_results(s)
