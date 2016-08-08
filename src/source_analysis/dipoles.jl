@@ -91,19 +91,19 @@ function best_dipole(ref::Union{Coordinate, Dipole}, dips::Array{Dipole}; maxdis
           sizes = [dip.size for dip =dips]
           bestdip = maximum(sizes[valid_dist])
           dip = dips[find(sizes .== bestdip)]
-          debug("$(sum(valid_dist)) dipoles within $(maxdist)mm. ")
+          debug("$(sum(valid_dist)) dipoles within $(maxdist) m. ")
 
       elseif sum(valid_dist) == 1
           # Return the one valid dipole
           dip = dips[find(valid_dist)]
-          debug("Only one dipole within $(maxdist)mm. ")
+          debug("Only one dipole within $(maxdist) m. ")
 
       else
           # No dipoles within distance
           # Take the closest
           bestdip = minimum(dists)
           dip = dips[find(dists .== bestdip)]
-          debug("No dipole within $(maxdist)mm. ")
+          debug("No dipole within $(maxdist) m. ")
 
       end
       debug("Best = $(euclidean(ref, dip[1]))")
