@@ -107,7 +107,7 @@ facts("Volume Image") do
 
     	t = read_VolumeImage(fname)
     	dips = find_dipoles(mean(t))
-    	@fact size(dips) --> (11,)
+    	@fact size(dips) --> (9,)
 
     	dips = EEG.new_dipole_method(mean(t))
     	@fact size(dips) --> (9,)
@@ -115,7 +115,7 @@ facts("Volume Image") do
     	fname = joinpath(dirname(@__FILE__), "../../data", "test-4d.dat")
     	t2 = read_VolumeImage(fname)
     	dips = find_dipoles(mean(t2))
-    	@fact size(dips) --> (5,)
+    	@fact size(dips) --> (3,)
 
     	# Test dipoles are returned in order of size
     	@fact issorted([dip.size for dip in dips], rev = true) --> true

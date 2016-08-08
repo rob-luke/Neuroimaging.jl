@@ -15,7 +15,7 @@ function find_dipoles(vi::VolumeImage; kwargs...)
     y = convert(Array{AbstractFloat}, y)
     z = convert(Array{AbstractFloat}, z)
 
-    find_dipoles(squeeze(vi.data, 4), x=x, y=y, z=z; kwargs...)
+    unique_dipoles(find_dipoles(squeeze(vi.data, 4), x=x, y=y, z=z; kwargs...))
 end
 
 
