@@ -69,10 +69,11 @@ type VolumeImage
         L = zeros(typeof(data[1]), length(newX), length(newY), length(newZ), length(newT))
 
         for idx in 1:length(data)
-            idxX = findin(newX, x[idx])[1]
-            idxY = findin(newY, y[idx])[1]
-            idxZ = findin(newZ, z[idx])[1]
-            L[idxX, idxY, idxZ, 1] = data[idx]
+            idxX = findfirst(newX, x[idx])
+            idxY = findfirst(newY, y[idx])
+            idxZ = findfirst(newZ, z[idx])
+            idxT = findfirst(newT, t[idx])
+            L[idxX, idxY, idxZ, idxT] = data[idx]
         end
 
         new(L, units, newX, newY, newZ, newT, method, info, coord_system)
