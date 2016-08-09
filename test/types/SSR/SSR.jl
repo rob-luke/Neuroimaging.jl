@@ -338,6 +338,11 @@ facts("Steady State Responses") do
         @fact s.samplingrate --> s2.samplingrate
         @fact contains(s2.header["subjID"], "test") --> true
 
+        s = channelnames(s, ["B24", "B16", "A3", "B18", "A02", "B17"])
+        write_SSR(s, fname_out)
+        s2 = read_SSR(fname_out)
+        @fact channelnames(s2) --> ["CP2", "Cz", "AF3", "C4", "AF7", "C2"]
+
     end
 
     context("Ftest") do
