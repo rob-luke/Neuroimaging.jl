@@ -66,12 +66,12 @@ function read_dat(fid::IO)
         debug("Regularisation = $regularization")
         debug("Units = $units")
     elseif search(typeline, "MSBF") != 0:-1
-    
+
         image_mode = "Single Time"
         image_type = "Multiple Source Beamformer"
         units = condition[3:end-1]
         regularization = "None"
-        
+
         Logging.warn("MSBF type under development")
     elseif search(typeline, "MSPS") != 0:-1
         Logging.warn("MSPS type not implemented yet")
@@ -172,33 +172,6 @@ function read_dat(fid::IO)
     close(fid)
 
     return x, y, z, complete_data, sample_times
-end
-
-
-@doc """
-Convert vector format source results to 3d array used in dat files
-
-#### Example:
-```julia
-x, y, z, s = prepare_dat(d, x, y, z)
-```
-""" ->
-function prepare_dat(d::Vector, x::Vector, y::Vector, z::Vector)
-
-
-    X = [sort(unique(x))]
-    Y = [sort(unique(y))]
-    Z = [sort(unique(z))]
-
-    Logging.info("Converting $(size(d)) sources to dat file format with size $(length(X)) x $(length(Y)) x $(length(Z))")
-
-    S = zeros(length(X), length(Y), length(Z), 1)
-
-    for n = 1:length(d)
-        S[findfirst(X, x[n]), findfirst(Y, y[n]), findfirst(Z, z[n]), 1] = d[n]
-    end
-
-    return X, Y, Z, S
 end
 
 
