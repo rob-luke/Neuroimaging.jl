@@ -42,13 +42,6 @@ function ftest(s::SSR; freq_of_interest::Union{Real, AbstractArray}=modulationra
 end
 
 
-# Backward compatibility
-function ftest(s::SSR, freq_of_interest::Array; kwargs...)
-
-    ftest(s, freq_of_interest = freq_of_interest; kwargs...)
-end
-
-
 #######################################
 #
 # Helper functions
@@ -71,14 +64,7 @@ function save_results(a::SSR; name_extension::AbstractString="", results_key::Ab
 
         to_save = get(results, collect(keys(results))[result_idx[1]], 0)
 
-        if length(result_idx) > 1
-            for k = result_idx[2:end]
-                result_data = get(results, collect(keys(results))[k], 0)
-                to_save = vcat(to_save, result_data)
-            end
-        end
-
-    writetable(file_name, to_save)
+        writetable(file_name, to_save)
     end
 
     Logging.info("File saved to $file_name")
