@@ -105,12 +105,17 @@ s = read_SSR(filename)
 channelnames(s, 1, "Fp1")
 ```
 """
-function channelnames{S <: AbstractString}(s::SSR, i::Int, l::S) 
-    
+function channelnames{S <: AbstractString}(s::SSR, i::Int, l::S)
+
     s.sensors[i].label = l
     return s
 end
-
+function channelnames{S <: AbstractString}(s::SSR, l::AbstractVector{S})
+    for li in 1:length(l)
+      s = channelnames(s, li, l[li])
+    end
+    return s
+end
 
 
 #######################################
