@@ -32,7 +32,7 @@ function import_biosemi(fname::Union{AbstractString, IO}; kwargs...)
                 "Duration" => triggers["dur"])
 
     # Tidy channel names if required
-    if any(header["chanLabels"] .== "A11")
+    if any(header["chanLabels"] .== "B16")  # Cz is usually present
         debug("  Converting names from BIOSEMI to 10-20")
         header["chanLabels"] = channelNames_biosemi_1020(header["chanLabels"])
     end
@@ -192,4 +192,3 @@ function channelNames_biosemi_1020{S <: AbstractString}(original::Array{S})
 
     return converted
 end
-
