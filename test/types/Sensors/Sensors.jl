@@ -18,6 +18,23 @@ facts("Sensors") do
     end
 
 
+    context("Info") do
+
+        @fact label(s) --> ["Fp1", "Fpz", "Fp2"]
+        @fact label(s[1]) --> "Fp1"
+        @fact labels(s) --> ["Fp1", "Fpz", "Fp2"]
+        @fact labels(s[1]) --> "Fp1"
+
+        @fact EEG.x(s) --> [-27.747648, -0.085967, 27.676888]
+        @fact EEG.x(s[1]) --> -27.747648
+        #
+        @fact EEG.y(s) --> [98.803864, 103.555275, 99.133354]
+        @fact EEG.y(s[1]) --> 98.803864
+        #
+        @fact EEG.z(s) --> [34.338360, 34.357265, 34.457005]
+        @fact EEG.z(s[1]) --> 34.338360
+    end
+
     context("Matching") do
 
         a, b = match_sensors(s, ["Fp1", "Fp2"])

@@ -142,8 +142,6 @@ facts("Volume Image") do
 
         # Take only valid dipole
         dists = [euclidean(Talairach(-0.05, 0, 0.01), dip) for dip=dips]
-        println(dips)
-        println(dists)
         bd = best_dipole(Talairach(-0.05, 0, 0.01), dips, maxdist = 0.015)
         @fact float(bd.x) --> roughly(-0.0525, atol =  0.001)
         @fact float(bd.y) --> roughly(-0.00378, atol =  0.001)
