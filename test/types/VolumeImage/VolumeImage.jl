@@ -162,6 +162,7 @@ facts("Volume Image") do
     context("Plotting") do
     	EEG.plot(mean(t))
     	EEG.plot(mean(t), min_val = 0, max_val = 50)
+        EEG.plot(mean(t), elp = joinpath(dirname(@__FILE__), "../../data", "test.elp"))
     	p = EEG.plot(mean(t), threshold = 24 )
 
         context("Overlay dipole") do
