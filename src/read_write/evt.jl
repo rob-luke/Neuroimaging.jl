@@ -12,9 +12,7 @@ function read_evt(fname::AbstractString, fs::Number; kwargs...)
 
     d = readdlm(fname)
 
-    if size(d,2) > 3
-        warn("EVT file has too many columns")
-    end
+    @assert (size(d, 2) <= 3) "EVT file has too many columns"
 
     d = Dict(d[1,1] => d[2:end, 1], d[1,2] => d[2:end, 2], d[1,3] => d[2:end, 3])
 
