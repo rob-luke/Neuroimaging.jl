@@ -1,6 +1,3 @@
-typealias FreqHz{T} SIUnits.SIQuantity{T,0,0,-1,0,0,0,0,0,0}
-
-
 @doc """
 ## Steady State Response
 This composite type contains the information for steady state response recordings and analysis.
@@ -33,8 +30,8 @@ type SSR
     sensors::Array{Sensor}
     triggers::Dict
     system_codes::Dict
-    samplingrate::FreqHz{Number}
-    modulationrate::FreqHz{Number}
+    samplingrate::quantity(AbstractFloat, Hz)
+    modulationrate::quantity(AbstractFloat, Hz)
     reference_channel::Array{AbstractString, 1}
     file_path::AbstractString
     file_name::AbstractString
