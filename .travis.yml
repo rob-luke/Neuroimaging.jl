@@ -11,11 +11,6 @@ before_install:
   - "export DISPLAY=:99.0"                                         # Required for graphics
   - "sh -e /etc/init.d/xvfb start"                                 # Required for graphics
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - sudo pip install --upgrade pip
-  - sudo apt-get update
-  - sudo apt-get install -y libblas-dev liblapack-dev libatlas-base-dev gfortran
-  - pip install numpy scipy --user
-  - pip install mne --user
 script:
   - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("EEG"); Pkg.test("EEG"; coverage=true)'
 after_success:
