@@ -6,7 +6,7 @@ The minimum required information for SSR recording is stored in the type.
 Additional information can be stored in the `processing` field.
 To facilitate processing, specific names are used in the processing dictionary.
 
-## Fields
+#### Fields
 
 * `data`: contains the recorded data
 * `trigers`: contains information about timing for creation of epochs
@@ -19,7 +19,7 @@ To facilitate processing, specific names are used in the processing dictionary.
 * `processing`: dictionary type to store analysis
 * `header`: additional information read from the file
 
-### Additional `processing` fields
+#### Additional `processing` fields
 The following standard names are used when saving data to the processing dictionary.
 
 * `Name`: The identifier for the participant
@@ -33,9 +33,10 @@ The following standard names are used when saving data to the processing diction
 #### Example
 
 Put an example here
+
 ```julia
 s = SSR("filename")
-end
+```
 
 """ ->
 type SSR
