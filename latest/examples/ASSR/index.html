@@ -135,6 +135,33 @@
               
                 <p><a id='ASSR-1'></a></p>
 <h1 id="assr">ASSR</h1>
+<p><a id='EEG.SSR' href='#EEG.SSR'>#</a>
+<strong><code>EEG.SSR</code></strong> &mdash; <em>Type</em>.</p>
+<p><strong>Steady State Response</strong></p>
+<p>This composite type contains the information for steady state response recordings and analysis.</p>
+<p><strong>Fields</strong></p>
+<ul>
+<li><code>data</code>: contains the recorded data</li>
+<li><code>trigers</code>: contains information about timing for creation of epochs</li>
+<li><code>system_codes</code>: contains system information</li>
+<li><code>samplingrate</code>: the sampling rate of the data</li>
+<li><code>modulationrate</code>: the modulation rate of the stimulus</li>
+<li><code>reference_channel</code>: the channel the data has been referenced to</li>
+<li><code>file_path</code> and <code>file_name</code>: where the file was read in from</li>
+<li><code>channel_names</code>: the names of the channels</li>
+<li><code>processing</code>: dictionary type to store analysis</li>
+<li><code>header</code>: additional information read from the file</li>
+</ul>
+<p><strong><code>processing</code> Fields</strong></p>
+<p>The following standard names are used when saving data to the processing dictionary.</p>
+<ul>
+<li><code>Name</code>: The identifier for the participant</li>
+<li><code>Side</code>: Side of stimulation</li>
+<li><code>Carrier_Frequency</code>: Carrier frequency of the stimulus</li>
+<li><code>Amplitude</code>: Amplitude of the stimulus</li>
+<li><code>epochs</code>: The epochs extracted from the recording</li>
+<li><code>sweeps</code>: The extracted sweeps from the recording</li>
+</ul>
 <pre><code class="julia">
 using EEG, DataFrames, Gadfly
 
