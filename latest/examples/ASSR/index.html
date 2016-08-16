@@ -137,8 +137,8 @@
 <h1 id="assr">ASSR</h1>
 <p><a id='EEG.SSR' href='#EEG.SSR'>#</a>
 <strong><code>EEG.SSR</code></strong> &mdash; <em>Type</em>.</p>
-<p><strong>Steady State Response</strong></p>
-<p>This composite type contains the information for steady state response recordings and analysis.</p>
+<p>Type for storing steady state response (SSR) data.</p>
+<p>The minimum required information for SSR recording is stored in the type. Additional information can be stored in the <code>processing</code> field. To facilitate processing, specific names are used in the processing dictionary.</p>
 <p><strong>Fields</strong></p>
 <ul>
 <li><code>data</code>: contains the recorded data</li>
@@ -152,7 +152,7 @@
 <li><code>processing</code>: dictionary type to store analysis</li>
 <li><code>header</code>: additional information read from the file</li>
 </ul>
-<p><strong><code>processing</code> Fields</strong></p>
+<p><strong>Additional <code>processing</code> fields</strong></p>
 <p>The following standard names are used when saving data to the processing dictionary.</p>
 <ul>
 <li><code>Name</code>: The identifier for the participant</li>
@@ -162,6 +162,8 @@
 <li><code>epochs</code>: The epochs extracted from the recording</li>
 <li><code>sweeps</code>: The extracted sweeps from the recording</li>
 </ul>
+<p><strong>Example</strong></p>
+<p>Put an example here ```julia s = SSR("filename") end</p>
 <pre><code class="julia">
 using EEG, DataFrames, Gadfly
 
