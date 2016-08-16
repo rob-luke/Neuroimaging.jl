@@ -1,4 +1,4 @@
-# ASSR
+# Steady State Responses
 
 ```@docs
 SSR
