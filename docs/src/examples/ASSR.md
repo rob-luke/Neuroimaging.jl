@@ -1,5 +1,11 @@
 # ASSR
 
+```@docs
+SSR
+```
+
+
+
 
 ```julia
 
