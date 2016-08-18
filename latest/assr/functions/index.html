@@ -175,7 +175,16 @@
 <li>filtered signal</li>
 <li>filter used on signal</li>
 </ul>
-<pre><code>rereference(::SSR, ::AbstractString)
+<p><a id='EEG.rereference-Tuple{EEG.SSR,AbstractString}' href='#EEG.rereference-Tuple{EEG.SSR,AbstractString}'>#</a>
+<strong><code>EEG.rereference</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>rereference(a::SSR, refChan::Union{AbstractString, Array{AbstractString}}; kwargs...)
+</code></pre>
+
+<p>Reference data to specified channel(s).</p>
+<p><strong>Example</strong></p>
+<pre><code class="julia">a = rereference(a, &quot;Cz&quot;)
+# or
+a = rereference(a, [&quot;P9&quot;, &quot;P10&quot;])
 </code></pre>
               
             </div>

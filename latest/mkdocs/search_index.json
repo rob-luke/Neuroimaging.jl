@@ -32,7 +32,7 @@
         }, 
         {
             "location": "/assr/functions/", 
-            "text": "Functions\n\n\nA number of functions are provided for the processing of SSR data.\n\n\n\n\nPreprocessing\n\n\n#\n\n\nEEG.highpass_filter\n \n \nMethod\n.\n\n\nHigh pass filter applied in forward and reverse direction\n\n\nSimply a wrapper for the DSP.jl functions\n\n\nArguments\n\n\n\n\nsignals\n: Signal data in the format samples x channels\n\n\ncutOff\n: Cut off frequency in Hz\n\n\nfs\n: Sampling rate\n\n\norder\n: Filter orde\n\n\n\n\nReturns\n\n\n\n\nfiltered signal\n\n\nfilter used on signal\n\n\n\n\nrereference(::SSR, ::AbstractString)", 
+            "text": "Functions\n\n\nA number of functions are provided for the processing of SSR data.\n\n\n\n\nPreprocessing\n\n\n#\n\n\nEEG.highpass_filter\n \n \nMethod\n.\n\n\nHigh pass filter applied in forward and reverse direction\n\n\nSimply a wrapper for the DSP.jl functions\n\n\nArguments\n\n\n\n\nsignals\n: Signal data in the format samples x channels\n\n\ncutOff\n: Cut off frequency in Hz\n\n\nfs\n: Sampling rate\n\n\norder\n: Filter orde\n\n\n\n\nReturns\n\n\n\n\nfiltered signal\n\n\nfilter used on signal\n\n\n\n\n#\n\n\nEEG.rereference\n \n \nMethod\n.\n\n\nrereference(a::SSR, refChan::Union{AbstractString, Array{AbstractString}}; kwargs...)\n\n\n\n\nReference data to specified channel(s).\n\n\nExample\n\n\na = rereference(a, \nCz\n)\n# or\na = rereference(a, [\nP9\n, \nP10\n])", 
             "title": "Functions"
         }, 
         {
@@ -42,7 +42,7 @@
         }, 
         {
             "location": "/assr/functions/#preprocessing", 
-            "text": "#  EEG.highpass_filter     Method .  High pass filter applied in forward and reverse direction  Simply a wrapper for the DSP.jl functions  Arguments   signals : Signal data in the format samples x channels  cutOff : Cut off frequency in Hz  fs : Sampling rate  order : Filter orde   Returns   filtered signal  filter used on signal   rereference(::SSR, ::AbstractString)", 
+            "text": "#  EEG.highpass_filter     Method .  High pass filter applied in forward and reverse direction  Simply a wrapper for the DSP.jl functions  Arguments   signals : Signal data in the format samples x channels  cutOff : Cut off frequency in Hz  fs : Sampling rate  order : Filter orde   Returns   filtered signal  filter used on signal   #  EEG.rereference     Method .  rereference(a::SSR, refChan::Union{AbstractString, Array{AbstractString}}; kwargs...)  Reference data to specified channel(s).  Example  a = rereference(a,  Cz )\n# or\na = rereference(a, [ P9 ,  P10 ])", 
             "title": "Preprocessing"
         }
     ]
