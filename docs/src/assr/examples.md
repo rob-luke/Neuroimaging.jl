@@ -1,11 +1,4 @@
-# Steady State Responses
-
-```@docs
-SSR
-```
-
-
-
+## Plot data
 
 ```julia
 
@@ -32,3 +25,4 @@ vline!(modulationrate(s) * [1 2 3 4], ylims = (-10, 30), linestyle = :dashed)
 ```
 
 ![SSR Example](doc/images/Example-40Hz-SSR.png)
+

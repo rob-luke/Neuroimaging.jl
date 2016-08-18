@@ -22,5 +22,6 @@ docs_dir: 'build'
 pages:
   - Home: index.md
   - Types:
-    - Steady State Response: examples/ASSR.md
-    - Source Analysis: examples/source.md
+    - Steady State Response: assr/ASSR.md
+      - Examples: assr/examples.md
+      - Functions: assr/functions.md
