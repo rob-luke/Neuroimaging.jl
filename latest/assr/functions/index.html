@@ -161,20 +161,17 @@
 <h2 id="preprocessing">Preprocessing</h2>
 <p><a id='EEG.highpass_filter-Tuple{EEG.SSR}' href='#EEG.highpass_filter-Tuple{EEG.SSR}'>#</a>
 <strong><code>EEG.highpass_filter</code></strong> &mdash; <em>Method</em>.</p>
-<p>High pass filter applied in forward and reverse direction</p>
-<p>Simply a wrapper for the DSP.jl functions</p>
-<p><strong>Arguments</strong></p>
-<ul>
-<li><code>signals</code>: Signal data in the format samples x channels</li>
-<li><code>cutOff</code>: Cut off frequency in Hz</li>
-<li><code>fs</code>: Sampling rate</li>
-<li><code>order</code>: Filter orde</li>
-</ul>
-<p><strong>Returns</strong></p>
-<ul>
-<li>filtered signal</li>
-<li>filter used on signal</li>
-</ul>
+<pre><code>highpass_filter(a::SSR; cutOff::Real=2, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
+</code></pre>
+
+<p>Applly a high pass filter.</p>
+<p>A zero phase high pass filter is applied to the data using <code>filtfilt</code>. A check is performed to ensure the filter does not affect the modulation rate. The filter coefficents are stored in the processing field.</p>
+<p><strong>Example</strong></p>
+<pre><code class="julia">a = highpass_filter(a)
+# or
+a = highpass_filter(a, cutOff = 1)
+</code></pre>
+
 <p><a id='EEG.rereference-Tuple{EEG.SSR,AbstractString}' href='#EEG.rereference-Tuple{EEG.SSR,AbstractString}'>#</a>
 <strong><code>EEG.rereference</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>rereference(a::SSR, refChan::Union{AbstractString, Array{AbstractString}}; kwargs...)
