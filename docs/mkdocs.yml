@@ -22,4 +22,4 @@ docs_dir: 'build'
 pages:
     - Home: 'index.md'
     - Types:
-        - Steady State Response: 'assr/ASSR.md'
+        - Steady State Response: 'assr/assr.md'
