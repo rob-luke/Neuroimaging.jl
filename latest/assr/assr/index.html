@@ -8,7 +8,7 @@
   
   <meta name="author" content="Robert Luke">
   
-  <title>Steady State Response - EEG.jl</title>
+  <title>Definition - EEG.jl</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -24,7 +24,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Steady State Response";
+    var mkdocs_page_name = "Definition";
     var mkdocs_page_input_path = "assr/assr.md";
     var mkdocs_page_url = "/assr/assr/";
   </script>
@@ -70,22 +70,36 @@
 
         
             
+    <ul class="subnav">
+    <li><span>Steady State Response</span></li>
+
+        
+            
     <li class="toctree-l1 current">
-        <a class="current" href="./">Steady State Response</a>
+        <a class="current" href="./">Definition</a>
         
             <ul>
-            
-                <li class="toctree-l3"><a href="#examples">Examples</a></li>
-                
-            
-                <li class="toctree-l3"><a href="#functions">Functions</a></li>
-                
-                    <li><a class="toctree-l4" href="#preprocessing">Preprocessing</a></li>
-                
             
             </ul>
         
     </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../examples/">Examples</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/">Functions</a>
+        
+    </li>
+
+        
+    </ul>
 
         
     </ul>
@@ -116,8 +130,12 @@
           <li>Types &raquo;</li>
         
       
+        
+          <li>Steady State Response &raquo;</li>
+        
+      
     
-    <li>Steady State Response</li>
+    <li>Definition</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -162,76 +180,14 @@
 <p>Put an example here</p>
 <pre><code class="julia">s = SSR(&quot;filename&quot;)
 </code></pre>
-
-<p><a id='Examples-1'></a></p>
-<h2 id="examples">Examples</h2>
-<pre><code class="julia">
-using EEG, DataFrames, Gadfly
-
-s = read_SSR(&quot;Example-40Hz.bdf&quot;)
-s = highpass_filter(s)
-s.modulationrate = assr_frequency(40)
-s = rereference(s, &quot;Cz&quot;)
-s = merge_channels(s, EEG_Vanvooren_2014, &quot;Merged&quot;)
-    remove_channel!(s, EEG_64_10_20)
-s = extract_epochs(s)
-s = create_sweeps(s, epochsPerSweep = 16)
-s = ftest(s, collect([[2:2:162], modulationrate(s)*[1, 2, 3, 4]]))
-
-s.processing[&quot;statistics&quot;][:Significant] = s.processing[&quot;statistics&quot;][:Statistic] .&lt; 0.05
-scatter(s.processing[&quot;statistics&quot;], 
-    :AnalysisFrequency, :SNRdB , group=:Significant,
-    xlabel = &quot;Frequency (Hz)&quot;, 
-    ylabel = &quot;SNR (dB)&quot;, 
-    xlims = (0, 170), markersize = 10)
-
-vline!(modulationrate(s) * [1 2 3 4], ylims = (-10, 30), linestyle = :dashed)
-</code></pre>
-
-<p><img alt="SSR Example" src="../doc/images/Example-40Hz-SSR.png" /></p>
-<p><a id='Functions-1'></a></p>
-<h2 id="functions">Functions</h2>
-<p>A number of functions are provided for the processing of SSR data.</p>
-<p><a id='Preprocessing-1'></a></p>
-<h3 id="preprocessing">Preprocessing</h3>
-<p><a id='EEG.highpass_filter-Tuple{EEG.SSR}' href='#EEG.highpass_filter-Tuple{EEG.SSR}'>#</a>
-<strong><code>EEG.highpass_filter</code></strong> &mdash; <em>Method</em>.</p>
-<p>High pass filter applied in forward and reverse direction</p>
-<p>Simply a wrapper for the DSP.jl functions</p>
-<p><strong>Arguments</strong></p>
-<ul>
-<li><code>signals</code>: Signal data in the format samples x channels</li>
-<li><code>cutOff</code>: Cut off frequency in Hz</li>
-<li><code>fs</code>: Sampling rate</li>
-<li><code>order</code>: Filter orde</li>
-</ul>
-<p><strong>Returns</strong></p>
-<ul>
-<li>filtered signal</li>
-<li>filter used on signal</li>
-</ul>
-<p><a id='EEG.highpass_filter-Tuple{EEG.SSR,AbstractString}' href='#EEG.highpass_filter-Tuple{EEG.SSR,AbstractString}'>#</a>
-<strong><code>EEG.highpass_filter</code></strong> &mdash; <em>Method</em>.</p>
-<p>High pass filter applied in forward and reverse direction</p>
-<p>Simply a wrapper for the DSP.jl functions</p>
-<p><strong>Arguments</strong></p>
-<ul>
-<li><code>signals</code>: Signal data in the format samples x channels</li>
-<li><code>cutOff</code>: Cut off frequency in Hz</li>
-<li><code>fs</code>: Sampling rate</li>
-<li><code>order</code>: Filter orde</li>
-</ul>
-<p><strong>Returns</strong></p>
-<ul>
-<li>filtered signal</li>
-<li>filter used on signal</li>
-</ul>
               
             </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../examples/" class="btn btn-neutral float-right" title="Examples">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../.." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -264,6 +220,8 @@ vline!(modulationrate(s) * [1 2 3 4], ylims = (-10, 30), linestyle = :dashed)
       
         <span><a href="../.." style="color: #fcfcfc;">&laquo; Previous</a></span>
       
+      
+        <span style="margin-left: 15px"><a href="../examples/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

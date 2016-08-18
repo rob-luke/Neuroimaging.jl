@@ -5,36 +5,36 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Process EEG files with Julia">
+  
   <meta name="author" content="Robert Luke">
   
-  <title>EEG.jl</title>
+  <title>Functions - EEG.jl</title>
   
 
-  <link rel="shortcut icon" href="./img/favicon.ico">
+  <link rel="shortcut icon" href="../../img/favicon.ico">
 
   
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
-  <link rel="stylesheet" href="./css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
-  <link rel="stylesheet" href="./css/highlight.css">
-  <link href="./assets/Documenter.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+  <link href="../../assets/Documenter.css" rel="stylesheet">
 
   
   <script>
     // Current page data
-    var mkdocs_page_name = "None";
-    var mkdocs_page_input_path = "index.md";
-    var mkdocs_page_url = "/";
+    var mkdocs_page_name = "Functions";
+    var mkdocs_page_input_path = "assr/functions.md";
+    var mkdocs_page_url = "/assr/functions/";
   </script>
   
-  <script src="./js/jquery-2.1.1.min.js"></script>
-  <script src="./js/modernizr-2.8.3.min.js"></script>
-  <script type="text/javascript" src="./js/highlight.pack.js"></script>
-  <script src="./js/theme.js"></script> 
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+  <script src="../../js/theme.js"></script> 
   <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-  <script src="./assets/mathjaxhelper.js"></script>
+  <script src="../../assets/mathjaxhelper.js"></script>
 
   
 </head>
@@ -46,9 +46,9 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
-        <a href="." class="icon icon-home"> EEG.jl</a>
+        <a href="../.." class="icon icon-home"> EEG.jl</a>
         <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
   </form>
 </div>
@@ -58,15 +58,8 @@
         <ul class="current">
           
             <li>
-    <li class="toctree-l1 current">
-        <a class="current" href=".">Home</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#eegjl-manual">EEG.jl Manual</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">Home</a>
         
     </li>
 <li>
@@ -83,21 +76,30 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="assr/assr/">Definition</a>
+        <a class="" href="../assr/">Definition</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="assr/examples/">Examples</a>
+        <a class="" href="../examples/">Examples</a>
         
     </li>
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="assr/functions/">Functions</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Functions</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#functions">Functions</a></li>
+                
+                    <li><a class="toctree-l4" href="#preprocessing">Preprocessing</a></li>
+                
+            
+            </ul>
         
     </li>
 
@@ -118,7 +120,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href=".">EEG.jl</a>
+        <a href="../..">EEG.jl</a>
       </nav>
 
       
@@ -126,11 +128,19 @@
         <div class="rst-content">
           <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href=".">Docs</a> &raquo;</li>
+    <li><a href="../..">Docs</a> &raquo;</li>
     
       
+        
+          <li>Types &raquo;</li>
+        
+      
+        
+          <li>Steady State Response &raquo;</li>
+        
+      
     
-    <li>Home</li>
+    <li>Functions</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -144,10 +154,29 @@
           <div role="main">
             <div class="section">
               
-                <p><a id='EEG.jl-Manual-1'></a></p>
-<h1 id="eegjl-manual">EEG.jl Manual</h1>
-<p>Process EEG files in Julia.</p>
-<p><strong>For research only. Not for clinical use. Use at your own risk</strong>.</p>
+                <p><a id='Functions-1'></a></p>
+<h1 id="functions">Functions</h1>
+<p>A number of functions are provided for the processing of SSR data.</p>
+<p><a id='Preprocessing-1'></a></p>
+<h2 id="preprocessing">Preprocessing</h2>
+<p><a id='EEG.highpass_filter-Tuple{EEG.SSR}' href='#EEG.highpass_filter-Tuple{EEG.SSR}'>#</a>
+<strong><code>EEG.highpass_filter</code></strong> &mdash; <em>Method</em>.</p>
+<p>High pass filter applied in forward and reverse direction</p>
+<p>Simply a wrapper for the DSP.jl functions</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>signals</code>: Signal data in the format samples x channels</li>
+<li><code>cutOff</code>: Cut off frequency in Hz</li>
+<li><code>fs</code>: Sampling rate</li>
+<li><code>order</code>: Filter orde</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>filtered signal</li>
+<li>filter used on signal</li>
+</ul>
+<pre><code>rereference(::SSR, ::AbstractString)
+</code></pre>
               
             </div>
           </div>
@@ -155,8 +184,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="assr/assr/" class="btn btn-neutral float-right" title="Definition">Next <span class="icon icon-circle-arrow-right"></span></a>
       
+        <a href="../examples/" class="btn btn-neutral" title="Examples"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -184,16 +213,11 @@
           <a href="https://github.com/codles/EEG.jl" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
+        <span><a href="../examples/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
-        <span style="margin-left: 15px"><a href="assr/assr/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
 
 </body>
 </html>
-
-<!--
-MkDocs version : 0.15.3
-Build Date UTC : 2016-08-18 12:05:40.920922
--->
