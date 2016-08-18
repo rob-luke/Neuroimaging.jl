@@ -4,7 +4,24 @@
 #
 #######################################
 
+"""
+    highpass_filter(a::SSR; cutOff::Real=2, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
 
+Applly a high pass filter.
+
+A zero phase high pass filter is applied to the data using `filtfilt`.
+A check is performed to ensure the filter does not affect the modulation rate.
+The filter coefficents are stored in the processing field.
+
+#### Example
+
+```julia
+a = highpass_filter(a)
+# or
+a = highpass_filter(a, cutOff = 1)
+```
+
+"""
 function highpass_filter(a::SSR; cutOff::Real=2, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
 
     a.data, f = highpass_filter(a.data, cutOff, fs, order)
