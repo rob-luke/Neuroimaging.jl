@@ -1,14 +1,16 @@
-@doc """
+"""
+    plot_timeseries(s::SSR; channels, fs, kwargs)
+    
 Plot an SSR recording.
 
 Plot detailed single channel or general multichanel figure depending on how many channels are requested.
 
 #### Input
 
-* s: SSR type
-* channels: The channels you want to plot, all if not specified
-* fs: Sample rate
-* Other optional arguements are passed to gadfly plot function
+* `s`: SSR type
+* `channels`: The channels you want to plot, all if not specified
+* `fs`: Sample rate
+* Other optional arguements are passed to the Plots.jl functions
 
 
 #### Output
@@ -18,11 +20,12 @@ Returns a figure
 
 #### Example
 
+```julia
 plot1 = plot_timeseries(s, channels=["P6", "Cz"], plot_points=8192*4)
 draw(PDF("timeseries.pdf", 10inch, 6inch), plot1)
+```
 
-
-""" ->
+"""
 function plot_timeseries{S <: AbstractString}(s::SSR; channels::Union{S, Array{S}} = channelnames(s),
         fs::Number = samplingrate(s), kwargs...)
 
