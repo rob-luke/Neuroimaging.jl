@@ -96,7 +96,11 @@
             
                 <li class="toctree-l3"><a href="#functions">Functions</a></li>
                 
+                    <li><a class="toctree-l4" href="#import">Import</a></li>
+                
                     <li><a class="toctree-l4" href="#preprocessing">Preprocessing</a></li>
+                
+                    <li><a class="toctree-l4" href="#plotting">Plotting</a></li>
                 
             
             </ul>
@@ -157,10 +161,36 @@
                 <p><a id='Functions-1'></a></p>
 <h1 id="functions">Functions</h1>
 <p>A number of functions are provided for the processing of SSR data.</p>
+<p><a id='Import-1'></a></p>
+<h2 id="import">Import</h2>
+<p><a id='EEG.read_SSR' href='#EEG.read_SSR'>#</a>
+<strong><code>EEG.read_SSR</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Read SSR from file or IO stream</strong></p>
+<p>Read a file or IO stream and store the data in an <code>SSR</code> type.</p>
+<p>Matching .mat files are read and modulation frequency information extracted. Failing that, user passed arguments are used or the modulation frequency is extracted from the file name.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>fname</code>: Name of the file to be read</li>
+<li><code>min_epoch_length</code>: Minimum epoch length in samples. Shorter epochs will be removed (0)</li>
+<li><code>max_epoch_length</code>: Maximum epoch length in samples. Longer epochs will be removed (0 = all)</li>
+<li><code>valid_triggers</code>: Triggers that are considered valid, others are removed ([1,2])</li>
+<li><code>stimulation_amplitude</code>: Amplitude of stimulation (NaN)</li>
+<li><code>modulationrate</code>: Modulation frequency of SSR stimulation (NaN)</li>
+<li><code>carrier_frequency</code>: Carrier frequency (NaN)</li>
+<li><code>participant_name</code>: Name of participant ("")</li>
+<li><code>remove_first</code>: Number of epochs to be removed from start of recording (0)</li>
+<li><code>max_epochs</code>: Maximum number of epochs to retain (0 = all)</li>
+<li><code>env</code> (nothing)</li>
+<li><code>bkt</code> ("")</li>
+</ul>
+<p><strong>Supported file formats</strong></p>
+<ul>
+<li>BIOSEMI (.bdf)</li>
+</ul>
 <p><a id='Preprocessing-1'></a></p>
 <h2 id="preprocessing">Preprocessing</h2>
 <p><a id='Filtering-1'></a></p>
-<h4 id="filtering">Filtering</h4>
+<h3 id="filtering">Filtering</h3>
 <p><a id='EEG.highpass_filter-Tuple{EEG.SSR}' href='#EEG.highpass_filter-Tuple{EEG.SSR}'>#</a>
 <strong><code>EEG.highpass_filter</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>highpass_filter(a::SSR; cutOff::Real=2, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
@@ -187,6 +217,24 @@ a = highpass_filter(a, cutOff = 1)
 # or
 a = rereference(a, [&quot;P9&quot;, &quot;P10&quot;])
 </code></pre>
+
+<p><a id='Plotting-1'></a></p>
+<h2 id="plotting">Plotting</h2>
+<p><a id='EEG.plot_timeseries-Tuple{EEG.SSR}' href='#EEG.plot_timeseries-Tuple{EEG.SSR}'>#</a>
+<strong><code>EEG.plot_timeseries</code></strong> &mdash; <em>Method</em>.</p>
+<p>Plot an SSR recording.</p>
+<p>Plot detailed single channel or general multichanel figure depending on how many channels are requested.</p>
+<p><strong>Input</strong></p>
+<ul>
+<li>s: SSR type</li>
+<li>channels: The channels you want to plot, all if not specified</li>
+<li>fs: Sample rate</li>
+<li>Other optional arguements are passed to gadfly plot function</li>
+</ul>
+<p><strong>Output</strong></p>
+<p>Returns a figure</p>
+<p><strong>Example</strong></p>
+<p>plot1 = plot_timeseries(s, channels=["P6", "Cz"], plot_points=8192*4) draw(PDF("timeseries.pdf", 10inch, 6inch), plot1)</p>
               
             </div>
           </div>
