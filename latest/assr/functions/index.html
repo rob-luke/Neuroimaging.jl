@@ -159,6 +159,8 @@
 <p>A number of functions are provided for the processing of SSR data.</p>
 <p><a id='Preprocessing-1'></a></p>
 <h2 id="preprocessing">Preprocessing</h2>
+<p><a id='Filtering-1'></a></p>
+<h4 id="filtering">Filtering</h4>
 <p><a id='EEG.highpass_filter-Tuple{EEG.SSR}' href='#EEG.highpass_filter-Tuple{EEG.SSR}'>#</a>
 <strong><code>EEG.highpass_filter</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>highpass_filter(a::SSR; cutOff::Real=2, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
@@ -172,6 +174,8 @@
 a = highpass_filter(a, cutOff = 1)
 </code></pre>
 
+<p><a id='Referencing-1'></a></p>
+<h3 id="referencing">Referencing</h3>
 <p><a id='EEG.rereference-Tuple{EEG.SSR,AbstractString}' href='#EEG.rereference-Tuple{EEG.SSR,AbstractString}'>#</a>
 <strong><code>EEG.rereference</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>rereference(a::SSR, refChan::Union{AbstractString, Array{AbstractString}}; kwargs...)
