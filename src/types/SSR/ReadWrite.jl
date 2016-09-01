@@ -186,7 +186,7 @@ function write_SSR(a::SSR, fname::AbstractString; chanLabels=channelnames(a), su
     Logging.info("Saving $(size(a.data)[end]) channels to $fname")
 
     writeBDF(fname, a.data', trigger_channel(a), system_code_channel(a), samplingrate(Int, a),
-             chanLabels = convert(Array{String, 1}, chanLabels),
+             chanLabels = convert(Array{Compat.ASCIIString, 1}, chanLabels),
              startDate = startDate, startTime = startTime, subjID = subjID)
 
 end
