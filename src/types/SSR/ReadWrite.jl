@@ -30,11 +30,11 @@ Failing that, user passed arguments are used or the modulation frequency is extr
 
 * BIOSEMI (.bdf)
 """ ->
-function read_SSR(fname::AbstractString;
+function read_SSR(fname::String;
                   stimulation_amplitude::Number=NaN,   # User can set these
                   modulationrate::Number=NaN,          # values, but if not
                   carrier_frequency::Number=NaN,       # then attempt to read
-                  stimulation_side::AbstractString="",         # from file name or mat
+                  stimulation_side::AbstractString="", # from file name or mat
                   participant_name::AbstractString="",
                   valid_triggers::Array{Int}=[1,2],
                   min_epoch_length::Int=0,
@@ -181,12 +181,12 @@ end
 function write_SSR(a::SSR, fname::AbstractString; chanLabels=channelnames(a), subjID=a.header["subjID"],
                    startDate=a.header["startDate"], startTime=a.header["startTime"], kwargs...)
 
-    fname = convert(ASCIIString, fname)
+    fname = convert(String, fname)
 
     Logging.info("Saving $(size(a.data)[end]) channels to $fname")
 
     writeBDF(fname, a.data', trigger_channel(a), system_code_channel(a), samplingrate(Int, a),
-             chanLabels = convert(Array{ASCIIString, 1}, chanLabels),
+             chanLabels = convert(Array{String, 1}, chanLabels),
              startDate = startDate, startTime = startTime, subjID = subjID)
 
 end
