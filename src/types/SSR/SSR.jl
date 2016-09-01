@@ -321,14 +321,14 @@ keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 """ ->
 function keep_channel!{S <: AbstractString}(a::SSR, channel_names::Array{S}; kwargs...)
     Logging.info("Keeping channel(s) $(join(channel_names, " "))")
-    keep_channel!(a, round(Int, [findfirst(channelnames(a), c) for c = channel_names]))
+    keep_channel!(a, vec(round(Int, [findfirst(channelnames(a), c) for c = channel_names])))
 end
 
 function keep_channel!(a::SSR, channel_name::AbstractString; kwargs...)
     keep_channel!(a, [channel_name]; kwargs...)
 end
 
-function keep_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
+function keep_channel!(a::SSR, channel_idx::AbstractVector{Int}; kwargs...)
 
     remove_channels = [1:size(a.data,2); ]
 
@@ -393,17 +393,19 @@ end
 @doc """
 Merge `SSR` channels listed in `merge_Chans` and label the averaged channel as `new_name`
 
+If multiple channels are listed then the average of those channels will be added.
+
 #### Example
 
 ```julia
 s = merge_channels(s, ["P6", "P8"], "P68")
 ```
 """ ->
-function merge_channels(a::SSR, merge_Chans::Array{ASCIIString}, new_name::ASCIIString; kwargs...)
+function merge_channels(a::SSR, merge_Chans::Array{String}, new_name::String; kwargs...)
 
-    debug("Total origin channels: $(length(channelnames(a)))")
+    debug("Number of original channels: $(length(channelnames(a)))")
 
-    keep_idxs = [findfirst(channelnames(a), i) for i = merge_Chans]
+    keep_idxs = vec([findfirst(channelnames(a), i) for i = merge_Chans])
 
     if sum(keep_idxs .== 0) > 0
         warn("Could not merge as these channels don't exist: $(join(vec(merge_Chans[keep_idxs .== 0]), " "))")
@@ -416,7 +418,7 @@ function merge_channels(a::SSR, merge_Chans::Array{ASCIIString}, new_name::ASCII
     a = add_channel(a, vec(mean(a.data[:,keep_idxs], 2)), new_name; kwargs...)
 end
 
-function merge_channels(a::SSR, merge_Chans::ASCIIString, new_name::ASCIIString; kwargs...)
+function merge_channels(a::SSR, merge_Chans::String, new_name::String; kwargs...)
     a = merge_channels(a, [merge_Chans], new_name; kwargs...)
 end
 
