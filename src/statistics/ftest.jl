@@ -44,7 +44,7 @@ function ftest{T <: AbstractFloat}(spectrum::Array{Complex{T},2}, frequencies::A
     signal_phase = angle(spectrum[idx, :])                             # Biased response phase
 
     # Determine signal power
-    signal_power = abs(spectrum[idx, :]).^2                            # Biased response power
+    signal_power = vec(abs(spectrum[idx, :]).^2)                       # Biased response power
 
     # Determine noise power
     noise_idxs  = [idx_Low - div(spill_bins, 2) : idx - spill_bins; idx + spill_bins : idx_High + div(spill_bins, 2)]
