@@ -5,15 +5,9 @@
 #
 #######################################
 
-function plot_spectrum(signal::Vector,
-                        fs::Real;
-                        titletext::AbstractString="",
-                        Fmin::Int=0,
-                        Fmax::Int=90,
-                        targetFreq::Float64=0.0,
-                        dBPlot::Bool=true,
-                        noise_level::Number=0,
-                        signal_level::Number=0)
+function plot_spectrum{S <: AbstractString, F <: AbstractFloat}(signal::Vector, fs::Real;
+                        titletext::S="", Fmin::Number=0, Fmax::Number=90, targetFreq::F=0.0, dBPlot::Bool=true,
+                        noise_level::Number=0, signal_level::Number=0)
 
     # Determine fft frequencies
     signal_length = length(signal)

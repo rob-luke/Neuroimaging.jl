@@ -9,6 +9,7 @@ using FactCheck
 
 Logging.configure(level=DEBUG)
 Logging.configure(output=open("logfile.log", "a"))
+unicodeplots()
 
 
 #

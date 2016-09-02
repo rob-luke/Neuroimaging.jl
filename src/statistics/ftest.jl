@@ -44,13 +44,13 @@ function ftest{T <: AbstractFloat}(spectrum::Array{Complex{T},2}, frequencies::A
     signal_phase = angle(spectrum[idx, :])                             # Biased response phase
 
     # Determine signal power
-    signal_power = abs(spectrum[idx, :]).^2                            # Biased response power
+    signal_power = vec(abs(spectrum[idx, :]).^2)                       # Biased response power
 
     # Determine noise power
     noise_idxs  = [idx_Low - div(spill_bins, 2) : idx - spill_bins; idx + spill_bins : idx_High + div(spill_bins, 2)]
     noise_bins  = spectrum[noise_idxs,:]
     noise_bins  = abs(noise_bins)
-    noise_power = sum(noise_bins .^2, 1) ./ size(noise_bins,1)     # Recording noise power
+    noise_power = vec(sum(noise_bins .^2, 1) ./ size(noise_bins,1))     # Recording noise power
 
     # Calculate SNR
     snr = (signal_power ./ noise_power)                                # Biased recording SNR

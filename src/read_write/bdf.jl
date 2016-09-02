@@ -12,8 +12,8 @@ function import_biosemi(fname::Union{AbstractString, IO}; kwargs...)
     Logging.info("Importing BIOSEMI data file")
 
     # Read raw data using BDF.jl
-    data, triggers, trigger_channel, system_code_channel = readBDF(copy(fname), transposeData=true; kwargs...)
-    header = readBDFHeader(copy(fname))
+    data, triggers, trigger_channel, system_code_channel = readBDF(identity(fname), transposeData=true; kwargs...)
+    header = readBDFHeader(identity(fname))
 
     # Check the sample rate
     sample_rate = header["sampRate"]

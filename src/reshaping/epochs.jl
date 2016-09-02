@@ -29,7 +29,9 @@ function extract_epochs{T <: Number}(data::Array{T, 2}, triggers::Dict, valid_tr
 
     validate_triggers(triggers)
 
-    triggers = DataFrame(Code = triggers["Code"], Index = triggers["Index"])
+    newTidx = [Int(i) for i in triggers["Index"]]
+
+    triggers = DataFrame(Code = triggers["Code"], Index = newTidx)
     # TODO Use convert function
     #=triggers = convert(DataFrame, triggers)=#
 

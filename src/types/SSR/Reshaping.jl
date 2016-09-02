@@ -60,7 +60,7 @@ function add_triggers(a::SSR, mod_freq::Number; kwargs...)
 
     debug("Adding triggers to reduce SSR. Using $(mod_freq)Hz")
 
-    epochIndex = DataFrame(Code = a.triggers["Code"], Index = a.triggers["Index"]);
+    epochIndex = DataFrame(Code = a.triggers["Code"], Index = [Int(i) for i in a.triggers["Index"]]);
     epochIndex[:Code] = epochIndex[:Code] - 252
 
     add_triggers(a, mod_freq, epochIndex; kwargs...)
