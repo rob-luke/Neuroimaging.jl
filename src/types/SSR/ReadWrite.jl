@@ -178,7 +178,7 @@ function system_code_channel(a::SSR; kwargs...)
 end
 
 
-function write_SSR(a::SSR, fname::AbstractString; chanLabels=channelnames(a), subjID=a.header["subjID"],
+function write_SSR{S <: AbstractString}(a::SSR, fname::S; chanLabels=channelnames(a), subjID=a.header["subjID"],
                    startDate=a.header["startDate"], startTime=a.header["startTime"], kwargs...)
 
     fname = convert(String, fname)
@@ -186,7 +186,7 @@ function write_SSR(a::SSR, fname::AbstractString; chanLabels=channelnames(a), su
     Logging.info("Saving $(size(a.data)[end]) channels to $fname")
 
     writeBDF(fname, a.data', trigger_channel(a), system_code_channel(a), samplingrate(Int, a),
-             chanLabels = convert(Array{Compat.ASCIIString, 1}, chanLabels),
+             chanLabels = convert(Array{S, 1}, chanLabels),
              startDate = startDate, startTime = startTime, subjID = subjID)
 
 end

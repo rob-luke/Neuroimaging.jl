@@ -1,7 +1,6 @@
 module EEG
 
 using Logging,  # For user feedback
-      Compat,   # For backward julia compatability
       SIUnits,  # Smarter units
       SIUnits.ShortUnits,
       DataFrames,
