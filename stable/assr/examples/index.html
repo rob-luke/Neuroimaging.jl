@@ -8,7 +8,7 @@
   
   <meta name="author" content="Robert Luke">
   
-  <title>ASSR - EEG.jl</title>
+  <title>Examples - EEG.jl</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -24,9 +24,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "ASSR";
-    var mkdocs_page_input_path = "examples/ASSR.md";
-    var mkdocs_page_url = "/examples/ASSR/";
+    var mkdocs_page_name = "Examples";
+    var mkdocs_page_input_path = "assr/examples.md";
+    var mkdocs_page_url = "/assr/examples/";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -66,16 +66,30 @@
           
             <li>
     <ul class="subnav">
-    <li><span>Examples</span></li>
+    <li><span>Types</span></li>
+
+        
+            
+    <ul class="subnav">
+    <li><span>Steady State Response</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../assr/">Definition</a>
+        
+    </li>
 
         
             
     <li class="toctree-l1 current">
-        <a class="current" href="./">ASSR</a>
+        <a class="current" href="./">Examples</a>
         
             <ul>
             
-                <li class="toctree-l3"><a href="#assr">ASSR</a></li>
+                <li class="toctree-l3"><a href="#examples">Examples</a></li>
+                
+                    <li><a class="toctree-l4" href="#plot-single-and-multi-channel-data">Plot single and multi channel data</a></li>
                 
             
             </ul>
@@ -85,9 +99,12 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../source/">Source Analysis</a>
+        <a class="" href="../functions/">Functions</a>
         
     </li>
+
+        
+    </ul>
 
         
     </ul>
@@ -115,11 +132,15 @@
     
       
         
-          <li>Examples &raquo;</li>
+          <li>Types &raquo;</li>
+        
+      
+        
+          <li>Steady State Response &raquo;</li>
         
       
     
-    <li>ASSR</li>
+    <li>Examples</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -133,32 +154,22 @@
           <div role="main">
             <div class="section">
               
-                <p><a id='ASSR-1'></a></p>
-<h1 id="assr">ASSR</h1>
-<pre><code class="julia">
-using EEG, DataFrames, Gadfly
+                <p><a id='Examples-1'></a></p>
+<h1 id="examples">Examples</h1>
+<p><a id='Plot-single-and-multi-channel-data-1'></a></p>
+<h2 id="plot-single-and-multi-channel-data">Plot single and multi channel data</h2>
+<pre><code class="julia">using EEG
 
-s = read_SSR(&quot;Example-40Hz.bdf&quot;)
+s = read_SSR(&quot;file.bdf&quot;)
 s = highpass_filter(s)
-s.modulationrate = assr_frequency(40)
 s = rereference(s, &quot;Cz&quot;)
-s = merge_channels(s, EEG_Vanvooren_2014, &quot;Merged&quot;)
-    remove_channel!(s, EEG_64_10_20)
-s = extract_epochs(s)
-s = create_sweeps(s, epochsPerSweep = 16)
-s = ftest(s, collect([[2:2:162], modulationrate(s)*[1, 2, 3, 4]]))
+s = trim_channel(s, 8192*80, start = 8192*50)
 
-s.processing[&quot;statistics&quot;][:Significant] = s.processing[&quot;statistics&quot;][:Statistic] .&lt; 0.05
-scatter(s.processing[&quot;statistics&quot;], 
-    :AnalysisFrequency, :SNRdB , group=:Significant,
-    xlabel = &quot;Frequency (Hz)&quot;, 
-    ylabel = &quot;SNR (dB)&quot;, 
-    xlims = (0, 170), markersize = 10)
-
-vline!(modulationrate(s) * [1 2 3 4], ylims = (-10, 30), linestyle = :dashed)
+plot_timeseries(s, channels=&quot;P6&quot;)
+plot_timeseries(s)
 </code></pre>
 
-<p><img alt="SSR Example" src="../doc/images/Example-40Hz-SSR.png" /></p>
+<p><img alt="Single Channel" src="https://cloud.githubusercontent.com/assets/748691/17362166/210e53f4-5974-11e6-8df0-c2723c65ba52.png" /> <img alt="Multi Channel" src="https://cloud.githubusercontent.com/assets/748691/17362167/210f9c28-5974-11e6-8a05-62fa399d32d1.png" /></p>
               
             </div>
           </div>
@@ -166,10 +177,10 @@ vline!(modulationrate(s) * [1 2 3 4], ylims = (-10, 30), linestyle = :dashed)
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../source/" class="btn btn-neutral float-right" title="Source Analysis">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../functions/" class="btn btn-neutral float-right" title="Functions">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../.." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../assr/" class="btn btn-neutral" title="Definition"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -197,10 +208,10 @@ vline!(modulationrate(s) * [1 2 3 4], ylims = (-10, 30), linestyle = :dashed)
           <a href="https://github.com/codles/EEG.jl" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../.." style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../assr/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../source/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../functions/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
