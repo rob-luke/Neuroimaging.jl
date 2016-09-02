@@ -401,7 +401,7 @@ If multiple channels are listed then the average of those channels will be added
 s = merge_channels(s, ["P6", "P8"], "P68")
 ```
 """ ->
-function merge_channels(a::SSR, merge_Chans::Array{Compat.ASCIIString}, new_name::Compat.ASCIIString; kwargs...)
+function merge_channels{S <: AbstractString}(a::SSR, merge_Chans::Array{S}, new_name::S; kwargs...)
 
     debug("Number of original channels: $(length(channelnames(a)))")
 
@@ -418,7 +418,7 @@ function merge_channels(a::SSR, merge_Chans::Array{Compat.ASCIIString}, new_name
     a = add_channel(a, vec(mean(a.data[:,keep_idxs], 2)), new_name; kwargs...)
 end
 
-function merge_channels(a::SSR, merge_Chans::Compat.ASCIIString, new_name::Compat.ASCIIString; kwargs...)
+function merge_channels{S <: AbstractString}(a::SSR, merge_Chans::S, new_name::S; kwargs...)
     a = merge_channels(a, [merge_Chans], new_name; kwargs...)
 end
 

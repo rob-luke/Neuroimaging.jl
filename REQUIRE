@@ -1,14 +1,12 @@
-julia 0.4 0.6-
+julia 0.5-
 
 AWS
-Compat
 DSP
 BDF
 DataFrames
 SIUnits
 ProgressMeter
 Distributions
-NumericExtensions
 Distances
 Logging
 Synchrony
