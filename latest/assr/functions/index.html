@@ -187,6 +187,7 @@
 <ul>
 <li>BIOSEMI (.bdf)</li>
 </ul>
+<p><a target='_blank' href='https://github.com/codles/EEG.jl/tree/d35aab5280bae64b4f71c5e1a72ade46e5a8181f/src/types/SSR/ReadWrite.jl#L7-L32' class='documenter-source'>source</a><br></p>
 <p><a id='Preprocessing-1'></a></p>
 <h2 id="preprocessing">Preprocessing</h2>
 <p><a id='Filtering-1'></a></p>
@@ -204,6 +205,7 @@
 a = highpass_filter(a, cutOff = 1)
 </code></pre>
 
+<p><a target='_blank' href='https://github.com/codles/EEG.jl/tree/d35aab5280bae64b4f71c5e1a72ade46e5a8181f/src/types/SSR/Preprocessing.jl#L7-L24' class='documenter-source'>source</a><br></p>
 <p><a id='Referencing-1'></a></p>
 <h3 id="referencing">Referencing</h3>
 <p><a id='EEG.rereference-Tuple{EEG.SSR,AbstractString}' href='#EEG.rereference-Tuple{EEG.SSR,AbstractString}'>#</a>
@@ -218,6 +220,7 @@ a = highpass_filter(a, cutOff = 1)
 a = rereference(a, [&quot;P9&quot;, &quot;P10&quot;])
 </code></pre>
 
+<p><a target='_blank' href='https://github.com/codles/EEG.jl/tree/d35aab5280bae64b4f71c5e1a72ade46e5a8181f/src/types/SSR/Preprocessing.jl#L129-L142' class='documenter-source'>source</a><br></p>
 <p><a id='Plotting-1'></a></p>
 <h2 id="plotting">Plotting</h2>
 <p><a id='EEG.plot_timeseries-Tuple{EEG.SSR}' href='#EEG.plot_timeseries-Tuple{EEG.SSR}'>#</a>
@@ -240,6 +243,8 @@ a = rereference(a, [&quot;P9&quot;, &quot;P10&quot;])
 <pre><code class="julia">plot1 = plot_timeseries(s, channels=[&quot;P6&quot;, &quot;Cz&quot;], plot_points=8192*4)
 draw(PDF(&quot;timeseries.pdf&quot;, 10inch, 6inch), plot1)
 </code></pre>
+
+<p><a target='_blank' href='https://github.com/codles/EEG.jl/tree/d35aab5280bae64b4f71c5e1a72ade46e5a8181f/src/types/SSR/plotting.jl#L1-L28' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
