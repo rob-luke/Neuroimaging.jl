@@ -10,7 +10,6 @@ notifications:
 sudo: true
 before_install:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - pip install urllib3[secure]  # For documenter.jl
 script:
   - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("EEG"); Pkg.test("EEG"; coverage=true)'
 after_success:
