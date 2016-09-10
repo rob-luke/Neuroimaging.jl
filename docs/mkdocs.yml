@@ -22,6 +22,7 @@ docs_dir: 'build'
 pages:
     - Home: 'index.md'
     - Types:
+        - Summary: 'types.md'
         - Steady State Response:
             - Definition: 'assr/assr.md'
             - Examples: 'assr/examples.md'
