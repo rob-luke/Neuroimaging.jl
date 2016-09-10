@@ -11,6 +11,11 @@
             "title": "EEG.jl Manual"
         }, 
         {
+            "location": "/types/", 
+            "text": "A number of types are provided to handle different types of data. Functions are provided to perform common operations on each type.", 
+            "title": "Summary"
+        }, 
+        {
             "location": "/assr/assr/", 
             "text": "#\n\n\nEEG.SSR\n \n \nType\n.\n\n\nType for storing steady state response (SSR) data.\n\n\nThe minimum required information for SSR recording is stored in the type. Additional information can be stored in the \nprocessing\n field. To facilitate processing, specific names are used in the processing dictionary.\n\n\nFields\n\n\n\n\ndata\n: contains the recorded data\n\n\ntrigers\n: contains information about timing for creation of epochs\n\n\nsystem_codes\n: contains system information\n\n\nsamplingrate\n: the sampling rate of the data\n\n\nmodulationrate\n: the modulation rate of the stimulus\n\n\nreference_channel\n: the channel the data has been referenced to\n\n\nfile_path\n and \nfile_name\n: where the file was read in from\n\n\nchannel_names\n: the names of the channels\n\n\nprocessing\n: dictionary type to store analysis\n\n\nheader\n: additional information read from the file\n\n\n\n\nAdditional \nprocessing\n fields\n\n\nThe following standard names are used when saving data to the processing dictionary.\n\n\n\n\nName\n: The identifier for the participant\n\n\nSide\n: Side of stimulation\n\n\nCarrier_Frequency\n: Carrier frequency of the stimulus\n\n\nAmplitude\n: Amplitude of the stimulus\n\n\nepochs\n: The epochs extracted from the recording\n\n\nsweeps\n: The extracted sweeps from the recording\n\n\n\n\nExample\n\n\nPut an example here\n\n\ns = SSR(\nfilename\n)\n\n\n\n\nsource", 
             "title": "Definition"
