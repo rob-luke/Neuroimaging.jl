@@ -22,7 +22,7 @@ function find_dipoles{T <: Number}(s::Array{T, 3}; window::Array{Int}=[6,6,6], x
     localmaxima_locations = findlocalmaxima(s)
     peak_values = s[localmaxima_locations]
     smallest_peak_value = (0.1 * maximum(peak_values))
-    localmaxima_locations_subset = findlocalmaxima(s .> smallest_peak_value)
+    localmaxima_locations_subset = findlocalmaxima(s .>= smallest_peak_value)
 
     # Store dipoles in an array
     dips = Dipole[]
