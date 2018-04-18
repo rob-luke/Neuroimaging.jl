@@ -19,22 +19,16 @@ function find_dipoles{T <: Number}(s::Array{T, 3}; window::Array{Int}=[6,6,6], x
 
     debug("Finding dipoles for 3d array")
 
-    minval, maxval = extrema_filter(s, window)
-
-    # Find the positions matching the maxima
-    matching = s[2:size(maxval)[1]+1, 2:size(maxval)[2]+1, 2:size(maxval)[3]+1]
-    matching = matching .== maxval
-
-    # dipoles are defined as maxima locations and within 90% of the maximum
-    peaks = maxval[matching]
-    peaks = peaks[peaks .>= 0.1 * maximum(peaks)]
+    localmaxima_locations = findlocalmaxima(s)
+    peak_values = s[localmaxima_locations]
+    smallest_peak_value = (0.1 * maximum(peak_values))
+    localmaxima_locations_subset = findlocalmaxima(s .> smallest_peak_value)
 
     # Store dipoles in an array
     dips = Dipole[]
 
-    for l = 1:length(peaks)
-        xidx, yidx, zidx = ind2sub(size(s), find(s .== peaks[l]))
-        push!(dips, Dipole("Unknown", x[xidx[1]], y[yidx[1]], z[zidx[1]], 0, 0, 0, 0, 0, peaks[l]))
+    for location in localmaxima_locations_subset
+        push!(dips, Dipole("Unknown", location[1], location[2], location[3], 0, 0, 0, 0, 0, s[location]))
     end
 
     left_side = s[x .< 0, :, :]
