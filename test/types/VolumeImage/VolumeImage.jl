@@ -107,7 +107,7 @@ facts("Volume Image") do
 
     	t = read_VolumeImage(fname)
     	dips = find_dipoles(mean(t))
-    	@fact size(dips) --> (9,)
+    	@fact size(dips) --> (16,)
 
     	dips = EEG.new_dipole_method(mean(t))
     	@fact size(dips) --> (9,)
