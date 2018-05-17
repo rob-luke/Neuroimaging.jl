@@ -144,7 +144,7 @@ function add_dataframe_static_rows(a::DataFrame, args...)
             code = k[2]
             expanded_code = vec(repmat([k[2]], size(a, 1), 1))
             debug("Name: $name  Code: $code")
-            DataFrames.insert_single_column!(a, DataFrames.upgrade_vector(expanded_code), size(a,2)+1)
+            DataFrames.insert_single_column!(a, expanded_code, size(a,2)+1)
             rename!(a, convert(Symbol, string("x", size(a,2))),  name)
         end
     end

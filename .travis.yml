@@ -3,10 +3,9 @@ os:
   - linux
   - osx
 julia:
-  - 0.5
+  - 0.6
 notifications:
   email: false
-  irc: "irc.freenode.org#eeg.jl"
 sudo: true
 before_install:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
