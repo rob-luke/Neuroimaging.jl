@@ -31,9 +31,9 @@ function read_elp(fname::AbstractString; coordinate=Talairach, r::Real=90)
     theta = df[:x3]
 
     # Save locations
-    x = r .* sin(phi*(pi/180)) .* cos(theta*(pi/180))
-    y = r .* sin(phi*(pi/180)) .* sin(theta*(pi/180)) - 17.5
-    z = r .* cos(phi*(pi/180))
+    x = r .* sin.(phi*(pi/180)) .* cos.(theta*(pi/180))
+    y = r .* sin.(phi*(pi/180)) .* sin.(theta*(pi/180)) - 17.5
+    z = r .* cos.(phi*(pi/180))
 
     # Convert label to ascii and remove '
     labels = df[:x1]
@@ -45,4 +45,3 @@ function read_elp(fname::AbstractString; coordinate=Talairach, r::Real=90)
 
     return elecs
 end
-

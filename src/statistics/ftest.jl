@@ -41,24 +41,24 @@ function ftest(spectrum::Array{Complex{T},2}, frequencies::AbstractArray,
     idx_High = _find_closest_number_idx(frequencies, freq_of_interest + side_freq)
 
     # Determine signal phase
-    signal_phase = angle(spectrum[idx, :])                             # Biased response phase
+    signal_phase = angle.(spectrum[idx, :])                             # Biased response phase
 
     # Determine signal power
-    signal_power = vec(abs(spectrum[idx, :]).^2)                       # Biased response power
+    signal_power = vec(abs.(spectrum[idx, :]).^2)                       # Biased response power
 
     # Determine noise power
     noise_idxs  = [idx_Low - div(spill_bins, 2) : idx - spill_bins; idx + spill_bins : idx_High + div(spill_bins, 2)]
     noise_bins  = spectrum[noise_idxs,:]
-    noise_bins  = abs(noise_bins)
+    noise_bins  = abs.(noise_bins)
     noise_power = vec(sum(noise_bins .^2, 1) ./ size(noise_bins,1))     # Recording noise power
 
     # Calculate SNR
     snr = (signal_power ./ noise_power)                                # Biased recording SNR
-    snrDb = 10 * log10(snr)
+    snrDb = 10 * log10.(snr)
 
     # Calculate statistic
     continuous_distribution = FDist(2, 2*size(noise_bins,1))
-    statistic = ccdf(continuous_distribution, snr)
+    statistic = ccdf.(continuous_distribution, snr)
 
     # Debugging information
     debug("Frequencies = [$(freq_of_interest - side_freq), $(freq_of_interest), $(freq_of_interest + side_freq)]")
@@ -82,7 +82,7 @@ function _ftest_spectrum(sweep::Union{Array{Float64,1}, Array{Float64,2}}; ref::
 
     # Calculate amplitude sweepe at each frequency along first dimension
     fftSweep    = 2 / sweepLen * fft(sweep, 1)
-    spectrum    = fftSweep[1:round(Int, sweepLen / 2 + 1), :]
+    spectrum    = fftSweep[1:round.(Int, sweepLen / 2 + 1), :]
 
     if ref > 0
         refspec = spectrum[:,ref]

@@ -1,5 +1,8 @@
 # EEG.jl News
 
+## v0.3.0
+* Drop support for julia v0.5
+* Only supports julia v0.6
 
 ## v0.2.0
 

@@ -22,9 +22,9 @@ function ftest(s::SSR; freq_of_interest::Union{Real, AbstractArray}=modulationra
                            ModulationRate     = copy(modulationrate(s)),
                            AnalysisType       = vec(repmat(["F-test"], length(channelnames(s)))),
                            AnalysisFrequency  = vec(repmat([freq], length(channelnames(s)))),
-                           SignalAmplitude    = vec(sqrt(signal)),
+                           SignalAmplitude    = vec(sqrt.(signal)),
                            SignalPhase        = vec(phase),
-                           NoiseAmplitude     = vec(sqrt(noise)),
+                           NoiseAmplitude     = vec(sqrt.(noise)),
                            SNRdB              = vec(snrDb),
                            Statistic          = vec(statistic))
 

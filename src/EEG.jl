@@ -7,6 +7,7 @@ using Logging,  # For user feedback
       Distances,
       ProgressMeter,
       AWS,
+      CSV,
       AWS.S3,
       BDF,
       DSP,

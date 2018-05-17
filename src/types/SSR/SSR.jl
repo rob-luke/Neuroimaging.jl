@@ -137,7 +137,7 @@ end
 
 import Base.show
 function Base.show(io::IO, a::SSR)
-    time_length = round(size(a.data,1) / samplingrate(a) / 60, 2)
+    time_length = round.(size(a.data,1) / samplingrate(a) / 60, 2)
     println(io, "SSR measurement of $time_length mins with $(size(a.data,2)) channels sampled at $(a.samplingrate)")
     println(io, "  Modulation frequency: $(a.modulationrate )")
 
@@ -186,7 +186,7 @@ function hcat(a::SSR, b::SSR)
         warn("Statistics have already been calculated and will no longer be valid")
     end
 
-    debug("Appending two SSRs with $(size(a.data, 2)) & $(size(b.data, 2)) channels and lengths $(size(a.data, 1)) $(size(b.data, 1))")
+    debug("Appending two SSRs with $(size(a.data, 2)) .& $(size(b.data, 2)) channels and lengths $(size(a.data, 1)) $(size(b.data, 1))")
 
     join_triggers(a, b)
     a.data = [a.data; b.data]
@@ -321,7 +321,7 @@ keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 """ ->
 function keep_channel!(a::SSR, channel_names::Array{S}; kwargs...) where S <: AbstractString
     Logging.info("Keeping channel(s) $(join(channel_names, " "))")
-    keep_channel!(a, vec(round(Int, [findfirst(channelnames(a), c) for c = channel_names])))
+    keep_channel!(a, vec(round.(Int, [findfirst(channelnames(a), c) for c = channel_names])))
 end
 
 function keep_channel!(a::SSR, channel_name::AbstractString; kwargs...)
@@ -368,13 +368,13 @@ function trim_channel(a::SSR, stop::Int; start::Int=1, kwargs...)
 
     a.data = a.data[start:stop,:]
 
-    to_keep = find( (a.triggers["Index"] .>= start) & (a.triggers["Index"] .<= stop))
+    to_keep = find( (a.triggers["Index"] .>= start) .& (a.triggers["Index"] .<= stop))
     a.triggers["Index"] = a.triggers["Index"][to_keep]
     a.triggers["Duration"] = a.triggers["Duration"][to_keep]
     a.triggers["Code"] = a.triggers["Code"][to_keep]
     a.triggers["Index"] -= (start-1)
 
-    to_keep = find( (a.system_codes["Index"] .>= start) & (a.system_codes["Index"] .<= stop))
+    to_keep = find( (a.system_codes["Index"] .>= start) .& (a.system_codes["Index"] .<= stop))
     a.system_codes["Index"]    = a.system_codes["Index"][to_keep]
     a.system_codes["Duration"] = a.system_codes["Duration"][to_keep]
     a.system_codes["Code"]     = a.system_codes["Code"][to_keep]
@@ -432,7 +432,7 @@ end
 function assr_frequency(rounded_freq::Number; stimulation_samplingrate::Number=32000,
                         stimulation_frames_per_epoch::Number=32768)
 
-    round(rounded_freq/(stimulation_samplingrate / stimulation_frames_per_epoch)) *
+    round.(rounded_freq/(stimulation_samplingrate / stimulation_frames_per_epoch)) *
                                                                 stimulation_samplingrate / stimulation_frames_per_epoch
 end
 

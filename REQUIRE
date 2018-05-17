@@ -3,6 +3,7 @@ julia 0.6 0.7-
 AWS
 DSP
 BDF
+CSV
 DataFrames
 SIUnits
 ProgressMeter

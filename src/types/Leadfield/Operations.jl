@@ -10,7 +10,7 @@ function find_location(l::Leadfield, x::Number, y::Number, z::Number)
     valid_y = l.y .== y
     valid_z = l.z .== z
 
-    idx = find(valid_x & valid_y & valid_z)
+    idx = find(valid_x .& valid_y .& valid_z)
 
     if isempty(idx)
 

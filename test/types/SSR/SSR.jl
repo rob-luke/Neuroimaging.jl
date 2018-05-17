@@ -73,6 +73,7 @@ facts("Steady State Responses") do
         events  = create_events(trigs, sampRate)
         channel = create_channel(events, dats, sampRate)
 
+        @fact size(channel) --> size(trigs)
         @fact channel --> trigs
 
     end

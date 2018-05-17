@@ -185,19 +185,19 @@ end
 function dimensions_equal(vi1::VolumeImage, vi2::VolumeImage; x::Bool=true, y::Bool=true, z::Bool=true, t::Bool=true, units::Bool=true, kwargs...)
 
     matching = true
-    if x & !(vi1.x == vi2.x)
+    if x .& .!(vi1.x == vi2.x)
         throw(KeyError("X dimensions do not match"))
     end
-    if y & !(vi1.y == vi2.y)
+    if y .& .!(vi1.y == vi2.y)
         throw(KeyError("Y dimensions do not match"))
     end
-    if z & !(vi1.z == vi2.z)
+    if z .& .!(vi1.z == vi2.z)
         throw(KeyError("Z dimensions do not match"))
     end
-    if t & !(vi1.t == vi2.t)
+    if t .& .!(vi1.t == vi2.t)
         throw(KeyError("T dimensions do not match"))
     end
-    if units & !(vi1.units == vi2.units)
+    if units .& .!(vi1.units == vi2.units)
         throw(KeyError("Units do not match"))
     end
 
@@ -211,9 +211,9 @@ Find indicies of location in VolumeImage
 """
 function find_location(vi::VolumeImage, x::Real, y::Real, z::Real)
 
-    x_loc = find(minimum(abs(vi.x ./ Meter - x)) .== abs(vi.x ./ Meter - x))[1]
-    y_loc = find(minimum(abs(vi.y ./ Meter - y)) .== abs(vi.y ./ Meter - y))[1]
-    z_loc = find(minimum(abs(vi.z ./ Meter - z)) .== abs(vi.z ./ Meter - z))[1]
+    x_loc = find(minimum(abs.(vi.x ./ Meter - x)) .== abs.(vi.x ./ Meter - x))[1]
+    y_loc = find(minimum(abs.(vi.y ./ Meter - y)) .== abs.(vi.y ./ Meter - y))[1]
+    z_loc = find(minimum(abs.(vi.z ./ Meter - z)) .== abs.(vi.z ./ Meter - z))[1]
 
     if length(size(vi.data)) == 3
         return [x_loc, y_loc, z_loc]

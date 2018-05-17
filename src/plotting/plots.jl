@@ -15,16 +15,16 @@ noise_level::Number=0, signal_level::Number=0) where {S <: AbstractString, F <: 
 
     # Calculate fft and convert to power
     fftSweep = 2 / signal_length * fft(signal)
-    spectrum = abs(fftSweep[1:div(signal_length, 2) + 1])  # Amplitude
+    spectrum = abs.(fftSweep[1:div(signal_length, 2) + 1])  # Amplitude
     spectrum = spectrum.^2
 
-    valid_idx = (frequencies .<= Fmax) & (frequencies .>= Fmin)
+    valid_idx = (frequencies .<= Fmax) .& (frequencies .>= Fmin)
     spectrum = spectrum[valid_idx]
     frequencies = frequencies[valid_idx]
 
     # Want a log plot?
     if dBPlot
-        spectrum = 10*log10( spectrum )
+        spectrum = 10*log10.( spectrum )
         ylabel="Response Power (dB)"
     else
         ylabel="Response Power (uV^2)"
@@ -40,7 +40,7 @@ noise_level::Number=0, signal_level::Number=0) where {S <: AbstractString, F <: 
     # Plot the noise level if requested
     if noise_level != 0
         if dBPlot
-            noise_level = 10*log10(noise_level)
+            noise_level = 10*log10.(noise_level)
         end
         p = plot!([Fmin, targetFreq+2], [noise_level, noise_level], lab = "Noise", color = :red)
     end
@@ -48,11 +48,11 @@ noise_level::Number=0, signal_level::Number=0) where {S <: AbstractString, F <: 
     # Plot the signal level if requested
     if signal_level != 0
         if dBPlot
-            signal_level = 10*log10(signal_level)
+            signal_level = 10*log10.(signal_level)
         end
         plot!([Fmin, targetFreq], [signal_level, signal_level], lab = "Signal", color = :green)
 
-        targetFreqIdx = findfirst(abs(frequencies.-targetFreq) , minimum(abs(frequencies.-targetFreq)))
+        targetFreqIdx = findfirst(abs.(frequencies.-targetFreq) , minimum(abs.(frequencies.-targetFreq)))
         targetFreq    = frequencies[targetFreqIdx]
         targetResults = spectrum[targetFreqIdx]
         #TODO remove label for circle rather than make it empty
@@ -197,8 +197,8 @@ function plot_filter_response(zpk_filter::FilterCoefficients, fs::Integer;
 
     frequencies = linspace(lower, upper, 1024)
     h = freqz(zpk_filter, frequencies, fs)
-    magnitude_dB = 20*log10(convert(Array{Float64}, abs(h)))
-    phase_response = (360/(2*pi))*unwrap(convert(Array{Float64}, angle(h)))
+    magnitude_dB = 20*log10.(convert(Array{Float64}, abs.(h)))
+    phase_response = (360/(2*pi))*unwrap(convert(Array{Float64}, angle.(h)))
 
     p1 = plot(frequencies, magnitude_dB,   lab = "")
     p2 = plot(frequencies, phase_response, lab = "")

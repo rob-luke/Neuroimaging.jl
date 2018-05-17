@@ -124,7 +124,7 @@ _find_closest_number_idx([1, 2, 2.7, 3.2, 4, 3.1, 7], 3)
 ```
 """ ->
 function _find_closest_number_idx(list::AbstractArray{T, 1}, target::Number) where T <: Number
-    diff_array = abs(list .- target)
+    diff_array = abs.(list .- target)
     targetIdx  = findfirst(diff_array , minimum(diff_array))
 end
 
@@ -145,7 +145,7 @@ function add_dataframe_static_rows(a::DataFrame, args...)
             expanded_code = vec(repmat([k[2]], size(a, 1), 1))
             debug("Name: $name  Code: $code")
             DataFrames.insert_single_column!(a, expanded_code, size(a,2)+1)
-            rename!(a, convert(Symbol, string("x", size(a,2))),  name)
+            rename!(a, convert(Symbol, string("x", size(a,2))) =>  name)
         end
     end
     return a

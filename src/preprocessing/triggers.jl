@@ -63,7 +63,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
         for ep in epochIndex[:Code]
             push!(validity, in(ep, valid_triggers))
         end
-        non_valid = sort(unique(epochIndex[:Code][!validity]))
+        non_valid = sort(unique(epochIndex[:Code][.!validity]))
         Logging.warn("Non valid triggers: $non_valid")
     end
 
@@ -174,7 +174,7 @@ function extra_triggers(t::Dict, old_trigger_code::Union{Int, Array{Int}},
             while offset < valid_trip_index[vt+1] && counter < max_inserted
 
                 push!(code, new_trigger_code)
-                push!(index, Int(round(offset)))  # Round and take integer here to minimise the drift
+                push!(index, Int(round.(offset)))  # Round and take integer here to minimise the drift
 
                 offset  += new_trigger_delay
                 counter += 1

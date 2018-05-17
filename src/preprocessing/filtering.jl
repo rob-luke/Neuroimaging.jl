@@ -134,7 +134,7 @@ function compensate_for_filter(filter::FilterCoefficients, spectrum::AbstractArr
     filter_response     = freqz(filter, frequencies, fs)
 
     for f = 1:length(filter_response)
-        spectrum[f, :, :] = spectrum[f, :, :] ./ abs(filter_response[f])^2
+        spectrum[f, :, :] = spectrum[f, :, :] ./ abs.(filter_response[f])^2
     end
 
     return spectrum

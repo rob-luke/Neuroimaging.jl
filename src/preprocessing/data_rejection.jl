@@ -18,7 +18,7 @@ function epoch_rejection(epochs::Array{T, 3}, retain_percentage::AbstractFloat;
         Logging.warn("Non valid percentage value for retaining epochs $(retain_percentage)")
     end
 
-    Logging.info("Rejected $(round(Int, (1 - retain_percentage) * 100))% of epochs based on $(string(rejection_method))")
+    Logging.info("Rejected $(round.(Int, (1 - retain_percentage) * 100))% of epochs based on $(string(rejection_method))")
 
     # Epoch value should be a value or score per epoch where a lower value is better
     # The lowest `retain_percentage` amount of epoch values will be kept
@@ -35,9 +35,9 @@ function peak2peak(epochs)
 
     epochsNum = size(epochs)[2]
 
-    peakvalues = Array(AbstractFloat, epochsNum)
+    peakvalues = Array{AbstractFloat}(epochsNum)
     for epoch in 1:epochsNum
-        peakvalues[epoch] = abs(maximum(epochs[:, epoch, :]) - minimum(epochs[:, epoch, :]))
+        peakvalues[epoch] = abs.(maximum(epochs[:, epoch, :]) - minimum(epochs[:, epoch, :]))
     end
 
     return peakvalues
@@ -76,5 +76,5 @@ function channel_rejection(sigs::Array{T}, threshold_abs::Number, threshold_var:
     valid_threshold_var = variances  .<  (variances_median + threshold_var * variances_std)
     debug("Dynamic rejection threshold: $(variances_median + threshold_var * variances_std)")
 
-    valid_nonzero & valid_threshold_abs & valid_threshold_var   # Merge all methods
+    valid_nonzero .& valid_threshold_abs .& valid_threshold_var   # Merge all methods
 end

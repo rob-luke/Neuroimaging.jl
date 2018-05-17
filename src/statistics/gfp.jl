@@ -20,7 +20,7 @@ function gfp(x::Array)
                 sumsqdif += (u[sensor] - u[sensor2])^2
             end
         end
-        result[sample] = sqrt(sumsqdif / (2*length(samples)))
+        result[sample] = sqrt.(sumsqdif / (2*length(samples)))
     end
 
     return result

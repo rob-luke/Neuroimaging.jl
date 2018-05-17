@@ -67,7 +67,7 @@ function _filter_check(f::FilterCoefficients, mod_freq::Number, fs::Number, tole
     # Ensure that the filter does not alter the modulation frequency greater than a set tolerance
     #
 
-    mod_change = abs(freqz(f, mod_freq, fs))
+    mod_change = abs.(freqz(f, mod_freq, fs))
     if mod_change > 1 + tolerance || mod_change < 1 - tolerance
         Logging.warn("Filtering has modified modulation frequency greater than set tolerance: $mod_change")
     end
@@ -100,7 +100,7 @@ function downsample(s::SSR, ratio::Rational)
 
     dec_filter  = DSP.FIRFilter([1], ratio)
 
-    new_data = zeros(typeof(s.data[1, 1]), round(Int, size(s.data, 1)*ratio), size(s.data, 2))
+    new_data = zeros(typeof(s.data[1, 1]), round.(Int, size(s.data, 1)*ratio), size(s.data, 2))
 
     for c in 1:size(s.data, 2)
 
@@ -109,7 +109,7 @@ function downsample(s::SSR, ratio::Rational)
 
     s.data = new_data
 
-    s.triggers["Index"] = round(Int, s.triggers["Index"] .* ratio)
+    s.triggers["Index"] = round.(Int, s.triggers["Index"] .* ratio)
     if s.triggers["Index"][1] == 0
         s.triggers["Index"][1] = 1
     end

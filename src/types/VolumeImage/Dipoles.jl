@@ -34,9 +34,9 @@ function new_dipole_method(vi::VolumeImage; min_size::Real = 1, kwargs...)
 
         tmp_vi.data[tmp_vi.data .< threshold] = 0
 
-        val_x = abs(tmp_vi.x .- (dip.x) ) .> (0.015 * Meter)
-        val_y = abs(tmp_vi.y .- (dip.y) ) .> (0.015 * Meter)
-        val_z = abs(tmp_vi.z .- (dip.z) ) .> (0.015 * Meter)
+        val_x = abs.(tmp_vi.x .- (dip.x) ) .> (0.015 * Meter)
+        val_y = abs.(tmp_vi.y .- (dip.y) ) .> (0.015 * Meter)
+        val_z = abs.(tmp_vi.z .- (dip.z) ) .> (0.015 * Meter)
 
         tmp_vi.data[val_x, :, :] = 0
         tmp_vi.data[:, val_y, :] = 0

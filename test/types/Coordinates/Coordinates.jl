@@ -67,11 +67,11 @@ facts("Coordinates") do
 
     context("Distances") do
 
-        @fact euclidean(Talairach(0, 0, 0), Talairach(1, 1, 1)) --> sqrt(3)
+        @fact euclidean(Talairach(0, 0, 0), Talairach(1, 1, 1)) --> sqrt.(3)
 
         v = [0, 0, 0]
-        @fact euclidean(Talairach(1, 1, 1), v) --> sqrt(3)
-        @fact euclidean(v, Talairach(1, 1, 1)) --> sqrt(3)
+        @fact euclidean(Talairach(1, 1, 1), v) --> sqrt.(3)
+        @fact euclidean(v, Talairach(1, 1, 1)) --> sqrt.(3)
 
     end
 end

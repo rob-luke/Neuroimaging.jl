@@ -185,7 +185,7 @@ startDate=a.header["startDate"], startTime=a.header["startTime"], kwargs...) whe
 
     Logging.info("Saving $(size(a.data)[end]) channels to $fname")
 
-    writeBDF(fname, a.data', trigger_channel(a), system_code_channel(a), samplingrate(Int, a),
+    writeBDF(fname, a.data', vec(trigger_channel(a)), vec(system_code_channel(a)), samplingrate(Int, a),
              chanLabels = convert(Array{S, 1}, chanLabels),
              startDate = startDate, startTime = startTime, subjID = subjID)
 
