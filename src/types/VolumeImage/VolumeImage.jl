@@ -16,7 +16,7 @@ The following standard names are used when saving data to the info dictionary.
 * `FileName`: Name of file
 
 """ ->
-type VolumeImage
+mutable struct VolumeImage
     data::Array{AbstractFloat, 4}
     units::AbstractString
     x::Vector{quantity(AbstractFloat, Meter)}
@@ -27,9 +27,9 @@ type VolumeImage
     info::Dict
     coord_system::AbstractString
 
-    function VolumeImage{F<:AbstractFloat, S<:AbstractString}(data::Array{F, 4}, units::S,
-                         x::Vector{F}, y::Vector{F}, z::Vector{F}, t::Vector{F},
-                         method::S, info::Dict, coord_system::S)
+    function VolumeImage(data::Array{F, 4}, units::S,
+x::Vector{F}, y::Vector{F}, z::Vector{F}, t::Vector{F},
+method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractString}
 
         @assert size(data, 1) == length(x)
         @assert size(data, 2) == length(y)
@@ -39,10 +39,10 @@ type VolumeImage
         new(data, units, x, y, z, t, method, info, coord_system)
     end
 
-    function VolumeImage{F<:AbstractFloat, S<:AbstractString, Met<:quantity(AbstractFloat, Meter),
-                         Sec<:quantity(AbstractFloat, Second)}(data::Array{F, 4}, units::S,
-                         x::Vector{Met}, y::Vector{Met}, z::Vector{Met}, t::Vector{Sec},
-                         method::S, info::Dict, coord_system::S)
+    function VolumeImage(data::Array{F, 4}, units::S,
+x::Vector{Met}, y::Vector{Met}, z::Vector{Met}, t::Vector{Sec},
+method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractString, Met<:quantity(AbstractFloat, Meter),
+                                             Sec<:quantity(AbstractFloat, Second)}
 
         @assert size(data, 1) == length(x)
         @assert size(data, 2) == length(y)
@@ -52,9 +52,9 @@ type VolumeImage
         new(data, units, x, y, z, t, method, info, coord_system)
     end
 
-    function VolumeImage{F<:AbstractFloat, S<:AbstractString}(data::Vector{F}, units::S,
-                         x::Vector{F}, y::Vector{F}, z::Vector{F}, t::Vector{F},
-                         method::S, info::Dict, coord_system::S)
+    function VolumeImage(data::Vector{F}, units::S,
+x::Vector{F}, y::Vector{F}, z::Vector{F}, t::Vector{F},
+method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractString}
 
         @assert length(x) == length(data)
         @assert length(y) == length(data)

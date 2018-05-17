@@ -39,7 +39,7 @@ s = SSR("filename")
 ```
 
 """ ->
-type SSR
+mutable struct SSR
     data::Array
     sensors::Array{Sensor}
     triggers::Dict
@@ -116,12 +116,12 @@ s = read_SSR(filename)
 channelnames(s, 1, "Fp1")
 ```
 """
-function channelnames{S <: AbstractString}(s::SSR, i::Int, l::S)
+function channelnames(s::SSR, i::Int, l::S) where S <: AbstractString
 
     s.sensors[i].label = l
     return s
 end
-function channelnames{S <: AbstractString}(s::SSR, l::AbstractVector{S})
+function channelnames(s::SSR, l::AbstractVector{S}) where S <: AbstractString
     for li in 1:length(l)
       s = channelnames(s, li, l[li])
     end
@@ -259,12 +259,12 @@ a = read_SSR(filename)
 remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
 """ ->
-function remove_channel!{S <: AbstractString}(a::SSR, channel_names::Array{S}; kwargs...)
+function remove_channel!(a::SSR, channel_names::Array{S}; kwargs...) where S <: AbstractString
     Logging.debug("Removing channels $(join(channel_names, " "))")
     remove_channel!(a, Int[findfirst(channelnames(a), c) for c=channel_names])
 end
 
-function remove_channel!{S <: AbstractString}(a::SSR, channel_name::S; kwargs...)
+function remove_channel!(a::SSR, channel_name::S; kwargs...) where S <: AbstractString
     Logging.debug("Removing channel $(channel_name)")
     remove_channel!(a, [channel_name])
 end
@@ -319,7 +319,7 @@ a = read_SSR(filename)
 keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
 """ ->
-function keep_channel!{S <: AbstractString}(a::SSR, channel_names::Array{S}; kwargs...)
+function keep_channel!(a::SSR, channel_names::Array{S}; kwargs...) where S <: AbstractString
     Logging.info("Keeping channel(s) $(join(channel_names, " "))")
     keep_channel!(a, vec(round(Int, [findfirst(channelnames(a), c) for c = channel_names])))
 end
@@ -401,7 +401,7 @@ If multiple channels are listed then the average of those channels will be added
 s = merge_channels(s, ["P6", "P8"], "P68")
 ```
 """ ->
-function merge_channels{S <: AbstractString}(a::SSR, merge_Chans::Array{S}, new_name::S; kwargs...)
+function merge_channels(a::SSR, merge_Chans::Array{S}, new_name::S; kwargs...) where S <: AbstractString
 
     debug("Number of original channels: $(length(channelnames(a)))")
 
@@ -418,7 +418,7 @@ function merge_channels{S <: AbstractString}(a::SSR, merge_Chans::Array{S}, new_
     a = add_channel(a, vec(mean(a.data[:,keep_idxs], 2)), new_name; kwargs...)
 end
 
-function merge_channels{S <: AbstractString}(a::SSR, merge_Chans::S, new_name::S; kwargs...)
+function merge_channels(a::SSR, merge_Chans::S, new_name::S; kwargs...) where S <: AbstractString
     a = merge_channels(a, [merge_Chans], new_name; kwargs...)
 end
 

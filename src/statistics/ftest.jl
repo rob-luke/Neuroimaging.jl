@@ -31,8 +31,8 @@ function ftest(sweeps::Union{Array{Float64, 3}, Array{Float32, 3}}, freq_of_inte
 end
 
 
-function ftest{T <: AbstractFloat}(spectrum::Array{Complex{T},2}, frequencies::AbstractArray,
-            freq_of_interest::Real, side_freq::Real, spill_bins::Int)
+function ftest(spectrum::Array{Complex{T},2}, frequencies::AbstractArray,
+            freq_of_interest::Real, side_freq::Real, spill_bins::Int) where T <: AbstractFloat
 
     Logging.info("Calculating F statistic on $(size(spectrum)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
 

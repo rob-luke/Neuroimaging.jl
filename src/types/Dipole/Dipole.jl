@@ -12,7 +12,7 @@ Dipole type.
 * size: size of dipole
 
 """ ->
-type Dipole
+mutable struct Dipole
     coord_system::AbstractString
     x::SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0} # m
     y::SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0} # m

@@ -14,8 +14,8 @@ Determines the local maxima in a 3 dimensional array
 * dips: An array of dipoles
 
 """ ->
-function find_dipoles{T <: Number}(s::Array{T, 3}; window::Array{Int}=[6,6,6], x::AbstractVector{T}=1:size(s,1),
-                                   y::AbstractVector{T}=1:size(s,2), z::AbstractVector{T}=1:size(s,3))
+function find_dipoles(s::Array{T, 3}; window::Array{Int}=[6,6,6], x::AbstractVector{T}=1:size(s,1),
+                      y::AbstractVector{T}=1:size(s,2), z::AbstractVector{T}=1:size(s,3)) where T <: Number
 
     debug("Finding dipoles for 3d array")
 

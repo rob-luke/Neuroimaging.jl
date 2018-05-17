@@ -86,7 +86,7 @@ end
 # Change biosemi labels to 1020
 #######################################
 
-function channelNames_biosemi_1020{S <: AbstractString}(original::S)
+function channelNames_biosemi_1020(original::S) where S <: AbstractString
 
     biosemi_1020 = ["A01" "Fp1"
                     "A1"  "Fp1"
@@ -180,7 +180,7 @@ function channelNames_biosemi_1020{S <: AbstractString}(original::S)
     converted = biosemi_1020[idx+size(biosemi_1020)[1]]
 end
 
-function channelNames_biosemi_1020{S <: AbstractString}(original::Array{S})
+function channelNames_biosemi_1020(original::Array{S}) where S <: AbstractString
 
     converted = Array(AbstractString, size(original))
 

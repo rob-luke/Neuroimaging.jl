@@ -5,9 +5,9 @@
 #
 #######################################
 
-function plot_spectrum{S <: AbstractString, F <: AbstractFloat}(signal::Vector, fs::Real;
-                        titletext::S="", Fmin::Number=0, Fmax::Number=90, targetFreq::F=0.0, dBPlot::Bool=true,
-                        noise_level::Number=0, signal_level::Number=0)
+function plot_spectrum(signal::Vector, fs::Real;
+titletext::S="", Fmin::Number=0, Fmax::Number=90, targetFreq::F=0.0, dBPlot::Bool=true,
+noise_level::Number=0, signal_level::Number=0) where {S <: AbstractString, F <: AbstractFloat}
 
     # Determine fft frequencies
     signal_length = length(signal)
@@ -132,8 +132,8 @@ Plot a single channel time series
 Returns a figure
 
 """ ->
-function plot_single_channel_timeseries{T <: Number, S <: AbstractString}(signal::AbstractVector{T}, fs::Real;
-        xlabel::S="Time (s)", ylabel::S="Amplitude (uV)", lab::S="", kwargs...)
+function plot_single_channel_timeseries(signal::AbstractVector{T}, fs::Real;
+        xlabel::S="Time (s)", ylabel::S="Amplitude (uV)", lab::S="", kwargs...) where {T <: Number, S <: AbstractString}
 
     debug("Plotting single channel waveform of size $(size(signal))")
 
@@ -161,8 +161,8 @@ Plot a multi channel time series
 Returns a figure
 
 """ ->
-function plot_multi_channel_timeseries{T <: Number, S <: AbstractString}(signals::Array{T, 2}, fs::Number, channels::Array{S};
-        xlabel::S="Time (s)", ylabel::S="Amplitude (uV)", kwargs...)
+function plot_multi_channel_timeseries(signals::Array{T, 2}, fs::Number, channels::Array{S};
+        xlabel::S="Time (s)", ylabel::S="Amplitude (uV)", kwargs...) where {T <: Number, S <: AbstractString}
 
     debug("Plotting multi channel waveform of size $(size(signals))")
 

@@ -15,14 +15,14 @@ Simply a wrapper for the DSP.jl functions
 * filtered signal
 * filter used on signal
 """ ->
-function highpass_filter{T <: AbstractFloat}(signals::Array{T}, cutOff::Number, fs::Number, order::Int)
+function highpass_filter(signals::Array{T}, cutOff::Number, fs::Number, order::Int) where T <: AbstractFloat
     debug("Highpass filtering $(size(signals)[end]) channels.  Pass band > $(cutOff) Hz")
     Wn = cutOff/(fs/2)
     highpass_filter(signals, Wn, order)
 end
 
 
-function highpass_filter{T <: AbstractFloat}(signals::Array{T}, Wn::Number, order::Int)
+function highpass_filter(signals::Array{T}, Wn::Number, order::Int) where T <: AbstractFloat
     debug("Filter order = $order, Wn = $Wn")
     f = digitalfilter(Highpass(Wn), Butterworth(order))
     signals = filtfilt(f, signals)
@@ -48,14 +48,14 @@ Simply a wrapper for the DSP.jl functions
 * filtered signal
 * filter used on signal
 """ ->
-function lowpass_filter{T <: AbstractFloat}(signals::Array{T}, cutOff::Number, fs::Number, order::Int)
+function lowpass_filter(signals::Array{T}, cutOff::Number, fs::Number, order::Int) where T <: AbstractFloat
     debug("Lowpass filtering $(size(signals)[end]) channels.  Pass band < $(cutOff) Hz")
     Wn = cutOff/(fs/2)
     lowpass_filter(signals, Wn, order)
 end
 
 
-function lowpass_filter{T <: AbstractFloat}(signals::Array{T}, Wn::Number, order::Int)
+function lowpass_filter(signals::Array{T}, Wn::Number, order::Int) where T <: AbstractFloat
     debug("Filter order = $order, Wn = $Wn")
     f = digitalfilter(Lowpass(Wn), Butterworth(order))
     signals = filtfilt(f, signals)

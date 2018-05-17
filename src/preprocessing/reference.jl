@@ -9,7 +9,7 @@ Remove a template signal from each column of an array
 #### Returns
 Signals with template removed
 """ ->
-function remove_template{T <: AbstractFloat}(signals::Array{T, 2}, template::AbstractVector{T})
+function remove_template(signals::Array{T, 2}, template::AbstractVector{T}) where T <: AbstractFloat
 
     @assert size(signals, 1) == size(template, 1)
 
@@ -35,7 +35,7 @@ If multiple channels are specififed, their average is used as the reference.
 
 Rereferenced signals
 """ ->
-function rereference{T <: AbstractFloat}(signals::Array{T, 2}, refChan::Union{Int, Array{Int}})
+function rereference(signals::Array{T, 2}, refChan::Union{Int, Array{Int}}) where T <: AbstractFloat
 
     debug("Re referencing $(size(signals)[end]) channels to $(length(refChan)) channels")
     debug("Reference channels = $refChan")
@@ -67,7 +67,7 @@ Or you can specify to use the `average` reference.
 
 Rereferenced signals
 """ ->
-function rereference{S <: AbstractString, T <: AbstractFloat}(signals::Array{T, 2}, refChan::S, chanNames::Vector{S})
+function rereference(signals::Array{T, 2}, refChan::S, chanNames::Vector{S}) where {S <: AbstractString, T <: AbstractFloat}
 
     debug("Reference channels = $refChan")
 
@@ -83,7 +83,7 @@ function rereference{S <: AbstractString, T <: AbstractFloat}(signals::Array{T, 
 end
 
 
-function rereference{S <: AbstractString, T <: AbstractFloat}(signals::Array{T, 2}, refChan::Vector{S}, chanNames::Vector{S})
+function rereference(signals::Array{T, 2}, refChan::Vector{S}, chanNames::Vector{S}) where {S <: AbstractString, T <: AbstractFloat}
 
     debug("Reference channels = $refChan")
 

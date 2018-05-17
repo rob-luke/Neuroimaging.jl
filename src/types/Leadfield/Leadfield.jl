@@ -1,4 +1,4 @@
-type Leadfield{T <: AbstractFloat, S <: AbstractString}
+mutable struct Leadfield{T <: AbstractFloat, S <: AbstractString}
     L::Array{T, 3}
     x::Vector{T}
     y::Vector{T}

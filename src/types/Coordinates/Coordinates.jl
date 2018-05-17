@@ -1,24 +1,24 @@
-abstract Coordinate
+abstract type Coordinate end
 
-type BrainVision <: Coordinate
+mutable struct BrainVision <: Coordinate
     x::Number
     y::Number
     z::Number
 end
 
-type Talairach <: Coordinate
+mutable struct Talairach <: Coordinate
     x::Number
     y::Number
     z::Number
 end
 
-type SPM <: Coordinate
+mutable struct SPM <: Coordinate
     x::Number
     y::Number
     z::Number
 end
 
-type UnknownCoordinate <: Coordinate
+mutable struct UnknownCoordinate <: Coordinate
     x::Number
     y::Number
     z::Number
@@ -26,6 +26,6 @@ end
 
 
 import Base.show
-function show{S <: Coordinate}(c::S)
+function show(c::S) where S <: Coordinate
     println("Coordinate: $(typeof(c)) - ($(c.x), $(c.y), $(c.z))")
 end

@@ -178,11 +178,11 @@ end
 @doc """
 Write dat file
 """ ->
-function write_dat{DataT <: AbstractFloat}(fname::AbstractString,
-                   X::AbstractVector, Y::AbstractVector, Z::AbstractVector,
-                   S::Array{DataT,4}, T::AbstractVector;
-                   data_file::AbstractString="NA", condition::AbstractString="NA", method::AbstractString="NA", regularization::AbstractString="NA",
-                   units::AbstractString="NA")
+function write_dat(fname::AbstractString,
+X::AbstractVector, Y::AbstractVector, Z::AbstractVector,
+S::Array{DataT,4}, T::AbstractVector;
+data_file::AbstractString="NA", condition::AbstractString="NA", method::AbstractString="NA", regularization::AbstractString="NA",
+units::AbstractString="NA") where DataT <: AbstractFloat
 
     if size(S,1) != length(X); Logging.warn("Data and x sizes do not match"); end
     if size(S,2) != length(Y); Logging.warn("Data and y sizes do not match"); end

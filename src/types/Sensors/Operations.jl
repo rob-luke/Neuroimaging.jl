@@ -3,7 +3,7 @@ Match a set of electrodes to those provided
 
 usage: lf, valid = match_sensors(electrodes, sensor_labels)
 """
-function match_sensors{AS <: AbstractString, S <: Sensor}(sens::Array{S}, lbls::Array{AS})
+function match_sensors(sens::Array{S}, lbls::Array{AS}) where {AS <: AbstractString, S <: Sensor}
 
     valid_idx = Int[]
     for label = lbls
@@ -18,7 +18,7 @@ function match_sensors{AS <: AbstractString, S <: Sensor}(sens::Array{S}, lbls::
 end
 
 
-function match_sensors{S <: AbstractString}(lf::Array, lf_labels::Array{S}, labels::Array{S})
+function match_sensors(lf::Array, lf_labels::Array{S}, labels::Array{S}) where S <: AbstractString
     # Match the sensors in a leadfield array to those provided
     #
     # usage: lf, valid = match_sensors(leadfield, leadfield_labels, sensor_labels)

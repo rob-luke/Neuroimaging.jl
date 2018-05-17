@@ -178,8 +178,8 @@ function system_code_channel(a::SSR; kwargs...)
 end
 
 
-function write_SSR{S <: AbstractString}(a::SSR, fname::S; chanLabels=channelnames(a), subjID=a.header["subjID"],
-                   startDate=a.header["startDate"], startTime=a.header["startTime"], kwargs...)
+function write_SSR(a::SSR, fname::S; chanLabels=channelnames(a), subjID=a.header["subjID"],
+startDate=a.header["startDate"], startTime=a.header["startTime"], kwargs...) where S <: AbstractString
 
     fname = convert(String, fname)
 

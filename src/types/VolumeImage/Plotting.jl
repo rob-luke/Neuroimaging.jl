@@ -36,9 +36,9 @@ function plot(v::VolumeImage; kwargs...)
 end
 
 
-function plot_src{A <: AbstractFloat, S <: AbstractString}(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
+function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
             threshold::Real=-Inf, min_val::Real=Inf, max_val::Real=-Inf, minsize::Real=2, maxsize::Real=6,
-            exclude::A=0.0, title::S="", elp::AbstractString="", colorbar::Bool=true, kwargs...)
+            exclude::A=0.0, title::S="", elp::AbstractString="", colorbar::Bool=true, kwargs...) where {A <: AbstractFloat, S <: AbstractString}
 
     # cols = [colorant"darkblue", colorant"orange", colorant"darkred"]
 
