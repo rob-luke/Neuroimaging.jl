@@ -1,5 +1,9 @@
 # EEG.jl News
 
+## v0.3.1
+* Remove depreciations
+* Clean test output
+
 ## v0.3.0
 * Drop support for julia v0.5
 * Only supports julia v0.6
