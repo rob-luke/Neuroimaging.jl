@@ -86,7 +86,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
         epochIndex[:Length] = [0; diff(epochIndex[:Index])]
         if min_epoch_length > 0
             epochIndex[:valid_length] = epochIndex[:Length] .> min_epoch_length
-            num_non_valid = sum(!epochIndex[:valid_length])
+            num_non_valid = sum(.!epochIndex[:valid_length])
             if num_non_valid > 1    # Don't count the first trigger
                 debug("Removed $num_non_valid triggers < length $min_epoch_length")
                 epochIndex = epochIndex[epochIndex[:valid_length], :]
@@ -95,7 +95,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
         epochIndex[:Length] = [0, diff(epochIndex[:Index]); ]
         if max_epoch_length != 0
             epochIndex[:valid_length] = epochIndex[:Length] .< max_epoch_length
-            num_non_valid = sum(!epochIndex[:valid_length])
+            num_non_valid = sum(.!epochIndex[:valid_length])
             if num_non_valid > 0
               debug("Removed $num_non_valid triggers > length $max_epoch_length")
                 epochIndex = epochIndex[epochIndex[:valid_length], :]

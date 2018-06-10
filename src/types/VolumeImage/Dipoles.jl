@@ -59,6 +59,6 @@ function new_dipole_method(vi::VolumeImage; min_size::Real = 1, kwargs...)
     unique_dipoles(new_dips)
 end
 
-unique_dipoles(dips = Array{Dipoles}) = dips[find(![false; diff([d.size for d in dips]) .== 0])]
+unique_dipoles(dips = Array{Dipoles}) = dips[find(.![false; diff([d.size for d in dips]) .== 0])]
 
 lowest_dipole(dips = Array{Dipoles}) = dips[find([d.z for d in dips] .== minimum([d.z for d in dips]))]
