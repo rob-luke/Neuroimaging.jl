@@ -64,7 +64,7 @@ function save_results(a::SSR; name_extension::AbstractString="", results_key::Ab
 
         to_save = get(results, collect(keys(results))[result_idx[1]], 0)
 
-        writetable(file_name, to_save)
+        CSV.write(file_name, to_save)
     end
 
     Logging.info("File saved to $file_name")
