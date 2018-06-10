@@ -8,7 +8,7 @@ facts("Steady State Responses") do
 
     context("Show") do
 
-        show(s)
+        @suppress_out show(s)
 
     end
 

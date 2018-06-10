@@ -153,10 +153,10 @@ facts("Volume Image") do
     end
 
     context("Show") do
-    	show(t)
-    	show(normalise(t))
+    	@suppress_out show(t)
+    	@suppress_out show(normalise(t))
     	t.info["Regularisation"] = 1.2
-    	show(t)
+    	@suppress_out show(t)
     end
 
     context("Plotting") do

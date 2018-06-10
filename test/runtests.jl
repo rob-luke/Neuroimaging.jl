@@ -6,6 +6,7 @@ using SIUnits, SIUnits.ShortUnits
 using FileFind
 using Plots
 using FactCheck
+using Suppressor
 
 Logging.configure(level=DEBUG)
 Logging.configure(output=open("logfile.log", "a"))

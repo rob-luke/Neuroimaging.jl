@@ -11,7 +11,7 @@ facts("Leadfield") do
 
     context("Show") do
 
-        show(L)
+        @suppress_out show(L)
     end
 
     context("Match") do

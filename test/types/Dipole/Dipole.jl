@@ -15,8 +15,8 @@ facts("Dipoles") do
 
     context("Show") do
 
-        show(dips[1])
-        show(dips)
+        @suppress_out show(dips[1])
+        @suppress_out show(dips)
     end
 
 

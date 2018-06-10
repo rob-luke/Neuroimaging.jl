@@ -13,8 +13,8 @@ facts("Sensors") do
 
     context("Show") do
 
-        show(s)
-        show(s[1])
+        @suppress_out show(s)
+        @suppress_out show(s[1])
     end
 
 

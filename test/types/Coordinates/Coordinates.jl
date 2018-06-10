@@ -4,25 +4,25 @@ facts("Coordinates") do
         context("Brain Vision") do
             bv = BrainVision(0, 0, 0)
             context("Show") do
-                show(bv)
+                @suppress_out show(bv)
             end
         end
         context("Talairach") do
             tal = Talairach(68.3, -26.9, 8.3)
             context("Show") do
-                show(tal)
+                @suppress_out show(tal)
             end
         end
         context("SPM") do
             spm = SPM(68.3, -26.9, 8.3)
             context("Show") do
-                show(spm)
+                @suppress_out show(spm)
             end
         end
         context("Unknown") do
             uk = UnknownCoordinate(1.2, 2, 3.2)
             context("Show") do
-                show(uk)
+                @suppress_out show(uk)
             end
         end
     end
