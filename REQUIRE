@@ -1,11 +1,10 @@
 julia 0.7
 
-AWS
 CSV
 DSP
 BDF
 DataFrames
-SIUnits
+Unitful
 ProgressMeter
 Distributions
 Distances
@@ -14,3 +13,4 @@ Synchrony
 Images
 MAT
 Plots
+Glob

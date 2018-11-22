@@ -1,17 +1,11 @@
 using EEG
-using Base.Test
+using Test
 using Logging
 using MAT, BDF
-using SIUnits, SIUnits.ShortUnits
-using FileFind
 using Plots
-using FactCheck
+using Glob
 using Suppressor
-
-Logging.configure(level=DEBUG)
-Logging.configure(output=open("logfile.log", "a"))
-unicodeplots()
-
+using Printf
 
 #
 # Run all tests
@@ -26,9 +20,19 @@ function add_test(fname)
         end
     end
 end
-FileFind.find(".", add_test)
+
+
+for (root, dirs, files) in walkdir(".")
+    for file in files
+        if endswith(file, ".jl")
+            if !contains(file, "runtests")
+                push!(tests, joinpath(root, file))
+            end
+        end
+    end
+end
 
 for t in tests
+    println("Testing $t")
     include(t)
 end
-FactCheck.exitstatus()

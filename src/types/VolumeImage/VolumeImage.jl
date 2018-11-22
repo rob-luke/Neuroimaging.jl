@@ -19,10 +19,10 @@ The following standard names are used when saving data to the info dictionary.
 mutable struct VolumeImage
     data::Array{AbstractFloat, 4}
     units::AbstractString
-    x::Vector{quantity(AbstractFloat, Meter)}
-    y::Vector{quantity(AbstractFloat, Meter)}
-    z::Vector{quantity(AbstractFloat, Meter)}
-    t::Vector{quantity(AbstractFloat, Second)}
+    x::typeof(1.0u"m")
+    y::typeof(1.0u"m")
+    z::typeof(1.0u"m")
+    t::typeof(1.0u"s")
     method::AbstractString
     info::Dict
     coord_system::AbstractString
@@ -41,8 +41,8 @@ method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractStri
 
     function VolumeImage(data::Array{F, 4}, units::S,
 x::Vector{Met}, y::Vector{Met}, z::Vector{Met}, t::Vector{Sec},
-method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractString, Met<:quantity(AbstractFloat, Meter),
-                                             Sec<:quantity(AbstractFloat, Second)}
+method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractString, Met<:typeof(1.0u"m"),
+                                               Sec<:typeof(1.0u"s")}
 
         @assert size(data, 1) == length(x)
         @assert size(data, 2) == length(y)

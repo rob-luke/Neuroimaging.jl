@@ -1,5 +1,4 @@
 using Plots
-using SIUnits
 
 import Plots.plot
 
