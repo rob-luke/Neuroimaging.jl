@@ -35,7 +35,7 @@ function conv_bv2tal(Xbv::Union{AbstractArray, Number}, Ybv::Union{AbstractArray
     Y = -Xbv .+ offset
     Z = -Ybv .+ offset
 
-    Logging.info("Converted $(length(Xbv)) coordinates to talairach space from BV")
+    @info("Converted $(length(Xbv)) coordinates to talairach space from BV")
 
     return X, Y, Z
 end
@@ -69,7 +69,7 @@ function conv_spm_mni2tal(Xspm::Union{AbstractArray, Number}, Yspm::Union{Abstra
     Y = inpoints[2, :]'
     Z = inpoints[3, :]'
 
-    Logging.info("Converted $(length(X)) coordinates to talairach space from SPM MNI")
+    @info("Converted $(length(X)) coordinates to talairach space from SPM MNI")
 
     return X, Y, Z
 end

@@ -10,7 +10,7 @@ Validate trigger channel
 """ ->
 function validate_triggers(t::Dict)
 
-    debug("Validating trigger information")
+    @debug("Validating trigger information")
 
     if t.count > 3
         err("Trigger channel has extra columns")
@@ -44,7 +44,7 @@ Clean trigger channel
 function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::Int, max_epoch_length::Int,
                         remove_first::Int, max_epochs::Int)
 
-    debug("Cleaning triggers")
+    @debug("Cleaning triggers")
 
     # Ensure the passed in dictionary contains all required fields
     validate_triggers(t)
@@ -53,18 +53,18 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
     epochIndex = DataFrame(Code = t["Code"] -252, Index = t["Index"], Duration = t["Duration"])
 
     # Present information about triggers before processing
-    debug("Original trigger codes $(unique(epochIndex[:Code]))")
-    debug("Originally $(length(epochIndex[:Code])) triggers")
+    @debug("Original trigger codes $(unique(epochIndex[:Code]))")
+    @debug("Originally $(length(epochIndex[:Code])) triggers")
 
     # Check for not valid indices and throw a warning
     if sum([in(i, [0; valid_triggers]) for i = epochIndex[:Code]]) != length(epochIndex[:Code])
-        Logging.warn("Non valid triggers found")
+        @warn("Non valid triggers found")
         validity = Bool[]
         for ep in epochIndex[:Code]
             push!(validity, in(ep, valid_triggers))
         end
         non_valid = sort(unique(epochIndex[:Code][.!validity]))
-        Logging.warn("Non valid triggers: $non_valid")
+        @warn("Non valid triggers: $non_valid")
     end
 
     # Just take valid indices
@@ -74,11 +74,11 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
     # Trim values if requested
     if remove_first > 0
         epochIndex = epochIndex[remove_first+1:end,:]
-        debug("Trimming first $remove_first triggers")
+        @debug("Trimming first $remove_first triggers")
     end
     if max_epochs != 0
         epochIndex = epochIndex[1:minimum([max_epochs, length(epochIndex[:Index])]),:]
-        debug("Trimming to $max_epochs triggers")
+        @debug("Trimming to $max_epochs triggers")
     end
 
     # Throw out epochs that are the wrong length
@@ -88,7 +88,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
             epochIndex[:valid_length] = epochIndex[:Length] .> min_epoch_length
             num_non_valid = sum(.!epochIndex[:valid_length])
             if num_non_valid > 1    # Don't count the first trigger
-                debug("Removed $num_non_valid triggers < length $min_epoch_length")
+                @debug("Removed $num_non_valid triggers < length $min_epoch_length")
                 epochIndex = epochIndex[epochIndex[:valid_length], :]
             end
         end
@@ -97,17 +97,17 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
             epochIndex[:valid_length] = epochIndex[:Length] .< max_epoch_length
             num_non_valid = sum(.!epochIndex[:valid_length])
             if num_non_valid > 0
-              debug("Removed $num_non_valid triggers > length $max_epoch_length")
+              @debug("Removed $num_non_valid triggers > length $max_epoch_length")
                 epochIndex = epochIndex[epochIndex[:valid_length], :]
             end
         end
 
         # Sanity check
         if std(epochIndex[:Length][2:end]) > 1
-            Logging.warn("Your epoch lengths vary too much")
-            Logging.warn(string("Length: median=$(median(epochIndex[:Length][2:end])) sd=$(std(epochIndex[:Length][2:end])) ",
+            @warn("Your epoch lengths vary too much")
+            @warn(string("Length: median=$(median(epochIndex[:Length][2:end])) sd=$(std(epochIndex[:Length][2:end])) ",
                   "min=$(minimum(epochIndex[:Length][2:end]))"))
-            debug(epochIndex)
+            @debug(epochIndex)
         end
 
     end
@@ -115,7 +115,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
     # If the trigger has been signalled by 0 status then offset this
     # Otherwise when saving and reading again, nothing will be detected
     if sum(epochIndex[:Code]) == 0
-        Logging.warn("Trigger status indicated by 0, shifting to 1 for further processing")
+        @warn("Trigger status indicated by 0, shifting to 1 for further processing")
         epochIndex[:Code] = epochIndex[:Code] .+ 1
     end
 
@@ -150,8 +150,8 @@ function extra_triggers(t::Dict, old_trigger_code::Union{Int, Array{Int}},
     valid_trip_index = [t["Index"][valid_trip_idx]; 0]  # Place a 0 at end so we dont use the last epoch
     valid_trip_code  = t["Code"][valid_trip_idx]
 
-    debug("Found $(length(valid_trip_code)) exisiting valid triggers")
-    debug("Adding new trigger $new_trigger_code after $new_trigger_time (s) = $new_trigger_delay (samples) from $old_trigger_code")
+    @debug("Found $(length(valid_trip_code)) exisiting valid triggers")
+    @debug("Adding new trigger $new_trigger_code after $new_trigger_time (s) = $new_trigger_delay (samples) from $old_trigger_code")
 
     validate_triggers(t)
 

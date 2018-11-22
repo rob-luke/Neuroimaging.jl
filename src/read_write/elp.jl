@@ -18,7 +18,7 @@ Read elp file containing sensor locations
 """ ->
 function read_elp(fname::AbstractString; coordinate=Talairach, r::Real=90)
 
-    info("Reading elp file = $fname")
+    @info("Reading elp file = $fname")
 
     # Create an empty electrode set
     elecs = Electrode[]
@@ -45,7 +45,7 @@ function read_elp(fname::AbstractString; coordinate=Talairach, r::Real=90)
         push!(elecs, Electrode(replace(local_matches[1], "'", "" ), coordinate(x, y, z), Dict()))
     end
 
-    debug("Imported $(length(elecs)) electrodes")
+    @debug("Imported $(length(elecs)) electrodes")
 
     return elecs
 end

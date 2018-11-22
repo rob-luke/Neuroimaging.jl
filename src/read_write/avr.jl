@@ -16,7 +16,7 @@ Read AVR (.avr) file
 
 """ ->
 function read_avr(fname::AbstractString)
-    Logging.info("Reading AVR file: $fname")
+    @info("Reading AVR file: $fname")
 
     # Open file
     file = open(fname, "r")
@@ -55,7 +55,7 @@ Write AVR file
 """ ->
 function write_avr(fname::AbstractString, data::Array, chanNames::Array, fs::Number)
 
-    Logging.info("Saving avr to $fname")
+    @info("Saving avr to $fname")
 
     fs  = float(fs)
 

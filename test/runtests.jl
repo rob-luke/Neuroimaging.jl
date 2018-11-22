@@ -1,11 +1,12 @@
 using EEG
 using Test
-using Logging
 using MAT, BDF
 using Plots
 using Glob
 using Suppressor
 using Printf
+using Logging
+
 
 #
 # Run all tests
@@ -36,3 +37,5 @@ for t in tests
     println("Testing $t")
     include(t)
 end
+
+close(io)

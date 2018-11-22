@@ -9,7 +9,7 @@ function match_sensors(sens::Array{S}, lbls::Array{AS}) where {AS <: AbstractStr
     for label = lbls
         matched_idx = findfirst(labels(sens), label)
         if matched_idx != 0; push!(valid_idx, matched_idx); end
-        debug("Label $label matched to $( matched_idx == 0 ? "!! nothing !!" : sens[matched_idx].label)")
+        @debug("Label $label matched to $( matched_idx == 0 ? "!! nothing !!" : sens[matched_idx].label)")
     end
 
     sens = sens[valid_idx]
@@ -27,10 +27,10 @@ function match_sensors(lf::Array, lf_labels::Array{S}, labels::Array{S}) where S
     for label = labels
         matched_idx = findfirst(lf_labels, label)
         if matched_idx != 0; push!(valid_idx, matched_idx); end
-        debug("Label $label matched to $( matched_idx == 0 ? "!! nothing !!" : lf_labels[matched_idx])")
+        @debug("Label $label matched to $( matched_idx == 0 ? "!! nothing !!" : lf_labels[matched_idx])")
     end
 
-    info("Leadfield had $(length(lf_labels)) channels, now has $(length(valid_idx)) channels")
+    @info("Leadfield had $(length(lf_labels)) channels, now has $(length(valid_idx)) channels")
 
     lf = lf[:,:,valid_idx]
     lf_labels = lf_labels[valid_idx]

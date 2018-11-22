@@ -7,7 +7,7 @@ function +(vi1::VolumeImage, vi2::VolumeImage)
 
     dimensions_equal(vi1, vi2)
 
-    debug("Adding two volume images with $(size(vi1.data, 4)) time instances")
+    @debug("Adding two volume images with $(size(vi1.data, 4)) time instances")
 
     vout = deepcopy(vi1)
 
@@ -23,7 +23,7 @@ function -(vi1::VolumeImage, vi2::VolumeImage)
 
     dimensions_equal(vi1, vi2)
 
-    debug("Subtracting two volume images with $(size(vi1.data, 4)) time instances")
+    @debug("Subtracting two volume images with $(size(vi1.data, 4)) time instances")
 
     vout = deepcopy(vi1)
 
@@ -39,7 +39,7 @@ function /(vi1::VolumeImage, vi2::VolumeImage)
 
     dimensions_equal(vi1, vi2)
 
-    debug("Dividing two volume images with $(size(vi1.data, 4)) time instances")
+    @debug("Dividing two volume images with $(size(vi1.data, 4)) time instances")
 
     vout = deepcopy(vi1)
 
@@ -74,7 +74,7 @@ end
 
 function mean(vi::VolumeImage)
 
-    debug("Taking mean of one volume images with $(size(vi.data, 4)) time instances")
+    @debug("Taking mean of one volume images with $(size(vi.data, 4)) time instances")
 
     vout = deepcopy(vi)
 
@@ -88,7 +88,7 @@ end
 
 function mean(va::Array{VolumeImage,1})
 
-    debug("Taking mean of $(length(va)) volume images with $(size(va[1].data, 4)) time instances")
+    @debug("Taking mean of $(length(va)) volume images with $(size(va[1].data, 4)) time instances")
 
     mean_va = deepcopy(va[1])
 
@@ -133,7 +133,7 @@ end
 
 function normalise(vi::VolumeImage)
 
-    debug("Normalising one volume images with $(size(vi.data, 4)) time instances")
+    @debug("Normalising one volume images with $(size(vi.data, 4)) time instances")
 
     normalisation_constant = maximum(vi)
 
@@ -146,7 +146,7 @@ end
 
 function normalise(va::Array{VolumeImage, 1})
 
-    debug("Normalising $(length(va)) volume images with $(size(va[1].data, 4)) time instances")
+    @debug("Normalising $(length(va)) volume images with $(size(va[1].data, 4)) time instances")
 
     vo = deepcopy(va)
     for i in 1:length(vo)

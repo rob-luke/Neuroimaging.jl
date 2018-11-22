@@ -50,7 +50,7 @@ end
 
 function add_triggers(a::SSR; kwargs...)
 
-    debug("Adding triggers to reduce SSR. Using SSR modulation frequency")
+    @debug("Adding triggers to reduce SSR. Using SSR modulation frequency")
 
     add_triggers(a, modulationrate(a); kwargs...)
 end
@@ -58,7 +58,7 @@ end
 
 function add_triggers(a::SSR, mod_freq::Number; kwargs...)
 
-    debug("Adding triggers to reduce SSR. Using $(mod_freq)Hz")
+    @debug("Adding triggers to reduce SSR. Using $(mod_freq)Hz")
 
     epochIndex = DataFrame(Code = a.triggers["Code"], Index = [Int(i) for i in a.triggers["Index"]]);
     epochIndex[:Code] = epochIndex[:Code] - 252
@@ -69,26 +69,26 @@ end
 
 function add_triggers(a::SSR, mod_freq::Number, epochIndex; cycle_per_epoch::Int=1, kwargs...)
 
-    Logging.info("Adding triggers to reduce SSR. Reducing $(mod_freq)Hz to $cycle_per_epoch cycle(s).")
+    @info("Adding triggers to reduce SSR. Reducing $(mod_freq)Hz to $cycle_per_epoch cycle(s).")
 
     # Existing epochs
     existing_epoch_length   = median(diff(epochIndex[:Index]))     # samples
     existing_epoch_length_s = existing_epoch_length / samplingrate(a)
-    debug("Existing epoch length: $(existing_epoch_length_s)s")
+    @debug("Existing epoch length: $(existing_epoch_length_s)s")
 
     # New epochs
     new_epoch_length_s = cycle_per_epoch / mod_freq
     new_epochs_num     = round.(existing_epoch_length_s / new_epoch_length_s) - 2
     new_epoch_times    = collect(1:new_epochs_num)*new_epoch_length_s
     new_epoch_indx     = [0; round.(new_epoch_times * samplingrate(a))]
-    debug("New epoch length = $new_epoch_length_s")
-    debug("New # epochs     = $new_epochs_num")
+    @debug("New epoch length = $new_epoch_length_s")
+    @debug("New # epochs     = $new_epochs_num")
 
     # Place new epoch indices
-    debug("Was $(length(epochIndex[:Index])) indices")
+    @debug("Was $(length(epochIndex[:Index])) indices")
     new_indx = epochIndex[:Index][1:end-1] .+ new_epoch_indx'
     new_indx = reshape(new_indx', length(new_indx), 1)[1:end-1]
-    debug("Now $(length(new_indx)) indices")
+    @debug("Now $(length(new_indx)) indices")
 
     # Place in dict
     new_code = round.(Int, ones(1, length(new_indx))) .+ 252
@@ -119,7 +119,7 @@ function channel_rejection(a::SSR; threshold_abs::Number=1000, threshold_var::Nu
 
     valid = channel_rejection(data, threshold_abs, threshold_var)
 
-    Logging.info("Rejected $(sum(.!valid)) channels $(join(channelnames(a)[find(.!valid)], " "))")
+    @info("Rejected $(sum(.!valid)) channels $(join(channelnames(a)[find(.!valid)], " "))")
 
     remove_channel!(a, channelnames(a)[find(.!valid)])
 

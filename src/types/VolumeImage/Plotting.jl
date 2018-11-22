@@ -76,14 +76,14 @@ function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
         end
     end
     if max_val > maximum(c_tmp)
-        Logging.debug("Manually specifying maximum plotting value")
+        @debug("Manually specifying maximum plotting value")
         push!(s_tmp, max_val)
         push!(c_tmp, max_val)
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
     if min_val < minimum(c_tmp)
-        Logging.debug("Manually specifying minimum plotting value")
+        @debug("Manually specifying minimum plotting value")
         push!(s_tmp, min_val)
         push!(c_tmp, min_val)
         push!(x_tmp, -200)
@@ -127,14 +127,14 @@ function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
         end
     end
     if max_val > maximum(c_tmp)
-        Logging.debug("Manually specifying maximum plotting value")
+        @debug("Manually specifying maximum plotting value")
         push!(s_tmp, max_val)
         push!(c_tmp, max_val)
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
     if min_val < minimum(c_tmp)
-        Logging.debug("Manually specifying minimum plotting value")
+        @debug("Manually specifying minimum plotting value")
         push!(s_tmp, min_val)
         push!(c_tmp, min_val)
         push!(x_tmp, -200)
@@ -177,14 +177,14 @@ function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
         end
     end
     if max_val > maximum(c_tmp)
-        Logging.debug("Manually specifying maximum plotting value")
+        @debug("Manually specifying maximum plotting value")
         push!(s_tmp, max_val)
         push!(c_tmp, max_val)
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
     if min_val < minimum(c_tmp)
-        Logging.debug("Manually specifying minimum plotting value")
+        @debug("Manually specifying minimum plotting value")
         push!(s_tmp, min_val)
         push!(c_tmp, min_val)
         push!(x_tmp, -200)

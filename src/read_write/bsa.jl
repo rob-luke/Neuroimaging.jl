@@ -14,7 +14,7 @@ Read Besa's BSA (.bsa) file
 * `bsa`: Dipole object
 """ ->
 function read_bsa(fname::AbstractString)
-    Logging.info("Reading BSA file = $fname")
+    @info("Reading BSA file = $fname")
 
     # Open file
     file = open(fname, "r")
@@ -47,9 +47,9 @@ function read_bsa(fname::AbstractString)
     # Close file
     close(file)
 
-    debug("Version = $version")
-    debug("Coordinate System  = $coordinate_system")
-    debug("Dipoles = $(length(dips))")
+    @debug("Version = $version")
+    @debug("Coordinate System  = $coordinate_system")
+    @debug("Dipoles = $(length(dips))")
 
     return dips
 end

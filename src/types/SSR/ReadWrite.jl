@@ -46,13 +46,13 @@ function read_SSR(fname::String;
                   kwargs...)
 
 
-    Logging.info("Importing SSR from file: $fname")
+    @info("Importing SSR from file: $fname")
 
     file_path, file_name, ext = fileparts(fname)
 
     if env != nothing
 
-        debug("File type is S3")
+        @debug("File type is S3")
         fname = S3.get_object(env, bkt, fname).obj
     end
 
@@ -64,8 +64,8 @@ function read_SSR(fname::String;
     # Extract frequency from the file name if not set manually
     if contains(file_name, "Hz") && isnan(modulationrate)
         a = match(r"[-_](\d+[_.]?[\d+]?)Hz|Hz(\d+[_.]?[\d+]?)[-_]", file_name).captures
-        modulationrate = float(a[[i !== nothing for i = a]][1]) * Hertz
-        debug("Extracted modulation frequency from file name: $modulationrate")
+        modulationrate = float(a[[i !== nothing for i = a]][1]) * u"Hz"
+        @debug("Extracted modulation frequency from file name: $modulationrate")
     end
 
     # Or even better if there is a mat file read it
@@ -91,7 +91,7 @@ function read_SSR(fname::String;
     if ext == "bdf"
         data, triggers, system_codes, samplingrate, reference_channel, header = import_biosemi(fname; kwargs...)
     else
-        warn("File type $ext is unknown")
+        @warn("File type $ext is unknown")
     end
 
     # Create electrodes
@@ -101,7 +101,7 @@ function read_SSR(fname::String;
     end
 
     # Create SSR type
-    a = SSR(data, elecs, triggers, system_codes, samplingrate * Hertz, modulationrate,
+    a = SSR(data, elecs, triggers, system_codes, samplingrate * u"Hz", modulationrate * u"Hz",
             [reference_channel], file_path, file_name, Dict(), header)
 
 
@@ -183,7 +183,7 @@ startDate=a.header["startDate"], startTime=a.header["startTime"], kwargs...) whe
 
     fname = convert(String, fname)
 
-    Logging.info("Saving $(size(a.data)[end]) channels to $fname")
+    @info("Saving $(size(a.data)[end]) channels to $fname")
 
     writeBDF(fname, a.data', vec(trigger_channel(a)), vec(system_code_channel(a)), samplingrate(Int, a),
              chanLabels = convert(Array{S, 1}, chanLabels),

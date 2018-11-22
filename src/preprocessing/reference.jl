@@ -37,8 +37,8 @@ Rereferenced signals
 """ ->
 function rereference(signals::Array{T, 2}, refChan::Union{Int, Array{Int}}) where T <: AbstractFloat
 
-    debug("Re referencing $(size(signals)[end]) channels to $(length(refChan)) channels")
-    debug("Reference channels = $refChan")
+    @debug("Re referencing $(size(signals)[end]) channels to $(length(refChan)) channels")
+    @debug("Reference channels = $refChan")
 
     reference_signal = signals[:, refChan]
 
@@ -69,7 +69,7 @@ Rereferenced signals
 """ ->
 function rereference(signals::Array{T, 2}, refChan::S, chanNames::Vector{S}) where {S <: AbstractString, T <: AbstractFloat}
 
-    debug("Reference channels = $refChan")
+    @debug("Reference channels = $refChan")
 
     if refChan == "car" || refChan == "average"
         refChan_Idx = collect(1:size(signals, 2))
@@ -85,7 +85,7 @@ end
 
 function rereference(signals::Array{T, 2}, refChan::Vector{S}, chanNames::Vector{S}) where {S <: AbstractString, T <: AbstractFloat}
 
-    debug("Reference channels = $refChan")
+    @debug("Reference channels = $refChan")
 
     refChan_Idx = [findfirst(chanNames, i) for i = refChan]
 

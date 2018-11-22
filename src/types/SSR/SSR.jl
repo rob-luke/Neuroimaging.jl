@@ -73,7 +73,7 @@ s = read_SSR(filename)
 samplingrate(s)
 ```
 """ ->
-samplingrate(t, s::SSR) = convert(t, float(s.samplingrate))
+samplingrate(t, s::SSR) = convert(t, s.samplingrate/u"Hz")
 samplingrate(s::SSR) = samplingrate(AbstractFloat, s)
 
 
@@ -90,7 +90,7 @@ s = read_SSR(filename)
 modulationrate(s)
 ```
 """ ->
-modulationrate(t, s::SSR) = convert(t, float(s.modulationrate))
+modulationrate(t, s::SSR) = convert(t, s.modulationrate/u"Hz")
 modulationrate(s::SSR) = modulationrate(AbstractFloat, s)
 
 
@@ -180,13 +180,13 @@ function hcat(a::SSR, b::SSR)
     end
 
     if haskey(a.processing, "epochs")
-        warn("Epochs have already been extracted and will no longer be valid")
+        @warn("Epochs have already been extracted and will no longer be valid")
     end
     if haskey(a.processing, "statistics")
-        warn("Statistics have already been calculated and will no longer be valid")
+        @warn("Statistics have already been calculated and will no longer be valid")
     end
 
-    debug("Appending two SSRs with $(size(a.data, 2)) .& $(size(b.data, 2)) channels and lengths $(size(a.data, 1)) $(size(b.data, 1))")
+    @debug("Appending two SSRs with $(size(a.data, 2)) .& $(size(b.data, 2)) channels and lengths $(size(a.data, 1)) $(size(b.data, 1))")
 
     join_triggers(a, b)
     a.data = [a.data; b.data]
@@ -238,7 +238,7 @@ s = add_channel(s, new_channel, "Merged")
 """ ->
 function add_channel(a::SSR, data::Vector, chanLabel::AbstractString; kwargs...)
 
-    Logging.info("Adding channel $chanLabel")
+    @info("Adding channel $chanLabel")
 
     a.data = hcat(a.data, data)
     push!(a.sensors, Electrode(chanLabel, Talairach(NaN, NaN, NaN), Dict()))
@@ -260,12 +260,12 @@ remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
 """ ->
 function remove_channel!(a::SSR, channel_names::Array{S}; kwargs...) where S <: AbstractString
-    Logging.debug("Removing channels $(join(channel_names, " "))")
+    @debug("Removing channels $(join(channel_names, " "))")
     remove_channel!(a, Int[findfirst(channelnames(a), c) for c=channel_names])
 end
 
 function remove_channel!(a::SSR, channel_name::S; kwargs...) where S <: AbstractString
-    Logging.debug("Removing channel $(channel_name)")
+    @debug("Removing channel $(channel_name)")
     remove_channel!(a, [channel_name])
 end
 
@@ -275,9 +275,9 @@ function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
 
     channel_idx = channel_idx[channel_idx .!= 0]
 
-    Logging.debug("Removing channel(s) $channel_idx")
+    @debug("Removing channel(s) $channel_idx")
     if any(channel_idx .== 0)
-        Logging.warn("Failed to remove a channel")
+        @warn("Failed to remove a channel")
     end
 
     keep_idx = [1:size(a.data)[end]; ]
@@ -289,13 +289,13 @@ function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
 
     if haskey(a.processing, "epochs")
         if size(a.processing["epochs"], 3) == size(a.data, 2)
-            Logging.debug("Removing channel(s) from epoch data")
+            @debug("Removing channel(s) from epoch data")
             a.processing["epochs"] = a.processing["epochs"][:, :, keep_idx]
         end
     end
     if haskey(a.processing, "sweeps")
         if size(a.processing["sweeps"], 3) == size(a.data, 2)
-            Logging.debug("Removing channel(s) from sweep data")
+            @debug("Removing channel(s) from sweep data")
             a.processing["sweeps"] = a.processing["sweeps"][:, :, keep_idx]
         end
     end
@@ -320,7 +320,7 @@ keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
 """ ->
 function keep_channel!(a::SSR, channel_names::Array{S}; kwargs...) where S <: AbstractString
-    Logging.info("Keeping channel(s) $(join(channel_names, " "))")
+    @info("Keeping channel(s) $(join(channel_names, " "))")
     keep_channel!(a, vec(round.(Int, [findfirst(channelnames(a), c) for c = channel_names])))
 end
 
@@ -364,7 +364,7 @@ s = trim_channel(s, 8192*300, start=8192)
 """ ->
 function trim_channel(a::SSR, stop::Int; start::Int=1, kwargs...)
 
-    Logging.info("Trimming $(size(a.data)[end]) channels between $start and $stop")
+    @info("Trimming $(size(a.data)[end]) channels between $start and $stop")
 
     a.data = a.data[start:stop,:]
 
@@ -403,17 +403,17 @@ s = merge_channels(s, ["P6", "P8"], "P68")
 """ ->
 function merge_channels(a::SSR, merge_Chans::Array{S}, new_name::S; kwargs...) where S <: AbstractString
 
-    debug("Number of original channels: $(length(channelnames(a)))")
+    @debug("Number of original channels: $(length(channelnames(a)))")
 
     keep_idxs = vec([findfirst(channelnames(a), i) for i = merge_Chans])
 
     if sum(keep_idxs .== 0) > 0
-        warn("Could not merge as these channels don't exist: $(join(vec(merge_Chans[keep_idxs .== 0]), " "))")
+        @warn("Could not merge as these channels don't exist: $(join(vec(merge_Chans[keep_idxs .== 0]), " "))")
         keep_idxs = keep_idxs[keep_idxs .> 0]
     end
 
-    Logging.info("Merging channels $(join(vec(channelnames(a)[keep_idxs,:]), " "))")
-    debug("Merging channels $keep_idxs")
+    @info("Merging channels $(join(vec(channelnames(a)[keep_idxs,:]), " "))")
+    @debug("Merging channels $keep_idxs")
 
     a = add_channel(a, vec(mean(a.data[:,keep_idxs], 2)), new_name; kwargs...)
 end

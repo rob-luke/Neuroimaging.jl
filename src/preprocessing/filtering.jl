@@ -16,14 +16,14 @@ Simply a wrapper for the DSP.jl functions
 * filter used on signal
 """ ->
 function highpass_filter(signals::Array{T}, cutOff::Number, fs::Number, order::Int) where T <: AbstractFloat
-    debug("Highpass filtering $(size(signals)[end]) channels.  Pass band > $(cutOff) Hz")
+    @debug("Highpass filtering $(size(signals)[end]) channels.  Pass band > $(cutOff) Hz")
     Wn = cutOff/(fs/2)
     highpass_filter(signals, Wn, order)
 end
 
 
 function highpass_filter(signals::Array{T}, Wn::Number, order::Int) where T <: AbstractFloat
-    debug("Filter order = $order, Wn = $Wn")
+    @debug("Filter order = $order, Wn = $Wn")
     f = digitalfilter(Highpass(Wn), Butterworth(order))
     signals = filtfilt(f, signals)
     return signals, f
@@ -49,14 +49,14 @@ Simply a wrapper for the DSP.jl functions
 * filter used on signal
 """ ->
 function lowpass_filter(signals::Array{T}, cutOff::Number, fs::Number, order::Int) where T <: AbstractFloat
-    debug("Lowpass filtering $(size(signals)[end]) channels.  Pass band < $(cutOff) Hz")
+    @debug("Lowpass filtering $(size(signals)[end]) channels.  Pass band < $(cutOff) Hz")
     Wn = cutOff/(fs/2)
     lowpass_filter(signals, Wn, order)
 end
 
 
 function lowpass_filter(signals::Array{T}, Wn::Number, order::Int) where T <: AbstractFloat
-    debug("Filter order = $order, Wn = $Wn")
+    @debug("Filter order = $order, Wn = $Wn")
     f = digitalfilter(Lowpass(Wn), Butterworth(order))
     signals = filtfilt(f, signals)
     return signals, f
@@ -74,8 +74,8 @@ function bandpass_filter(signals::Array, lower::Number, upper::Number, fs::Numbe
 
     f = digitalfilter(Bandpass(lower, upper, fs=fs), Chebyshev1(n, rp))
 
-    Logging.info("Bandpass filtering $(size(signals)[end]) channels.     $lower < Hz < $upper")
-    debug("Filter order = $n, fs = $fs")
+    @info("Bandpass filtering $(size(signals)[end]) channels.     $lower < Hz < $upper")
+    @debug("Filter order = $n, fs = $fs")
 
     signals = filt(f, signals)
     signals = filt(f, flipdim(signals, 1))
@@ -102,7 +102,7 @@ function compensate_for_filter(d::Dict, spectrum::AbstractArray, fs::Real)
 
         spectrum = compensate_for_filter(d[key], spectrum, frequencies, fs)
 
-        debug("Accounted for $key response in spectrum estimation")
+        @debug("Accounted for $key response in spectrum estimation")
 
         key_numb += 1
         key = string(key_name, key_numb)

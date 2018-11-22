@@ -1,14 +1,14 @@
 function find_dipoles(vi::VolumeImage; kwargs...)
 
-    Logging.info("Finding dipoles for volume image")
+    @info("Finding dipoles for volume image")
 
     if size(vi.data, 4) > 1
-        warn("Can not squeeze 4d volume image to 3d. Please reduce first.")
+        @warn("Can not squeeze 4d volume image to 3d. Please reduce first.")
     end
 
-    x = [xi / (1 * Meter) for xi in vi.x]
-    y = [yi / (1 * Meter) for yi in vi.y]
-    z = [zi / (1 * Meter) for zi in vi.z]
+    x = [xi / (1 * u"m") for xi in vi.x]
+    y = [yi / (1 * u"m") for yi in vi.y]
+    z = [zi / (1 * u"m") for zi in vi.z]
 
     # List comprehension returns type any which needs to be changed
     x = convert(Array{AbstractFloat}, x)
@@ -34,9 +34,9 @@ function new_dipole_method(vi::VolumeImage; min_size::Real = 1, kwargs...)
 
         tmp_vi.data[tmp_vi.data .< threshold] = 0
 
-        val_x = abs.(tmp_vi.x .- (dip.x) ) .> (0.015 * Meter)
-        val_y = abs.(tmp_vi.y .- (dip.y) ) .> (0.015 * Meter)
-        val_z = abs.(tmp_vi.z .- (dip.z) ) .> (0.015 * Meter)
+        val_x = abs.(tmp_vi.x .- (dip.x) ) .> (0.015 * u"m")
+        val_y = abs.(tmp_vi.y .- (dip.y) ) .> (0.015 * u"m")
+        val_z = abs.(tmp_vi.z .- (dip.z) ) .> (0.015 * u"m")
 
         tmp_vi.data[val_x, :, :] = 0
         tmp_vi.data[:, val_y, :] = 0
@@ -44,9 +44,9 @@ function new_dipole_method(vi::VolumeImage; min_size::Real = 1, kwargs...)
 
         valid = tmp_vi.data .> threshold;
 
-        x_loc = mean(vi.x[find(squeeze(sum(valid, [2, 3]), (2, 3)))]  / (1.0 * SIUnits.Meter))
-        y_loc = mean(vi.y[find(squeeze(sum(valid, [1, 3]), (1, 3)))]  / (1.0 * SIUnits.Meter))
-        z_loc = mean(vi.z[find(squeeze(sum(valid, [1, 2]), (1, 2)))]  / (1.0 * SIUnits.Meter))
+        x_loc = mean(vi.x[find(squeeze(sum(valid, [2, 3]), (2, 3)))]  / (1.0 * u"m"))
+        y_loc = mean(vi.y[find(squeeze(sum(valid, [1, 3]), (1, 3)))]  / (1.0 * u"m"))
+        z_loc = mean(vi.z[find(squeeze(sum(valid, [1, 2]), (1, 2)))]  / (1.0 * u"m"))
 
         x, y, z, t = find_location(vi, x_loc, y_loc, z_loc)
         s = vi.data[x, y, z, t]

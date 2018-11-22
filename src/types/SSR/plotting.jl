@@ -31,7 +31,7 @@ function plot_timeseries(s::SSR; channels::Union{S, Array{S}} = channelnames(s),
 
     if isa(channels, AbstractString) || length(channels) == 1 || size(s.data, 2) == 1
 
-        debug("Plotting single channel waveform for channel $channels  from channels $(channelnames(s))")
+        @debug("Plotting single channel waveform for channel $channels  from channels $(channelnames(s))")
 
         fig = plot_single_channel_timeseries(vec(keep_channel!(deepcopy(s), channels).data), samplingrate(s); kwargs...)
 
@@ -41,10 +41,10 @@ function plot_timeseries(s::SSR; channels::Union{S, Array{S}} = channelnames(s),
         idx = [findfirst(channelnames(s), n) for n in channels]
         idx = idx[idx .!= 0]   # But if you cant find channels then plot what you can
         if length(idx) != length(channels)
-            warn("Cant find index of all requested channels")
+            @warn("Cant find index of all requested channels")
         end
 
-        debug("Plotting multi channel waveform for channels $(channelnames(s)[idx])")
+        @debug("Plotting multi channel waveform for channels $(channelnames(s)[idx])")
         fig = plot_multi_channel_timeseries(s.data[:, idx], samplingrate(s), channelnames(s)[idx]; kwargs...)
     end
 
