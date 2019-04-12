@@ -1,13 +1,13 @@
 module EEG
 
 using Logging,  # For user feedback
-      SIUnits,  # Smarter units
-      SIUnits.ShortUnits,
+#      SIUnits,  # Smarter units
+#      SIUnits.ShortUnits,
       DataFrames,
       Distances,
       ProgressMeter,
-      AWS,
-      AWS.S3,
+#      AWS,
+#      AWS.S3,
       BDF,
       CSV,
       DSP,
