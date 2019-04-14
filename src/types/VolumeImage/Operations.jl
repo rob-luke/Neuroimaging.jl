@@ -1,4 +1,5 @@
 import Base: +, -, /, *, mean, maximum, minimum, isequal, ==
+using Statistics
 
 
 # +

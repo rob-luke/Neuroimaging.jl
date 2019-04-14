@@ -5,8 +5,6 @@ using Logging,  # For user feedback
       DataFrames,
       Distances,
       ProgressMeter,
-#      AWS,
-#      AWS.S3,
       BDF,
       CSV,
       DSP,
@@ -14,7 +12,9 @@ using Logging,  # For user feedback
       Plots,
       Images,
       BDF,
-      MAT
+      MAT,
+      Printf,
+      Statistics
 
 
 export # Helper functions

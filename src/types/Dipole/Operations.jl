@@ -1,4 +1,5 @@
 import Base.mean
+using Statistics
 function mean(ds::Array{Dipole})
 
     mean_x = mean([d.x for d in ds])
