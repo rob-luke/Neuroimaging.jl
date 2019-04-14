@@ -1,4 +1,4 @@
-@doc """
+"""
 
 Type for storing steady state response (SSR) data.
 
@@ -38,7 +38,7 @@ Put an example here
 s = SSR("filename")
 ```
 
-""" ->
+"""
 mutable struct SSR
     data::Array
     sensors::Array{Sensor}
@@ -60,7 +60,7 @@ end
 #
 #######################################
 
-@doc """
+"""
 Return the sampling rate of a steady state type.
 If no type is provided, the sampling rate is returned as a floating point.
 
@@ -72,12 +72,12 @@ Return the sampling rate of a recording
 s = read_SSR(filename)
 samplingrate(s)
 ```
-""" ->
+"""
 samplingrate(t, s::SSR) = convert(t, float(s.samplingrate))
 samplingrate(s::SSR) = samplingrate(AbstractFloat, s)
 
 
-@doc """
+"""
 Return the modulation rate of a steady state type.
 If no type is provided, the modulation rate is returned as a floating point.
 
@@ -89,12 +89,12 @@ Return the modulation rate of a recording
 s = read_SSR(filename)
 modulationrate(s)
 ```
-""" ->
+"""
 modulationrate(t, s::SSR) = convert(t, float(s.modulationrate))
 modulationrate(s::SSR) = modulationrate(AbstractFloat, s)
 
 
-@doc """
+"""
 Return the names of sensors in SSR measurement.
 
 #### Example
@@ -106,7 +106,7 @@ channelnames(s)
 """
 channelnames(s::SSR) = labels(s.sensors)
 
-@doc """
+"""
 Change the names of sensors in SSR measurement.
 
 #### Example
@@ -164,7 +164,7 @@ end
 #######################################
 
 import Base.hcat
-@doc """
+"""
 Append one SSR type to another, simulating a longer recording.
 
 #### Example
@@ -172,7 +172,7 @@ Append one SSR type to another, simulating a longer recording.
 ```julia
 hcat(a, b)
 ```
-""" ->
+"""
 function hcat(a::SSR, b::SSR)
 
     if channelnames(a) != channelnames(b)
@@ -195,7 +195,7 @@ function hcat(a::SSR, b::SSR)
 end
 
 
-@doc """
+"""
 Append the trigger information of one SSR type to another.
 Places the trigger information at the end of first file
 
@@ -204,7 +204,7 @@ Places the trigger information at the end of first file
 ```julia
 join_triggers(a, b)
 ```
-""" ->
+"""
 function join_triggers(a, b; offset=size(a.data, 1))
 
     a.triggers["Index"] = [a.triggers["Index"]; (b.triggers["Index"] .+ offset)]
@@ -223,7 +223,7 @@ end
 #
 #######################################
 
-@doc """
+"""
 Add a channel to the SSR type with specified channel names.
 
 #### Example
@@ -235,7 +235,7 @@ s = read_SSR(filename)
 new_channel = mean(s.data, 2)
 s = add_channel(s, new_channel, "Merged")
 ```
-""" ->
+"""
 function add_channel(a::SSR, data::Vector, chanLabel::AbstractString; kwargs...)
 
     Logging.info("Adding channel $chanLabel")
@@ -247,7 +247,7 @@ function add_channel(a::SSR, data::Vector, chanLabel::AbstractString; kwargs...)
 end
 
 
-@doc """
+"""
 Remove specified channels from SSR.
 
 #### Example
@@ -258,7 +258,7 @@ Remove channel Cz and those in the set called `EEG_Vanvooren_2014_Right`
 a = read_SSR(filename)
 remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
-""" ->
+"""
 function remove_channel!(a::SSR, channel_names::Array{S}; kwargs...) where S <: AbstractString
     Logging.debug("Removing channels $(join(channel_names, " "))")
     remove_channel!(a, Int[findfirst(channelnames(a), c) for c=channel_names])
@@ -307,7 +307,7 @@ function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
 end
 
 
-@doc """
+"""
 Remove all channels except those requested from SSR.
 
 #### Example
@@ -318,7 +318,7 @@ Remove all channels except Cz and those in the set called `EEG_Vanvooren_2014_Ri
 a = read_SSR(filename)
 keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
-""" ->
+"""
 function keep_channel!(a::SSR, channel_names::Array{S}; kwargs...) where S <: AbstractString
     Logging.info("Keeping channel(s) $(join(channel_names, " "))")
     keep_channel!(a, vec(round.(Int, [findfirst(channelnames(a), c) for c = channel_names])))
@@ -347,7 +347,7 @@ end
 #
 #######################################
 
-@doc """
+"""
 Trim SSR recording by removing data after `stop` specifed samples.
 
 #### Optional Parameters
@@ -361,7 +361,7 @@ Remove the first 8192 samples and everything after 8192*300 samples
 ```julia
 s = trim_channel(s, 8192*300, start=8192)
 ```
-""" ->
+"""
 function trim_channel(a::SSR, stop::Int; start::Int=1, kwargs...)
 
     Logging.info("Trimming $(size(a.data)[end]) channels between $start and $stop")
@@ -390,7 +390,7 @@ end
 #
 #######################################
 
-@doc """
+"""
 Merge `SSR` channels listed in `merge_Chans` and label the averaged channel as `new_name`
 
 If multiple channels are listed then the average of those channels will be added.
@@ -400,7 +400,7 @@ If multiple channels are listed then the average of those channels will be added
 ```julia
 s = merge_channels(s, ["P6", "P8"], "P68")
 ```
-""" ->
+"""
 function merge_channels(a::SSR, merge_Chans::Array{S}, new_name::S; kwargs...) where S <: AbstractString
 
     debug("Number of original channels: $(length(channelnames(a)))")

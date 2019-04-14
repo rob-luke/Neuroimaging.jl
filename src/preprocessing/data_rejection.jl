@@ -1,4 +1,4 @@
-@doc """
+"""
 Reject epochs based on the maximum peak to peak voltage within an epoch across all channels
 
 #### Arguments
@@ -10,7 +10,7 @@ Reject epochs based on the maximum peak to peak voltage within an epoch across a
 #### Returns
 
 * An array with a reduced amount of entries in the epochs dimension
-""" ->
+"""
 function epoch_rejection(epochs::Array{T, 3}, retain_percentage::AbstractFloat;
             rejection_method::Function=EEG.peak2peak) where T <: Number
 
@@ -28,9 +28,9 @@ function epoch_rejection(epochs::Array{T, 3}, retain_percentage::AbstractFloat;
     epochs = epochs[:, epoch_values .<= cut_off_value, :]
 end
 
-@doc """
+"""
 Find the peak to peak value for each epoch to be returned to epoch_rejection()
-""" ->
+"""
 function peak2peak(epochs)
 
     epochsNum = size(epochs)[2]
@@ -44,7 +44,7 @@ function peak2peak(epochs)
 end
 
 
-@doc """
+"""
 Reject channels with too great a variance.
 
 Rejection can be based on a threshold or dynamicly chosen based on the variation of all channels.
@@ -58,7 +58,7 @@ Rejection can be based on a threshold or dynamicly chosen based on the variation
 #### Returns
 
 An array indicating the channels to be kept
-""" ->
+"""
 function channel_rejection(sigs::Array{T}, threshold_abs::Number, threshold_var::Number) where T <: Number
 
     debug("Rejecting channels for signal of $(size(sigs,2)) chanels and $(size(sigs,1)) samples")

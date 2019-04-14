@@ -1,4 +1,4 @@
-@doc """
+"""
 Remove a template signal from each column of an array
 
 #### Arguments
@@ -8,7 +8,7 @@ Remove a template signal from each column of an array
 
 #### Returns
 Signals with template removed
-""" ->
+"""
 function remove_template(signals::Array{T, 2}, template::AbstractVector{T}) where T <: AbstractFloat
 
     @assert size(signals, 1) == size(template, 1)
@@ -21,7 +21,7 @@ function remove_template(signals::Array{T, 2}, template::AbstractVector{T}) wher
 end
 
 
-@doc """
+"""
 Re reference a signals to specific signal channel by index.
 
 If multiple channels are specififed, their average is used as the reference.
@@ -34,7 +34,7 @@ If multiple channels are specififed, their average is used as the reference.
 #### Returns
 
 Rereferenced signals
-""" ->
+"""
 function rereference(signals::Array{T, 2}, refChan::Union{Int, Array{Int}}) where T <: AbstractFloat
 
     debug("Re referencing $(size(signals)[end]) channels to $(length(refChan)) channels")
@@ -51,7 +51,7 @@ function rereference(signals::Array{T, 2}, refChan::Union{Int, Array{Int}}) wher
 end
 
 
-@doc """
+"""
 Re-reference a signals to specific signal channel by name.
 
 If multiple channels are specififed, their average is used as the reference.
@@ -66,7 +66,7 @@ Or you can specify to use the `average` reference.
 #### Returns
 
 Rereferenced signals
-""" ->
+"""
 function rereference(signals::Array{T, 2}, refChan::S, chanNames::Vector{S}) where {S <: AbstractString, T <: AbstractFloat}
 
     debug("Reference channels = $refChan")

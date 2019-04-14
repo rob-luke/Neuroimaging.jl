@@ -5,7 +5,7 @@
 #
 #######################################
 
-@doc """
+"""
 Extract epoch data from array of channels.
 
 #### Input
@@ -21,7 +21,7 @@ Extract epoch data from array of channels.
 ```julia
 epochs = extract_epochs(data, triggers, [1,2], 0, 0)
 ```
-""" ->
+"""
 function extract_epochs(data::Array{T, 2}, triggers::Dict, valid_triggers::Union{AbstractVector, Int},
     remove_first::Int, remove_last::Int, trigger_offset::Int = 252) where T <: Number
 

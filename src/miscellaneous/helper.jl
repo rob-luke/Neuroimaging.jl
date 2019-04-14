@@ -1,4 +1,4 @@
-@doc """
+"""
 Return a new processing key with the number incremented.
 It checks for existing keys and returns a string with the next key to be used.
 
@@ -22,7 +22,7 @@ results_storage[new_processing_key(results_storage, "FTest")] = 49
 #   "FTest1" => 4
 #   "FTest2" => 49
 ```
-""" ->
+"""
 function new_processing_key(d::Dict, key_name::AbstractString)
     key_numb = 1
     key = string(key_name, key_numb)
@@ -34,7 +34,7 @@ function new_processing_key(d::Dict, key_name::AbstractString)
 end
 
 
-@doc """
+"""
 Find dictionary keys containing a string.
 
 #### Arguments
@@ -60,14 +60,14 @@ find_keys_containing(results_storage, "FTest")
 #  1
 #  3
 ```
-""" ->
+"""
 function find_keys_containing(d::Dict, partial_key::AbstractString)
     valid_keys = [startswith(i, partial_key) for i = collect(keys(d))]
     findin(valid_keys, true)
 end
 
 
-@doc """
+"""
 Extract the path, filename and extension of a file
 
 #### Arguments
@@ -85,7 +85,7 @@ fileparts("/Users/test/subdir/test-file.bdf")
 
 # ("/Users/test/subdir/","test-file","bdf")
 ```
-""" ->
+"""
 function fileparts(fname::AbstractString)
     if fname==""
         pathname  = ""
@@ -103,7 +103,7 @@ function fileparts(fname::AbstractString)
 end
 
 
-@doc """
+"""
 Find the closest number to a target in an array and return the index
 
 #### Arguments
@@ -122,7 +122,7 @@ _find_closest_number_idx([1, 2, 2.7, 3.2, 4, 3.1, 7], 3)
 
 # 6
 ```
-""" ->
+"""
 function _find_closest_number_idx(list::AbstractArray{T, 1}, target::Number) where T <: Number
     diff_array = abs.(list .- target)
     targetIdx  = findfirst(diff_array , minimum(diff_array))

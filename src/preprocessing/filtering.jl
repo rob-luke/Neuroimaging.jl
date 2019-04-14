@@ -1,4 +1,4 @@
-@doc """
+"""
 High pass filter applied in forward and reverse direction
 
 Simply a wrapper for the DSP.jl functions
@@ -14,7 +14,7 @@ Simply a wrapper for the DSP.jl functions
 
 * filtered signal
 * filter used on signal
-""" ->
+"""
 function highpass_filter(signals::Array{T}, cutOff::Number, fs::Number, order::Int) where T <: AbstractFloat
     debug("Highpass filtering $(size(signals)[end]) channels.  Pass band > $(cutOff) Hz")
     Wn = cutOff/(fs/2)
@@ -31,7 +31,7 @@ end
 
 
 
-@doc """
+"""
 Low pass filter applied in forward and reverse direction
 
 Simply a wrapper for the DSP.jl functions
@@ -47,7 +47,7 @@ Simply a wrapper for the DSP.jl functions
 
 * filtered signal
 * filter used on signal
-""" ->
+"""
 function lowpass_filter(signals::Array{T}, cutOff::Number, fs::Number, order::Int) where T <: AbstractFloat
     debug("Lowpass filtering $(size(signals)[end]) channels.  Pass band < $(cutOff) Hz")
     Wn = cutOff/(fs/2)
@@ -63,9 +63,9 @@ function lowpass_filter(signals::Array{T}, Wn::Number, order::Int) where T <: Ab
 end
 
 
-@doc """
+"""
 Band pass filter
-""" ->
+"""
 function bandpass_filter(signals::Array, lower::Number, upper::Number, fs::Number, n::Int, rp::Number)
     # Type 1 Chebychev filter
     # TODO filtfilt does not work. Why not?
@@ -112,7 +112,7 @@ function compensate_for_filter(d::Dict, spectrum::AbstractArray, fs::Real)
 end
 
 
-@doc """
+"""
 Recover the spectrum of signal by compensating for filtering done.
 
 #### Arguments
@@ -129,7 +129,7 @@ Spectrum of the signal after comensating for the filter
 #### TODO
 
 Extend this to arbitrary number of dimensions rather than the hard coded 3
-""" ->
+"""
 function compensate_for_filter(filter::FilterCoefficients, spectrum::AbstractArray, frequencies::AbstractArray, fs::Real)
     filter_response     = freqz(filter, frequencies, fs)
 

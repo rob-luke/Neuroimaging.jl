@@ -1,4 +1,4 @@
-@doc """
+"""
 Calculates the F test as is commonly implemented in SSR research.
 TODO: Add references to MASTER and Luts et al
 
@@ -19,7 +19,7 @@ TODO: Add references to MASTER and Luts et al
 * Noise power estimated of side frequencies
 * F statistic
 
-""" ->
+"""
 function ftest(sweeps::Union{Array{Float64, 3}, Array{Float32, 3}}, freq_of_interest::Real,
                 fs::Real, side_freq::Real, used_filter::Union{DSP.FilterType, Void}, spill_bins::Int)
 
