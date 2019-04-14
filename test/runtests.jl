@@ -2,11 +2,8 @@ using EEG
 using Test
 using Logging
 using MAT, BDF
-using SIUnits, SIUnits.ShortUnits
 using Plots
 
-Logging.configure(level=DEBUG)
-Logging.configure(output=open("logfile.log", "a"))
 unicodeplots()
 
 

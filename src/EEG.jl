@@ -1,8 +1,7 @@
 module EEG
 
 using Logging,  # For user feedback
-#      SIUnits,  # Smarter units
-#      SIUnits.ShortUnits,
+      Unitful,
       DataFrames,
       Distances,
       ProgressMeter,

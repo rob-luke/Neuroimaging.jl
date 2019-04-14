@@ -1,4 +1,4 @@
-@doc """
+"""
 Dipole type.
 
 
@@ -11,12 +11,12 @@ Dipole type.
 * state: State of dipol
 * size: size of dipole
 
-""" ->
+"""
 mutable struct Dipole
     coord_system::AbstractString
-    x::SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0} # m
-    y::SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0} # m
-    z::SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0} # m
+    x::typeof(1.0u"m")
+    y::typeof(1.0u"m")
+    z::typeof(1.0u"m")
     xori::Number
     yori::Number
     zori::Number

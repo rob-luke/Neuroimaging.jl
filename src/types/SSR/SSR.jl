@@ -44,8 +44,8 @@ mutable struct SSR
     sensors::Array{Sensor}
     triggers::Dict
     system_codes::Dict
-    samplingrate::quantity(AbstractFloat, Hz)
-    modulationrate::quantity(AbstractFloat, Hz)
+    samplingrate::typeof(1.0u"Hz")
+    modulationrate::typeof(1.0u"Hz")
     reference_channel::Array{AbstractString, 1}
     file_path::AbstractString
     file_name::AbstractString

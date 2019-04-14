@@ -1,10 +1,8 @@
 using Plots
-using SIUnits
-
 import Plots.plot
 
 
-@doc """
+"""
 Plot a volume image
 
 #### Arguments
@@ -25,7 +23,7 @@ Plot a volume image
 
 * A Plots.jl figure
 
-""" ->
+"""
 function plot(v::VolumeImage; kwargs...)
 
     x = AbstractFloat[xi / (1 * Milli * Meter) for xi in v.x]
