@@ -5,9 +5,9 @@
 # Duration: Duration of trigger
 
 
-@doc """
+"""
 Validate trigger channel
-""" ->
+"""
 function validate_triggers(t::Dict)
 
     debug("Validating trigger information")
@@ -38,9 +38,9 @@ function validate_triggers(t::Dict)
 end
 
 
-@doc """
+"""
 Clean trigger channel
-""" ->
+""" 
 function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::Int, max_epoch_length::Int,
                         remove_first::Int, max_epochs::Int)
 
@@ -128,11 +128,11 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
 end
 
 
-@doc """
+"""
 Place extra triggers a set time after existing triggers.
 
 A new trigger with `new_trigger_code` will be placed `new_trigger_time` seconds after exisiting `old_trigger_code` triggers.
-""" ->
+"""
 function extra_triggers(t::Dict, old_trigger_code::Union{Int, Array{Int}},
                         new_trigger_code::Int, new_trigger_time::Number, fs::Number;
                         trigger_code_offset::Int=252, max_inserted::Number=Inf)
