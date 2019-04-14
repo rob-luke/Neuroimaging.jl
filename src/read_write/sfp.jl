@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc """
+"""
 Read sfp file containing sensor locations
 
 #### Input
@@ -12,7 +12,7 @@ Read sfp file containing sensor locations
 
 #### Output
 * `elec`: Electrodes object
-""" ->
+"""
 function read_sfp(fname::AbstractString; coordinate=Talairach)
 
     info("Reading dat file = $fname")

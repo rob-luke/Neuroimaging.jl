@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc """
+"""
 Read AVR (.avr) file
 
 #### Input
@@ -14,7 +14,7 @@ Read AVR (.avr) file
 * `data`: Array of data read from AVR file. Each column represents a channel, and each row represents a point.
 * `chanNames`: Channel Names
 
-""" ->
+"""
 function read_avr(fname::AbstractString)
     Logging.info("Reading AVR file: $fname")
 
@@ -50,9 +50,9 @@ function read_avr(fname::AbstractString)
     return data, chanNames
 end
 
-@doc """
+"""
 Write AVR file
-""" ->
+"""
 function write_avr(fname::AbstractString, data::Array, chanNames::Array, fs::Number)
 
     Logging.info("Saving avr to $fname")

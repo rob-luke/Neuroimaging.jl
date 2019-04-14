@@ -1,4 +1,4 @@
-@doc """
+"""
 Find all dipole in an activity map.
 
 Determines the local maxima in a 3 dimensional array
@@ -13,7 +13,7 @@ Determines the local maxima in a 3 dimensional array
 
 * dips: An array of dipoles
 
-""" ->
+"""
 function find_dipoles(s::Array{T, 3}; window::Array{Int}=[6,6,6], x::AbstractVector{T}=1:size(s,1),
                       y::AbstractVector{T}=1:size(s,2), z::AbstractVector{T}=1:size(s,3)) where T <: Number
 
@@ -53,7 +53,7 @@ end
 #######################################
 
 
-@doc """
+"""
 Find best dipole relative to reference location.
 
 Finds the largest dipole within a specified distance of a reference location
@@ -68,7 +68,7 @@ Finds the largest dipole within a specified distance of a reference location
 
 * dip: The best dipole
 
-""" ->
+"""
 function best_dipole(ref::Union{Coordinate, Dipole}, dips::Array{Dipole}; maxdist::Number=0.30, min_dipole_size::Real=-Inf, kwargs...)
 
     Logging.info("Calculating best dipole for $(length(dips)) dipoles")

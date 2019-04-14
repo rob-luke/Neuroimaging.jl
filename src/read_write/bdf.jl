@@ -4,9 +4,9 @@
 #
 #######################################
 
-@doc """
+"""
 Import Biosemi files
-""" ->
+"""
 function import_biosemi(fname::Union{AbstractString, IO}; kwargs...)
 
     Logging.info("Importing BIOSEMI data file")

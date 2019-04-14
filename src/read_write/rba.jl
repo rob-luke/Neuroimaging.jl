@@ -4,9 +4,9 @@
 #
 #######################################
 
-@doc """
+"""
 Read rba from MAT file
-""" ->
+"""
 function read_rba_mat(mat_path)
     # Define variables here so that they can be accessed within the scope of try constructs
     modulation_frequency  = NaN
@@ -23,6 +23,8 @@ function read_rba_mat(mat_path)
         carrier_frequency    = rba["properties"]["stimulation_properties"]["stimulus_1"]["rounded_carrier_frequency"]
 
         info("Imported matching .mat file in old format")
+    catch
+        # nothing
     end
 
     # New RBA format
@@ -52,6 +54,8 @@ function read_rba_mat(mat_path)
         participant_name    = mat["metas"]["subject"]
 
         info("Imported matching .mat file in new format")
+    catch
+        # nothing
     end
 
     if modulation_frequency == NaN && stimulation_side == NaN && participant_name == NaN

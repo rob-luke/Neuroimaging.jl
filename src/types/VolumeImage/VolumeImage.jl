@@ -1,4 +1,4 @@
-@doc """
+"""
 ## Volume Image
 This composite type contains volume image information
 
@@ -15,7 +15,7 @@ The following standard names are used when saving data to the info dictionary.
 * `NormalisationConstant`: Value used to normalise image to maximum of 1
 * `FileName`: Name of file
 
-""" ->
+"""
 mutable struct VolumeImage
     data::Array{AbstractFloat, 4}
     units::AbstractString

@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc """
+"""
 ## Read SSR from file or IO stream
 Read a file or IO stream and store the data in an `SSR` type.
 
@@ -29,7 +29,7 @@ Failing that, user passed arguments are used or the modulation frequency is extr
 #### Supported file formats
 
 * BIOSEMI (.bdf)
-""" ->
+"""
 function read_SSR(fname::String;
                   stimulation_amplitude::Number=NaN,   # User can set these
                   modulationrate::Number=NaN,          # values, but if not

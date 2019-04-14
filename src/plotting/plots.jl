@@ -115,7 +115,7 @@ end
 #
 #######################################
 
-@doc """
+"""
 Plot a single channel time series
 
 #### Input
@@ -131,7 +131,7 @@ Plot a single channel time series
 
 Returns a figure
 
-""" ->
+"""
 function plot_single_channel_timeseries(signal::AbstractVector{T}, fs::Real;
         xlabel::S="Time (s)", ylabel::S="Amplitude (uV)", lab::S="", kwargs...) where {T <: Number, S <: AbstractString}
 
@@ -144,7 +144,7 @@ end
 
 
 
-@doc """
+"""
 Plot a multi channel time series
 
 #### Input
@@ -160,7 +160,7 @@ Plot a multi channel time series
 
 Returns a figure
 
-""" ->
+"""
 function plot_multi_channel_timeseries(signals::Array{T, 2}, fs::Number, channels::Array{S};
         xlabel::S="Time (s)", ylabel::S="Amplitude (uV)", kwargs...) where {T <: Number, S <: AbstractString}
 

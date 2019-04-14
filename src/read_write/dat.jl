@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc """
+"""
 Read dat files
 
 #### Arguments
@@ -19,7 +19,7 @@ Read dat files
 
 #### References
 File specs were taken from [fieldtrip](https://github.com/fieldtrip/fieldtrip/blob/1cabb512c46cc70e5b734776f20cdc3c181243bd/external/besa/readBESAimage.m)
-""" ->
+"""
 function read_dat(fname::AbstractString)
     Logging.info("Reading dat file = $fname")
 
@@ -175,9 +175,9 @@ function read_dat(fid::IO)
 end
 
 
-@doc """
+"""
 Write dat file
-""" ->
+"""
 function write_dat(fname::AbstractString,
 X::AbstractVector, Y::AbstractVector, Z::AbstractVector,
 S::Array{DataT,4}, T::AbstractVector;
