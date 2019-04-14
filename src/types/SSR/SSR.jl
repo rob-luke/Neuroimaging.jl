@@ -284,6 +284,8 @@ function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
     for c = sort(channel_idx, rev=true)
         try
             splice!(keep_idx, c)
+        catch
+            # Nothing
         end
     end
 
