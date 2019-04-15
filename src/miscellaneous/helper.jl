@@ -63,7 +63,7 @@ find_keys_containing(results_storage, "FTest")
 """
 function find_keys_containing(d::Dict, partial_key::AbstractString)
     valid_keys = [startswith(i, partial_key) for i = collect(keys(d))]
-    findin(valid_keys, true)
+    findall((in)(true), valid_keys)
 end
 
 
@@ -92,11 +92,15 @@ function fileparts(fname::AbstractString)
         filename  = ""
         extension = ""
     else
-        separators = sort(unique([search(fname, '/', i) for i = 1:length(fname)]))
-        pathname = fname[1:last(separators)]
-        extension  = last(sort(unique([search(fname, '.', i) for i = 1:length(fname)])))
-        filename = fname[last(separators)+1:extension-1]
-        extension  = fname[extension+1:end]
+
+        pathname = dirname(fname)
+        if pathname == ""
+            #nothing
+        else
+            pathname = string(pathname, "/")
+        end
+        filename = splitext(basename(fname))[1]
+        extension = splitext(basename(fname))[2][2:end]
     end
 
     return pathname, filename, extension
@@ -125,7 +129,7 @@ _find_closest_number_idx([1, 2, 2.7, 3.2, 4, 3.1, 7], 3)
 """
 function _find_closest_number_idx(list::AbstractArray{T, 1}, target::Number) where T <: Number
     diff_array = abs.(list .- target)
-    targetIdx  = findfirst(diff_array , minimum(diff_array))
+    targetIdx  = something(findfirst(isequal(minimum(diff_array)), diff_array), 0)
 end
 
 

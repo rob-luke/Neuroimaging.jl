@@ -1,43 +1,43 @@
-facts("Miscellaneous") do
+@testset "Miscellaneous" begin
 
-    context("Results storage") do
+    @testset "Results storage" begin
         results_storage = Dict()
         results_storage[new_processing_key(results_storage, "FTest")] = 4
         results_storage[new_processing_key(results_storage, "Turtle")] = 5
         results_storage[new_processing_key(results_storage, "FTest")] = 49
 
-        @fact new_processing_key(results_storage, "FTest") --> "FTest3"
+        @test new_processing_key(results_storage, "FTest") == "FTest3"
 
-        @fact find_keys_containing(results_storage, "FTest") --> [1, 3]
-        @fact find_keys_containing(results_storage, "Mum") --> []
+        @test find_keys_containing(results_storage, "FTest") == [1, 3]
+        @test find_keys_containing(results_storage, "Mum") == []
 
     end
 
-    context("File parts") do
+    @testset "File parts" begin
 
         a, b, c = fileparts("")
-        @fact a --> ""
-        @fact b --> ""
-        @fact c --> ""
+        @test a == ""
+        @test b == ""
+        @test c == ""
 
         a, b, c = fileparts("/Users/test/subdir/test-file.bdf")
-        @fact a --> "/Users/test/subdir/"
-        @fact b --> "test-file"
-        @fact c --> "bdf"
+        @test a == "/Users/test/subdir/"
+        @test b == "test-file"
+        @test c == "bdf"
 
         a, b, c = fileparts("/Users/test/subdir/test_file.bdf")
-        @fact a --> "/Users/test/subdir/"
-        @fact b --> "test_file"
-        @fact c --> "bdf"
+        @test a == "/Users/test/subdir/"
+        @test b == "test_file"
+        @test c == "bdf"
 
         a, b, c = fileparts("test-file.bdf")
-        @fact a --> ""
-        @fact b --> "test-file"
-        @fact c --> "bdf"
+        @test a == ""
+        @test b == "test-file"
+        @test c == "bdf"
     end
 
-    context("Find closest number index") do
-        @fact _find_closest_number_idx([1, 2, 2.7, 3.2, 4, 3.1, 7], 3) --> 6
+    @testset "Find closest number index" begin
+        @test _find_closest_number_idx([1, 2, 2.7, 3.2, 4, 3.1, 7], 3) == 6
     end
 
 end
