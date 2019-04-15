@@ -25,7 +25,7 @@ epochs = extract_epochs(data, triggers, [1,2], 0, 0)
 function extract_epochs(data::Array{T, 2}, triggers::Dict, valid_triggers::Union{AbstractVector, Int},
     remove_first::Int, remove_last::Int, trigger_offset::Int = 252) where T <: Number
 
-    debug("Extracting epochs for $(size(data)[end]) channels using triggers $(valid_triggers)")
+    @debug("Extracting epochs for $(size(data)[end]) channels using triggers $(valid_triggers)")
 
     validate_triggers(triggers)
 
@@ -42,7 +42,7 @@ function extract_epochs(data::Array{T, 2}, triggers::Dict, valid_triggers::Union
     valid_triggers = any(triggers[:Code] .== valid_triggers', 2)
     valid_triggers = find(valid_triggers .== true)
 
-    debug("Number of valid triggers: $(length(valid_triggers))")
+    @debug("Number of valid triggers: $(length(valid_triggers))")
 
     # Remove unwanted triggers
     triggers = triggers[valid_triggers, :]                # That aren't valid
@@ -57,7 +57,7 @@ function extract_epochs(data::Array{T, 2}, triggers::Dict, valid_triggers::Union
     while end_indices[end] > size(data, 1)
         pop!(start_indices)
         pop!(end_indices)
-        debug("Removed end epoch as its not complete")
+        @debug("Removed end epoch as its not complete")
     end
 
     # Create variable for epochs
@@ -65,13 +65,13 @@ function extract_epochs(data::Array{T, 2}, triggers::Dict, valid_triggers::Union
     epochs = zeros(Float64, (Int(lenEpochs), Int(numEpochs), Int(numChans)))
 
     # User feedback
-    debug("Creating epochs: $lenEpochs x $numEpochs x $numChans")
+    @debug("Creating epochs: $lenEpochs x $numEpochs x $numChans")
 
     for si = 1:length(start_indices)
         epochs[:, si, :] = data[start_indices[si]: end_indices[si], :]
     end
 
-    Logging.info("Generated $numEpochs epochs of length $lenEpochs for $numChans channels")
+    @info("Generated $numEpochs epochs of length $lenEpochs for $numChans channels")
 
     return epochs
 end
@@ -85,7 +85,7 @@ end
 
 function average_epochs(ep::Array)
 
-    Logging.info("Averaging down epochs to 1 epoch of length $(size(ep,1)) from $(size(ep,2)) epochs on $(size(ep,3)) channels")
+    @info("Averaging down epochs to 1 epoch of length $(size(ep,1)) from $(size(ep,2)) epochs on $(size(ep,3)) channels")
 
     squeeze(mean(ep, 2), 2)
 end

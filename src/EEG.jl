@@ -14,7 +14,8 @@ using Logging,  # For user feedback
       BDF,
       MAT,
       Printf,
-      Statistics
+      Statistics,
+      FFTW
 
 
 export # Helper functions

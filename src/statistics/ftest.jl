@@ -34,7 +34,7 @@ end
 function ftest(spectrum::Array{Complex{T},2}, frequencies::AbstractArray,
             freq_of_interest::Real, side_freq::Real, spill_bins::Int) where T <: AbstractFloat
 
-    Logging.info("Calculating F statistic on $(size(spectrum)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
+    @info("Calculating F statistic on $(size(spectrum)[end]) channels at $freq_of_interest Hz +-$(side_freq) Hz")
 
     idx      = _find_closest_number_idx(frequencies, freq_of_interest)
     idx_Low  = _find_closest_number_idx(frequencies, freq_of_interest - side_freq)
@@ -61,14 +61,14 @@ function ftest(spectrum::Array{Complex{T},2}, frequencies::AbstractArray,
     statistic = ccdf.(continuous_distribution, snr)
 
     # Debugging information
-    debug("Frequencies = [$(freq_of_interest - side_freq), $(freq_of_interest), $(freq_of_interest + side_freq)]")
-    debug("Indicies    = [$(minimum(noise_idxs)), $(idx), $(maximum(noise_idxs))]")
-    debug("Noise bins  = $(size(noise_bins,1))")
-    debug("Signal      = $(signal_power)")
-    debug("Noise       = $(noise_power)")
-    debug("SNR         = $(snr)")
-    debug("SNR dB      = $(snrDb)")
-    debug("Stat        = $(statistic)")
+    @debug("Frequencies = [$(freq_of_interest - side_freq), $(freq_of_interest), $(freq_of_interest + side_freq)]")
+    @debug("Indicies    = [$(minimum(noise_idxs)), $(idx), $(maximum(noise_idxs))]")
+    @debug("Noise bins  = $(size(noise_bins,1))")
+    @debug("Signal      = $(signal_power)")
+    @debug("Noise       = $(noise_power)")
+    @debug("SNR         = $(snr)")
+    @debug("SNR dB      = $(snrDb)")
+    @debug("Stat        = $(statistic)")
 
     return snrDb, signal_phase, signal_power, noise_power, statistic
 end

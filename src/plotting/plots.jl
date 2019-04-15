@@ -135,7 +135,7 @@ Returns a figure
 function plot_single_channel_timeseries(signal::AbstractVector{T}, fs::Real;
         xlabel::S="Time (s)", ylabel::S="Amplitude (uV)", lab::S="", kwargs...) where {T <: Number, S <: AbstractString}
 
-    debug("Plotting single channel waveform of size $(size(signal))")
+    @debug("Plotting single channel waveform of size $(size(signal))")
 
     time_s = collect(1:size(signal, 1))/fs   # Create time axis
 
@@ -164,7 +164,7 @@ Returns a figure
 function plot_multi_channel_timeseries(signals::Array{T, 2}, fs::Number, channels::Array{S};
         xlabel::S="Time (s)", ylabel::S="Amplitude (uV)", kwargs...) where {T <: Number, S <: AbstractString}
 
-    debug("Plotting multi channel waveform of size $(size(signals))")
+    @debug("Plotting multi channel waveform of size $(size(signals))")
 
     time_s = collect(1:size(signals, 1))/fs                        # Create time axis
 
