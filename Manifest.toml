@@ -202,6 +202,12 @@ git-tree-sha1 = "4d30e889c9f106a51ffa4791a88ffd4765bf20c3"
 uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 version = "0.7.0"
 
+[[Eglob]]
+deps = ["Glob"]
+git-tree-sha1 = "62a8bee2aedc65071cabfd45e5ef58a961c46ba8"
+uuid = "ba70085b-a8a4-575c-9558-0e347d50824b"
+version = "0.1.0"
+
 [[FFTViews]]
 deps = ["CustomUnitRanges", "FFTW", "Test"]
 git-tree-sha1 = "9d7993227ca7c0fdb6b31deef193adbba11c8f4e"

@@ -3,6 +3,7 @@ using Test
 using Logging
 using MAT, BDF
 using Plots
+using Eglob
 
 unicodeplots()
 
@@ -11,25 +12,10 @@ unicodeplots()
 # Run all tests
 #
 
-tests = AbstractString[]
+tests = [match for match in eglob("**/*.jl")]
+tests = tests[.~(tests .== "runtests.jl")]
 
-for (root, dirs, files) in walkdir(".")
-    for file in files
-        @info file
-    end
+@info tests
+for t in tests
+    include(t)
 end
-
-#function add_test(fname)
-#    global tests
-#    if endswith(fname, ".jl")
-#        if !contains(fname, "runtests#")
-#            push!(tests, fname)
-#        end
-#    end
-#end
-#FileFind.find(".", add_test)
-#
-#for t in tests
-#    include(t)
-#end
-#FactCheck.exitstatus()
