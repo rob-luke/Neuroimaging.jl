@@ -59,7 +59,7 @@ function read_rba_mat(mat_path)
     end
 
     if modulation_frequency == NaN && stimulation_side == NaN && participant_name == NaN
-        warn("Reading of .mat file failed")
+        @warn("Reading of .mat file failed")
     end
 
     @debug("Frequency: $modulation_frequency Side: $stimulation_side Name: $participant_name Carrier: $carrier_frequency")

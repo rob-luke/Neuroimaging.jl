@@ -14,7 +14,7 @@ Read Besa's BSA (.bsa) file
 * `bsa`: Dipole object
 """
 function read_bsa(fname::AbstractString)
-    Logging.info("Reading BSA file = $fname")
+    @info("Reading BSA file = $fname")
 
     # Open file
     file = open(fname, "r")
