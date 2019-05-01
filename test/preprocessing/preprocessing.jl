@@ -1,17 +1,17 @@
-facts("Preprocessing") do
+@testset "Preprocessing" begin
 
     fname = joinpath(dirname(@__FILE__),  "..", "data", "test_Hz19.5-testing.bdf")
     s = read_SSR(fname)
 
-    context("Triggers") do
+    @testset "Triggers" begin
 
-        context("Validation") do
+        @testset "Validation" begin
 
             validate_triggers(s.triggers)
 
             s1 = deepcopy(s)
             delete!(s1.triggers, "Index")
-            @fact_throws KeyError validate_triggers(s1.triggers)
+            @test_throws KeyError validate_triggers(s1.triggers)
 
             s1 = deepcopy(s)
             delete!(s1.triggers, "Code")
@@ -22,7 +22,7 @@ facts("Preprocessing") do
             @test_throws KeyError validate_triggers(s1.triggers)
 
             s1 = deepcopy(s)
-            s1.triggers["test"] = 1
+            s1.triggers["test"] = [1]
             validate_triggers(s1.triggers)
 
             s1 = deepcopy(s)
@@ -38,31 +38,31 @@ facts("Preprocessing") do
 end
 
 
-facts("Referencing") do
+@testset "Referencing" begin
 
     signals = [0 1 2] .* ones(5, 3)
 
-    context("Remove template") do
+    @testset "Remove template" begin
 
-	signals = [0 1 2] .* ones(5, 3)
-	template = vec(2 * ones(5))
-	@fact remove_template(signals, template) -->  [-2 -1 0] .* ones(5, 3)
-	@fact_throws remove_template(signals, [1, 2, 3])
+        signals = [0 1 2] .* ones(5, 3)
+        template = vec(2 * ones(5))
+        @test remove_template(signals, template) ==  [-2 -1 0] .* ones(5, 3)
 
-    end
-    context("Reference to channel") do
-
-	@fact rereference(signals, 3) --> [-2 -1 0] .* ones(5, 3)
-	@fact rereference(signals, "C2", ["C1", "C2", "C3"]) --> [-1 0 1] .* ones(5, 3)
 
     end
+    @testset "Reference to channel" begin
 
-    context("Reference to group of channels") do
+        @test rereference(signals, 3) == [-2 -1 0] .* ones(5, 3)
+        @test rereference(signals, "C2", ["C1", "C2", "C3"]) == [-1 0 1] .* ones(5, 3)
 
-	@fact rereference(signals, [1, 2, 3]) --> [-1 0 1] .* ones(5, 3)
-	@fact rereference(signals, ["C2", "C1", "C3"], ["C1", "C2", "C3"]) --> [-1 0 1] .* ones(5, 3)
-	@fact rereference(signals, "car", ["C1", "C2", "C3"]) --> [-1 0 1] .* ones(5, 3)
-	@fact rereference(signals, "average", ["C1", "C2", "C3"]) --> [-1 0 1] .* ones(5, 3)
+    end
+
+    @testset "Reference to group of channels" begin
+
+        @test rereference(signals, [1, 2, 3]) == [-1 0 1] .* ones(5, 3)
+        @test rereference(signals, ["C2", "C1", "C3"], ["C1", "C2", "C3"]) == [-1 0 1] .* ones(5, 3)
+        @test rereference(signals, "car", ["C1", "C2", "C3"]) == [-1 0 1] .* ones(5, 3)
+        @test rereference(signals, "average", ["C1", "C2", "C3"]) == [-1 0 1] .* ones(5, 3)
 
     end
 end

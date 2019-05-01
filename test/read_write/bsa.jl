@@ -2,4 +2,4 @@ fname = joinpath(dirname(@__FILE__), "../data", "test.bsa")
 
 dips = read_bsa(fname)
 
-@fact size(dips) --> (2,)
+@test size(dips) == (2,)

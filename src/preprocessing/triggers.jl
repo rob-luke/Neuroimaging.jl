@@ -13,7 +13,7 @@ function validate_triggers(t::Dict)
     @debug("Validating trigger information")
 
     if t.count > 3
-        err("Trigger channel has extra columns")
+        @error("Trigger channel has extra columns")
     end
 
     if !haskey(t, "Index")
