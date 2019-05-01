@@ -69,10 +69,10 @@ method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractStri
         L = zeros(typeof(data[1]), length(newX), length(newY), length(newZ), length(newT))
 
         for idx in 1:length(data)
-            idxX = findfirst(newX, x[idx])
-            idxY = findfirst(newY, y[idx])
-            idxZ = findfirst(newZ, z[idx])
-            idxT = findfirst(newT, t[idx])
+            idxX = something(findfirst(isequal(x[idx]), newX), 0) 
+            idxY = something(findfirst(isequal(y[idx]), newY), 0)
+            idxZ = something(findfirst(isequal(z[idx]), newZ), 0)
+            idxT = something(findfirst(isequal(t[idx]), newT), 0)
             L[idxX, idxY, idxZ, idxT] = data[idx]
         end
 

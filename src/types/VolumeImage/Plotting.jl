@@ -92,7 +92,7 @@ function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
     if plot_labels
         plotlist = ["Fpz", "Fp2", "AF8", "F8", "FT8", "T8", "TP8", "P10", "PO8", "O2", "Oz", "O1", "PO7", "P9", "TP7", "T7", "FT7", "F7", "AF7", "Fp1"]
         for elec in e
-            if findfirst(plotlist, elec.label) > 0
+            if something(findfirst(isequal(elec.label), plotlist), 0) > 0
                 annotate!(p1, elec.coordinate.x-5, 1.1*elec.coordinate.y-2, elec.label, colorbar = false)
             end
         end
@@ -143,7 +143,7 @@ function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
     if plot_labels
         plotlist = ["Iz", "Oz", "POz", "Pz", "CPz", "Cz", "FCz", "Fz", "AFz", "Fpz"]
         for elec in e
-            if findfirst(plotlist, elec.label) > 0
+            if  something(findfirst(isequal(elec.label), plotlist), 0)   > 0
                 annotate!(p2, elec.coordinate.y-5, elec.coordinate.z, elec.label)
             end
         end
@@ -193,7 +193,7 @@ function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
     if plot_labels
         plotlist = ["T7", "C5", "C3", "C1", "Cz", "C2", "C4", "C6", "T8"]
         for elec in e
-            if findfirst(plotlist, elec.label) > 0
+            if findfirst(plotlist, elec.label)  > 0
                 annotate!(p3, elec.coordinate.x-5, elec.coordinate.z, elec.label)
             end
         end

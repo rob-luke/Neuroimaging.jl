@@ -38,7 +38,7 @@ function plot_timeseries(s::SSR; channels::Union{S, Array{S}} = channelnames(s),
     else
 
         # Find index of requested channels
-        idx = [findfirst(channelnames(s), n) for n in channels]
+        idx = [   something(findfirst(isequal(n), channelnames(s)), 0) for n in channels]
         idx = idx[idx .!= 0]   # But if you cant find channels then plot what you can
         if length(idx) != length(channels)
             warn("Cant find index of all requested channels")

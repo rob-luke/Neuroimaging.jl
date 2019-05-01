@@ -44,7 +44,7 @@ function rereference(signals::Array{T, 2}, refChan::Union{Int, Array{Int}}) wher
 
     # If using the average of several channels
     if size(reference_signal, 2) > 1
-        reference_signal = vec(mean(reference_signal ,2))
+        reference_signal = vec(mean(reference_signal, dims = 2))
     end
 
     remove_template(signals, reference_signal)
@@ -74,7 +74,7 @@ function rereference(signals::Array{T, 2}, refChan::S, chanNames::Vector{S}) whe
     if refChan == "car" || refChan == "average"
         refChan_Idx = collect(1:size(signals, 2))
     elseif isa(refChan, AbstractString)
-        refChan_Idx = findfirst(chanNames, refChan)
+        refChan_Idx = something(findfirst(isequal(refChan), chanNames), 0)
     end
 
     if refChan == 0; error("Requested channel is not in the provided list of channels"); end
@@ -87,7 +87,7 @@ function rereference(signals::Array{T, 2}, refChan::Vector{S}, chanNames::Vector
 
     @debug("Reference channels = $refChan")
 
-    refChan_Idx = [findfirst(chanNames, i) for i = refChan]
+    refChan_Idx = [something(findfirst(isequal(i), chanNames), 0)  for i = refChan]
 
     if refChan == 0; error("Requested channel is not in the provided list of channels"); end
 

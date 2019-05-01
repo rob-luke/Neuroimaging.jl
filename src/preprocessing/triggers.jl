@@ -146,7 +146,7 @@ function extra_triggers(t::Dict, old_trigger_code::Union{Int, Array{Int}},
 
     # Find triggers we want to trip on
     valid_trip       = any(t["Code"]-trigger_code_offset .== old_trigger_code', 2)
-    valid_trip_idx   = find(valid_trip)
+    valid_trip_idx   = findall(valid_trip)
     valid_trip_index = [t["Index"][valid_trip_idx]; 0]  # Place a 0 at end so we dont use the last epoch
     valid_trip_code  = t["Code"][valid_trip_idx]
 

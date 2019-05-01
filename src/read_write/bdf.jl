@@ -171,7 +171,7 @@ function channelNames_biosemi_1020(original::S) where S <: AbstractString
                     "B32" "O2"
                     "Status" "Status"]
 
-    idx = findfirst(biosemi_1020, original)
+    idx = something(findfirst(isequal(original), biosemi_1020), 0)
 
     if idx == 0
         error("Channel $original is unknown")

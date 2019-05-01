@@ -92,7 +92,7 @@ end
 #######################################
 
 function compensate_for_filter(d::Dict, spectrum::AbstractArray, fs::Real)
-    frequencies = linspace(0, 1, Int(size(spectrum, 1))) * fs / 2
+    frequencies = range(0, stop = 1, length = Int(size(spectrum, 1))) * fs / 2
 
     key_name = "filter"
     key_numb = 1

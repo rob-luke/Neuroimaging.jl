@@ -261,7 +261,7 @@ remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 """
 function remove_channel!(a::SSR, channel_names::Array{S}; kwargs...) where S <: AbstractString
     @debug("Removing channels $(join(channel_names, " "))")
-    remove_channel!(a, Int[findfirst(channelnames(a), c) for c=channel_names])
+    remove_channel!(a, Int[something(findfirst(isequal(c), channelnames(a)), 0)  for c=channel_names])
 end
 
 function remove_channel!(a::SSR, channel_name::S; kwargs...) where S <: AbstractString
@@ -323,7 +323,7 @@ keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 """
 function keep_channel!(a::SSR, channel_names::Array{S}; kwargs...) where S <: AbstractString
     @info("Keeping channel(s) $(join(channel_names, " "))")
-    keep_channel!(a, vec(round.(Int, [findfirst(channelnames(a), c) for c = channel_names])))
+    keep_channel!(a, vec(round.(Int, [ something(findfirst(isequal(c), channelnames(a)), 0) for c = channel_names])))
 end
 
 function keep_channel!(a::SSR, channel_name::AbstractString; kwargs...)
@@ -407,7 +407,7 @@ function merge_channels(a::SSR, merge_Chans::Array{S}, new_name::S; kwargs...) w
 
     @debug("Number of original channels: $(length(channelnames(a)))")
 
-    keep_idxs = vec([findfirst(channelnames(a), i) for i = merge_Chans])
+    keep_idxs = vec([something(findfirst(isequal(i), channelnames(a)), 0) for i = merge_Chans])
 
     if sum(keep_idxs .== 0) > 0
         @warn("Could not merge as these channels don't exist: $(join(vec(merge_Chans[keep_idxs .== 0]), " "))")
