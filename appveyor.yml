@@ -1,27 +1,24 @@
+
 environment:
   matrix:
-  - JULIA_URL: "https://julialang-s3.julialang.org/bin/winnt/x64/0.6/julia-0.6-latest-win64.exe"
-    PYTHONDIR: "C:\\Miniconda-x64" 
-    PYTHON: "C:\\Miniconda-x64\\python.exe"
+  - julia_version: 0.7
+
+platform:
+  - x64 # 64-bit
+
+notifications:
+  - provider: Email
+    on_build_success: false
+    on_build_failure: false
+    on_build_status_changed: false
 
 install:
-  - ps: "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12"
-  # Install and upate pip
-  - "SET PATH=%PYTHONDIR%;%PYTHONDIR%\\Scripts;%PATH%"
-# Download most recent Julia Windows binary
-  - ps: (new-object net.webclient).DownloadFile(
-        $env:JULIA_URL,
-        "C:\projects\julia-binary.exe")
-# Run installer silently, output to C:\projects\julia
-  - C:\projects\julia-binary.exe /S /D=C:\projects\julia
+  - ps: iex ((new-object net.webclient).DownloadString("https://raw.githubusercontent.com/JuliaCI/Appveyor.jl/version-1/bin/install.ps1"))
 
 build_script:
-# Need to convert from shallow to complete for Pkg.clone to work
-  - IF EXIST .git\shallow (git fetch --unshallow)
-  - conda install -y NumPy SciPy matplotlib pip
-  - pip install -e git+https://github.com/mne-tools/mne-python#egg=mne-dev
-  - C:\projects\julia\bin\julia -e "Pkg.add(\"PyCall\"); Pkg.build(\"PyCall\")"
-  - C:\projects\julia\bin\julia -e "versioninfo(); Pkg.init(); Pkg.clone(\"git://github.com/codles/EEG.jl.git\")"
+  - echo "%JL_BUILD_SCRIPT%"
+  - C:\julia\bin\julia -e "%JL_BUILD_SCRIPT%"
 
 test_script:
-  - C:\projects\julia\bin\julia -e "Pkg.test(\"EEG\")"
+  - echo "%JL_TEST_SCRIPT%"
+  - C:\julia\bin\julia -e "%JL_TEST_SCRIPT%"
