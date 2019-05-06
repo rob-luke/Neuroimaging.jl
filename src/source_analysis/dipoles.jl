@@ -33,7 +33,7 @@ function find_dipoles(s::Array{T, 3}; window::Array{Int}=[6,6,6], x::AbstractVec
     end
 
     left_side = s[x .< 0, :, :]
-    a = CartesianIndices(size(left_side))[find(left_side .== maximum(left_side))]
+    a = CartesianIndices(size(left_side))[findall(left_side .== maximum(left_side))]
     a = a[1]
     xidx = a[1]
     yidx = a[2]
@@ -41,7 +41,7 @@ function find_dipoles(s::Array{T, 3}; window::Array{Int}=[6,6,6], x::AbstractVec
     push!(dips, Dipole("Unknown", x[xidx[1]] * u"m", y[yidx[1]] * u"m", z[zidx[1]] * u"m", 0, 0, 0, 0, 0, maximum(left_side)))
 
     right_side = s[x .> 0, :, :]
-    a = CartesianIndices(size(right_side))[find(right_side .== maximum(right_side))]
+    a = CartesianIndices(size(right_side))[findall(right_side .== maximum(right_side))]
     a = a[1]
     xidx = a[1]
     yidx = a[2]
@@ -81,7 +81,7 @@ function best_dipole(ref::Union{Coordinate, Dipole}, dips::Array{Dipole}; maxdis
 
     @info("Calculating best dipole for $(length(dips)) dipoles")
 
-    dips = dips[find([d.size > min_dipole_size for d in dips])]
+    dips = dips[findall([d.size > min_dipole_size for d in dips])]
 
     if length(dips) > 0
 
@@ -93,19 +93,19 @@ function best_dipole(ref::Union{Coordinate, Dipole}, dips::Array{Dipole}; maxdis
           # Valid dipoles exist find the largest one
           sizes = [dip.size for dip =dips]
           bestdip = maximum(sizes[valid_dist])
-          dip = dips[find(sizes .== bestdip)]
+          dip = dips[findall(sizes .== bestdip)]
           @debug("$(sum(valid_dist)) dipoles within $(maxdist) m. ")
 
       elseif sum(valid_dist) == 1
           # Return the one valid dipole
-          dip = dips[find(valid_dist)]
+          dip = dips[findall(valid_dist)]
           @debug("Only one dipole within $(maxdist) m. ")
 
       else
           # No dipoles within distance
           # Take the closest
           bestdip = minimum(dists)
-          dip = dips[find(dists .== bestdip)]
+          dip = dips[findall(dists .== bestdip)]
           @debug("No dipole within $(maxdist) m. ")
 
       end

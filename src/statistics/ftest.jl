@@ -21,11 +21,11 @@ TODO: Add references to MASTER and Luts et al
 
 """
 function ftest(sweeps::Union{Array{Float64, 3}, Array{Float32, 3}}, freq_of_interest::Real,
-                fs::Real, side_freq::Real, used_filter::Union{DSP.FilterType, Void}, spill_bins::Int)
+                fs::Real, side_freq::Real, used_filter::Union{DSP.FilterType, Nothing}, spill_bins::Int)
 
     spectrum    = EEG._ftest_spectrum(sweeps)
     # No compensation is made here for prior filtering. See SSR.jl for an example of how to compensate filtering.
-    frequencies = linspace(0, 1, Int(size(spectrum, 1)))*float(fs)/2
+    frequencies = range(0, stop=1, length=Int(size(spectrum, 1)))*float(fs)/2
 
     ftest(spectrum, frequencies, freq_of_interest, side_freq, spill_bins)
 end
