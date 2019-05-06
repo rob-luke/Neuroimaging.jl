@@ -16,16 +16,19 @@
 
     	s = read_SSR(fname2)
 
+        @info samplingrate(s)
     	@test samplingrate(s) == 8192.0
+        @info samplingrate(s)
     	@test samplingrate(Int, s) == 8192
     	@test isa(samplingrate(s), AbstractFloat) == true
     	@test isa(samplingrate(Int, s), Int) == true
 
+        @info modulationrate(s)
     	@test modulationrate(s) == 19.5
     	@test isa(modulationrate(s), AbstractFloat) == true
 
-        @test maximum(s.data[:,2]) == roughly(54.5939, atol =  0.1)
-        @test minimum(s.data[:,4]) == roughly(-175.2503 , atol = 0.1)
+        @test isapprox(maximum(s.data[:,2]), 54.5939; atol =  0.1)
+        @test isapprox(minimum(s.data[:,4]), -175.2503; atol = 0.1)
 
         s = read_SSR(fname, valid_triggers = [8])
         s = read_SSR(fname, min_epoch_length = 8388)
@@ -64,7 +67,7 @@
         sampRate = readBDFHeader(fname)["sampRate"][1]
 
         @test trigs == create_channel(evtTab, dats, sampRate, code="code", index="idx", duration="dur")
-        @test trigs == not(trigger_channel(read_SSR(fname)))
+        @test trigs == .!(trigger_channel(read_SSR(fname)))
         @test trigs == trigger_channel(read_SSR(fname, valid_triggers = collect(-1000:10000)))
 
         # Convert between events and channels
@@ -173,7 +176,7 @@
         matlab_sweeps = read(filen, "sweep")
         close(filen)
         @test size(matlab_sweeps[:,1:6]) ==  size(julia_result)
-        @test matlab_sweeps[:,1:6] ==  roughly(julia_result, atol = 0.01)  # why so different?
+        @test isapprox(matlab_sweeps[:,1:6], julia_result; atol = 0.01)  # why so different?
 
     end
 
@@ -349,7 +352,7 @@
     @testset "Ftest" begin
 
         s = read_SSR(fname)
-        s.modulationrate = 19.5
+        s.modulationrate = 19.5 * 1.0u"Hz"
         s = rereference(s, "Cz")
         s = extract_epochs(s)
         s = create_sweeps(s, epochsPerSweep=4)
@@ -357,16 +360,16 @@
 
         @test isnan(snrDb[1]) == true
         @test isnan(statistic[1]) == true
-        @test snrDb[2:end] == roughly([-7.0915, -7.8101, 2.6462, -10.2675, -4.1863]; atol =  0.001)
-        @test statistic[2:end] == roughly([0.8233,  0.8480, 0.1721,   0.9105,  0.6854]; atol = 0.001)
+        @test isapprox(snrDb[2:end], [-7.0915, -7.8101, 2.6462, -10.2675, -4.1863]; atol =  0.001)
+        @test isapprox(statistic[2:end], [0.8233,  0.8480, 0.1721,   0.9105,  0.6854]; atol = 0.001)
 
         s = ftest(s, side_freq=2.5,  Note="Original channels", Additional_columns = 22)
         @test isnan(s.processing["statistics"][:SNRdB][1]) == true
-        @test s.processing["statistics"][:SNRdB][2:end] == roughly([-1.2386, 0.5514, -1.5537, -2.7541, -6.7079]; atol = 0.001)
+        @test isapprox(s.processing["statistics"][:SNRdB][2:end], [-1.2386, 0.5514, -1.5537, -2.7541, -6.7079]; atol = 0.001)
 
         s = ftest(s, side_freq = 1.2,  Note="SecondTest", Additional_columns = 24)
 
-        context("Save results") do
+        @testset "Save results" begin
 
             save_results(s)
         end
@@ -378,10 +381,10 @@
         for rate in [4, 10, 20, 40]
 
             s = read_SSR(fname)
-            s.modulationrate = rate
+            s.modulationrate = rate * 1.0u"Hz"
             s = add_triggers(s)
             s = extract_epochs(s)
-            @test size(s.processing["epochs"], 1) * rate / 8192 == roughly(1; atol=0.005)
+            @test isapprox(size(s.processing["epochs"], 1) * rate / 8192, 1; atol=0.005)
 
         end
     end

@@ -114,7 +114,7 @@ function downsample(s::SSR, ratio::Rational)
         s.triggers["Index"][1] = 1
     end
 
-    s.samplingrate = float(samplingrate(s) * ratio) * Hertz
+    s.samplingrate = float(samplingrate(s) * ratio) * 1.0u"Hz"
 
     return s
 end

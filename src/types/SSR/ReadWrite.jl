@@ -101,8 +101,17 @@ function read_SSR(fname::String;
     end
 
     # Create SSR type
-    samplingrate = samplingrate * 1.0u"Hz"
-    modulationrate = modulationrate * 1.0u"Hz"
+    if unit(modulationrate) == unit(1.0u"Hz")
+        #nothing
+    else
+        modulationrate = modulationrate * 1.0u"Hz"
+    end
+    if unit(samplingrate) == unit(1.0u"Hz")
+        #nothing
+    else
+        samplingrate = samplingrate * 1.0u"Hz"
+    end
+
     a = SSR(data, elecs, triggers, system_codes, samplingrate, modulationrate,
             [reference_channel], file_path, file_name, Dict(), header)
 
