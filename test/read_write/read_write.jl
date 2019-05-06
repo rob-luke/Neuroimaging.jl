@@ -1,24 +1,24 @@
-facts("File formats") do
+@testset "File formats" begin
 
-    context("avr") do
+    @testset "avr" begin
         include("avr.jl")
     end
-    context("bsa") do
+    @testset "bsa" begin
         include("bsa.jl")
     end
-    context("dat") do
+    @testset "dat" begin
         include("dat.jl")
     end
-    context("elp") do
+    @testset "elp" begin
         include("elp.jl")
     end
-    context("evt") do
+    @testset "evt" begin
         include("evt.jl")
     end
-    context("rba") do
+    @testset "rba" begin
         include("rba.jl")
     end
-    context("sfp") do
+    @testset "sfp" begin
         include("rba.jl")
     end
 end

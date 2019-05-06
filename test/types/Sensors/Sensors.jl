@@ -1,48 +1,48 @@
-facts("Sensors") do
+@testset "Sensors" begin
 
     fname = joinpath(dirname(@__FILE__), "..", "..", "data", "test.sfp")
     s = read_sfp(fname)
 
 
-    context("Read file") do
+    @testset "Read file" begin
 
         s = read_sfp(fname)
-        @fact length(s) --> 3
+        @test length(s) == 3
     end
 
 
-    context("Show") do
+    @testset "Show" begin
 
-        @suppress_out show(s)
-        @suppress_out show(s[1])
+        show(s)
+        show(s[1])
     end
 
 
-    context("Info") do
+    @testset "Info" begin
 
-        @fact label(s) --> ["Fp1", "Fpz", "Fp2"]
-        @fact label(s[1]) --> "Fp1"
-        @fact labels(s) --> ["Fp1", "Fpz", "Fp2"]
-        @fact labels(s[1]) --> "Fp1"
+        @test label(s) == ["Fp1", "Fpz", "Fp2"]
+        @test label(s[1]) == "Fp1"
+        @test labels(s) == ["Fp1", "Fpz", "Fp2"]
+        @test labels(s[1]) == "Fp1"
 
-        @fact EEG.x(s) --> [-27.747648, -0.085967, 27.676888]
-        @fact EEG.x(s[1]) --> -27.747648
+        @test EEG.x(s) == [-27.747648, -0.085967, 27.676888]
+        @test EEG.x(s[1]) == -27.747648
 
-        @fact EEG.y(s) --> [98.803864, 103.555275, 99.133354]
-        @fact EEG.y(s[1]) --> 98.803864
+        @test EEG.y(s) == [98.803864, 103.555275, 99.133354]
+        @test EEG.y(s[1]) == 98.803864
 
-        @fact EEG.z(s) --> [34.338360, 34.357265, 34.457005]
-        @fact EEG.z(s[1]) --> 34.338360
+        @test EEG.z(s) == [34.338360, 34.357265, 34.457005]
+        @test EEG.z(s[1]) == 34.338360
     end
 
-    context("Matching") do
+    @testset "Matching" begin
 
         a, b = match_sensors(s, ["Fp1", "Fp2"])
 
     end
 
 
-    context("Leadfield matching") do
+    @testset "Leadfield matching" begin
 
         L = ones(4, 3, 5)
         L[:, :, 2] = L[:, :, 2] * 2
@@ -52,20 +52,20 @@ facts("Sensors") do
 
         L, idx = match_sensors(L, ["meh", "Cz", "Fp1", "Fp2", "eh"], ["Fp2", "Cz"])
 
-        @fact size(L) --> (4, 3, 2)
-        @fact L[:, :, 1] --> ones(4, 3) * 4
-        @fact L[:, :, 2] --> ones(4, 3) * 2
-        @fact idx --> [4, 2]
+        @test size(L) == (4, 3, 2)
+        @test L[:, :, 1] == ones(4, 3) * 4
+        @test L[:, :, 2] == ones(4, 3) * 2
+        @test idx == [4, 2]
 
     end
 
 
-    context("Standard sets") do
+    @testset "Standard sets" begin
 
-        @fact length(EEG_64_10_20) --> 64
-        @fact length(EEG_Vanvooren_2014) --> 18
-        @fact length(EEG_Vanvooren_2014_Left) --> 9
-        @fact length(EEG_Vanvooren_2014_Right) --> 9
+        @test length(EEG_64_10_20) == 64
+        @test length(EEG_Vanvooren_2014) == 18
+        @test length(EEG_Vanvooren_2014_Left) == 9
+        @test length(EEG_Vanvooren_2014_Right) == 9
 
     end
 

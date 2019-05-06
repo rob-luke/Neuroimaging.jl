@@ -15,7 +15,7 @@ function find_location(l::Leadfield, x::Number, y::Number, z::Number)
     if isempty(idx)
 
         dists = [euclidean([l.x[i], l.y[i], l.z[i]], [x, y, z]) for i = 1:length(l.x)]
-        idx = findfirst(dists, minimum(dists))
+        idx = something(findfirst(isequal(minimum(dists)), dists), 0)
     else
         idx = idx[1]
     end

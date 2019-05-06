@@ -17,7 +17,7 @@ end
 
 function match_leadfield(l::Leadfield, s::SSR)
 
-    info("Matching leadfield to SSR")
+    @info("Matching leadfield to SSR")
 
     idx = [findfirst(l.sensors, name) for name = channelnames(s)]
 
@@ -28,7 +28,7 @@ function match_leadfield(l::Leadfield, s::SSR)
     l.L = l.L[:,:,idx]
     l.sensors = l.sensors[idx]
 
-    debug("matched $(length(idx)) sensors")
+    @debug("matched $(length(idx)) sensors")
 
     return l
 end

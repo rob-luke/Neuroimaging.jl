@@ -1,4 +1,4 @@
-@doc """
+"""
 Dipole type.
 
 
@@ -11,12 +11,12 @@ Dipole type.
 * state: State of dipol
 * size: size of dipole
 
-""" ->
+"""
 mutable struct Dipole
     coord_system::AbstractString
-    x::SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0} # m
-    y::SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0} # m
-    z::SIUnits.SIQuantity{AbstractFloat,1,0,0,0,0,0,0,0,0} # m
+    x::typeof(1.0u"m")
+    y::typeof(1.0u"m")
+    z::typeof(1.0u"m")
     xori::Number
     yori::Number
     zori::Number
@@ -29,7 +29,7 @@ end
 import Base.show
 function Base.show(io::IO, d::Dipole)
     @printf("Dipole with coordinates x = % 6.2f m, y = % 6.2f m, z = % 6.2f m, size = % 9.5f\n",
-        float(d.x), float(d.y), float(d.z), float(d.size))
+        ustrip(d.x), ustrip(d.y), ustrip(d.z), ustrip(d.size))
 end
 
 
@@ -37,6 +37,6 @@ function Base.show(io::IO, dips::Array{Dipole})
     @printf("%d dipoles\n", length(dips))
     for d in dips
         @printf("  Dipole with coordinates x = % 6.2f m, y = % 6.2f m, z = % 6.2f m and size = % 9.5f\n",
-            float(d.x), float(d.y), float(d.z), float(d.size))
+            ustrip(d.x), ustrip(d.y), ustrip(d.z), ustrip(d.size))
     end
 end

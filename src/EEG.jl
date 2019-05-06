@@ -1,13 +1,10 @@
 module EEG
 
 using Logging,  # For user feedback
-      SIUnits,  # Smarter units
-      SIUnits.ShortUnits,
+      Unitful,
       DataFrames,
       Distances,
       ProgressMeter,
-      AWS,
-      AWS.S3,
       BDF,
       CSV,
       DSP,
@@ -15,7 +12,10 @@ using Logging,  # For user feedback
       Plots,
       Images,
       BDF,
-      MAT
+      MAT,
+      Printf,
+      Statistics,
+      FFTW
 
 
 export # Helper functions

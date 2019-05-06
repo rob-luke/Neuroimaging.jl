@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc """
+"""
 Read dat files
 
 #### Arguments
@@ -19,9 +19,9 @@ Read dat files
 
 #### References
 File specs were taken from [fieldtrip](https://github.com/fieldtrip/fieldtrip/blob/1cabb512c46cc70e5b734776f20cdc3c181243bd/external/besa/readBESAimage.m)
-""" ->
+"""
 function read_dat(fname::AbstractString)
-    Logging.info("Reading dat file = $fname")
+    @info("Reading dat file = $fname")
 
     read_dat(open(fname, "r"))
 end
@@ -36,7 +36,7 @@ function read_dat(fid::IO)
     # Ensure we are reading version 2
     versionAbstractString = match(r"(\S+):(\d.\d)", readline(fid))
     version = float(versionAbstractString.captures[2])
-    debug("Version = $version")
+    @debug("Version = $version")
 
     # Use @assert here?
     if version != 2
@@ -52,7 +52,7 @@ function read_dat(fid::IO)
 
     # Types of data that can be stored
     if search(typeline, "Method") != 0:-1  # TODO: change to imatch
-        debug("File type is Method")
+        @debug("File type is Method")
 
         image_type = typeline[21:end]
         image_mode = "Time"
@@ -63,8 +63,8 @@ function read_dat(fid::IO)
         # Units
         units          = readline(fid)[3:end-1]
 
-        debug("Regularisation = $regularization")
-        debug("Units = $units")
+        @debug("Regularisation = $regularization")
+        @debug("Units = $units")
     elseif search(typeline, "MSBF") != 0:-1
 
         image_mode = "Single Time"
@@ -175,9 +175,9 @@ function read_dat(fid::IO)
 end
 
 
-@doc """
+"""
 Write dat file
-""" ->
+"""
 function write_dat(fname::AbstractString,
 X::AbstractVector, Y::AbstractVector, Z::AbstractVector,
 S::Array{DataT,4}, T::AbstractVector;
@@ -189,7 +189,7 @@ units::AbstractString="NA") where DataT <: AbstractFloat
     if size(S,3) != length(Z); Logging.warn("Data and z sizes do not match"); end
     if size(S,4) != length(T); Logging.warn("Data and t sizes do not match"); end
 
-    Logging.info("Saving dat to $fname")
+    @info("Saving dat to $fname")
 
     open(fname, "w") do fid
         @printf(fid, "BESA_SA_IMAGE:2.0\n")
@@ -220,6 +220,6 @@ units::AbstractString="NA") where DataT <: AbstractFloat
                 @printf(fid, "\n")
             end
         end
-        debug("File successfully written")
+        @debug("File successfully written")
     end
 end

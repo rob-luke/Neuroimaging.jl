@@ -1,4 +1,4 @@
-facts("Plotting") do
+@testset "Plotting" begin
 
     fname = joinpath(dirname(@__FILE__), "../data", "test_Hz19.5-testing.bdf")
     s = read_SSR(fname)
@@ -8,7 +8,7 @@ facts("Plotting") do
     s = create_sweeps(s, epochsPerSweep = 2)
     s = ftest(s)
 
-    context("Spectrum") do
+    @testset "Spectrum" begin
         p = plot_spectrum(s, "20Hz_SWN_70dB_R", targetFreq = 3.0)
         #= display(p) =#
 
@@ -19,7 +19,7 @@ facts("Plotting") do
         #= display(p) =#
     end
 
-    context("Filter reponse") do
+    @testset "Filter reponse" begin
 
         p = plot_filter_response(s.processing["filter1"], Int(samplingrate(s)))
         #= display(p) =#
@@ -27,7 +27,7 @@ facts("Plotting") do
 
     s = trim_channel(s, 8192*3)
 
-    context("Multi channel time series") do
+    @testset "Multi channel time series" begin
         plot1 = plot_timeseries(s)
         #= display(plot1) =#
 
@@ -39,7 +39,7 @@ facts("Plotting") do
         #= display(plot3) =#
     end
 
-    context("Single channel time series") do
+    @testset "Single channel time series" begin
         plot4 = plot_timeseries(s, channels=["40Hz_SWN_70dB_R"])
         #= display(plot4) =#
 

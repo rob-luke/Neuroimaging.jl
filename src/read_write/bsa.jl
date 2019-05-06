@@ -4,7 +4,7 @@
 #
 #######################################
 
-@doc """
+"""
 Read Besa's BSA (.bsa) file
 
 #### Input
@@ -12,9 +12,9 @@ Read Besa's BSA (.bsa) file
 
 #### Output
 * `bsa`: Dipole object
-""" ->
+"""
 function read_bsa(fname::AbstractString)
-    Logging.info("Reading BSA file = $fname")
+    @info("Reading BSA file = $fname")
 
     # Open file
     file = open(fname, "r")
@@ -37,7 +37,7 @@ function read_bsa(fname::AbstractString)
     while !eof(file)
         dm = match(regexp, readline(file))
 
-        dip = Dipole(coordinate_system, float(dm.captures[2])/1000, float(dm.captures[3])/1000, float(dm.captures[4])/1000,
+        dip = Dipole(coordinate_system, 1u"m" * float(dm.captures[2])/1000, 1u"m" * float(dm.captures[3])/1000, 1u"m" * float(dm.captures[4])/1000,
                                         float(dm.captures[5]), float(dm.captures[6]), float(dm.captures[7]),
                                         float(dm.captures[8]), float(dm.captures[9]), float(dm.captures[10]))
 
@@ -47,9 +47,9 @@ function read_bsa(fname::AbstractString)
     # Close file
     close(file)
 
-    debug("Version = $version")
-    debug("Coordinate System  = $coordinate_system")
-    debug("Dipoles = $(length(dips))")
+    @debug("Version = $version")
+    @debug("Coordinate System  = $coordinate_system")
+    @debug("Dipoles = $(length(dips))")
 
     return dips
 end

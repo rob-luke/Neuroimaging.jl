@@ -1,4 +1,4 @@
-@doc """
+"""
 
 Type for storing steady state response (SSR) data.
 
@@ -38,14 +38,14 @@ Put an example here
 s = SSR("filename")
 ```
 
-""" ->
+"""
 mutable struct SSR
     data::Array
     sensors::Array{Sensor}
     triggers::Dict
     system_codes::Dict
-    samplingrate::quantity(AbstractFloat, Hz)
-    modulationrate::quantity(AbstractFloat, Hz)
+    samplingrate::typeof(1.0u"Hz")
+    modulationrate::typeof(1.0u"Hz")
     reference_channel::Array{AbstractString, 1}
     file_path::AbstractString
     file_name::AbstractString
@@ -60,7 +60,7 @@ end
 #
 #######################################
 
-@doc """
+"""
 Return the sampling rate of a steady state type.
 If no type is provided, the sampling rate is returned as a floating point.
 
@@ -72,12 +72,12 @@ Return the sampling rate of a recording
 s = read_SSR(filename)
 samplingrate(s)
 ```
-""" ->
-samplingrate(t, s::SSR) = convert(t, float(s.samplingrate))
+"""
+samplingrate(t, s::SSR) = convert(t, ustrip(s.samplingrate))
 samplingrate(s::SSR) = samplingrate(AbstractFloat, s)
 
 
-@doc """
+"""
 Return the modulation rate of a steady state type.
 If no type is provided, the modulation rate is returned as a floating point.
 
@@ -89,12 +89,12 @@ Return the modulation rate of a recording
 s = read_SSR(filename)
 modulationrate(s)
 ```
-""" ->
-modulationrate(t, s::SSR) = convert(t, float(s.modulationrate))
+"""
+modulationrate(t, s::SSR) = convert(t, ustrip(s.modulationrate))
 modulationrate(s::SSR) = modulationrate(AbstractFloat, s)
 
 
-@doc """
+"""
 Return the names of sensors in SSR measurement.
 
 #### Example
@@ -106,7 +106,7 @@ channelnames(s)
 """
 channelnames(s::SSR) = labels(s.sensors)
 
-@doc """
+"""
 Change the names of sensors in SSR measurement.
 
 #### Example
@@ -164,7 +164,7 @@ end
 #######################################
 
 import Base.hcat
-@doc """
+"""
 Append one SSR type to another, simulating a longer recording.
 
 #### Example
@@ -172,7 +172,7 @@ Append one SSR type to another, simulating a longer recording.
 ```julia
 hcat(a, b)
 ```
-""" ->
+"""
 function hcat(a::SSR, b::SSR)
 
     if channelnames(a) != channelnames(b)
@@ -180,13 +180,13 @@ function hcat(a::SSR, b::SSR)
     end
 
     if haskey(a.processing, "epochs")
-        warn("Epochs have already been extracted and will no longer be valid")
+        @warn("Epochs have already been extracted and will no longer be valid")
     end
     if haskey(a.processing, "statistics")
-        warn("Statistics have already been calculated and will no longer be valid")
+        @warn("Statistics have already been calculated and will no longer be valid")
     end
 
-    debug("Appending two SSRs with $(size(a.data, 2)) .& $(size(b.data, 2)) channels and lengths $(size(a.data, 1)) $(size(b.data, 1))")
+    @debug("Appending two SSRs with $(size(a.data, 2)) .& $(size(b.data, 2)) channels and lengths $(size(a.data, 1)) $(size(b.data, 1))")
 
     join_triggers(a, b)
     a.data = [a.data; b.data]
@@ -195,7 +195,7 @@ function hcat(a::SSR, b::SSR)
 end
 
 
-@doc """
+"""
 Append the trigger information of one SSR type to another.
 Places the trigger information at the end of first file
 
@@ -204,7 +204,7 @@ Places the trigger information at the end of first file
 ```julia
 join_triggers(a, b)
 ```
-""" ->
+"""
 function join_triggers(a, b; offset=size(a.data, 1))
 
     a.triggers["Index"] = [a.triggers["Index"]; (b.triggers["Index"] .+ offset)]
@@ -223,7 +223,7 @@ end
 #
 #######################################
 
-@doc """
+"""
 Add a channel to the SSR type with specified channel names.
 
 #### Example
@@ -235,10 +235,10 @@ s = read_SSR(filename)
 new_channel = mean(s.data, 2)
 s = add_channel(s, new_channel, "Merged")
 ```
-""" ->
+"""
 function add_channel(a::SSR, data::Vector, chanLabel::AbstractString; kwargs...)
 
-    Logging.info("Adding channel $chanLabel")
+    @info("Adding channel $chanLabel")
 
     a.data = hcat(a.data, data)
     push!(a.sensors, Electrode(chanLabel, Talairach(NaN, NaN, NaN), Dict()))
@@ -247,7 +247,7 @@ function add_channel(a::SSR, data::Vector, chanLabel::AbstractString; kwargs...)
 end
 
 
-@doc """
+"""
 Remove specified channels from SSR.
 
 #### Example
@@ -258,14 +258,14 @@ Remove channel Cz and those in the set called `EEG_Vanvooren_2014_Right`
 a = read_SSR(filename)
 remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
-""" ->
+"""
 function remove_channel!(a::SSR, channel_names::Array{S}; kwargs...) where S <: AbstractString
-    Logging.debug("Removing channels $(join(channel_names, " "))")
-    remove_channel!(a, Int[findfirst(channelnames(a), c) for c=channel_names])
+    @debug("Removing channels $(join(channel_names, " "))")
+    remove_channel!(a, Int[something(findfirst(isequal(c), channelnames(a)), 0)  for c=channel_names])
 end
 
 function remove_channel!(a::SSR, channel_name::S; kwargs...) where S <: AbstractString
-    Logging.debug("Removing channel $(channel_name)")
+    @debug("Removing channel $(channel_name)")
     remove_channel!(a, [channel_name])
 end
 
@@ -275,27 +275,29 @@ function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
 
     channel_idx = channel_idx[channel_idx .!= 0]
 
-    Logging.debug("Removing channel(s) $channel_idx")
+    @debug("Removing channel(s) $channel_idx")
     if any(channel_idx .== 0)
-        Logging.warn("Failed to remove a channel")
+        @warn("Failed to remove a channel")
     end
 
     keep_idx = [1:size(a.data)[end]; ]
     for c = sort(channel_idx, rev=true)
         try
             splice!(keep_idx, c)
+        catch
+            # Nothing
         end
     end
 
     if haskey(a.processing, "epochs")
         if size(a.processing["epochs"], 3) == size(a.data, 2)
-            Logging.debug("Removing channel(s) from epoch data")
+            @debug("Removing channel(s) from epoch data")
             a.processing["epochs"] = a.processing["epochs"][:, :, keep_idx]
         end
     end
     if haskey(a.processing, "sweeps")
         if size(a.processing["sweeps"], 3) == size(a.data, 2)
-            Logging.debug("Removing channel(s) from sweep data")
+            @debug("Removing channel(s) from sweep data")
             a.processing["sweeps"] = a.processing["sweeps"][:, :, keep_idx]
         end
     end
@@ -307,7 +309,7 @@ function remove_channel!(a::SSR, channel_idx::Array{Int}; kwargs...)
 end
 
 
-@doc """
+"""
 Remove all channels except those requested from SSR.
 
 #### Example
@@ -318,10 +320,10 @@ Remove all channels except Cz and those in the set called `EEG_Vanvooren_2014_Ri
 a = read_SSR(filename)
 keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
-""" ->
+"""
 function keep_channel!(a::SSR, channel_names::Array{S}; kwargs...) where S <: AbstractString
-    Logging.info("Keeping channel(s) $(join(channel_names, " "))")
-    keep_channel!(a, vec(round.(Int, [findfirst(channelnames(a), c) for c = channel_names])))
+    @info("Keeping channel(s) $(join(channel_names, " "))")
+    keep_channel!(a, vec(round.(Int, [ something(findfirst(isequal(c), channelnames(a)), 0) for c = channel_names])))
 end
 
 function keep_channel!(a::SSR, channel_name::AbstractString; kwargs...)
@@ -347,7 +349,7 @@ end
 #
 #######################################
 
-@doc """
+"""
 Trim SSR recording by removing data after `stop` specifed samples.
 
 #### Optional Parameters
@@ -361,10 +363,10 @@ Remove the first 8192 samples and everything after 8192*300 samples
 ```julia
 s = trim_channel(s, 8192*300, start=8192)
 ```
-""" ->
+"""
 function trim_channel(a::SSR, stop::Int; start::Int=1, kwargs...)
 
-    Logging.info("Trimming $(size(a.data)[end]) channels between $start and $stop")
+    @info("Trimming $(size(a.data)[end]) channels between $start and $stop")
 
     a.data = a.data[start:stop,:]
 
@@ -390,7 +392,7 @@ end
 #
 #######################################
 
-@doc """
+"""
 Merge `SSR` channels listed in `merge_Chans` and label the averaged channel as `new_name`
 
 If multiple channels are listed then the average of those channels will be added.
@@ -400,20 +402,20 @@ If multiple channels are listed then the average of those channels will be added
 ```julia
 s = merge_channels(s, ["P6", "P8"], "P68")
 ```
-""" ->
+"""
 function merge_channels(a::SSR, merge_Chans::Array{S}, new_name::S; kwargs...) where S <: AbstractString
 
-    debug("Number of original channels: $(length(channelnames(a)))")
+    @debug("Number of original channels: $(length(channelnames(a)))")
 
-    keep_idxs = vec([findfirst(channelnames(a), i) for i = merge_Chans])
+    keep_idxs = vec([something(findfirst(isequal(i), channelnames(a)), 0) for i = merge_Chans])
 
     if sum(keep_idxs .== 0) > 0
-        warn("Could not merge as these channels don't exist: $(join(vec(merge_Chans[keep_idxs .== 0]), " "))")
+        @warn("Could not merge as these channels don't exist: $(join(vec(merge_Chans[keep_idxs .== 0]), " "))")
         keep_idxs = keep_idxs[keep_idxs .> 0]
     end
 
-    Logging.info("Merging channels $(join(vec(channelnames(a)[keep_idxs,:]), " "))")
-    debug("Merging channels $keep_idxs")
+    @info("Merging channels $(join(vec(channelnames(a)[keep_idxs,:]), " "))")
+    @debug("Merging channels $keep_idxs")
 
     a = add_channel(a, vec(mean(a.data[:,keep_idxs], 2)), new_name; kwargs...)
 end

@@ -1,11 +1,11 @@
-julia 0.6 0.7-
+julia 0.7
 
 AWS
 CSV
 DSP
 BDF
 DataFrames
-SIUnits
+#SIUnits
 ProgressMeter
 Distributions
 Distances
@@ -15,3 +15,7 @@ FileFind
 Images
 MAT
 Plots
+Unitful
+Printf
+Statistics
+FFTW

@@ -1,4 +1,5 @@
 import Base: +, -, /, *, mean, maximum, minimum, isequal, ==
+using Statistics
 
 
 # +
@@ -7,7 +8,7 @@ function +(vi1::VolumeImage, vi2::VolumeImage)
 
     dimensions_equal(vi1, vi2)
 
-    debug("Adding two volume images with $(size(vi1.data, 4)) time instances")
+    @debug("Adding two volume images with $(size(vi1.data, 4)) time instances")
 
     vout = deepcopy(vi1)
 
@@ -23,7 +24,7 @@ function -(vi1::VolumeImage, vi2::VolumeImage)
 
     dimensions_equal(vi1, vi2)
 
-    debug("Subtracting two volume images with $(size(vi1.data, 4)) time instances")
+    @debug("Subtracting two volume images with $(size(vi1.data, 4)) time instances")
 
     vout = deepcopy(vi1)
 
@@ -39,7 +40,7 @@ function /(vi1::VolumeImage, vi2::VolumeImage)
 
     dimensions_equal(vi1, vi2)
 
-    debug("Dividing two volume images with $(size(vi1.data, 4)) time instances")
+    @debug("Dividing two volume images with $(size(vi1.data, 4)) time instances")
 
     vout = deepcopy(vi1)
 
@@ -74,21 +75,21 @@ end
 
 function mean(vi::VolumeImage)
 
-    debug("Taking mean of one volume images with $(size(vi.data, 4)) time instances")
+    @debug("Taking mean of one volume images with $(size(vi.data, 4)) time instances")
 
     vout = deepcopy(vi)
 
     vout.data = mean(vout.data, 4)
 
     # Store time as 0 to indicate its been averaged
-    vout.t = [NaN]
+    vout.t = [NaN] * u"s"
 
     return vout
 end
 
 function mean(va::Array{VolumeImage,1})
 
-    debug("Taking mean of $(length(va)) volume images with $(size(va[1].data, 4)) time instances")
+    @debug("Taking mean of $(length(va)) volume images with $(size(va[1].data, 4)) time instances")
 
     mean_va = deepcopy(va[1])
 
@@ -133,7 +134,7 @@ end
 
 function normalise(vi::VolumeImage)
 
-    debug("Normalising one volume images with $(size(vi.data, 4)) time instances")
+    @debug("Normalising one volume images with $(size(vi.data, 4)) time instances")
 
     normalisation_constant = maximum(vi)
 
@@ -146,7 +147,7 @@ end
 
 function normalise(va::Array{VolumeImage, 1})
 
-    debug("Normalising $(length(va)) volume images with $(size(va[1].data, 4)) time instances")
+    @debug("Normalising $(length(va)) volume images with $(size(va[1].data, 4)) time instances")
 
     vo = deepcopy(va)
     for i in 1:length(vo)
@@ -211,9 +212,9 @@ Find indicies of location in VolumeImage
 """
 function find_location(vi::VolumeImage, x::Real, y::Real, z::Real)
 
-    x_loc = find(minimum(abs.(vi.x ./ Meter - x)) .== abs.(vi.x ./ Meter - x))[1]
-    y_loc = find(minimum(abs.(vi.y ./ Meter - y)) .== abs.(vi.y ./ Meter - y))[1]
-    z_loc = find(minimum(abs.(vi.z ./ Meter - z)) .== abs.(vi.z ./ Meter - z))[1]
+    x_loc = find(minimum(abs.(vi.x - x)) .== abs.(vi.x - x))[1]
+    y_loc = find(minimum(abs.(vi.y - y)) .== abs.(vi.y - y))[1]
+    z_loc = find(minimum(abs.(vi.z - z)) .== abs.(vi.z - z))[1]
 
     if length(size(vi.data)) == 3
         return [x_loc, y_loc, z_loc]

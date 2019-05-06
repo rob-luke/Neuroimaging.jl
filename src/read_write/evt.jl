@@ -4,11 +4,13 @@
 #
 #######################################
 
-@doc """
+"""
 Read *.evt file and convert to form for EEG.jl
-""" ->
+"""
 function read_evt(fname::AbstractString, fs::Number; kwargs...)
-    Logging.info("Reading evt file: $fname")
+    @info("Reading evt file: $fname")
+
+    fs = ustrip(fs)
 
     d = readdlm(fname)
 
@@ -21,12 +23,12 @@ function read_evt(fname::AbstractString, fs::Number; kwargs...)
     elseif haskey(d, "Tsec")
         d["Index"] = [1 + round.(i  * float(fs)) for i in d["Tsec"]]
     else
-        warn("Unknown time scale in evt file")
+        @warn("Unknown time scale in evt file")
     end
 
     d["Duration"] = ones(length(d["Code"]))
 
-    Logging.info("Imported $(length(d["Code"])) events")
+    @info("Imported $(length(d["Code"])) events")
 
     return Dict("Code" => d["Code"] + 252, "Index" => d["Index"], "Duration" => d["Duration"])
 end

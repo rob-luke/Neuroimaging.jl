@@ -4,12 +4,12 @@
 #
 #######################################
 
-@doc """
+"""
 Import Biosemi files
-""" ->
+"""
 function import_biosemi(fname::Union{AbstractString, IO}; kwargs...)
 
-    Logging.info("Importing BIOSEMI data file")
+    @info("Importing BIOSEMI data file")
 
     # Read raw data using BDF.jl
     data, triggers, trigger_channel, system_code_channel = readBDF(identity(fname), transposeData=true; kwargs...)
@@ -33,7 +33,7 @@ function import_biosemi(fname::Union{AbstractString, IO}; kwargs...)
 
     # Tidy channel names if required
     if any(header["chanLabels"] .== "B16")  # Cz is usually present
-        debug("  Converting names from BIOSEMI to 10-20")
+        @debug("  Converting names from BIOSEMI to 10-20")
         header["chanLabels"] = channelNames_biosemi_1020(header["chanLabels"])
     end
 
@@ -69,7 +69,7 @@ end
 function create_channel(t::Dict, l::Int, fs::Number; code::AbstractString="Code", index::AbstractString="Index",
                         duration::AbstractString="Duration")
 
-    debug("Creating trigger channel from data. Length: $l Triggers: $(length(t[index])) Fs: $fs")
+    @debug("Creating trigger channel from data. Length: $l Triggers: $(length(t[index])) Fs: $fs")
 
     channel = Array{Int16}(l)
 
@@ -171,20 +171,20 @@ function channelNames_biosemi_1020(original::S) where S <: AbstractString
                     "B32" "O2"
                     "Status" "Status"]
 
-    idx = findfirst(biosemi_1020, original)
+    idx = something(findfirst(isequal(original), biosemi_1020), 0)
 
     if idx == 0
         error("Channel $original is unknown")
     end
 
-    converted = biosemi_1020[idx+size(biosemi_1020)[1]]
+    converted = biosemi_1020[:, 2][idx]
 end
 
 function channelNames_biosemi_1020(original::Array{S}) where S <: AbstractString
 
     converted = Array{AbstractString}(size(original))
 
-    info("Fixing channel names of $(length(original)) channels")
+    @info("Fixing channel names of $(length(original)) channels")
 
     for i = 1:length(original)
         converted[i] = channelNames_biosemi_1020(original[i])

@@ -52,7 +52,7 @@ noise_level::Number=0, signal_level::Number=0) where {S <: AbstractString, F <: 
         end
         plot!([Fmin, targetFreq], [signal_level, signal_level], lab = "Signal", color = :green)
 
-        targetFreqIdx = findfirst(abs.(frequencies.-targetFreq) , minimum(abs.(frequencies.-targetFreq)))
+        targetFreqIdx =   something(findfirst(isequal(minimum(abs.(frequencies.-targetFreq))), abs.(frequencies.-targetFreq)), 0) 
         targetFreq    = frequencies[targetFreqIdx]
         targetResults = spectrum[targetFreqIdx]
         #TODO remove label for circle rather than make it empty
@@ -102,7 +102,7 @@ end
 
 function plot_spectrum(eeg::SSR, chan::AbstractString; targetFreq::Number=modulationrate(eeg))
 
-    return plot_spectrum(eeg, findfirst(channelnames(eeg), chan), targetFreq=targetFreq)
+    return plot_spectrum(eeg,  something(findfirst(isequal(chan), channelnames(eeg)), 0), targetFreq=targetFreq)
 end
 
 
@@ -115,7 +115,7 @@ end
 #
 #######################################
 
-@doc """
+"""
 Plot a single channel time series
 
 #### Input
@@ -131,11 +131,11 @@ Plot a single channel time series
 
 Returns a figure
 
-""" ->
+"""
 function plot_single_channel_timeseries(signal::AbstractVector{T}, fs::Real;
         xlabel::S="Time (s)", ylabel::S="Amplitude (uV)", lab::S="", kwargs...) where {T <: Number, S <: AbstractString}
 
-    debug("Plotting single channel waveform of size $(size(signal))")
+    @debug("Plotting single channel waveform of size $(size(signal))")
 
     time_s = collect(1:size(signal, 1))/fs   # Create time axis
 
@@ -144,7 +144,7 @@ end
 
 
 
-@doc """
+"""
 Plot a multi channel time series
 
 #### Input
@@ -160,15 +160,15 @@ Plot a multi channel time series
 
 Returns a figure
 
-""" ->
+"""
 function plot_multi_channel_timeseries(signals::Array{T, 2}, fs::Number, channels::Array{S};
         xlabel::S="Time (s)", ylabel::S="Amplitude (uV)", kwargs...) where {T <: Number, S <: AbstractString}
 
-    debug("Plotting multi channel waveform of size $(size(signals))")
+    @debug("Plotting multi channel waveform of size $(size(signals))")
 
     time_s = collect(1:size(signals, 1))/fs                        # Create time axis
 
-    variances = var(signals,1)          # Variance of each figure for rescaling
+    variances = var(signals, dims = 1)          # Variance of each figure for rescaling
     mean_variance = mean(variances)     # Calculate for rescaling figures
 
     p = Plots.plot(t=:line, c=:black, xlabel=xlabel, ylabel=ylabel, ylim=(-0.5, size(signals, 2) - 0.5))

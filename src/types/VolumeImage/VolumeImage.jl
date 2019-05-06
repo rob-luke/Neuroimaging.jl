@@ -1,4 +1,4 @@
-@doc """
+"""
 ## Volume Image
 This composite type contains volume image information
 
@@ -15,14 +15,14 @@ The following standard names are used when saving data to the info dictionary.
 * `NormalisationConstant`: Value used to normalise image to maximum of 1
 * `FileName`: Name of file
 
-""" ->
+"""
 mutable struct VolumeImage
     data::Array{AbstractFloat, 4}
     units::AbstractString
-    x::Vector{quantity(AbstractFloat, Meter)}
-    y::Vector{quantity(AbstractFloat, Meter)}
-    z::Vector{quantity(AbstractFloat, Meter)}
-    t::Vector{quantity(AbstractFloat, Second)}
+    x::Vector{typeof(1.0u"m")}
+    y::Vector{typeof(1.0u"m")}
+    z::Vector{typeof(1.0u"m")}
+    t::Vector{typeof(1.0u"s")}
     method::AbstractString
     info::Dict
     coord_system::AbstractString
@@ -36,13 +36,13 @@ method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractStri
         @assert size(data, 3) == length(z)
         @assert size(data, 4) == length(t)
 
-        new(data, units, x, y, z, t, method, info, coord_system)
+        new(data, units, x * u"m", y * u"m", z * u"m", t * u"s", method, info, coord_system)
     end
 
     function VolumeImage(data::Array{F, 4}, units::S,
 x::Vector{Met}, y::Vector{Met}, z::Vector{Met}, t::Vector{Sec},
-method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractString, Met<:quantity(AbstractFloat, Meter),
-                                             Sec<:quantity(AbstractFloat, Second)}
+method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractString, Met<:typeof(1.0u"m"),
+                                               Sec<:typeof(1.0u"s")}
 
         @assert size(data, 1) == length(x)
         @assert size(data, 2) == length(y)
@@ -69,14 +69,14 @@ method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractStri
         L = zeros(typeof(data[1]), length(newX), length(newY), length(newZ), length(newT))
 
         for idx in 1:length(data)
-            idxX = findfirst(newX, x[idx])
-            idxY = findfirst(newY, y[idx])
-            idxZ = findfirst(newZ, z[idx])
-            idxT = findfirst(newT, t[idx])
+            idxX = something(findfirst(isequal(x[idx]), newX), 0) 
+            idxY = something(findfirst(isequal(y[idx]), newY), 0)
+            idxZ = something(findfirst(isequal(z[idx]), newZ), 0)
+            idxT = something(findfirst(isequal(t[idx]), newT), 0)
             L[idxX, idxY, idxZ, idxT] = data[idx]
         end
 
-        new(L, units, newX, newY, newZ, newT, method, info, coord_system)
+        new(L, units, newX * u"m", newY * u"m", newZ * u"m", newT * u"s", method, info, coord_system)
     end
 
 end

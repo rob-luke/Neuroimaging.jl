@@ -1,4 +1,4 @@
-@doc """
+"""
 Remove a template signal from each column of an array
 
 #### Arguments
@@ -8,7 +8,7 @@ Remove a template signal from each column of an array
 
 #### Returns
 Signals with template removed
-""" ->
+"""
 function remove_template(signals::Array{T, 2}, template::AbstractVector{T}) where T <: AbstractFloat
 
     @assert size(signals, 1) == size(template, 1)
@@ -21,7 +21,7 @@ function remove_template(signals::Array{T, 2}, template::AbstractVector{T}) wher
 end
 
 
-@doc """
+"""
 Re reference a signals to specific signal channel by index.
 
 If multiple channels are specififed, their average is used as the reference.
@@ -34,24 +34,24 @@ If multiple channels are specififed, their average is used as the reference.
 #### Returns
 
 Rereferenced signals
-""" ->
+"""
 function rereference(signals::Array{T, 2}, refChan::Union{Int, Array{Int}}) where T <: AbstractFloat
 
-    debug("Re referencing $(size(signals)[end]) channels to $(length(refChan)) channels")
-    debug("Reference channels = $refChan")
+    @debug("Re referencing $(size(signals)[end]) channels to $(length(refChan)) channels")
+    @debug("Reference channels = $refChan")
 
     reference_signal = signals[:, refChan]
 
     # If using the average of several channels
     if size(reference_signal, 2) > 1
-        reference_signal = vec(mean(reference_signal ,2))
+        reference_signal = vec(mean(reference_signal, dims = 2))
     end
 
     remove_template(signals, reference_signal)
 end
 
 
-@doc """
+"""
 Re-reference a signals to specific signal channel by name.
 
 If multiple channels are specififed, their average is used as the reference.
@@ -66,15 +66,15 @@ Or you can specify to use the `average` reference.
 #### Returns
 
 Rereferenced signals
-""" ->
+"""
 function rereference(signals::Array{T, 2}, refChan::S, chanNames::Vector{S}) where {S <: AbstractString, T <: AbstractFloat}
 
-    debug("Reference channels = $refChan")
+    @debug("Reference channels = $refChan")
 
     if refChan == "car" || refChan == "average"
         refChan_Idx = collect(1:size(signals, 2))
     elseif isa(refChan, AbstractString)
-        refChan_Idx = findfirst(chanNames, refChan)
+        refChan_Idx = something(findfirst(isequal(refChan), chanNames), 0)
     end
 
     if refChan == 0; error("Requested channel is not in the provided list of channels"); end
@@ -85,9 +85,9 @@ end
 
 function rereference(signals::Array{T, 2}, refChan::Vector{S}, chanNames::Vector{S}) where {S <: AbstractString, T <: AbstractFloat}
 
-    debug("Reference channels = $refChan")
+    @debug("Reference channels = $refChan")
 
-    refChan_Idx = [findfirst(chanNames, i) for i = refChan]
+    refChan_Idx = [something(findfirst(isequal(i), chanNames), 0)  for i = refChan]
 
     if refChan == 0; error("Requested channel is not in the provided list of channels"); end
 

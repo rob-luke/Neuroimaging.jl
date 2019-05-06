@@ -1,4 +1,4 @@
-@doc """
+"""
 High pass filter applied in forward and reverse direction
 
 Simply a wrapper for the DSP.jl functions
@@ -14,16 +14,16 @@ Simply a wrapper for the DSP.jl functions
 
 * filtered signal
 * filter used on signal
-""" ->
+"""
 function highpass_filter(signals::Array{T}, cutOff::Number, fs::Number, order::Int) where T <: AbstractFloat
-    debug("Highpass filtering $(size(signals)[end]) channels.  Pass band > $(cutOff) Hz")
+    @debug("Highpass filtering $(size(signals)[end]) channels.  Pass band > $(cutOff) Hz")
     Wn = cutOff/(fs/2)
     highpass_filter(signals, Wn, order)
 end
 
 
 function highpass_filter(signals::Array{T}, Wn::Number, order::Int) where T <: AbstractFloat
-    debug("Filter order = $order, Wn = $Wn")
+    @debug("Filter order = $order, Wn = $Wn")
     f = digitalfilter(Highpass(Wn), Butterworth(order))
     signals = filtfilt(f, signals)
     return signals, f
@@ -31,7 +31,7 @@ end
 
 
 
-@doc """
+"""
 Low pass filter applied in forward and reverse direction
 
 Simply a wrapper for the DSP.jl functions
@@ -47,25 +47,25 @@ Simply a wrapper for the DSP.jl functions
 
 * filtered signal
 * filter used on signal
-""" ->
+"""
 function lowpass_filter(signals::Array{T}, cutOff::Number, fs::Number, order::Int) where T <: AbstractFloat
-    debug("Lowpass filtering $(size(signals)[end]) channels.  Pass band < $(cutOff) Hz")
+    @debug("Lowpass filtering $(size(signals)[end]) channels.  Pass band < $(cutOff) Hz")
     Wn = cutOff/(fs/2)
     lowpass_filter(signals, Wn, order)
 end
 
 
 function lowpass_filter(signals::Array{T}, Wn::Number, order::Int) where T <: AbstractFloat
-    debug("Filter order = $order, Wn = $Wn")
+    @debug("Filter order = $order, Wn = $Wn")
     f = digitalfilter(Lowpass(Wn), Butterworth(order))
     signals = filtfilt(f, signals)
     return signals, f
 end
 
 
-@doc """
+"""
 Band pass filter
-""" ->
+"""
 function bandpass_filter(signals::Array, lower::Number, upper::Number, fs::Number, n::Int, rp::Number)
     # Type 1 Chebychev filter
     # TODO filtfilt does not work. Why not?
@@ -74,8 +74,8 @@ function bandpass_filter(signals::Array, lower::Number, upper::Number, fs::Numbe
 
     f = digitalfilter(Bandpass(lower, upper, fs=fs), Chebyshev1(n, rp))
 
-    Logging.info("Bandpass filtering $(size(signals)[end]) channels.     $lower < Hz < $upper")
-    debug("Filter order = $n, fs = $fs")
+    @info("Bandpass filtering $(size(signals)[end]) channels.     $lower < Hz < $upper")
+    @debug("Filter order = $n, fs = $fs")
 
     signals = filt(f, signals)
     signals = filt(f, flipdim(signals, 1))
@@ -92,7 +92,7 @@ end
 #######################################
 
 function compensate_for_filter(d::Dict, spectrum::AbstractArray, fs::Real)
-    frequencies = linspace(0, 1, Int(size(spectrum, 1))) * fs / 2
+    frequencies = range(0, stop = 1, length = Int(size(spectrum, 1))) * fs / 2
 
     key_name = "filter"
     key_numb = 1
@@ -102,7 +102,7 @@ function compensate_for_filter(d::Dict, spectrum::AbstractArray, fs::Real)
 
         spectrum = compensate_for_filter(d[key], spectrum, frequencies, fs)
 
-        debug("Accounted for $key response in spectrum estimation")
+        @debug("Accounted for $key response in spectrum estimation")
 
         key_numb += 1
         key = string(key_name, key_numb)
@@ -112,7 +112,7 @@ function compensate_for_filter(d::Dict, spectrum::AbstractArray, fs::Real)
 end
 
 
-@doc """
+"""
 Recover the spectrum of signal by compensating for filtering done.
 
 #### Arguments
@@ -129,7 +129,7 @@ Spectrum of the signal after comensating for the filter
 #### TODO
 
 Extend this to arbitrary number of dimensions rather than the hard coded 3
-""" ->
+"""
 function compensate_for_filter(filter::FilterCoefficients, spectrum::AbstractArray, frequencies::AbstractArray, fs::Real)
     filter_response     = freqz(filter, frequencies, fs)
 

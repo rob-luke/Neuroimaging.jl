@@ -69,9 +69,9 @@ function _filter_check(f::FilterCoefficients, mod_freq::Number, fs::Number, tole
 
     mod_change = abs.(freqz(f, mod_freq, fs))
     if mod_change > 1 + tolerance || mod_change < 1 - tolerance
-        Logging.warn("Filtering has modified modulation frequency greater than set tolerance: $mod_change")
+        @warn("Filtering has modified modulation frequency greater than set tolerance: $mod_change")
     end
-    debug("Filter magnitude at modulation frequency: $(mod_change)")
+    @debug("Filter magnitude at modulation frequency: $(mod_change)")
 end
 
 
@@ -96,7 +96,7 @@ end
 
 function downsample(s::SSR, ratio::Rational)
 
-    Logging.info("Downsampling SSR by ratio $ratio")
+    @info("Downsampling SSR by ratio $ratio")
 
     dec_filter  = DSP.FIRFilter([1], ratio)
 
@@ -114,7 +114,7 @@ function downsample(s::SSR, ratio::Rational)
         s.triggers["Index"][1] = 1
     end
 
-    s.samplingrate = float(samplingrate(s) * ratio) * Hertz
+    s.samplingrate = float(samplingrate(s) * ratio) * 1.0u"Hz"
 
     return s
 end

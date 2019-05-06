@@ -1,6 +1,6 @@
 function read_VolumeImage(fname::AbstractString)
 
-    Logging.info("Creating volume image from file $fname")
+    @info("Creating volume image from file $fname")
 
     if contains(fname, ".dat")
         x, y, z, s, t = read_dat(fname)
@@ -12,14 +12,14 @@ function read_VolumeImage(fname::AbstractString)
         z = z/1000
         t = t/1000
     else
-        Logging.warn("Unknown file type")
+        @warn("Unknown file type")
     end
 
     header["FileName"] = fname
 
     coord_system = "?"
 
-    VolumeImage(s, units, collect(x), collect(y), collect(z), collect(t), method, header, coord_system)
+    VolumeImage(s, units, collect(x) * u"m", collect(y) * u"m", collect(z) * u"m", collect(t) * u"s", method, header, coord_system)
 end
 
 

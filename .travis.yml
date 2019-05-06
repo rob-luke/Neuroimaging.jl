@@ -3,16 +3,6 @@ os:
   - linux
 #   - osx
 julia:
-  - 0.6
+  - 0.7
 notifications:
   email: false
-sudo: true
-before_install:
-  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-script:
-  - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("EEG"); Pkg.test("EEG"; coverage=true)'
-after_success:
-  - julia -e 'cd(Pkg.dir("EEG")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(process_folder()); Codecov.submit(process_folder())'
-  - julia -e 'cd(Pkg.dir("EEG")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
-  - julia -e 'Pkg.add("Documenter")'
-  - julia -e 'cd(Pkg.dir("EEG")); include(joinpath("docs", "make.jl"))'
