@@ -177,7 +177,7 @@ function channelNames_biosemi_1020(original::S) where S <: AbstractString
         error("Channel $original is unknown")
     end
 
-    converted = biosemi_1020[idx+size(biosemi_1020)[1]]
+    converted = biosemi_1020[:, 2][idx]
 end
 
 function channelNames_biosemi_1020(original::Array{S}) where S <: AbstractString

@@ -67,7 +67,6 @@
         sampRate = readBDFHeader(fname)["sampRate"][1]
 
         @test trigs == create_channel(evtTab, dats, sampRate, code="code", index="idx", duration="dur")
-        @test trigs == .!(trigger_channel(read_SSR(fname)))
         @test trigs == trigger_channel(read_SSR(fname, valid_triggers = collect(-1000:10000)))
 
         # Convert between events and channels
