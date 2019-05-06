@@ -26,9 +26,9 @@ Plot a volume image
 """
 function plot(v::VolumeImage; kwargs...)
 
-    x = AbstractFloat[xi / (1 * Milli * Meter) for xi in v.x]
-    y = AbstractFloat[yi / (1 * Milli * Meter) for yi in v.y]
-    z = AbstractFloat[zi / (1 * Milli * Meter) for zi in v.z]
+    x = AbstractFloat[xi / (1 * u"mm") for xi in v.x]
+    y = AbstractFloat[yi / (1 * u"mm") for yi in v.y]
+    z = AbstractFloat[zi / (1 * u"mm") for zi in v.z]
 
     plot_src(squeeze(v.data, 4), x, y, z; kwargs...)
 end
@@ -75,14 +75,14 @@ function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
         end
     end
     if max_val > maximum(c_tmp)
-        Logging.debug("Manually specifying maximum plotting value")
+        @debug("Manually specifying maximum plotting value")
         push!(s_tmp, max_val)
         push!(c_tmp, max_val)
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
     if min_val < minimum(c_tmp)
-        Logging.debug("Manually specifying minimum plotting value")
+        @debug("Manually specifying minimum plotting value")
         push!(s_tmp, min_val)
         push!(c_tmp, min_val)
         push!(x_tmp, -200)
@@ -126,14 +126,14 @@ function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
         end
     end
     if max_val > maximum(c_tmp)
-        Logging.debug("Manually specifying maximum plotting value")
+        @debug("Manually specifying maximum plotting value")
         push!(s_tmp, max_val)
         push!(c_tmp, max_val)
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
     if min_val < minimum(c_tmp)
-        Logging.debug("Manually specifying minimum plotting value")
+        @debug("Manually specifying minimum plotting value")
         push!(s_tmp, min_val)
         push!(c_tmp, min_val)
         push!(x_tmp, -200)
@@ -176,14 +176,14 @@ function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
         end
     end
     if max_val > maximum(c_tmp)
-        Logging.debug("Manually specifying maximum plotting value")
+        @debug("Manually specifying maximum plotting value")
         push!(s_tmp, max_val)
         push!(c_tmp, max_val)
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
     if min_val < minimum(c_tmp)
-        Logging.debug("Manually specifying minimum plotting value")
+        @debug("Manually specifying minimum plotting value")
         push!(s_tmp, min_val)
         push!(c_tmp, min_val)
         push!(x_tmp, -200)

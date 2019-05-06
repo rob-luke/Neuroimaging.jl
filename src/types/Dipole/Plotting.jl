@@ -1,8 +1,8 @@
 function EEG.plot(p, dip::Union{Dipole, Coordinate}; c=:green, m=(8, :rect), l="", kwargs...)
 
-  Plots.scatter!(p.subplots[1], [float(dip.x)*1000], [float(dip.y)*1000], m=m, c=c, lab=l, legend=false; kwargs...)
-  Plots.scatter!(p.subplots[2], [float(dip.y)*1000], [float(dip.z)*1000], m=m, c=c, lab=l, legend=false; kwargs...)
-  Plots.scatter!(p.subplots[3], [float(dip.x)*1000], [float(dip.z)*1000], m=m, c=c, lab=l, legend=true; kwargs...)
+  Plots.scatter!(p.subplots[1], [ustrip(dip.x)*1000], [ustrip(dip.y)*1000], m=m, c=c, lab=l, legend=false; kwargs...)
+  Plots.scatter!(p.subplots[2], [ustrip(dip.y)*1000], [ustrip(dip.z)*1000], m=m, c=c, lab=l, legend=false; kwargs...)
+  Plots.scatter!(p.subplots[3], [ustrip(dip.x)*1000], [ustrip(dip.z)*1000], m=m, c=c, lab=l, legend=true; kwargs...)
 
   return p
 end

@@ -36,7 +36,7 @@ method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractStri
         @assert size(data, 3) == length(z)
         @assert size(data, 4) == length(t)
 
-        new(data, units, x, y, z, t, method, info, coord_system)
+        new(data, units, x * u"m", y * u"m", z * u"m", t * u"s", method, info, coord_system)
     end
 
     function VolumeImage(data::Array{F, 4}, units::S,
@@ -76,7 +76,7 @@ method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractStri
             L[idxX, idxY, idxZ, idxT] = data[idx]
         end
 
-        new(L, units, newX, newY, newZ, newT, method, info, coord_system)
+        new(L, units, newX * u"m", newY * u"m", newZ * u"m", newT * u"s", method, info, coord_system)
     end
 
 end
