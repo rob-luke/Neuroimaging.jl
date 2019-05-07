@@ -18,7 +18,7 @@ function import_biosemi(fname::Union{AbstractString, IO}; kwargs...)
     # Check the sample rate
     sample_rate = header["sampRate"]
     if sum(diff(sample_rate)) != 0
-        warn("Sampling rate varies across channels")
+        @warn("Sampling rate varies across channels")
         sample_rate = NaN
     else
         sample_rate = sample_rate[1]
@@ -47,8 +47,8 @@ end
 
 function create_events(channel::Array{Int16,1}, fs::Number)
 
-    startPoints = vcat(1, find(diff(channel) .!= 0).+1)
-    stopPoints = vcat(find(diff(channel) .!= 0), length(channel))
+    startPoints = vcat(1, findall(diff(channel) .!= 0).+1)
+    stopPoints = vcat(findall(diff(channel) .!= 0), length(channel))
     trigDurs = (stopPoints - startPoints)/fs
 
     evt = channel[startPoints]
