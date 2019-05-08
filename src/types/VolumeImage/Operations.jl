@@ -212,9 +212,9 @@ Find indicies of location in VolumeImage
 """
 function find_location(vi::VolumeImage, x::Real, y::Real, z::Real)
 
-    x_loc = find(minimum(abs.(vi.x - x)) .== abs.(vi.x - x))[1]
-    y_loc = find(minimum(abs.(vi.y - y)) .== abs.(vi.y - y))[1]
-    z_loc = find(minimum(abs.(vi.z - z)) .== abs.(vi.z - z))[1]
+    x_loc = findall(minimum(abs.(vi.x - x)) .== abs.(vi.x - x))[1]
+    y_loc = findall(minimum(abs.(vi.y - y)) .== abs.(vi.y - y))[1]
+    z_loc = findall(minimum(abs.(vi.z - z)) .== abs.(vi.z - z))[1]
 
     if length(size(vi.data)) == 3
         return [x_loc, y_loc, z_loc]

@@ -24,7 +24,7 @@ function read_elp(fname::AbstractString; coordinate=Talairach, r::Real=90)
     elecs = Electrode[]
 
     # Read file and match to expected file format
-    file = readstring(fname)
+    file = read(fname, String)
     regexp = r"(\S+)\s+(\S+)\s+(\S+)"
     m = matchall(regexp, file)
 

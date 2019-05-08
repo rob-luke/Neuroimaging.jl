@@ -21,7 +21,7 @@ function read_sfp(fname::AbstractString; coordinate=Talairach)
     elecs = Electrode[]
 
     # Read file and match to expected file format
-    file = readstring(fname)
+    file = read(fname, String)
     regexp = r"(\S+)\s+(\S+)\s+(\S+)\s+(\S+)"
     m = matchall(regexp, file)
 

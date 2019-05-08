@@ -3,7 +3,7 @@
     fname = joinpath(dirname(@__FILE__),  "..", "..", "data", "test_Hz19.5-testing.bdf")
     fname2 = joinpath(dirname(@__FILE__), "..", "..", "data", "tmp", "test_Hz19.5-copy.bdf")
     fname_out = joinpath(dirname(@__FILE__), "..", "..", "data", "tmp", "testwrite.bdf")
-    cp(fname, fname2, remove_destination = true)  # So doesnt use .mat file
+    cp(fname, fname2, force = true)  # So doesnt use .mat file
     s = read_SSR(fname)
 
     @testset "Show" begin

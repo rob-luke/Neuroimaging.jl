@@ -39,8 +39,7 @@ function extract_epochs(data::Array{T, 2}, triggers::Dict, valid_triggers::Union
     triggers[:Code] = triggers[:Code] - trigger_offset
 
     # Determine indices of triggers which are valid
-    valid_triggers = any(triggers[:Code] .== valid_triggers', 2)
-    valid_triggers = find(valid_triggers .== true)
+    valid_triggers = any(triggers[:Code] .== valid_triggers', 2)[:, 1]
 
     @debug("Number of valid triggers: $(length(valid_triggers))")
 
