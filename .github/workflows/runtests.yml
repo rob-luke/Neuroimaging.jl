@@ -7,7 +7,9 @@ on:
       - main
     tags: '*'
   workflow_dispatch:
-
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number }}-${{ github.event.type }}
+  cancel-in-progress: true
 
 jobs:
   test:
