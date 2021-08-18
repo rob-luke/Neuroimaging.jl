@@ -22,25 +22,26 @@ function read_avr(fname::AbstractString)
     file = open(fname, "r")
 
     # Header line
-    header_exp = r"Npts= (\d*)\s+TSB= ([-+]?[0-9]*\.?[0-9]+)\s+DI= ([-+]?[0-9]*\.?[0-9]+)\s+SB= ([-+]?[0-9]*\.?[0-9]+)\s+SC= ([-+]?[0-9]*\.?[0-9]+)\s+Nchan= (\d*)"
-    m     = match(header_exp, readline(file))
-    npts  = parse(Int, ascii(m.captures[1])) # Number of points
-    tsb   = m.captures[2] # Omit?
-    di     = m.captures[3] # Omit?
-    sb    = m.captures[4] # Omit?
-    sc    = m.captures[5] # Omit?
+    header_exp =
+        r"Npts= (\d*)\s+TSB= ([-+]?[0-9]*\.?[0-9]+)\s+DI= ([-+]?[0-9]*\.?[0-9]+)\s+SB= ([-+]?[0-9]*\.?[0-9]+)\s+SC= ([-+]?[0-9]*\.?[0-9]+)\s+Nchan= (\d*)"
+    m = match(header_exp, readline(file))
+    npts = parse(Int, ascii(m.captures[1])) # Number of points
+    tsb = m.captures[2] # Omit?
+    di = m.captures[3] # Omit?
+    sb = m.captures[4] # Omit?
+    sc = m.captures[5] # Omit?
     nchan = parse(Int, ascii(m.captures[6])) # Number of channels
 
     # Channel line
     names_exp = r"(\w+)"
-    chanNames = collect((m.match for m = eachmatch(names_exp, readline(file))))
+    chanNames = collect((m.match for m in eachmatch(names_exp, readline(file))))
 
     # Data
     data = Array{Float64}(undef, (npts, nchan))
     for c = 1:nchan
-        d = collect((m.match for m = eachmatch(r"([-+]?[0-9]*\.?[0-9]+)", readline(file))))
+        d = collect((m.match for m in eachmatch(r"([-+]?[0-9]*\.?[0-9]+)", readline(file))))
         for n = 1:npts
-            data[n,c] = parse(Float64, ascii(d[n]))
+            data[n, c] = parse(Float64, ascii(d[n]))
         end
     end
 
@@ -57,11 +58,19 @@ function write_avr(fname::AbstractString, data::Array, chanNames::Array, fs::Num
 
     @info("Saving avr to $fname")
 
-    fs  = float(fs)
+    fs = float(fs)
 
     open(fname, "w") do fid
-        @printf(fid, "Npts= %d   TSB= %2.6f DI= %2.6f SB= %2.3f SC= %3.1f Nchan= %d\n", size(data,1), 1000/fs, 1000/fs,
-                1.0, 200.0, size(data,2))
+        @printf(
+            fid,
+            "Npts= %d   TSB= %2.6f DI= %2.6f SB= %2.3f SC= %3.1f Nchan= %d\n",
+            size(data, 1),
+            1000 / fs,
+            1000 / fs,
+            1.0,
+            200.0,
+            size(data, 2)
+        )
 
         @printf(fid, "%s", chanNames[1])
         for c = 2:length(chanNames)
@@ -70,11 +79,11 @@ function write_avr(fname::AbstractString, data::Array, chanNames::Array, fs::Num
         end
         @printf(fid, "\n")
 
-        for c = 1:size(data,2)
-            @printf(fid, "%2.6f", data[1,c])
-            for p = 2:size(data,1)
+        for c = 1:size(data, 2)
+            @printf(fid, "%2.6f", data[1, c])
+            for p = 2:size(data, 1)
                 @printf(fid, " ")
-                @printf(fid, "%2.6f", data[p,c])
+                @printf(fid, "%2.6f", data[p, c])
             end
             @printf(fid, " ")
             @printf(fid, "\n")

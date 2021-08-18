@@ -9,7 +9,3 @@
         ~ = gfp(s.data)  # TODO: Check result
     end
 end
-
-
-
-

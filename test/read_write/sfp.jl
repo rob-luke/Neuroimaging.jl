@@ -2,7 +2,7 @@ fname = joinpath(dirname(@__FILE__), "..", "data", "test.sfp")
 
 s = read_sfp(fname)
 
-@test length(s)  == 3
+@test length(s) == 3
 @test label(s) == ["Fp1", "Fpz", "Fp2"]
 @test EEG.x(s) == [-27.747648, -0.085967, 27.676888]
 @test EEG.y(s) == [98.803864, 103.555275, 99.133354]

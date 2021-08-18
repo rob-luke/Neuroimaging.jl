@@ -1,6 +1,6 @@
 @testset "Preprocessing" begin
 
-    fname = joinpath(dirname(@__FILE__),  "..", "data", "test_Hz19.5-testing.bdf")
+    fname = joinpath(dirname(@__FILE__), "..", "data", "test_Hz19.5-testing.bdf")
     s = read_SSR(fname)
 
     @testset "Triggers" begin
@@ -46,7 +46,7 @@ end
 
         signals = [0 1 2] .* ones(5, 3)
         template = vec(2 * ones(5))
-        @test remove_template(signals, template) ==  [-2 -1 0] .* ones(5, 3)
+        @test remove_template(signals, template) == [-2 -1 0] .* ones(5, 3)
 
 
     end
@@ -60,7 +60,8 @@ end
     @testset "Reference to group of channels" begin
 
         @test rereference(signals, [1, 2, 3]) == [-1 0 1] .* ones(5, 3)
-        @test rereference(signals, ["C2", "C1", "C3"], ["C1", "C2", "C3"]) == [-1 0 1] .* ones(5, 3)
+        @test rereference(signals, ["C2", "C1", "C3"], ["C1", "C2", "C3"]) ==
+              [-1 0 1] .* ones(5, 3)
         @test rereference(signals, "car", ["C1", "C2", "C3"]) == [-1 0 1] .* ones(5, 3)
         @test rereference(signals, "average", ["C1", "C2", "C3"]) == [-1 0 1] .* ones(5, 3)
 

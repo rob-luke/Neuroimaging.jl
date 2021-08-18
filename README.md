@@ -1,43 +1,21 @@
-## This project is currently being revitalised. We appreciate your patience or support in this process. See https://github.com/rob-luke/EEG.jl/projects/1
+## This project is currently being revitalised. 
+
+## We appreciate your patience or support in [this process](https://github.com/rob-luke/EEG.jl/projects/1)
 
 
 # EEG
 
 Process EEG files in [Julia](http://julialang.org/).  
-**For research only. Not for clinical use. Use at your own risk**.
-
-
-
 
 
 ## Status
 
-| Release                                                                                  | Documentation                  | Testing                        |
-|------------------------------------------------------------------------------------------|--------------------------------|--------------------------------|
-| Julia 1.X --- **No release yet**                                                         |  **In progress**               |    [![Tests Julia 1](https://github.com/rob-luke/EEG.jl/actions/workflows/runtests.yml/badge.svg)](https://github.com/rob-luke/EEG.jl/actions/workflows/runtests.yml)    |                                                                                                                                                                                                                                                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| Julia 0.7 --- **Release exists**                                                         |  **In progress**               |    [![Tests Julia 0.7](https://github.com/rob-luke/EEG.jl/actions/workflows/runtests_07.yml/badge.svg)](https://github.com/rob-luke/EEG.jl/actions/workflows/runtests_07.yml)   | 
+| Release            | Documentation                                                                                                 | Testing                                                                                                                                                            |
+|--------------------|---------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **In development** | [![Documentation](https://img.shields.io/badge/Documentation-dev-green)](https://rob-luke.github.io/EEG.jl/)  | [![Tests Julia 1](https://github.com/rob-luke/EEG.jl/actions/workflows/runtests.yml/badge.svg)](https://github.com/rob-luke/EEG.jl/actions/workflows/runtests.yml) |  
 
 
-
-
-## Installation
-
-To install this package, run the following command(s) from the Julia command line:
-
-
-```julia
-Pkg.add("EEG")
-
-# For the latest developements
-Pkg.checkout("EEG")
-```
-
-## Documentation
-
-Documentation can be found [here](http://codles.github.io/EEG.jl/latest/).
-
-
-## Example
+## Examples
 
 
 ### Plot single and multi channel data
@@ -60,7 +38,6 @@ plot_timeseries(s)
 
 ### Plot estimated neural activity
 
-If you have source activity saved in a *.dat file (eg BESA) you can plot the estimated activity and local peaks of activity.
 
 ```julia
 using EEG
@@ -69,7 +46,6 @@ t = read_VolumeImage("example.dat")
 
 p = EEG.plot(t, c=:darkrainbow)
 p = EEG.plot(t, find_dipoles(t), l = "Peak Activity", c=:black)
-
 ```
 
 ![Source](https://cloud.githubusercontent.com/assets/748691/17363374/523373a0-597a-11e6-94d9-826381617756.png)
