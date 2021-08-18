@@ -24,7 +24,6 @@ jobs:
           - 'FFTW'
         version:
           - '0.7'
-          - '1.0'
         os:
           - ubuntu-latest
         threads:
