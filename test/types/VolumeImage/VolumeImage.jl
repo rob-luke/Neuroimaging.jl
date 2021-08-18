@@ -5,12 +5,22 @@
 
     @testset "Reading" begin
         t = read_VolumeImage(fname)
-        @test isa(t, EEG.VolumeImage) ==  true
+        @test isa(t, EEG.VolumeImage) == true
     end
 
     @testset "Create" begin
         # Array
-        n = VolumeImage(t.data, t.units, t.x, t.y, t.z, t.t, t.method, t.info, t.coord_system)
+        n = VolumeImage(
+            t.data,
+            t.units,
+            t.x,
+            t.y,
+            t.z,
+            t.t,
+            t.method,
+            t.info,
+            t.coord_system,
+        )
         @test isa(n, EEG.VolumeImage) == true
         @test isequal(n.data, t.data) == true
 
@@ -21,10 +31,10 @@
         z = zeros(length(t.data))
         s = zeros(length(t.data))  # t is already taken
         i = 1
-        for xi in 1:length(t.x)
-            for yi in 1:length(t.y)
-                for zi in 1:length(t.z)
-                    for ti in 1:length(t.t)
+        for xi = 1:length(t.x)
+            for yi = 1:length(t.y)
+                for zi = 1:length(t.z)
+                    for ti = 1:length(t.t)
                         d[i] = ustrip(t.data[xi, yi, zi, ti])
                         x[i] = ustrip(t.x[xi])
                         y[i] = ustrip(t.y[yi])
@@ -49,7 +59,7 @@
 
         @test isequal(t, t2) == true
 
-        @test t + t ==  t * 2
+        @test t + t == t * 2
         t4 = t * 4
         @test t4 / 2 == t + t
         @test t4 / 2 == t4 - t - t
@@ -86,11 +96,14 @@
 
 
     @testset "Dimension checks" begin
-        t2 = deepcopy(t); t2.x = t2.x[1:3]
+        t2 = deepcopy(t)
+        t2.x = t2.x[1:3]
         @test_throws KeyError EEG.dimensions_equal(t, t2)
-        t2 = deepcopy(t); t2.y = t2.y[1:3]
+        t2 = deepcopy(t)
+        t2.y = t2.y[1:3]
         @test_throws KeyError EEG.dimensions_equal(t, t2)
-        t2 = deepcopy(t); t2.z = t2.z[1:3]
+        t2 = deepcopy(t)
+        t2.z = t2.z[1:3]
         @test_throws KeyError EEG.dimensions_equal(t, t2)
         t2 = read_VolumeImage(joinpath(dirname(@__FILE__), "../../data", "test-4d.dat"))
         @test_throws KeyError EEG.dimensions_equal(t, t2)
@@ -161,7 +174,7 @@
         EEG.plot(mean(t))
         EEG.plot(mean(t), min_val = 0, max_val = 50)
         EEG.plot(mean(t), elp = joinpath(dirname(@__FILE__), "../../data", "test.elp"))
-        p = EEG.plot(mean(t), threshold = 24 )
+        p = EEG.plot(mean(t), threshold = 24)
 
         @testset "Overlay dipole" begin
 

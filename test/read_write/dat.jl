@@ -52,4 +52,3 @@ sname = joinpath(dirname(@__FILE__), "..", "data", "tmp", "same.dat")
 #@test minimum(z) == -58.189999
 #@test minimum(s) == -7.5189352036
 #@test minimum(t) == 0
-

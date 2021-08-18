@@ -4,25 +4,25 @@
         @testset "Brain Vision" begin
             bv = BrainVision(0, 0, 0)
             @testset "Show" begin
-                 show(bv)
+                show(bv)
             end
         end
         @testset "Talairach" begin
             tal = Talairach(68.3, -26.9, 8.3)
             @testset "Show" begin
-                 show(tal)
+                show(tal)
             end
         end
         @testset "SPM" begin
             spm = SPM(68.3, -26.9, 8.3)
             @testset "Show" begin
-                 show(spm)
+                show(spm)
             end
         end
         @testset "Unknown" begin
             uk = UnknownCoordinate(1.2, 2, 3.2)
             @testset "Show" begin
-                 show(uk)
+                show(uk)
             end
         end
     end
@@ -36,7 +36,7 @@
 
             mni = SPM(73.7, -26.0, 7.0)
             tal = Talairach(68.3, -26.9, 8.3)
-            @test isapprox(euclidean(convert(Talairach, mni), tal), 0; atol=2)
+            @test isapprox(euclidean(convert(Talairach, mni), tal), 0; atol = 2)
 
             # As an electrode
 
@@ -59,7 +59,7 @@
 
             bv = BrainVision(0, 0, 0)
             tal = Talairach(128, 128, 128)
-            @test isapprox(euclidean(convert(Talairach, bv), tal), 0; atol=1.5)
+            @test isapprox(euclidean(convert(Talairach, bv), tal), 0; atol = 1.5)
 
         end
     end

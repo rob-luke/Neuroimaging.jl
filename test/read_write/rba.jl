@@ -1,4 +1,4 @@
-a  = read_SSR(joinpath(dirname(@__FILE__), "..", "data", "test_Hz19.5-testing.bdf"))
+a = read_SSR(joinpath(dirname(@__FILE__), "..", "data", "test_Hz19.5-testing.bdf"))
 
 @test a.processing["Side"] == "Bilateral"
 @test a.processing["Name"] == "P2"
