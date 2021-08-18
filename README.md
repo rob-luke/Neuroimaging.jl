@@ -9,7 +9,9 @@ The general plan is:
 - [x] Remove all errors thrown by code
 - [x] Ensure current code base runs with the latest version of Julia (1.6)
 - [ ] Remove code warnings and update dependency packages
-- [ ] Document existing code and raise issues for known shortcomings. I.e., note all code that needs to be modernised.
+- [ ] Document existing code and raise issues for known shortcomings. I.e., note all code that needs to be modernised
+- [ ] Add help on how to contribute to the documentation 
+- [ ] Start chipping away at improvements! PRs appreciated for any aspect of the code base
 
 
 # EEG
