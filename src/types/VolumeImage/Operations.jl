@@ -1,4 +1,4 @@
-import Base: +, -, /, *, mean, maximum, minimum, isequal, ==
+import Base: +, -, /, *, maximum, minimum, isequal, ==
 using Statistics
 
 

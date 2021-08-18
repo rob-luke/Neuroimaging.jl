@@ -64,7 +64,7 @@ function read_SSR(fname::String;
     # Extract frequency from the file name if not set manually
     if occursin("Hz", file_name) && isnan(modulationrate)
         a = match(r"[-_](\d+[_.]?[\d+]?)Hz|Hz(\d+[_.]?[\d+]?)[-_]", file_name).captures
-        modulationrate = float(a[[i !== nothing for i = a]][1]) * 1.0u"Hz"
+        modulationrate = parse(Float64, a[[i !== nothing for i = a]][1]) * 1.0u"Hz"
         @debug("Extracted modulation frequency from file name: $modulationrate")
     end
 

@@ -36,7 +36,7 @@ function extract_epochs(data::Array{T, 2}, triggers::Dict, valid_triggers::Union
     #=triggers = convert(DataFrame, triggers)=#
 
     # Change offset so numbers are manageable
-    triggers[:Code] = triggers[:Code] - trigger_offset
+    triggers[:Code] = triggers[:Code] .- trigger_offset
 
     # Determine indices of triggers which are valid
     valid_triggers = any(triggers[:Code] .== valid_triggers',  dims = 2)[:, 1]
@@ -52,7 +52,7 @@ function extract_epochs(data::Array{T, 2}, triggers::Dict, valid_triggers::Union
 
     # Check we aren't looking past the end of the data
     start_indices = convert(Array{Int}, triggers[:Index])
-    end_indices   = convert(Array{Int}, start_indices + lenEpochs - 1)
+    end_indices   = convert(Array{Int}, start_indices .+ lenEpochs .- 1)
     while end_indices[end] > size(data, 1)
         pop!(start_indices)
         pop!(end_indices)

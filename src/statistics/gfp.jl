@@ -8,7 +8,7 @@ function gfp(x::Array)
 
     samples, sensors = size(x)
 
-    info("Computing global field power for $sensors sensors and $samples samples")
+    @info("Computing global field power for $sensors sensors and $samples samples")
 
     result = zeros(samples,1)
 

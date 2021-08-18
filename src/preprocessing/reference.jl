@@ -44,7 +44,7 @@ function rereference(signals::Array{T, 2}, refChan::Union{Int, Array{Int}}) wher
 
     # If using the average of several channels
     if size(reference_signal, 2) > 1
-        reference_signal = vec(mean(reference_signal, dims = 2))
+        reference_signal = vec(Statistics.mean(reference_signal, dims = 2))
     end
 
     remove_template(signals, reference_signal)

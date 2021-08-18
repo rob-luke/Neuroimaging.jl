@@ -1,3 +1,4 @@
+using Statistics
 # Trigger information is stored in a dictionary
 # containing three fields, all referenced in samples.
 # Index:    Start of trigger
@@ -50,7 +51,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
     validate_triggers(t)
 
     # Make in to data frame for easy management
-    epochIndex = DataFrame(Code = t["Code"] -252, Index = t["Index"], Duration = t["Duration"])
+    epochIndex = DataFrame(Code = t["Code"] .- 252, Index = t["Index"], Duration = t["Duration"])
 
     # Present information about triggers before processing
     @debug("Original trigger codes $(unique(epochIndex[:Code]))")
@@ -103,7 +104,7 @@ function clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::I
         end
 
         # Sanity check
-        if std(epochIndex[:Length][2:end]) > 1
+        if Statistics.std(epochIndex[:Length][2:end]) > 1
             @warn("Your epoch lengths vary too much")
             @warn(string("Length: median=$(median(epochIndex[:Length][2:end])) sd=$(std(epochIndex[:Length][2:end])) ",
                   "min=$(minimum(epochIndex[:Length][2:end]))"))
