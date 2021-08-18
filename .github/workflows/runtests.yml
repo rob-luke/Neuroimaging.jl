@@ -48,8 +48,10 @@ jobs:
         run: julia -e 'using Pkg; Pkg.activate("."); Pkg.status()' 
       - name: Instantiate
         run: julia -e 'using Pkg; Pkg.activate("."); Pkg.instantiate()' 
-      - name: Test
+      - name: Build
         run: julia -e 'using Pkg; Pkg.activate("."); Pkg.build()' 
+      - name: Test
+        run: julia -e 'using Pkg; Pkg.activate("."); Pkg.test()' 
 #       - uses: julia-actions/julia-buildpkg@v1
 #       - uses: julia-actions/julia-runtest@v1
       - uses: julia-actions/julia-processcoverage@v1
