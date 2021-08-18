@@ -10,5 +10,6 @@ makedocs(
 
 deploydocs(
     repo = "github.com/rob-luke/EEG.jl.git",
+    push_preview = true,
     devbranch = "main"
 )
