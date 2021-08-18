@@ -1,5 +1,5 @@
-mutable struct Leadfield{T <: AbstractFloat, S <: AbstractString}
-    L::Array{T, 3}
+mutable struct Leadfield{T<:AbstractFloat,S<:AbstractString}
+    L::Array{T,3}
     x::Vector{T}
     y::Vector{T}
     z::Vector{T}
@@ -19,13 +19,15 @@ function match_leadfield(l::Leadfield, s::SSR)
 
     @info("Matching leadfield to SSR")
 
-    idx = [something(findfirst(isequal(name), l.sensors), 0) for name = channelnames(s)]
+    idx = [something(findfirst(isequal(name), l.sensors), 0) for name in channelnames(s)]
 
     if length(unique(idx)) < length(idx)
-        error("Not all SSR channels mapped to sensor #SSR=$(length(channelnames(s))), #L=$(length(l.sensors))")
+        error(
+            "Not all SSR channels mapped to sensor #SSR=$(length(channelnames(s))), #L=$(length(l.sensors))",
+        )
     end
 
-    l.L = l.L[:,:,idx]
+    l.L = l.L[:, :, idx]
     l.sensors = l.sensors[idx]
 
     @debug("matched $(length(idx)) sensors")

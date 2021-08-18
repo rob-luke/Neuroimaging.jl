@@ -62,7 +62,7 @@ find_keys_containing(results_storage, "FTest")
 ```
 """
 function find_keys_containing(d::Dict, partial_key::AbstractString)
-    valid_keys = [startswith(i, partial_key) for i = collect(keys(d))]
+    valid_keys = [startswith(i, partial_key) for i in collect(keys(d))]
     findall((in)(true), valid_keys)
 end
 
@@ -87,9 +87,9 @@ fileparts("/Users/test/subdir/test-file.bdf")
 ```
 """
 function fileparts(fname::AbstractString)
-    if fname==""
-        pathname  = ""
-        filename  = ""
+    if fname == ""
+        pathname = ""
+        filename = ""
         extension = ""
     else
 
@@ -127,9 +127,12 @@ _find_closest_number_idx([1, 2, 2.7, 3.2, 4, 3.1, 7], 3)
 # 6
 ```
 """
-function _find_closest_number_idx(list::AbstractArray{T, 1}, target::Number) where T <: Number
+function _find_closest_number_idx(
+    list::AbstractArray{T,1},
+    target::Number,
+) where {T<:Number}
     diff_array = abs.(list .- target)
-    targetIdx  = something(findfirst(isequal(minimum(diff_array)), diff_array), 0)
+    targetIdx = something(findfirst(isequal(minimum(diff_array)), diff_array), 0)
 end
 
 
@@ -148,8 +151,8 @@ function add_dataframe_static_rows(a::DataFrame, args...)
             code = k[2]
             expanded_code = vec(repmat([k[2]], size(a, 1), 1))
             @debug("Name: $name  Code: $code")
-            DataFrames.insert_single_column!(a, expanded_code, size(a,2)+1)
-            rename!(a, Symbol(string("x", size(a,2))) =>  name)
+            DataFrames.insert_single_column!(a, expanded_code, size(a, 2) + 1)
+            rename!(a, Symbol(string("x", size(a, 2))) => name)
         end
     end
     return a

@@ -9,7 +9,7 @@ function create_sweeps(epochs::Array, epochsPerSweep::Int)
 
     epochsLen = size(epochs)[1]
     epochsNum = size(epochs)[2]
-    chansNum  = size(epochs)[3]
+    chansNum = size(epochs)[3]
 
     sweepLen = epochsLen * epochsPerSweep
     sweepNum = round.(Int, floor(epochsNum / epochsPerSweep))
@@ -18,10 +18,11 @@ function create_sweeps(epochs::Array, epochsPerSweep::Int)
     sweep = 1
     while sweep <= sweepNum
 
-        sweepStart = (sweep-1)*(epochsPerSweep)+1
-        sweepStop  = sweepStart + epochsPerSweep-1
+        sweepStart = (sweep - 1) * (epochsPerSweep) + 1
+        sweepStop = sweepStart + epochsPerSweep - 1
 
-        sweeps[:,sweep,:] = reshape(epochs[:,sweepStart:sweepStop,:], (sweepLen, 1, chansNum))
+        sweeps[:, sweep, :] =
+            reshape(epochs[:, sweepStart:sweepStop, :], (sweepLen, 1, chansNum))
 
         sweep += 1
     end

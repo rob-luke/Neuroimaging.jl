@@ -9,4 +9,3 @@ a2, b2 = read_avr(sname)
 
 @test a == a2
 @test b == b2
-

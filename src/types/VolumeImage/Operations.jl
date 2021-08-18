@@ -89,11 +89,13 @@ end
 
 function mean(va::Array{VolumeImage,1})
 
-    @debug("Taking mean of $(length(va)) volume images with $(size(va[1].data, 4)) time instances")
+    @debug(
+        "Taking mean of $(length(va)) volume images with $(size(va[1].data, 4)) time instances"
+    )
 
     mean_va = deepcopy(va[1])
 
-    for i in 2:length(va)
+    for i = 2:length(va)
 
         mean_va = mean_va + va[i]
 
@@ -145,12 +147,14 @@ function normalise(vi::VolumeImage)
     return vi
 end
 
-function normalise(va::Array{VolumeImage, 1})
+function normalise(va::Array{VolumeImage,1})
 
-    @debug("Normalising $(length(va)) volume images with $(size(va[1].data, 4)) time instances")
+    @debug(
+        "Normalising $(length(va)) volume images with $(size(va[1].data, 4)) time instances"
+    )
 
     vo = deepcopy(va)
-    for i in 1:length(vo)
+    for i = 1:length(vo)
         vo[i] = normalise(vo[i])
     end
     return vo
@@ -162,13 +166,13 @@ end
 function isequal(a::VolumeImage, b::VolumeImage)
 
     a.data == b.data ||
-    a.units == b.units ||
-    a.x == b.x ||
-    a.y == b.y ||
-    a.z == b.z ||
-    a.t == b.t ||
-    a.method == b.method ||
-    a.coord_system == b.coord_system
+        a.units == b.units ||
+        a.x == b.x ||
+        a.y == b.y ||
+        a.z == b.z ||
+        a.t == b.t ||
+        a.method == b.method ||
+        a.coord_system == b.coord_system
 
 end
 
@@ -183,7 +187,16 @@ end
 # ----------------
 #
 
-function dimensions_equal(vi1::VolumeImage, vi2::VolumeImage; x::Bool=true, y::Bool=true, z::Bool=true, t::Bool=true, units::Bool=true, kwargs...)
+function dimensions_equal(
+    vi1::VolumeImage,
+    vi2::VolumeImage;
+    x::Bool = true,
+    y::Bool = true,
+    z::Bool = true,
+    t::Bool = true,
+    units::Bool = true,
+    kwargs...,
+)
 
     matching = true
     if x .& .!(vi1.x == vi2.x)
