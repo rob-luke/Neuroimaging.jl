@@ -48,7 +48,7 @@ function read_dat(fid::IO)
     readline(fid) # Empty line
     data_file = readline(fid)
     condition = readline(fid)
-    typeline  = readline(fid)
+    typeline = readline(fid)
 
     # Types of data that can be stored
     if something(findfirst("Method", typeline), 0:-1) != 0:-1  # TODO: change to imatch
@@ -58,10 +58,10 @@ function read_dat(fid::IO)
         image_mode = "Time"
         regularization = readline(fid)[21:end-1]
 
-        #=Latency=#  # TODO: Fix for latencies. See fieldtrip
+        # TODO: Fix for latencies. See fieldtrip
 
         # Units
-        units          = readline(fid)[3:end-1]
+        units = readline(fid)[3:end-1]
 
         @debug("Regularisation = $regularization")
         @debug("Units = $units")
@@ -87,18 +87,30 @@ function read_dat(fid::IO)
     # Read in the dimensions
     regexp = r"[X-Z]:\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+(-?\d+)"
     xrange = match(regexp, readline(fid))
-    x = range(parse(Float64, xrange.captures[1]), stop=parse(Float64, xrange.captures[2]), length=parse(Int, xrange.captures[3]))
+    x = range(
+        parse(Float64, xrange.captures[1]),
+        stop = parse(Float64, xrange.captures[2]),
+        length = parse(Int, xrange.captures[3]),
+    )
     yrange = match(regexp, readline(fid))
-    y = range(parse(Float64, yrange.captures[1]), stop=parse(Float64, yrange.captures[2]), length=parse(Int, yrange.captures[3]))
+    y = range(
+        parse(Float64, yrange.captures[1]),
+        stop = parse(Float64, yrange.captures[2]),
+        length = parse(Int, yrange.captures[3]),
+    )
     zrange = match(regexp, readline(fid))
-    z = range(parse(Float64, zrange.captures[1]), stop=parse(Float64, zrange.captures[2]), length=parse(Int, zrange.captures[3]))
+    z = range(
+        parse(Float64, zrange.captures[1]),
+        stop = parse(Float64, zrange.captures[2]),
+        length = parse(Int, zrange.captures[3]),
+    )
 
-    empty       = readline(fid)
+    empty = readline(fid)
 
     # Variables to fill
     t = 1
     complete_data = Array{Float64}(undef, (length(x), length(y), length(z), t))
-    sample_times  = Float64[]
+    sample_times = Float64[]
 
     description = readline(fid)
     if something(findfirst("Sample", typeline), 0:-1) != 0:-1
@@ -117,7 +129,7 @@ function read_dat(fid::IO)
 
                 for yind = 1:length(y)
                     d = readline(fid)       # values
-                    m = collect((m.match for m = eachmatch(r"(-?\d+.\d+)", d)))
+                    m = collect((m.match for m in eachmatch(r"(-?\d+.\d+)", d)))
                     complete_data[:, yind, zind, t] = float(m)
                 end
 
@@ -135,7 +147,7 @@ function read_dat(fid::IO)
                 # There is no nice way to grow a multidimensional array
                 temp = complete_data
                 complete_data = Array{Float64}(undef, (length(x), length(y), length(z), t))
-                complete_data[:,:,:,1:t-1] = temp
+                complete_data[:, :, :, 1:t-1] = temp
             end
         end
     else
@@ -152,7 +164,7 @@ function read_dat(fid::IO)
                 for yind = 1:length(y)
                     d = readline(fid)       # values
                     print(d)
-                    m = collect((m.match for m = eachmatch(r"(-?\d+.\d+)", d)))
+                    m = collect((m.match for m in eachmatch(r"(-?\d+.\d+)", d)))
                     println(m)
                     #TODO this is broken in 0.7 to 1.0 fixes
                     complete_data[:, yind, zind, t] = parse.(Float64, m)
@@ -181,16 +193,32 @@ end
 """
 Write dat file
 """
-function write_dat(fname::AbstractString,
-X::AbstractVector, Y::AbstractVector, Z::AbstractVector,
-S::Array{DataT,4}, T::AbstractVector;
-data_file::AbstractString="NA", condition::AbstractString="NA", method::AbstractString="NA", regularization::AbstractString="NA",
-units::AbstractString="NA") where DataT <: AbstractFloat
+function write_dat(
+    fname::AbstractString,
+    X::AbstractVector,
+    Y::AbstractVector,
+    Z::AbstractVector,
+    S::Array{DataT,4},
+    T::AbstractVector;
+    data_file::AbstractString = "NA",
+    condition::AbstractString = "NA",
+    method::AbstractString = "NA",
+    regularization::AbstractString = "NA",
+    units::AbstractString = "NA",
+) where {DataT<:AbstractFloat}
 
-    if size(S,1) != length(X); @warn("Data and x sizes do not match"); end
-    if size(S,2) != length(Y); @warn("Data and y sizes do not match"); end
-    if size(S,3) != length(Z); @warn("Data and z sizes do not match"); end
-    if size(S,4) != length(T); @warn("Data and t sizes do not match"); end
+    if size(S, 1) != length(X)
+        @warn("Data and x sizes do not match")
+    end
+    if size(S, 2) != length(Y)
+        @warn("Data and y sizes do not match")
+    end
+    if size(S, 3) != length(Z)
+        @warn("Data and z sizes do not match")
+    end
+    if size(S, 4) != length(T)
+        @warn("Data and t sizes do not match")
+    end
 
     @info("Saving dat to $fname")
 
@@ -201,22 +229,25 @@ units::AbstractString="NA") where DataT <: AbstractFloat
         @printf(fid, "Condition:          %s\n", condition)
         @printf(fid, "Method:             %s\n", method)
         @printf(fid, "Regularization:     %s\n", regularization)
-        @printf(fid, "  %s\n",                   units)
+        @printf(fid, "  %s\n", units)
 
         @printf(fid, "\n")
         @printf(fid, "Grid dimensions ([min] [max] [nr of locations]):\n")
         @printf(fid, "X:  %2.6f %2.6f %d\n", minimum(X), maximum(X), length(X))
         @printf(fid, "Y:  %2.6f %2.6f %d\n", minimum(Y), maximum(Y), length(Y))
         @printf(fid, "Z:  %2.6f %2.6f %d\n", minimum(Z), maximum(Z), length(Z))
-        @printf(fid, "==============================================================================================\n")
+        @printf(
+            fid,
+            "==============================================================================================\n"
+        )
 
         for t = 1:size(S, 4)
-            @printf(fid, "Sample %d, %1.2f ms\n", t-1, T[t])
+            @printf(fid, "Sample %d, %1.2f ms\n", t - 1, T[t])
             for z = 1:size(S, 3)
-                @printf(fid, "Z: %d\n", z-1)
-                for y = 1:size(S,2)
-                    for x = 1:size(S,1)
-                        @printf(fid, "%2.10f ", S[x,y,z,t])
+                @printf(fid, "Z: %d\n", z - 1)
+                for y = 1:size(S, 2)
+                    for x = 1:size(S, 1)
+                        @printf(fid, "%2.10f ", S[x, y, z, t])
                     end
                     @printf(fid, "\n")
                 end

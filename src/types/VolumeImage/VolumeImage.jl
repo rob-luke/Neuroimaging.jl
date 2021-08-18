@@ -17,7 +17,7 @@ The following standard names are used when saving data to the info dictionary.
 
 """
 mutable struct VolumeImage
-    data::Array{AbstractFloat, 4}
+    data::Array{AbstractFloat,4}
     units::AbstractString
     x::Vector{typeof(1.0u"m")}
     y::Vector{typeof(1.0u"m")}
@@ -27,9 +27,17 @@ mutable struct VolumeImage
     info::Dict
     coord_system::AbstractString
 
-    function VolumeImage(data::Array{F, 4}, units::S,
-x::Vector{F}, y::Vector{F}, z::Vector{F}, t::Vector{F},
-method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractString}
+    function VolumeImage(
+        data::Array{F,4},
+        units::S,
+        x::Vector{F},
+        y::Vector{F},
+        z::Vector{F},
+        t::Vector{F},
+        method::S,
+        info::Dict,
+        coord_system::S,
+    ) where {F<:AbstractFloat,S<:AbstractString}
 
         @assert size(data, 1) == length(x)
         @assert size(data, 2) == length(y)
@@ -39,10 +47,17 @@ method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractStri
         new(data, units, x * u"m", y * u"m", z * u"m", t * u"s", method, info, coord_system)
     end
 
-    function VolumeImage(data::Array{F, 4}, units::S,
-x::Vector{Met}, y::Vector{Met}, z::Vector{Met}, t::Vector{Sec},
-method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractString, Met<:typeof(1.0u"m"),
-                                               Sec<:typeof(1.0u"s")}
+    function VolumeImage(
+        data::Array{F,4},
+        units::S,
+        x::Vector{Met},
+        y::Vector{Met},
+        z::Vector{Met},
+        t::Vector{Sec},
+        method::S,
+        info::Dict,
+        coord_system::S,
+    ) where {F<:AbstractFloat,S<:AbstractString,Met<:typeof(1.0u"m"),Sec<:typeof(1.0u"s")}
 
         @assert size(data, 1) == length(x)
         @assert size(data, 2) == length(y)
@@ -52,9 +67,17 @@ method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractStri
         new(data, units, x, y, z, t, method, info, coord_system)
     end
 
-    function VolumeImage(data::Vector{F}, units::S,
-x::Vector{F}, y::Vector{F}, z::Vector{F}, t::Vector{F},
-method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractString}
+    function VolumeImage(
+        data::Vector{F},
+        units::S,
+        x::Vector{F},
+        y::Vector{F},
+        z::Vector{F},
+        t::Vector{F},
+        method::S,
+        info::Dict,
+        coord_system::S,
+    ) where {F<:AbstractFloat,S<:AbstractString}
 
         @assert length(x) == length(data)
         @assert length(y) == length(data)
@@ -68,15 +91,25 @@ method::S, info::Dict, coord_system::S) where {F<:AbstractFloat, S<:AbstractStri
 
         L = zeros(typeof(data[1]), length(newX), length(newY), length(newZ), length(newT))
 
-        for idx in 1:length(data)
-            idxX = something(findfirst(isequal(x[idx]), newX), 0) 
+        for idx = 1:length(data)
+            idxX = something(findfirst(isequal(x[idx]), newX), 0)
             idxY = something(findfirst(isequal(y[idx]), newY), 0)
             idxZ = something(findfirst(isequal(z[idx]), newZ), 0)
             idxT = something(findfirst(isequal(t[idx]), newT), 0)
             L[idxX, idxY, idxZ, idxT] = data[idx]
         end
 
-        new(L, units, newX * u"m", newY * u"m", newZ * u"m", newT * u"s", method, info, coord_system)
+        new(
+            L,
+            units,
+            newX * u"m",
+            newY * u"m",
+            newZ * u"m",
+            newT * u"s",
+            method,
+            info,
+            coord_system,
+        )
     end
 
 end

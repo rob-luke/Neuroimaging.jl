@@ -30,20 +30,22 @@ Failing that, user passed arguments are used or the modulation frequency is extr
 
 * BIOSEMI (.bdf)
 """
-function read_SSR(fname::String;
-                  stimulation_amplitude::Number=NaN,   # User can set these
-                  modulationrate::Number=NaN,          # values, but if not
-                  carrier_frequency::Number=NaN,       # then attempt to read
-                  stimulation_side::AbstractString="", # from file name or mat
-                  participant_name::AbstractString="",
-                  valid_triggers::Array{Int}=[1,2],
-                  min_epoch_length::Int=0,
-                  max_epoch_length::Int=0,
-                  remove_first::Int=0,
-                  max_epochs::Int=0,
-                  env=nothing,
-                  bkt="",
-                  kwargs...)
+function read_SSR(
+    fname::String;
+    stimulation_amplitude::Number = NaN,   # User can set these
+    modulationrate::Number = NaN,          # values, but if not
+    carrier_frequency::Number = NaN,       # then attempt to read
+    stimulation_side::AbstractString = "", # from file name or mat
+    participant_name::AbstractString = "",
+    valid_triggers::Array{Int} = [1, 2],
+    min_epoch_length::Int = 0,
+    max_epoch_length::Int = 0,
+    remove_first::Int = 0,
+    max_epochs::Int = 0,
+    env = nothing,
+    bkt = "",
+    kwargs...,
+)
 
 
     @info("Importing SSR from file: $fname")
@@ -64,7 +66,7 @@ function read_SSR(fname::String;
     # Extract frequency from the file name if not set manually
     if occursin("Hz", file_name) && isnan(modulationrate)
         a = match(r"[-_](\d+[_.]?[\d+]?)Hz|Hz(\d+[_.]?[\d+]?)[-_]", file_name).captures
-        modulationrate = parse(Float64, a[[i !== nothing for i = a]][1]) * 1.0u"Hz"
+        modulationrate = parse(Float64, a[[i !== nothing for i in a]][1]) * 1.0u"Hz"
         @debug("Extracted modulation frequency from file name: $modulationrate")
     end
 
@@ -75,8 +77,11 @@ function read_SSR(fname::String;
     end
 
     if isfile(mat_path)
-        modulationrate, stimulation_side, participant_name,
-            stimulation_amplitude, carrier_frequency = read_rba_mat(mat_path)
+        modulationrate,
+        stimulation_side,
+        participant_name,
+        stimulation_amplitude,
+        carrier_frequency = read_rba_mat(mat_path)
         valid_mat = true
     else
         valid_mat = false
@@ -89,7 +94,8 @@ function read_SSR(fname::String;
 
     # Import raw data
     if ext == "bdf"
-        data, triggers, system_codes, samplingrate, reference_channel, header = import_biosemi(fname; kwargs...)
+        data, triggers, system_codes, samplingrate, reference_channel, header =
+            import_biosemi(fname; kwargs...)
     else
         warn("File type $ext is unknown")
     end
@@ -112,8 +118,19 @@ function read_SSR(fname::String;
         samplingrate = samplingrate * 1.0u"Hz"
     end
 
-    a = SSR(data, elecs, triggers, system_codes, samplingrate, modulationrate,
-            [reference_channel], file_path, file_name, Dict(), header)
+    a = SSR(
+        data,
+        elecs,
+        triggers,
+        system_codes,
+        samplingrate,
+        modulationrate,
+        [reference_channel],
+        file_path,
+        file_name,
+        Dict(),
+        header,
+    )
 
 
     # If a valid mat file was found then store that information with the raw header
@@ -148,7 +165,14 @@ function read_SSR(fname::String;
     remove_channel!(a, "Status")
 
     # Clean epoch index
-    a.triggers = clean_triggers(a.triggers, valid_triggers, min_epoch_length, max_epoch_length, remove_first, max_epochs)
+    a.triggers = clean_triggers(
+        a.triggers,
+        valid_triggers,
+        min_epoch_length,
+        max_epoch_length,
+        remove_first,
+        max_epochs,
+    )
 
     return a
 end
@@ -189,15 +213,30 @@ function system_code_channel(a::SSR; kwargs...)
 end
 
 
-function write_SSR(a::SSR, fname::S; chanLabels=channelnames(a), subjID=a.header["subjID"],
-startDate=a.header["startDate"], startTime=a.header["startTime"], kwargs...) where S <: AbstractString
+function write_SSR(
+    a::SSR,
+    fname::S;
+    chanLabels = channelnames(a),
+    subjID = a.header["subjID"],
+    startDate = a.header["startDate"],
+    startTime = a.header["startTime"],
+    kwargs...,
+) where {S<:AbstractString}
 
     fname = convert(String, fname)
 
     @info("Saving $(size(a.data)[end]) channels to $fname")
 
-    writeBDF(fname, a.data', vec(trigger_channel(a)), vec(system_code_channel(a)), samplingrate(Int, a),
-             chanLabels = convert(Array{S, 1}, chanLabels),
-             startDate = startDate, startTime = startTime, subjID = subjID)
+    writeBDF(
+        fname,
+        a.data',
+        vec(trigger_channel(a)),
+        vec(system_code_channel(a)),
+        samplingrate(Int, a),
+        chanLabels = convert(Array{S,1}, chanLabels),
+        startDate = startDate,
+        startTime = startTime,
+        subjID = subjID,
+    )
 
 end
