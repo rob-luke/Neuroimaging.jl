@@ -35,7 +35,7 @@ function read_dat(fid::IO)
 
     # Ensure we are reading version 2
     versionAbstractString = match(r"(\S+):(\d.\d)", readline(fid))
-    version = float(versionAbstractString.captures[2])
+    version = parse(Float64, versionAbstractString.captures[2])
     @debug("Version = $version")
 
     # Use @assert here?
@@ -51,7 +51,7 @@ function read_dat(fid::IO)
     typeline  = readline(fid)
 
     # Types of data that can be stored
-    if search(typeline, "Method") != 0:-1  # TODO: change to imatch
+    if something(findfirst("Method", typeline), 0:-1) != 0:-1  # TODO: change to imatch
         @debug("File type is Method")
 
         image_type = typeline[21:end]
@@ -65,20 +65,20 @@ function read_dat(fid::IO)
 
         @debug("Regularisation = $regularization")
         @debug("Units = $units")
-    elseif search(typeline, "MSBF") != 0:-1
+    elseif something(findfirst("MSBF", typeline), 0:-1) != 0:-1
 
         image_mode = "Single Time"
         image_type = "Multiple Source Beamformer"
         units = condition[3:end-1]
         regularization = "None"
 
-        Logging.warn("MSBF type under development")
-    elseif search(typeline, "MSPS") != 0:-1
-        Logging.warn("MSPS type not implemented yet")
-    elseif search(typeline, "Sens") != 0:-1
-        Logging.warn("Sens type not implemented yet")
+        @warn("MSBF type under development")
+    elseif something(findfirst("MSPS", typeline), 0:-1) != 0:-1
+        @warn("MSPS type not implemented yet")
+    elseif something(findfirst("Sens", typeline), 0:-1) != 0:-1
+        @warn("Sens type not implemented yet")
     else
-        Logging.warn("Unknown type")
+        @warn("Unknown type")
     end
 
     readline(fid) # Empty line
@@ -87,11 +87,11 @@ function read_dat(fid::IO)
     # Read in the dimensions
     regexp = r"[X-Z]:\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+(-?\d+)"
     xrange = match(regexp, readline(fid))
-    x = range(float(xrange.captures[1]), stop=float(xrange.captures[2]), length=parse(Int, xrange.captures[3]))
+    x = range(parse(Float64, xrange.captures[1]), stop=parse(Float64, xrange.captures[2]), length=parse(Int, xrange.captures[3]))
     yrange = match(regexp, readline(fid))
-    y = range(float(yrange.captures[1]), stop=float(yrange.captures[2]), length=parse(Int, yrange.captures[3]))
+    y = range(parse(Float64, yrange.captures[1]), stop=parse(Float64, yrange.captures[2]), length=parse(Int, yrange.captures[3]))
     zrange = match(regexp, readline(fid))
-    z = range(float(zrange.captures[1]), stop=float(zrange.captures[2]), length=parse(Int, zrange.captures[3]))
+    z = range(parse(Float64, zrange.captures[1]), stop=parse(Float64, zrange.captures[2]), length=parse(Int, zrange.captures[3]))
 
     empty       = readline(fid)
 
@@ -101,7 +101,7 @@ function read_dat(fid::IO)
     sample_times  = Float64[]
 
     description = readline(fid)
-    if search(description, "Sample") != 0:-1
+    if something(findfirst("Sample", typeline), 0:-1) != 0:-1
 
         #
         # 4D file
@@ -151,8 +151,11 @@ function read_dat(fid::IO)
 
                 for yind = 1:length(y)
                     d = readline(fid)       # values
+                    print(d)
                     m = collect((m.match for m = eachmatch(r"(-?\d+.\d+)", d)))
-                    complete_data[:, yind, zind, t] = float(m)
+                    println(m)
+                    #TODO this is broken in 0.7 to 1.0 fixes
+                    complete_data[:, yind, zind, t] = parse.(Float64, m)
                 end
 
                 d = readline(fid)           # blank or dashed
@@ -184,10 +187,10 @@ S::Array{DataT,4}, T::AbstractVector;
 data_file::AbstractString="NA", condition::AbstractString="NA", method::AbstractString="NA", regularization::AbstractString="NA",
 units::AbstractString="NA") where DataT <: AbstractFloat
 
-    if size(S,1) != length(X); Logging.warn("Data and x sizes do not match"); end
-    if size(S,2) != length(Y); Logging.warn("Data and y sizes do not match"); end
-    if size(S,3) != length(Z); Logging.warn("Data and z sizes do not match"); end
-    if size(S,4) != length(T); Logging.warn("Data and t sizes do not match"); end
+    if size(S,1) != length(X); @warn("Data and x sizes do not match"); end
+    if size(S,2) != length(Y); @warn("Data and y sizes do not match"); end
+    if size(S,3) != length(Z); @warn("Data and z sizes do not match"); end
+    if size(S,4) != length(T); @warn("Data and t sizes do not match"); end
 
     @info("Saving dat to $fname")
 

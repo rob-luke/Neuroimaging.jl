@@ -21,7 +21,7 @@ function read_bsa(fname::AbstractString)
 
     # Read version
     first_line        = readline(file)
-    separator         = search(first_line, '|')
+    separator         = something(findfirst(isequal('|'), first_line), 0)
     version           = first_line[1:separator-1]
     coordinate_system = first_line[separator+1:end-1]
 
