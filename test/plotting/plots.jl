@@ -25,25 +25,25 @@
         #= display(p) =#
     end
 
-    s = trim_channel(s, 8192*3)
+    s = trim_channel(s, 8192 * 3)
 
     @testset "Multi channel time series" begin
         plot1 = plot_timeseries(s)
         #= display(plot1) =#
 
-        plot2 = plot_timeseries(s, channels=["40Hz_SWN_70dB_R", "Cz"])
+        plot2 = plot_timeseries(s, channels = ["40Hz_SWN_70dB_R", "Cz"])
         #= display(plot2) =#
 
         s = rereference(s, "car")
-        plot3 = plot_timeseries(s, channels=["40Hz_SWN_70dB_R", "Cz"])
+        plot3 = plot_timeseries(s, channels = ["40Hz_SWN_70dB_R", "Cz"])
         #= display(plot3) =#
     end
 
     @testset "Single channel time series" begin
-        plot4 = plot_timeseries(s, channels=["40Hz_SWN_70dB_R"])
+        plot4 = plot_timeseries(s, channels = ["40Hz_SWN_70dB_R"])
         #= display(plot4) =#
 
-        plot5 = plot_timeseries(s, channels="Cz")
+        plot5 = plot_timeseries(s, channels = "Cz")
         #= display(plot5) =#
 
         keep_channel!(s, ["40Hz_SWN_70dB_R"])

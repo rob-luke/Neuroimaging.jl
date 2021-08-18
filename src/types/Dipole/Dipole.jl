@@ -28,15 +28,25 @@ end
 
 import Base.show
 function Base.show(io::IO, d::Dipole)
-    @printf("Dipole with coordinates x = % 6.2f m, y = % 6.2f m, z = % 6.2f m, size = % 9.5f\n",
-        ustrip(d.x), ustrip(d.y), ustrip(d.z), ustrip(d.size))
+    @printf(
+        "Dipole with coordinates x = % 6.2f m, y = % 6.2f m, z = % 6.2f m, size = % 9.5f\n",
+        ustrip(d.x),
+        ustrip(d.y),
+        ustrip(d.z),
+        ustrip(d.size)
+    )
 end
 
 
 function Base.show(io::IO, dips::Array{Dipole})
     @printf("%d dipoles\n", length(dips))
     for d in dips
-        @printf("  Dipole with coordinates x = % 6.2f m, y = % 6.2f m, z = % 6.2f m and size = % 9.5f\n",
-            ustrip(d.x), ustrip(d.y), ustrip(d.z), ustrip(d.size))
+        @printf(
+            "  Dipole with coordinates x = % 6.2f m, y = % 6.2f m, z = % 6.2f m and size = % 9.5f\n",
+            ustrip(d.x),
+            ustrip(d.y),
+            ustrip(d.z),
+            ustrip(d.size)
+        )
     end
 end

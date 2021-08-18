@@ -5,28 +5,38 @@
 #######################################
 
 
-function ftest(s::SSR; freq_of_interest::Union{Real, AbstractArray}=modulationrate(s), side_freq::Number=0.5,
-    ID::AbstractString="", spill_bins::Int=2, results_key::AbstractString="statistics", kwargs... )
+function ftest(
+    s::SSR;
+    freq_of_interest::Union{Real,AbstractArray} = modulationrate(s),
+    side_freq::Number = 0.5,
+    ID::AbstractString = "",
+    spill_bins::Int = 2,
+    results_key::AbstractString = "statistics",
+    kwargs...,
+)
 
     # Do calculation here once, instead of in each low level call
-    spectrum    = EEG._ftest_spectrum(s.processing["sweeps"])
-    spectrum    = compensate_for_filter(s.processing, spectrum, samplingrate(s))
-    frequencies = range(0, stop=1, length=Int(size(spectrum, 1)))*samplingrate(s)/2
+    spectrum = EEG._ftest_spectrum(s.processing["sweeps"])
+    spectrum = compensate_for_filter(s.processing, spectrum, samplingrate(s))
+    frequencies = range(0, stop = 1, length = Int(size(spectrum, 1))) * samplingrate(s) / 2
 
     for freq in freq_of_interest
 
-        snrDb, phase, signal, noise, statistic = ftest(spectrum, frequencies, freq, side_freq, spill_bins)
+        snrDb, phase, signal, noise, statistic =
+            ftest(spectrum, frequencies, freq, side_freq, spill_bins)
 
-        result = DataFrame(ID                 = vec(repeat([ID], length(channelnames(s)), 1)),
-                           Channel            = copy(channelnames(s)),
-                           ModulationRate     = copy(modulationrate(s)),
-                           AnalysisType       = vec(repeat(["F-test"], length(channelnames(s)))),
-                           AnalysisFrequency  = vec(repeat([freq], length(channelnames(s)))),
-                           SignalAmplitude    = vec(sqrt.(signal)),
-                           SignalPhase        = vec(phase),
-                           NoiseAmplitude     = vec(sqrt.(noise)),
-                           SNRdB              = vec(snrDb),
-                           Statistic          = vec(statistic))
+        result = DataFrame(
+            ID = vec(repeat([ID], length(channelnames(s)), 1)),
+            Channel = copy(channelnames(s)),
+            ModulationRate = copy(modulationrate(s)),
+            AnalysisType = vec(repeat(["F-test"], length(channelnames(s)))),
+            AnalysisFrequency = vec(repeat([freq], length(channelnames(s)))),
+            SignalAmplitude = vec(sqrt.(signal)),
+            SignalPhase = vec(phase),
+            NoiseAmplitude = vec(sqrt.(noise)),
+            SNRdB = vec(snrDb),
+            Statistic = vec(statistic),
+        )
 
         result = add_dataframe_static_rows(result, kwargs)
 
@@ -50,7 +60,12 @@ end
 
 
 # Save ftest results to file
-function save_results(a::SSR; name_extension::AbstractString="", results_key::AbstractString="statistics", kwargs...)
+function save_results(
+    a::SSR;
+    name_extension::AbstractString = "",
+    results_key::AbstractString = "statistics",
+    kwargs...,
+)
 
     file_name = string(a.file_name, name_extension, ".csv")
 

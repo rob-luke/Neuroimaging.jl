@@ -22,7 +22,14 @@ a = highpass_filter(a, cutOff = 1)
 ```
 
 """
-function highpass_filter(a::SSR; cutOff::Real=2, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
+function highpass_filter(
+    a::SSR;
+    cutOff::Real = 2,
+    fs::Real = samplingrate(a),
+    order::Int = 3,
+    tolerance::Real = 0.01,
+    kwargs...,
+)
 
     a.data, f = highpass_filter(a.data, cutOff, fs, order)
 
@@ -32,7 +39,14 @@ function highpass_filter(a::SSR; cutOff::Real=2, fs::Real=samplingrate(a), order
 end
 
 
-function lowpass_filter(a::SSR; cutOff::Real=150, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
+function lowpass_filter(
+    a::SSR;
+    cutOff::Real = 150,
+    fs::Real = samplingrate(a),
+    order::Int = 3,
+    tolerance::Real = 0.01,
+    kwargs...,
+)
 
     a.data, f = lowpass_filter(a.data, cutOff, fs, order)
 
@@ -44,10 +58,15 @@ function lowpass_filter(a::SSR; cutOff::Real=150, fs::Real=samplingrate(a), orde
 end
 
 
-function bandpass_filter(a::SSR;
-                         lower::Number=modulationrate(a)-1,
-                         upper::Number=modulationrate(a)+1,
-                         n::Int=24, rp::Number=0.0001, tolerance::Number=0.01, kwargs...)
+function bandpass_filter(
+    a::SSR;
+    lower::Number = modulationrate(a) - 1,
+    upper::Number = modulationrate(a) + 1,
+    n::Int = 24,
+    rp::Number = 0.0001,
+    tolerance::Number = 0.01,
+    kwargs...,
+)
 
     # Type 1 Chebychev filter
     # The default options here are optimised for modulation frequencies 4, 10, 20, 40, 80
@@ -62,20 +81,27 @@ function bandpass_filter(a::SSR;
 end
 
 
-function _filter_check(f::FilterCoefficients, mod_freq::Number, fs::Number, tolerance::Number)
+function _filter_check(
+    f::FilterCoefficients,
+    mod_freq::Number,
+    fs::Number,
+    tolerance::Number,
+)
     #
     # Ensure that the filter does not alter the modulation frequency greater than a set tolerance
     #
 
     mod_change = abs.(freqz(f, mod_freq, fs))
     if mod_change > 1 + tolerance || mod_change < 1 - tolerance
-        @warn("Filtering has modified modulation frequency greater than set tolerance: $mod_change")
+        @warn(
+            "Filtering has modified modulation frequency greater than set tolerance: $mod_change"
+        )
     end
     @debug("Filter magnitude at modulation frequency: $(mod_change)")
 end
 
 
-function _append_filter(a::SSR, f::FilterCoefficients; name::AbstractString="filter")
+function _append_filter(a::SSR, f::FilterCoefficients; name::AbstractString = "filter")
     #
     # Put the filter information in the SSR processing structure
     #
@@ -98,11 +124,12 @@ function downsample(s::SSR, ratio::Rational)
 
     @info("Downsampling SSR by ratio $ratio")
 
-    dec_filter  = DSP.FIRFilter([1], ratio)
+    dec_filter = DSP.FIRFilter([1], ratio)
 
-    new_data = zeros(typeof(s.data[1, 1]), round.(Int, size(s.data, 1)*ratio), size(s.data, 2))
+    new_data =
+        zeros(typeof(s.data[1, 1]), round.(Int, size(s.data, 1) * ratio), size(s.data, 2))
 
-    for c in 1:size(s.data, 2)
+    for c = 1:size(s.data, 2)
 
         new_data[:, c] = DSP.filt(dec_filter, vec(s.data[:, c]))
     end
@@ -140,7 +167,11 @@ a = rereference(a, ["P9", "P10"])
 ```
 
 """
-function rereference(a::SSR, refChan::Union{AbstractString, Array{AbstractString}}; kwargs...)
+function rereference(
+    a::SSR,
+    refChan::Union{AbstractString,Array{AbstractString}};
+    kwargs...,
+)
 
     a.data = rereference(a.data, refChan, channelnames(a))
 
