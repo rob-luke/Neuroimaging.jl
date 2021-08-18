@@ -24,6 +24,7 @@ UnicodePlots = "b8865327-cd53-5732-bb35-84acbb429228"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 
 [compat]
+CSV = "0.8"
 Distributions = "0.25"
 UnicodePlots = "1"
 Images = "0.24"
