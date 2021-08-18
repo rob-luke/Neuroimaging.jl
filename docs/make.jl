@@ -10,9 +10,9 @@ makedocs(
         "Home" => "index.md",
         "Types" => "types.md",
         "Steady State Responses" => Any[
-            "Overview" => "assr.md",
-            "Example" => "examples.md",
-            "API" => "functions.md",
+            "Overview" => "assr/assr.md",
+            "Example" => "assr/examples.md",
+            "API" => "assr/functions.md",
         ],
         "API" => "api.md"
     ]
