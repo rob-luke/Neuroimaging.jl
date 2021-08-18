@@ -1,25 +1,21 @@
-push!(LOAD_PATH,"../src/")
+push!(LOAD_PATH, "../src/")
 using Documenter, EEG
 
 makedocs(
     modules = [EEG],
     format = Documenter.HTML(prettyurls = get(ENV, "CI", nothing) == "true"),
     sitename = "EEG.jl",
-    authors  = "Robert Luke",
+    authors = "Robert Luke",
     pages = [
         "Home" => "index.md",
         "Types" => "types.md",
         "Steady State Responses" => Any[
-            "Overview" => "assr/assr.md",
-            "Example" => "assr/examples.md",
-            "API" => "assr/functions.md",
+            "Overview"=>"assr/assr.md",
+            "Example"=>"assr/examples.md",
+            "API"=>"assr/functions.md",
         ],
-        "API" => "api.md"
-    ]
+        "API" => "api.md",
+    ],
 )
 
-deploydocs(
-    repo = "github.com/rob-luke/EEG.jl.git",
-    push_preview = true,
-    devbranch = "main"
-)
+deploydocs(repo = "github.com/rob-luke/EEG.jl.git", push_preview = true, devbranch = "main")
