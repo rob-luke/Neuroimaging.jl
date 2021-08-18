@@ -1,7 +1,12 @@
+## This project is currently being revitalised. We appreciate your patience or support in this process. See https://github.com/rob-luke/EEG.jl/projects/1
+
+
 # EEG
 
 Process EEG files in [Julia](http://julialang.org/).  
 **For research only. Not for clinical use. Use at your own risk**.
+
+
 
 
 
