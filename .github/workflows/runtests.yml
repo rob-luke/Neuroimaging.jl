@@ -1,0 +1,59 @@
+name: Tests Julia 1
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    tags: '*'
+  workflow_dispatch:
+
+
+jobs:
+  test:
+    timeout-minutes: 45
+    name: ${{ matrix.version }} - ${{ matrix.os }} - ${{ matrix.arch }} - provider ${{ matrix.provider }} - ${{ matrix.threads }} thread(s)
+    runs-on: ${{ matrix.os }}
+    env:
+      JULIA_FFTW_PROVIDER: ${{ matrix.provider }}
+      JULIA_NUM_THREADS: ${{ matrix.threads }}
+    strategy:
+      fail-fast: false
+      matrix:
+        provider:
+          - 'FFTW'
+        version:
+          - '0.7'
+        os:
+          - ubuntu-latest
+        threads:
+          - '1'
+        arch:
+          - x64
+
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: ${{ matrix.version }}
+      - name: Where am I?
+        run: pwd
+      - name: Whats here?
+        run: ls
+      - name: Build
+        run: julia -e 'using Pkg; Pkg.build()' 
+      - name: Status
+        run: julia -e 'using Pkg; Pkg.activate("."); Pkg.status()' 
+      - name: Instantiate
+        run: julia -e 'using Pkg; Pkg.activate("."); Pkg.instantiate()' 
+      - name: Build
+        run: julia -e 'using Pkg; Pkg.activate("."); Pkg.build()' 
+      - name: Test
+        run: julia -e 'using Pkg; Pkg.activate("."); Pkg.test()' 
+#       - uses: julia-actions/julia-buildpkg@v1
+#       - uses: julia-actions/julia-runtest@v1
+      - uses: julia-actions/julia-processcoverage@v1
+      - uses: codecov/codecov-action@v1
+        with:
+          file: lcov.info
