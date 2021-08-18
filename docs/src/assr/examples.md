@@ -1,9 +1,13 @@
 # Examples
 
 
+```@example whereami
+pwd()
+```
+
 ```@example fileread
 using EEG
-s = read_SSR("file.bdf")
+s = read_SSR("test/data/test_Hz19.5-testing.bdf")
 ```
 
 ## Plot single and multi channel data
