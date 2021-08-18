@@ -26,6 +26,6 @@ end
 
 
 import Base.show
-function show(c::S) where S <: Coordinate
+function show(c::S) where {S<:Coordinate}
     println("Coordinate: $(typeof(c)) - ($(c.x), $(c.y), $(c.z))")
 end
