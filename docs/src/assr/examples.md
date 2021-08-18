@@ -1,5 +1,11 @@
 # Examples
 
+
+```@example fileread
+using EEG
+s = read_SSR("file.bdf")
+```
+
 ## Plot single and multi channel data
 
 ```julia
