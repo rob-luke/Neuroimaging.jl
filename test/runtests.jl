@@ -3,7 +3,7 @@ using Test
 using Logging
 using MAT, BDF
 using Plots
-using Eglob
+using Glob
 
 unicodeplots()
 
@@ -12,7 +12,8 @@ unicodeplots()
 # Run all tests
 #
 
-tests = [match for match in eglob("**/*.jl")]
+println(pwd())
+tests = glob("**/*.jl")
 tests = tests[.~(tests .== "runtests.jl")]
 
 @info tests
