@@ -36,10 +36,10 @@ function extract_epochs(data::Array{T, 2}, triggers::Dict, valid_triggers::Union
     #=triggers = convert(DataFrame, triggers)=#
 
     # Change offset so numbers are manageable
-    triggers[:Code] = triggers[:Code] - trigger_offset
+    triggers[:Code] = triggers[:Code] .- trigger_offset
 
     # Determine indices of triggers which are valid
-    valid_triggers = any(triggers[:Code] .== valid_triggers', 2)[:, 1]
+    valid_triggers = any(triggers[:Code] .== valid_triggers',  dims = 2)[:, 1]
 
     @debug("Number of valid triggers: $(length(valid_triggers))")
 
@@ -52,7 +52,7 @@ function extract_epochs(data::Array{T, 2}, triggers::Dict, valid_triggers::Union
 
     # Check we aren't looking past the end of the data
     start_indices = convert(Array{Int}, triggers[:Index])
-    end_indices   = convert(Array{Int}, start_indices + lenEpochs - 1)
+    end_indices   = convert(Array{Int}, start_indices .+ lenEpochs .- 1)
     while end_indices[end] > size(data, 1)
         pop!(start_indices)
         pop!(end_indices)
@@ -86,5 +86,5 @@ function average_epochs(ep::Array)
 
     @info("Averaging down epochs to 1 epoch of length $(size(ep,1)) from $(size(ep,2)) epochs on $(size(ep,3)) channels")
 
-    squeeze(mean(ep, 2), 2)
+    dropdims(mean(ep, dims = 2), dims = 2)
 end

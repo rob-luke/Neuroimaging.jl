@@ -1,4 +1,3 @@
-import Base.mean
 using Statistics
 function mean(ds::Array{Dipole})
 
@@ -10,7 +9,6 @@ function mean(ds::Array{Dipole})
     Dipole(ds[1].coord_system, mean_x, mean_y, mean_z, 0, 0, 0, 0, 0, mean_s)
 end
 
-import Base.std
 function std(ds::Array{Dipole})
 
     std_x = std([d.x for d in ds])

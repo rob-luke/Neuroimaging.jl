@@ -17,11 +17,11 @@ function ftest(s::SSR; freq_of_interest::Union{Real, AbstractArray}=modulationra
 
         snrDb, phase, signal, noise, statistic = ftest(spectrum, frequencies, freq, side_freq, spill_bins)
 
-        result = DataFrame(ID                 = vec(repmat([ID], length(channelnames(s)), 1)),
+        result = DataFrame(ID                 = vec(repeat([ID], length(channelnames(s)), 1)),
                            Channel            = copy(channelnames(s)),
                            ModulationRate     = copy(modulationrate(s)),
-                           AnalysisType       = vec(repmat(["F-test"], length(channelnames(s)))),
-                           AnalysisFrequency  = vec(repmat([freq], length(channelnames(s)))),
+                           AnalysisType       = vec(repeat(["F-test"], length(channelnames(s)))),
+                           AnalysisFrequency  = vec(repeat([freq], length(channelnames(s)))),
                            SignalAmplitude    = vec(sqrt.(signal)),
                            SignalPhase        = vec(phase),
                            NoiseAmplitude     = vec(sqrt.(noise)),
@@ -67,7 +67,7 @@ function save_results(a::SSR; name_extension::AbstractString="", results_key::Ab
         CSV.write(file_name, to_save)
     end
 
-    Logging.info("File saved to $file_name")
+    @info("File saved to $file_name")
 
     return a
 end

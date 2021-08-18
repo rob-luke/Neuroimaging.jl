@@ -8,12 +8,12 @@ function gfp(x::Array)
 
     samples, sensors = size(x)
 
-    info("Computing global field power for $sensors sensors and $samples samples")
+    @info("Computing global field power for $sensors sensors and $samples samples")
 
     result = zeros(samples,1)
 
     for sample = 1:samples
-        u = vec(x[sample,:]) .- mean(x[sample,:])
+        u = vec(x[sample,:]) .- Statistics.mean(x[sample,:])
         sumsqdif = 0
         for sensor = 1:sensors
             for sensor2 = 1:sensors

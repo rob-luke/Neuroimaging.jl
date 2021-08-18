@@ -87,9 +87,9 @@ function plot_spectrum(eeg::SSR, chan::Int; targetFreq::Number=0)
         signal = 0
     end
 
-    title = replace(title, "_", " ")
+    title = replace(title, "_"=>" ")
 
-    avg_sweep = squeeze(mean(eeg.processing["sweeps"], 2), 2)
+    avg_sweep = dropdims(Statistics.mean(eeg.processing["sweeps"], dims = 2), dims = 2)
     avg_sweep = avg_sweep[:, chan]
     avg_sweep = convert(Array{Float64}, vec(avg_sweep ))
 
@@ -169,13 +169,13 @@ function plot_multi_channel_timeseries(signals::Array{T, 2}, fs::Number, channel
     time_s = collect(1:size(signals, 1))/fs                        # Create time axis
 
     variances = var(signals, dims = 1)          # Variance of each figure for rescaling
-    mean_variance = mean(variances)     # Calculate for rescaling figures
+    mean_variance = Statistics.mean(variances)     # Calculate for rescaling figures
 
     p = Plots.plot(t=:line, c=:black, xlabel=xlabel, ylabel=ylabel, ylim=(-0.5, size(signals, 2) - 0.5))
 
     for c in 1:size(signals, 2)                                  # Plot each channel
-        signals[:, c] = signals[:, c] - mean(signals[:, c])      # Remove mean
-        signals[:, c] = signals[:, c] / mean_variance .+ (c-1)   # Rescale and shift so all chanels are visible
+        signals[:, c] = signals[:, c] .- Statistics.mean(signals[:, c])      # Remove mean
+        signals[:, c] = signals[:, c] ./ mean_variance .+ (c-1)   # Rescale and shift so all chanels are visible
         p = plot!(time_s, signals[:, c], c=:black, lab="")
     end
     p = plot!(yticks = (0:length(channels) - 1, channels))
