@@ -13,7 +13,7 @@ function gfp(x::Array)
     result = zeros(samples,1)
 
     for sample = 1:samples
-        u = vec(x[sample,:]) .- mean(x[sample,:])
+        u = vec(x[sample,:]) .- Statistics.mean(x[sample,:])
         sumsqdif = 0
         for sensor = 1:sensors
             for sensor2 = 1:sensors
