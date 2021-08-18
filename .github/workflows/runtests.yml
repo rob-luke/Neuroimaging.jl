@@ -44,6 +44,10 @@ jobs:
         run: ls
       - name: Build
         run: julia -e 'using Pkg; Pkg.build()' 
+      - name: Status
+        run: julia -e 'using Pkg; Pkg.activate("."); Pkg.status()' 
+      - name: Instantiate
+        run: julia -e 'using Pkg; Pkg.activate("."); Pkg.instantiate()' 
       - name: Test
         run: julia -e 'using Pkg; Pkg.activate("."); Pkg.build()' 
 #       - uses: julia-actions/julia-buildpkg@v1
