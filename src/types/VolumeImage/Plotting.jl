@@ -34,9 +34,22 @@ function plot(v::VolumeImage; kwargs...)
 end
 
 
-function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
-            threshold::Real=-Inf, min_val::Real=Inf, max_val::Real=-Inf, minsize::Real=2, maxsize::Real=6,
-            exclude::A=0.0, title::S="", elp::AbstractString="", colorbar::Bool=true, kwargs...) where {A <: AbstractFloat, S <: AbstractString}
+function plot_src(
+    d::Array{A,3},
+    x::Vector{A},
+    y::Vector{A},
+    z::Vector{A};
+    threshold::Real = -Inf,
+    min_val::Real = Inf,
+    max_val::Real = -Inf,
+    minsize::Real = 2,
+    maxsize::Real = 6,
+    exclude::A = 0.0,
+    title::S = "",
+    elp::AbstractString = "",
+    colorbar::Bool = true,
+    kwargs...,
+) where {A<:AbstractFloat,S<:AbstractString}
 
     # cols = [colorant"darkblue", colorant"orange", colorant"darkred"]
 
@@ -58,8 +71,8 @@ function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
     t = copy(d)
     t = maximum(t, dims = 3)
     t = dropdims(t, dims = 3)
-    for x_i in 1:size(t, 1)
-        for y_i in 1:size(t, 2)
+    for x_i = 1:size(t, 1)
+        for y_i = 1:size(t, 2)
             val = t[x_i, y_i]
             if val != exclude
                 push!(x_tmp, x[x_i])
@@ -88,12 +101,54 @@ function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
-    p1 = plot(x_tmp, y_tmp, zcolor=c_tmp, ms=s_tmp, legend=false, l=:scatter, lab = "Source", colorbar = false, markerstrokewidth = 0.1, xlabel="Left - Right (mm)", ylabel="Posterior - Anterior (mm)", xlims = (-100, 100), ylims =(-120, 90); kwargs...)
+    p1 = plot(
+        x_tmp,
+        y_tmp,
+        zcolor = c_tmp,
+        ms = s_tmp,
+        legend = false,
+        l = :scatter,
+        lab = "Source",
+        colorbar = false,
+        markerstrokewidth = 0.1,
+        xlabel = "Left - Right (mm)",
+        ylabel = "Posterior - Anterior (mm)",
+        xlims = (-100, 100),
+        ylims = (-120, 90);
+        kwargs...,
+    )
     if plot_labels
-        plotlist = ["Fpz", "Fp2", "AF8", "F8", "FT8", "T8", "TP8", "P10", "PO8", "O2", "Oz", "O1", "PO7", "P9", "TP7", "T7", "FT7", "F7", "AF7", "Fp1"]
+        plotlist = [
+            "Fpz",
+            "Fp2",
+            "AF8",
+            "F8",
+            "FT8",
+            "T8",
+            "TP8",
+            "P10",
+            "PO8",
+            "O2",
+            "Oz",
+            "O1",
+            "PO7",
+            "P9",
+            "TP7",
+            "T7",
+            "FT7",
+            "F7",
+            "AF7",
+            "Fp1",
+        ]
         for elec in e
             if something(findfirst(isequal(elec.label), plotlist), 0) > 0
-                annotate!(p1, elec.coordinate.x-5, 1.1*elec.coordinate.y-2, elec.label, colorbar = false)
+                annotate!(
+                    p1,
+                    elec.coordinate.x - 5,
+                    1.1 * elec.coordinate.y - 2,
+                    elec.label,
+                    colorbar = false,
+                )
             end
         end
     end
@@ -109,8 +164,8 @@ function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
     t = copy(d)
     t = maximum(t, dims = 1)
     t = dropdims(t, dims = 1)
-    for x_i in 1:size(t, 1)
-        for y_i in 1:size(t, 2)
+    for x_i = 1:size(t, 1)
+        for y_i = 1:size(t, 2)
             val = t[x_i, y_i]
             if val != exclude
                 push!(x_tmp, y[x_i])
@@ -139,12 +194,28 @@ function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
-    p2 = plot(x_tmp, y_tmp, zcolor=c_tmp, ms=s_tmp, legend=false, l=:scatter, title = title, lab = "Source", colorbar = false, markerstrokewidth = 0.1, xlabel = "Posterior - Anterior (mm)", ylabel = "Inferior - Superior (mm)", xlims = (-120, 90), ylims =(-70, 100); kwargs...)
+    p2 = plot(
+        x_tmp,
+        y_tmp,
+        zcolor = c_tmp,
+        ms = s_tmp,
+        legend = false,
+        l = :scatter,
+        title = title,
+        lab = "Source",
+        colorbar = false,
+        markerstrokewidth = 0.1,
+        xlabel = "Posterior - Anterior (mm)",
+        ylabel = "Inferior - Superior (mm)",
+        xlims = (-120, 90),
+        ylims = (-70, 100);
+        kwargs...,
+    )
     if plot_labels
         plotlist = ["Iz", "Oz", "POz", "Pz", "CPz", "Cz", "FCz", "Fz", "AFz", "Fpz"]
         for elec in e
-            if  something(findfirst(isequal(elec.label), plotlist), 0)   > 0
-                annotate!(p2, elec.coordinate.y-5, elec.coordinate.z, elec.label)
+            if something(findfirst(isequal(elec.label), plotlist), 0) > 0
+                annotate!(p2, elec.coordinate.y - 5, elec.coordinate.z, elec.label)
             end
         end
     end
@@ -159,8 +230,8 @@ function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
     t = copy(d)
     t = maximum(t, dims = 2)
     t = dropdims(t, dims = 2)
-    for x_i in 1:size(t, 1)
-        for y_i in 1:size(t, 2)
+    for x_i = 1:size(t, 1)
+        for y_i = 1:size(t, 2)
             val = t[x_i, y_i]
             if val != exclude
                 push!(x_tmp, x[x_i])
@@ -189,16 +260,31 @@ function plot_src(d::Array{A, 3}, x::Vector{A}, y::Vector{A}, z::Vector{A};
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
-    p3 = plot(x_tmp, y_tmp, zcolor=c_tmp, ms=s_tmp, legend=false, l=:scatter, lab = "", markerstrokewidth = 0.1, colorbar = colorbar, xlabel = "Left - Right (mm)", ylabel = "Inferior - Superior (mm)", xlims = (-100, 100), ylims =(-70, 100); kwargs...)
+    p3 = plot(
+        x_tmp,
+        y_tmp,
+        zcolor = c_tmp,
+        ms = s_tmp,
+        legend = false,
+        l = :scatter,
+        lab = "",
+        markerstrokewidth = 0.1,
+        colorbar = colorbar,
+        xlabel = "Left - Right (mm)",
+        ylabel = "Inferior - Superior (mm)",
+        xlims = (-100, 100),
+        ylims = (-70, 100);
+        kwargs...,
+    )
     if plot_labels
         plotlist = ["T7", "C5", "C3", "C1", "Cz", "C2", "C4", "C6", "T8"]
         for elec in e
-            if something(findfirst(isequal(elec.label), plotlist), 0)  > 0
-                annotate!(p3, elec.coordinate.x-5, elec.coordinate.z, elec.label)
+            if something(findfirst(isequal(elec.label), plotlist), 0) > 0
+                annotate!(p3, elec.coordinate.x - 5, elec.coordinate.z, elec.label)
             end
         end
     end
 
-    l  = @layout([a b c])
+    l = @layout([a b c])
     return plot(p1, p2, p3, layout = l)
 end
