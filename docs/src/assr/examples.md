@@ -5,9 +5,13 @@
 pwd()
 ```
 
+```@example whatshere
+readdir("../../../)
+```
+
 ```@example fileread
 using EEG
-s = read_SSR("test/data/test_Hz19.5-testing.bdf")
+s = read_SSR("../../../test/data/test_Hz19.5-testing.bdf")
 ```
 
 ## Plot single and multi channel data
