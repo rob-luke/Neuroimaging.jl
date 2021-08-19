@@ -16,6 +16,7 @@ jobs:
     env:
       GKS_ENCODING: "utf8"
       GKSwstype: "100"
+      DATADEPS_ALWAYS_ACCEPT: true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
