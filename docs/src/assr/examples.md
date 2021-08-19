@@ -1,6 +1,28 @@
 # Examples
 
-## Plot single and multi channel data
+## Reading data
+
+The following code reads a steady state response recording stored in biosemi data fromat.
+The function extracts standard steady state parameters from the file name.
+
+```@example fileread
+using EEG
+s = read_SSR("../../../test/data/test_Hz19.5-testing.bdf")
+```
+
+## Filter data
+
+```@example fileread
+s = highpass_filter(s)
+```
+
+## Rereference data
+
+```@example fileread
+s = rereference(s, "Cz")
+```
+
+## Old static example
 
 ```julia
 using EEG

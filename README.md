@@ -1,6 +1,17 @@
-## This project is currently being revitalised. 
+## This project is currently being revitalised. See progress [here](https://github.com/rob-luke/EEG.jl/projects/1)
 
-## We appreciate your patience or support in [this process](https://github.com/rob-luke/EEG.jl/projects/1)
+This EEG package has been around since Julia v0.1!
+The Julia language has evolved since the early days,
+and there are many places in the codebase that should be bought up to date with the latest Julia standards. 
+The general plan is:
+
+- [x] Renable the continuous integration
+- [x] Remove all errors thrown by code
+- [x] Ensure current code base runs with the latest version of Julia (1.6)
+- [ ] Remove code warnings and update dependency packages
+- [ ] Document existing code and raise issues for known shortcomings. I.e., note all code that needs to be modernised
+- [ ] Add help on how to contribute to the documentation 
+- [ ] Start chipping away at improvements! PRs appreciated for any aspect of the code base
 
 
 # EEG
