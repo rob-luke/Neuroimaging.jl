@@ -11,11 +11,16 @@ on:
   pull_request:
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number }}-${{ github.event.type }}
+  cancel-in-progress: true
+
 jobs:
   build:
     env:
       GKS_ENCODING: "utf8"
       GKSwstype: "100"
+      DATADEPS_ALWAYS_ACCEPT: true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
