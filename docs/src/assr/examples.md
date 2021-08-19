@@ -2,7 +2,7 @@
 
 ## Reading data
 
-The following code reads a steady state response recording stored in biosemi data fromat.
+The following code reads a steady state response recording stored in biosemi data format.
 The function extracts standard steady state parameters from the file name.
 
 ```@example fileread
