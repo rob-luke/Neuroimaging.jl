@@ -6,7 +6,7 @@ pwd()
 ```
 
 ```@example whatshere
-readdir("../../../)
+readdir("../../../")
 ```
 
 ```@example fileread
