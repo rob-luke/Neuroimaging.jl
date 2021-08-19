@@ -16,7 +16,8 @@ using Logging,  # For user feedback
     MAT,
     Printf,
     Statistics,
-    FFTW
+    FFTW,
+    DataDeps
 
 
 export new_processing_key,
@@ -131,6 +132,7 @@ export new_processing_key,
 
 # Helper functions
 include("miscellaneous/helper.jl")
+include("datasets/datasets.jl")
 
 # Pre-processing
 include("preprocessing/data_rejection.jl")

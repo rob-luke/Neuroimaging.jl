@@ -6,8 +6,9 @@ The following code reads a steady state response recording stored in biosemi dat
 The function extracts standard steady state parameters from the file name.
 
 ```@example fileread
-using EEG
-s = read_SSR("../../../test/data/test_Hz19.5-testing.bdf")
+using EEG, DataDeps
+data_path = joinpath(datadep"BioSemiTestFiles", "Newtest17-2048.bdf")
+s = read_SSR(data_path)
 ```
 
 ## Filter data
