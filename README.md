@@ -1,4 +1,4 @@
-## This project is currently being revitalised. See progress [here](https://github.com/rob-luke/EEG.jl/projects/1)
+## This project is currently being revitalised. See progress [here](https://github.com/rob-luke/Neuroimaging.jl/projects/1)
 
 This package has been around since Julia v0.1!
 The Julia language has evolved since the early days,
@@ -23,9 +23,9 @@ Process EEG files in [Julia](http://julialang.org/).
 
 | Release            | Documentation                                                                                                 | Testing                                                                                                                                                            |
 |--------------------|---------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **In development** | [![Documentation](https://img.shields.io/badge/Documentation-dev-green)](https://rob-luke.github.io/EEG.jl/)  | [![Tests Julia 1](https://github.com/rob-luke/EEG.jl/actions/workflows/runtests.yml/badge.svg)](https://github.com/rob-luke/EEG.jl/actions/workflows/runtests.yml) |  
+| **In development** | [![Documentation](https://img.shields.io/badge/Documentation-dev-green)](https://rob-luke.github.io/Neuroimaging.jl/)  | [![Tests Julia 1](https://github.com/rob-luke/Neuroimaging.jl/actions/workflows/runtests.yml/badge.svg)](https://github.com/rob-luke/Neuroimaging.jl/actions/workflows/runtests.yml) |  
 
 
 ## Documentation
 
-See https://rob-luke.github.io/eeg.jl
+See https://rob-luke.github.io/Neuroimaging.jl
