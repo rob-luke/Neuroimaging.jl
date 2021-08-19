@@ -19,6 +19,7 @@ jobs:
     env:
       JULIA_FFTW_PROVIDER: ${{ matrix.provider }}
       JULIA_NUM_THREADS: ${{ matrix.threads }}
+      DATADEPS_ALWAYS_ACCEPT: true
     strategy:
       fail-fast: false
       matrix:
