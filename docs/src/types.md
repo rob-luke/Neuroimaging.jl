@@ -10,8 +10,8 @@ For example, the function channelnames would return the correct
 information when called on a steady state response or evoked potential
 data type (yet to be implemented).
 
-Types also exist for storing metadata. For example, electrode sensor
-positions are a sub type of the `Sensor` type. And the position
+Types also exist for storing metadata. For example, electrodes
+are a sub type of the `Sensor` type. And the position
 of the sensors may be in the `Talairach` space, which is a subtype of
 the `Coordinate` type.
 
