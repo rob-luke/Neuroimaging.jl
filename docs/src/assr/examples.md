@@ -61,4 +61,5 @@ s = rereference(s, "A9")
 
 ```@example fileread
 plot_timeseries(s, channels="A6")
+current() |> DisplayAs.PNG # hide
 ```
