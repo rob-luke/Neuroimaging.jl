@@ -29,7 +29,7 @@ function ftest(
     spill_bins::Int,
 )
 
-    spectrum = EEG._ftest_spectrum(sweeps)
+    spectrum = Neuroimaging._ftest_spectrum(sweeps)
     # No compensation is made here for prior filtering. See SSR.jl for an example of how to compensate filtering.
     frequencies = range(0, stop = 1, length = Int(size(spectrum, 1))) * float(fs) / 2
 

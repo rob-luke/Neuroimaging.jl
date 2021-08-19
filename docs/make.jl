@@ -1,10 +1,10 @@
 push!(LOAD_PATH, "../src/")
-using Documenter, EEG
+using Documenter, Neuroimaging
 
 makedocs(
-    modules = [EEG],
+    modules = [Neuroimaging],
     format = Documenter.HTML(prettyurls = get(ENV, "CI", nothing) == "true"),
-    sitename = "EEG.jl",
+    sitename = "Neuroimaging.jl",
     authors = "Robert Luke",
     pages = [
         "Home" => "index.md",

@@ -25,14 +25,14 @@
         @test labels(s) == ["Fp1", "Fpz", "Fp2"]
         @test labels(s[1]) == "Fp1"
 
-        @test EEG.x(s) == [-27.747648, -0.085967, 27.676888]
-        @test EEG.x(s[1]) == -27.747648
+        @test Neuroimaging.x(s) == [-27.747648, -0.085967, 27.676888]
+        @test Neuroimaging.x(s[1]) == -27.747648
 
-        @test EEG.y(s) == [98.803864, 103.555275, 99.133354]
-        @test EEG.y(s[1]) == 98.803864
+        @test Neuroimaging.y(s) == [98.803864, 103.555275, 99.133354]
+        @test Neuroimaging.y(s[1]) == 98.803864
 
-        @test EEG.z(s) == [34.338360, 34.357265, 34.457005]
-        @test EEG.z(s[1]) == 34.338360
+        @test Neuroimaging.z(s) == [34.338360, 34.357265, 34.457005]
+        @test Neuroimaging.z(s[1]) == 34.338360
     end
 
     @testset "Matching" begin

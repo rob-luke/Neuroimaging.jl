@@ -1,4 +1,7 @@
-module EEG
+"""
+A Julia package for process neuroimaing data.
+"""
+module Neuroimaging
 
 using Logging,  # For user feedback
     Unitful,

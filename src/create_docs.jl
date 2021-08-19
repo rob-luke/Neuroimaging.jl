@@ -1,3 +1,3 @@
-using EEG, Lexicon
+using Neuroimaging, Lexicon
 
-save("doc/API.md", EEG)
+save("doc/API.md", Neuroimaging)

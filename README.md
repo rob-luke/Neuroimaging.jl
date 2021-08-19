@@ -1,6 +1,6 @@
 ## This project is currently being revitalised. See progress [here](https://github.com/rob-luke/EEG.jl/projects/1)
 
-This EEG package has been around since Julia v0.1!
+This package has been around since Julia v0.1!
 The Julia language has evolved since the early days,
 and there are many places in the codebase that should be bought up to date with the latest Julia standards. 
 The general plan is:

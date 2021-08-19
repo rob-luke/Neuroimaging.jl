@@ -3,12 +3,12 @@
 ---
 
 ```@meta
-CurrentModule = EEG
+CurrentModule = Neuroimaging
 ```
 
 ## Module
 ```@docs
-EEG
+Neuroimaging
 ```
 
 ## To be sorted
