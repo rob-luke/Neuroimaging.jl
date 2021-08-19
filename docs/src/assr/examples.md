@@ -1,20 +1,34 @@
 # Examples
 
+## Reading data
 
-```@example whereami
-pwd()
-```
-
-```@example whatshere
-readdir("../../../")
-```
+The following code reads a steady state response recording stored in biosemi data fromat.
+The function extracts standard steady state parameters from the file name.
 
 ```@example fileread
 using EEG
 s = read_SSR("../../../test/data/test_Hz19.5-testing.bdf")
 ```
 
-## Plot single and multi channel data
+## Filter data
+
+```@example fileread
+s = highpass_filter(s)
+```
+
+## Rereference data
+
+```@example fileread
+s = rereference(s, "Cz")
+```
+
+## Plot data
+
+```@example fileread
+plot_timeseries(s, channels="P6")
+```
+
+## Old static example
 
 ```julia
 using EEG
