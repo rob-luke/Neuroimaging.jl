@@ -11,6 +11,28 @@ data_path = joinpath(datadep"BioSemiTestFiles", "Newtest17-2048.bdf")
 s = read_SSR(data_path)
 ```
 
+## Get info
+
+What are the channel names?
+
+```@example fileread
+println(channelnames(s))
+```
+
+And the sample rate?
+
+```@example fileread
+samplingrate(s)
+```
+
+Trigger info?
+This needs to be changed so it abstracts away from the type.
+It should be a function as in the two examples above.
+
+```@example fileread
+s.triggers
+```
+
 ## Filter data
 
 ```@example fileread
@@ -20,7 +42,7 @@ s = highpass_filter(s)
 ## Rereference data
 
 ```@example fileread
-s = rereference(s, "Cz")
+s = rereference(s, "A9")
 ```
 
 ## Old static example
