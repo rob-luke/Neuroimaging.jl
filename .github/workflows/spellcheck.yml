@@ -12,4 +12,4 @@ jobs:
       name: Spellcheck
       with:
         task_name: Markdown
-        # config_path: .github/workflows/spellcheck.config
+        config_path: .github/workflows/spellcheck.config
