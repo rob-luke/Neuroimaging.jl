@@ -28,4 +28,4 @@ Process EEG files in [Julia](http://julialang.org/).
 
 ## Documentation
 
-See rob-luke.github.io/eeg.jl
+See https://rob-luke.github.io/eeg.jl
