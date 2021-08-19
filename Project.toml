@@ -1,4 +1,4 @@
-name = "EEG"
+name = "Neuroimaging"
 uuid = "70dcca16-fae7-5c11-a923-39bcb60edd10"
 
 [deps]

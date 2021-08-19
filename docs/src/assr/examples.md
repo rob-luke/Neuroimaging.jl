@@ -7,7 +7,7 @@ The function extracts standard steady state parameters from the file name.
 
 ```@example fileread
 using DisplayAs # hide
-using EEG, DataDeps, Plots
+using Neuroimaging, DataDeps, Plots
 data_path = joinpath(datadep"BioSemiTestFiles", "Newtest17-2048.bdf")
 s = read_SSR(data_path)
 ```

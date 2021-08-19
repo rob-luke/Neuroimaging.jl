@@ -22,7 +22,7 @@ including examples and function APIs.
 ## Available types
 
 ```@meta
-CurrentModule = EEG
+CurrentModule = Neuroimaging
 ```
 
 ### Measurement

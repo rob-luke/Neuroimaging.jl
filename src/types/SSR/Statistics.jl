@@ -16,7 +16,7 @@ function ftest(
 )
 
     # Do calculation here once, instead of in each low level call
-    spectrum = EEG._ftest_spectrum(s.processing["sweeps"])
+    spectrum = Neuroimaging._ftest_spectrum(s.processing["sweeps"])
     spectrum = compensate_for_filter(s.processing, spectrum, samplingrate(s))
     frequencies = range(0, stop = 1, length = Int(size(spectrum, 1))) * samplingrate(s) / 2
 

@@ -1,4 +1,4 @@
-# EEG.jl News
+# Neuroimaging.jl News
 
 ## v0.3.1
 * Remove warnings 

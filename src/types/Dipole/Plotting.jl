@@ -1,4 +1,4 @@
-function EEG.plot(
+function Neuroimaging.plot(
     p,
     dip::Union{Dipole,Coordinate};
     c = :green,
@@ -42,13 +42,13 @@ function EEG.plot(
 end
 
 
-function EEG.plot(p, dips::Union{Array{Dipole},Array{Coordinate}}; l = "", kwargs...)
+function Neuroimaging.plot(p, dips::Union{Array{Dipole},Array{Coordinate}}; l = "", kwargs...)
 
     for dip = 1:length(dips)
         if dip == length(dips)
-            p = EEG.plot(p, dips[dip], l = l; kwargs...)
+            p = Neuroimaging.plot(p, dips[dip], l = l; kwargs...)
         else
-            p = EEG.plot(p, dips[dip], l = ""; kwargs...)
+            p = Neuroimaging.plot(p, dips[dip], l = ""; kwargs...)
         end
     end
 

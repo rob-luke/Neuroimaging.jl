@@ -5,7 +5,7 @@
 
     @testset "Reading" begin
         t = read_VolumeImage(fname)
-        @test isa(t, EEG.VolumeImage) == true
+        @test isa(t, Neuroimaging.VolumeImage) == true
     end
 
     @testset "Create" begin
@@ -21,7 +21,7 @@
             t.info,
             t.coord_system,
         )
-        @test isa(n, EEG.VolumeImage) == true
+        @test isa(n, Neuroimaging.VolumeImage) == true
         @test isequal(n.data, t.data) == true
 
         # Vector
@@ -46,7 +46,7 @@
             end
         end
         n2 = VolumeImage(d, t.units, x, y, z, s, t.method, t.info, t.coord_system)
-        @test isa(n2, EEG.VolumeImage) == true
+        @test isa(n2, Neuroimaging.VolumeImage) == true
         @test isequal(n2.data, t.data) == true
         @test isequal(n2.x, t.x) == true
         @test isequal(n2.y, t.y) == true
@@ -98,15 +98,15 @@
     @testset "Dimension checks" begin
         t2 = deepcopy(t)
         t2.x = t2.x[1:3]
-        @test_throws KeyError EEG.dimensions_equal(t, t2)
+        @test_throws KeyError Neuroimaging.dimensions_equal(t, t2)
         t2 = deepcopy(t)
         t2.y = t2.y[1:3]
-        @test_throws KeyError EEG.dimensions_equal(t, t2)
+        @test_throws KeyError Neuroimaging.dimensions_equal(t, t2)
         t2 = deepcopy(t)
         t2.z = t2.z[1:3]
-        @test_throws KeyError EEG.dimensions_equal(t, t2)
+        @test_throws KeyError Neuroimaging.dimensions_equal(t, t2)
         t2 = read_VolumeImage(joinpath(dirname(@__FILE__), "../../data", "test-4d.dat"))
-        @test_throws KeyError EEG.dimensions_equal(t, t2)
+        @test_throws KeyError Neuroimaging.dimensions_equal(t, t2)
     end
 
 
@@ -120,7 +120,7 @@
         dips = find_dipoles(mean(t))
         @test size(dips) == (16,)
 
-        #dips = EEG.new_dipole_method(mean(t))
+        #dips = Neuroimaging.new_dipole_method(mean(t))
         #@test size(dips) == (9,)
 
         fname = joinpath(dirname(@__FILE__), "../../data", "test-4d.dat")
@@ -171,10 +171,10 @@
     end
 
     @testset "Plotting" begin
-        EEG.plot(mean(t))
-        EEG.plot(mean(t), min_val = 0, max_val = 50)
-        EEG.plot(mean(t), elp = joinpath(dirname(@__FILE__), "../../data", "test.elp"))
-        p = EEG.plot(mean(t), threshold = 24)
+        Neuroimaging.plot(mean(t))
+        Neuroimaging.plot(mean(t), min_val = 0, max_val = 50)
+        Neuroimaging.plot(mean(t), elp = joinpath(dirname(@__FILE__), "../../data", "test.elp"))
+        p = Neuroimaging.plot(mean(t), threshold = 24)
 
         @testset "Overlay dipole" begin
 

@@ -14,7 +14,7 @@ Reject epochs based on the maximum peak to peak voltage within an epoch across a
 function epoch_rejection(
     epochs::Array{T,3},
     retain_percentage::AbstractFloat;
-    rejection_method::Function = EEG.peak2peak,
+    rejection_method::Function = Neuroimaging.peak2peak,
 ) where {T<:Number}
 
     if (0 > retain_percentage) || (1 < retain_percentage)

@@ -1,10 +1,10 @@
-# EEG.jl Manual
+# Neuroimaging.jl Manual
 
-Process EEG files in Julia.
+Process neuroimaging data in Julia.
 
 **For research only. Not for clinical use. Use at your own risk**.
 
 
 ```@meta
-CurrentModule = EEG
+CurrentModule = Neuroimaging
 ```

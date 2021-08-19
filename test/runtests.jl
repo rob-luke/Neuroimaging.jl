@@ -1,4 +1,4 @@
-using EEG
+using Neuroimaging
 using Test
 using Logging
 using MAT, BDF
