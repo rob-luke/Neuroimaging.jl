@@ -27,6 +27,7 @@ Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 [compat]
 BDF = "0.4"
 CSV = "0.8"
+ImageCore = "0.8"
 DataFrames = "0.21"
 Distances = "0.10"
 Distributions = "0.25"
