@@ -19,4 +19,8 @@ Cz
 bdf
 highpass
 rereference
-
+channelnames
+subtype
+APIs
+optodes
+neuroimaging
