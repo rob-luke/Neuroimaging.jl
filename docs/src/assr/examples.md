@@ -6,18 +6,6 @@ The following code reads a steady state response recording stored in biosemi dat
 The function extracts standard steady state parameters from the file name.
 
 ```@example fileread
-using EEG, DataDeps
-register(
-    DataDep(
-        "BioSemiTestFiles",
-        "Manafacturer provided example files",
-        ["https://www.biosemi.com/download/BDFtestfiles.zip"];
-        post_fetch_method = [file -> run(`unzip $file`)],
-    ),
-)
-```
-
-```@example fileread
 using EEG, DataDeps, Plots
 data_path = joinpath(datadep"BioSemiTestFiles", "Newtest17-2048.bdf")
 s = read_SSR(data_path)

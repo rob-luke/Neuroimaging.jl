@@ -6,4 +6,4 @@ s = read_SSR(data_path)
 @test samplingrate(s) == 2048
 @test length(channelnames(s)) == 16
 @test length(s.triggers["Index"]) == length(s.triggers["Code"])
-@test length(s.triggers["Code"]) == ength(s.triggers["Duration"])
+@test length(s.triggers["Code"]) == length(s.triggers["Duration"])
