@@ -1,1 +1,12 @@
 eeg
+jl
+julia
+Rereference
+timeseries
+Preprocessing
+MERCHANTABILITY
+NONINFRINGEMENT
+sublicense
+biosemi
+SSR
+s
