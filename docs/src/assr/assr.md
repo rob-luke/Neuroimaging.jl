@@ -1,3 +1,3 @@
 # Introduction
 
-Add basic information about steady state respones.
+Add basic information about steady state responses.
