@@ -22,12 +22,6 @@ s = highpass_filter(s)
 s = rereference(s, "Cz")
 ```
 
-## Plot data
-
-```@example fileread
-plot_timeseries(s, channels="P6")
-```
-
 ## Old static example
 
 ```julia
