@@ -19,7 +19,7 @@ A brief description of each type is provided below.
 See the following documentation sections for more details of each type,
 including examples and function APIs.
 
-### Available types
+## Available types
 
 ```@meta
 CurrentModule = EEG
@@ -31,14 +31,14 @@ CurrentModule = EEG
 SSR
 ```
 
-### Sensors
+### Sensor
 
 ```@docs
 Sensor
 Electrode
 ```
 
-### Coordinates
+### Coordinate
 
 ```@docs
 Coordinate
