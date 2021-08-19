@@ -1,7 +1,7 @@
 # EEG.jl News
 
 ## v0.3.1
-* Remove depreciations
+* Remove warnings 
 * Clean test output
 
 ## v0.3.0
