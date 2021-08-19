@@ -1,3 +1,9 @@
+# Types
+
+A feature of the Julia programming language is the strong type system.
+This package exploits that strength and defines various types for storing
+information about your neuroimaging data.
+
 A number of types are provided to handle different types of data.
 Functions are provided to perform common operations on each type.
 For example, the function channelnames would return the correct
