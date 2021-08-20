@@ -16,7 +16,7 @@ The general plan is:
 
 # Neuroimaging
 
-Process Neuroimaging files in [Julia](http://julialang.org/).  
+Process neuroimaging data in [Julia](http://julialang.org/).  
 
 
 ## Status
