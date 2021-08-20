@@ -14,9 +14,9 @@ The general plan is:
 - [ ] Start chipping away at improvements! Pull requests are appreciated for any aspect of the code base
 
 
-# EEG
+# Neuroimaging
 
-Process EEG files in [Julia](http://julialang.org/).  
+Process Neuroimaging files in [Julia](http://julialang.org/).  
 
 
 ## Status
