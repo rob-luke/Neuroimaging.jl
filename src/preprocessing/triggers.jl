@@ -115,7 +115,7 @@ function clean_triggers(
             @warn("Your epoch lengths vary too much")
             @warn(
                 string(
-                    "Length: median=$(median(epochIndex[:Length][2:end])) sd=$(std(epochIndex[:Length][2:end])) ",
+                    "Length: median=$(median(epochIndex[:Length][2:end])) sd=$(Statistics.std(epochIndex[:Length][2:end])) ",
                     "min=$(minimum(epochIndex[:Length][2:end]))",
                 )
             )
