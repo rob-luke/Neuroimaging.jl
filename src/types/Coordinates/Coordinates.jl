@@ -2,7 +2,12 @@
 Abstract type for coordinates in three dimensions
 
     All sub types have x, y, z coordinates.
-    And conversion is available beween subtypes.
+    And conversion is available between subtypes using the convert function.
+
+```julia
+bv_coord = (0.3, 2, 3.1)
+tal_coord = convert(Talairach, mni)
+```
 """
 abstract type Coordinate end
 

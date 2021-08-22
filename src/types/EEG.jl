@@ -419,3 +419,110 @@ function merge_channels(
 ) where {S<:AbstractString}
     a = merge_channels(a, [merge_Chans], new_name; kwargs...)
 end
+
+
+"""
+## Read SSR from file or IO stream
+Read a file or IO stream and store the data in an `SSR` type.
+
+Matching .mat files are read and modulation frequency information extracted.
+Failing that, user passed arguments are used or the modulation frequency is extracted from the file name.
+
+#### Arguments
+
+* `fname`: Name of the file to be read
+* `min_epoch_length`: Minimum epoch length in samples. Shorter epochs will be removed (0)
+* `max_epoch_length`: Maximum epoch length in samples. Longer epochs will be removed (0 = all)
+* `valid_triggers`: Triggers that are considered valid, others are removed ([1,2])
+* `stimulation_amplitude`: Amplitude of stimulation (NaN)
+* `modulationrate`: Modulation frequency of SSR stimulation (NaN)
+* `remove_first`: Number of epochs to be removed from start of recording (0)
+* `max_epochs`: Maximum number of epochs to retain (0 = all)
+
+#### Supported file formats
+
+* BIOSEMI (.bdf)
+"""
+function read_EEG(
+    fname::String;
+    valid_triggers::Array{Int} = [1, 2],
+    min_epoch_length::Int = 0,
+    max_epoch_length::Int = 0,
+    remove_first::Int = 0,
+    max_epochs::Int = 0,
+    kwargs...,
+)
+
+    @info("Importing EEG from file: $fname")
+    file_path, file_name, ext = fileparts(fname)
+
+
+    #
+    # Read file data
+    #
+
+    # Import raw data
+    if ext == "bdf"
+        data, triggers, system_codes, samplingrate, reference_channel, header =
+            import_biosemi(fname; kwargs...)
+    else
+        warn("File type $ext is unknown")
+    end
+
+    # Create electrodes
+    elecs = Electrode[]
+    for e in header["chanLabels"]
+        push!(elecs, Electrode(e, Talairach(NaN, NaN, NaN), Dict()))
+    end
+
+    # Create EEG type
+    if unit(samplingrate) == unit(1.0u"Hz")
+        #nothing
+    else
+        samplingrate = samplingrate * 1.0u"Hz"
+    end
+
+    a = GeneralEEG(
+        data,
+        elecs,
+        triggers,
+        system_codes,
+        samplingrate,
+        [reference_channel],
+        file_path,
+        file_name,
+        Dict(),
+        header,
+    )
+
+    #
+    # Clean up
+    #
+
+    # Remove status channel information
+    remove_channel!(a, "Status")
+
+    # Clean epoch index
+    a.triggers = clean_triggers(
+        a.triggers,
+        valid_triggers,
+        min_epoch_length,
+        max_epoch_length,
+        remove_first,
+        max_epochs,
+    )
+
+    return a
+end
+
+
+function trigger_channel(a::EEG; kwargs...)
+
+    create_channel(a.triggers, a.data, samplingrate(a))
+end
+
+
+function system_code_channel(a::EEG; kwargs...)
+
+    create_channel(a.system_codes, a.data, samplingrate(a))
+end

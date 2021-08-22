@@ -24,3 +24,6 @@ subtype
 APIs
 optodes
 neuroimaging
+fNIRS
+TODO
+GeneralEEG

@@ -1,29 +1,31 @@
 """
-
 Abstract type for storing neuroimaging sensors.
 
 Other types inherit from the Sensor type.
 And common functions can be run on all sensors sub types.
+All sensors have a label and coordinate.
+Some sensors also store additional information.
+For example, fNIRS sensors may hold wavelength information.
+
+All Sensor types support the following functions:
+
+* `label()`
+* `labels()`
+* `x()`
+* `y()`
+* `z()`
 
 ```julia
 my_sensor = # Create a electrode, optode etc
 label(my_sensor)  # Returns the sensor name
 x(my_sensor)      # Returns the x coordinate of the sensor
 ```
-    
 """
 abstract type Sensor end
 
 
 """
 Electrode sensor type used in EEG measurements.
-
-Each electrode has a label, coordinate position, and info dictionary.
-
-Note: the dictionary field will be depreciated and the fields will
-be moved to the base type in the future. This will be invisible to the
-end user, as all interaction with types should be made using functions
-and not by addressing the fields themselves.
 """
 mutable struct Electrode <: Sensor
     label::AbstractString
@@ -40,8 +42,6 @@ abstract type Optode <: Sensor end
 
 """
 Source optode sensor type used in fNIRS measurements.
-
-Each source optode has a label, coordinate position.
 """
 mutable struct Source <: Optode
     label::AbstractString
@@ -49,11 +49,9 @@ mutable struct Source <: Optode
     info::Dict
 end
 
+
 """
-
 Detector optode sensor type used in fNIRS measurements.
-
-Each detector optode has a label, coordinate position.
 """
 mutable struct Detector <: Optode
     label::AbstractString

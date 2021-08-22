@@ -23,9 +23,7 @@ validate_triggers
 clean_triggers
 remove_channel!
 samplingrate
-Dipole
 extract_epochs
-VolumeImage
 find_dipoles
 find_location
 ```
