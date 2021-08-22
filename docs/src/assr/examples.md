@@ -8,7 +8,12 @@ The function extracts standard steady state parameters from the file name.
 ```@example fileread
 using DisplayAs # hide
 using Neuroimaging, DataDeps, Plots
-data_path = joinpath(datadep"BioSemiTestFiles", "Newtest17-2048.bdf")
+data_path = joinpath(
+    datadep"ExampleSSR",
+    "Neuroimaging.jl-example-data-master",
+    "neuroimaingSSR.bdf",
+)
+
 s = read_SSR(data_path)
 ```
 
@@ -43,12 +48,37 @@ s = highpass_filter(s)
 ## Rereference data
 
 ```@example fileread
-s = rereference(s, "A9")
+s = rereference(s, "Cz")
+remove_channel!(s, "Cz")
 ```
 
-## Rereference data
+## Plot data
 
 ```@example fileread
 plot_timeseries(s, channels="A6")
 current() |> DisplayAs.PNG # hide
+```
+
+
+## Extract SSR at frequency of interest
+
+```@example fileread
+
+s = extract_epochs(s)
+
+s = create_sweeps(s, epochsPerSweep = 8)
+
+s = ftest(s)
+
+s.processing["statistics"]
+
+```
+
+## Demonstrate no false postiive at other freqs
+
+```@example fileread
+
+s = ftest(s, freq_of_interest=32.0391)
+
+s.processing["statistics"]
 ```
