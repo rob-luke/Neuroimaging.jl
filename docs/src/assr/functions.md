@@ -1,6 +1,7 @@
 # Functions
 
-A number of functions are provided for the processing of SSR data.
+In addition to the function available for processing EEG data,
+a number of functions are provided specifically for the processing of SSR data
 
 
 ## Import
@@ -16,12 +17,14 @@ read_SSR
 
 ```@docs
 highpass_filter(::SSR)
+lowpass_filter(::SSR)
+bandpass_filter(::SSR)
 ```
 
-### Referencing
+## Statistics
 
 ```@docs
-rereference(::SSR, ::AbstractString)
+ftest(::SSR)
 ```
 
 ## Plotting

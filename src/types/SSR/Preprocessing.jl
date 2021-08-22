@@ -38,7 +38,24 @@ function highpass_filter(
     _append_filter(a, f)
 end
 
+"""
+lowpass_filter(a::SSR; cutOff::Real=150, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
 
+Applly a low pass filter.
+
+A zero phase high pass filter is applied to the data using `filtfilt`.
+A check is performed to ensure the filter does not affect the modulation rate.
+The filter coefficents are stored in the processing field.
+
+#### Example
+
+```julia
+a = lowpass_filter(a)
+# or
+a = lowpass_filter(a, cutOff = 1)
+```
+
+"""
 function lowpass_filter(
     a::SSR;
     cutOff::Real = 150,
@@ -58,6 +75,19 @@ function lowpass_filter(
 end
 
 
+"""
+bandpass_filter(a::SSR; lower::Number=modulationrate(a) - 1, upper::Number=modulationrate(a) + 1, fs::Real=samplingrate(a), n::Int=24, rp::Number = 0.0001, tolerance::Real=0.01, kwargs...)
+
+Applly a band pass filter.
+
+
+#### Example
+
+```julia
+a = bandpass_filter(a)
+```
+
+"""
 function bandpass_filter(
     a::SSR;
     lower::Number = modulationrate(a) - 1,
@@ -144,38 +174,4 @@ function downsample(s::SSR, ratio::Rational)
     s.samplingrate = float(samplingrate(s) * ratio) * 1.0u"Hz"
 
     return s
-end
-
-
-#######################################
-#
-# Change reference channels
-#
-#######################################
-
-"""
-    rereference(a::SSR, refChan::Union{AbstractString, Array{AbstractString}}; kwargs...)
-
-Reference data to specified channel(s).
-
-#### Example
-
-```julia
-a = rereference(a, "Cz")
-# or
-a = rereference(a, ["P9", "P10"])
-```
-
-"""
-function rereference(
-    a::SSR,
-    refChan::Union{AbstractString,Array{AbstractString}};
-    kwargs...,
-)
-
-    a.data = rereference(a.data, refChan, channelnames(a))
-
-    a.reference_channel = [refChan]
-
-    return a
 end

@@ -1,0 +1,86 @@
+using Neuroimaging, Test, BDF
+
+@testset "Steady State Responses" begin
+
+    fname = joinpath(dirname(@__FILE__), "..", "data", "test_Hz19.5-testing.bdf")
+
+    s = read_EEG(fname)
+
+    @testset "Show" begin
+        show(s)
+    end
+
+    @testset "Read file" begin
+
+        s = read_EEG(fname)
+
+        @info samplingrate(s)
+        @test samplingrate(s) == 8192.0
+        @info samplingrate(s)
+        @test samplingrate(Int, s) == 8192
+        @test isa(samplingrate(s), AbstractFloat) == true
+        @test isa(samplingrate(Int, s), Int) == true
+
+        @test isapprox(maximum(s.data[:, 2]), 54.5939; atol = 0.1)
+        @test isapprox(minimum(s.data[:, 4]), -175.2503; atol = 0.1)
+
+        s = read_EEG(fname, valid_triggers = [8])
+        s = read_EEG(fname, min_epoch_length = 8388)
+        s = read_EEG(fname, max_epoch_length = 8389)
+
+        s = read_EEG(fname)
+        original_length = length(s.triggers["Index"])
+        s = read_EEG(fname, remove_first = 10)
+        @test original_length - 10 == length(s.triggers["Index"])
+
+        s = read_EEG(fname, max_epochs = 12)
+        @test length(s.triggers["Index"]) == 12
+
+        s = read_EEG(fname)
+        s.triggers = extra_triggers(s.triggers, 1, 7, 0.7, samplingrate(s))
+        @test length(s.triggers["Index"]) == 56
+    end
+
+
+    @testset "Channel names" begin
+
+        s1 = deepcopy(s)
+        s1 = channelnames(s1, 1, "A01")
+        s1 = channelnames(s1, 2, "A05")
+        s1 = channelnames(s1, 3, "A11")
+        s1 = channelnames(s1, 4, "B03")
+        s1 = channelnames(s1, 5, "A17")
+        s1 = channelnames(s1, 6, "B17")
+        @test channelnames(s1) == ["A01", "A05", "A11", "B03", "A17", "B17"]
+
+    end
+
+    @testset "Triggers" begin
+
+        dats, evtTab, trigs, statusChan = readBDF(fname)
+        sampRate = readBDFHeader(fname)["sampRate"][1]
+
+        @test trigs == create_channel(
+            evtTab,
+            dats,
+            sampRate,
+            code = "code",
+            index = "idx",
+            duration = "dur",
+        )
+        @test trigs ==
+              trigger_channel(read_EEG(fname, valid_triggers = collect(-1000:10000)))
+
+        # Convert between events and channels
+
+        dats, evtTab, trigs, statusChan = readBDF(fname)
+        events = create_events(trigs, sampRate)
+        channel = create_channel(events, dats, sampRate)
+
+        @test size(channel) == size(trigs)
+        @test channel == trigs
+
+    end
+
+
+end

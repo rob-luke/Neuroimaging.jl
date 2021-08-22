@@ -4,7 +4,14 @@
 #
 #######################################
 
+"""
+Run f-test statistics on steady state response measurement.
 
+By default saves information to the key `statistics`,
+but this can be modified by the user.
+
+TODO: Find a good reference.
+"""
 function ftest(
     s::SSR;
     freq_of_interest::Union{Real,AbstractArray} = modulationrate(s),
@@ -58,7 +65,12 @@ end
 #
 #######################################
 
+"""
+Save the processing step information from SSR type.
 
+By default saves information in the key `statistics`,
+but this can be modified by the user.
+"""
 # Save ftest results to file
 function save_results(
     a::SSR;

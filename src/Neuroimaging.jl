@@ -74,6 +74,8 @@ export new_processing_key,
     isequal,
     ==,
     # Type - SSR
+    EEG,
+    GeneralEEG,
     SSR,
     samplingrate,
     modulationrate,
@@ -104,6 +106,7 @@ export new_processing_key,
     EEG_Vanvooren_2014,
     EEG_Vanvooren_2014_Left,
     EEG_Vanvooren_2014_Right,
+    read_EEG,
     Coordinate,
     SPM,
     BrainVision,
@@ -130,7 +133,10 @@ export new_processing_key,
     oplot_dipoles,
     SSR_spectrogram,
     plot_filter_response,
-    plot_ftest
+    plot_ftest,
+    Source,
+    Detector,
+    Optode
 
 
 # Helper functions
@@ -158,6 +164,7 @@ include("types/Coordinates/Coordinates.jl")
 include("types/Sensors/Sensors.jl")
 
 # Type - SSR
+include("types/EEG/EEG.jl")
 include("types/SSR/SSR.jl")
 include("types/SSR/Preprocessing.jl")
 include("types/SSR/ReadWrite.jl")
@@ -188,7 +195,7 @@ include("types/VolumeImage/Dipoles.jl")
 include("types/VolumeImage/Operations.jl")
 
 # Plotting functions
-include("types/SSR/plotting.jl")
+include("types/EEG/plotting.jl")
 include("plotting/plots.jl")
 include("types/Dipole/Plotting.jl")
 

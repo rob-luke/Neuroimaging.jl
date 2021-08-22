@@ -201,16 +201,7 @@ end
 #
 #######################################
 
-function trigger_channel(a::SSR; kwargs...)
 
-    create_channel(a.triggers, a.data, samplingrate(a))
-end
-
-
-function system_code_channel(a::SSR; kwargs...)
-
-    create_channel(a.system_codes, a.data, samplingrate(a))
-end
 
 
 function write_SSR(

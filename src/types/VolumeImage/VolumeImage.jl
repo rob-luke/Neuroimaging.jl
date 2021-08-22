@@ -1,5 +1,6 @@
 """
-## Volume Image
+Volume Image
+
 This composite type contains volume image information
 
 #### Fields

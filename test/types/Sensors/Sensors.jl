@@ -1,3 +1,5 @@
+using Neuroimaging, Test
+
 @testset "Sensors" begin
 
     fname = joinpath(dirname(@__FILE__), "..", "..", "data", "test.sfp")
@@ -67,6 +69,22 @@
         @test length(EEG_Vanvooren_2014_Left) == 9
         @test length(EEG_Vanvooren_2014_Right) == 9
 
+    end
+
+    @testset "Optodes" begin
+
+        label = "source1"
+        coord = Talairach(68.3, -26.9, 8.3)
+        s = Source(label, coord, Dict())
+        @test isa(s, Neuroimaging.Sensor)
+        @test isa(s, Neuroimaging.Optode)
+        @test isa(s, Neuroimaging.Source)
+        @test !isa(s, Neuroimaging.Detector)
+        @test !isa(s, Neuroimaging.Electrode)
+        d = Detector(label, coord, Dict())
+        @test isa(d, Neuroimaging.Sensor)
+        @test isa(d, Neuroimaging.Optode)
+        @test isa(d, Neuroimaging.Detector)
     end
 
 end
