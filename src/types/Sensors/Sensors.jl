@@ -35,7 +35,7 @@ end
 """
 Optode abstract sensor type used in fNIRS measrurements.
 """
-abstract type Optode <: Sensor end 
+abstract type Optode <: Sensor end
 
 
 """

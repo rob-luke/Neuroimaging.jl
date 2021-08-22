@@ -72,7 +72,7 @@ using Neuroimaging, Test
     end
 
     @testset "Optodes" begin
-        
+
         label = "source1"
         coord = Talairach(68.3, -26.9, 8.3)
         s = Source(label, coord, Dict())
