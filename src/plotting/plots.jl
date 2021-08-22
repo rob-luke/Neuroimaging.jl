@@ -245,7 +245,7 @@ function plot_multi_channel_timeseries(
     for c = 1:size(signals, 2)                                  # Plot each channel
         signals[:, c] = signals[:, c] .- Statistics.mean(signals[:, c])      # Remove mean
         signals[:, c] = signals[:, c] ./ mean_variance .+ (c - 1)   # Rescale and shift so all chanels are visible
-        p = plot!(time_s, signals[:, c], c = :black, lab = "")
+        p = plot!(time_s, signals[:, c] .* 3, c = :black, lab = "")
     end
     p = plot!(yticks = (0:length(channels)-1, channels))
 

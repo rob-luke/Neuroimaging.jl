@@ -1,4 +1,12 @@
-# Library
+# Low-Level Function API
+
+As well as providing convenient types for analysis.
+This package also provides low-level functions for dealing with
+data in its raw form.
+These low-level functions are described below.
+
+Note: Currently sorting out the docs, so its a bit of a mess.
+Is there an automated way to list all functions using documenter?
 
 ---
 
