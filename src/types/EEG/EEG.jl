@@ -179,6 +179,40 @@ end
 
 
 
+#######################################
+#
+# Change reference channels
+#
+#######################################
+
+"""
+    rereference(a::EEG, refChan::Union{AbstractString, Array{AbstractString}}; kwargs...)
+
+Reference data to specified channel(s).
+
+#### Example
+
+```julia
+a = rereference(a, "Cz")
+# or
+a = rereference(a, ["P9", "P10"])
+```
+
+"""
+function rereference(
+    a::EEG,
+    refChan::Union{AbstractString,Array{AbstractString}};
+    kwargs...,
+)
+
+    a.data = rereference(a.data, refChan, channelnames(a))
+
+    a.reference_channel = [refChan]
+
+    return a
+end
+
+
 
 #######################################
 #
