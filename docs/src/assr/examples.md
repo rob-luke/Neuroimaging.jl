@@ -133,6 +133,8 @@ it is important to ensure that the false detection rate at other frequencies is 
 As such we can analyse all other frequencies from 10 to 400 Hz and quantify
 the false detection rate.
 
+For this example file the resulting false detection rate is slightly over 5%.
+
 ```@example fileread
 using DataFrames, Query, Statistics
 
@@ -149,6 +151,11 @@ s.processing["statistics"] |>
 
 ## Visualise response amplitude
 
+Finally we can plot the ASSR spectrum.
+We will also mark with red dots the frequency components which
+contained a signficant stimulus locked response according to the f-test.
+And we add a vertical line at the modulation rate.
+
 ```@example fileread
 using StatsPlots
 
@@ -160,8 +167,9 @@ df = s.processing["statistics"] |>
     @orderby_descending(_.AnalysisFrequency) |> 
     DataFrame
 
-df |> @df StatsPlots.scatter(:AnalysisFrequency, :AverageAmplitude, color=:AverageStatistic, ms=6, lab="")
+vline([40], ylims=(0, 0.3), colour="grey", line=:dash)
 df |> @df StatsPlots.plot!(:AnalysisFrequency, :AverageAmplitude, xlabel="Frequency (Hz)", ylabel="Amplitude (uV)", lab="")
+df|> @filter(_.AverageStatistic == 1) |> @df StatsPlots.scatter!(:AnalysisFrequency, :AverageAmplitude, color="red", ms=4, lab="")
 current() |> DisplayAs.PNG # hide
 ```
 
