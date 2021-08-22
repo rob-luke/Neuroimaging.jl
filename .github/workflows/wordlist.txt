@@ -47,6 +47,8 @@ save_results
 Astrid
 De
 NeuroImage
+documenter
+optode
 ASSRs
 Rance
 fm
