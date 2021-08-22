@@ -12,7 +12,7 @@ expected at the modulation rate and harmonics, but not other frequencies.
 A standard ASSR analysis is performed. After an introduction to the data
 structure, a high pass filter is applied, the signal is referenced to Cz,
 epochs are extracted then combined in to sweeps, then finally an f-test
-is applied to the sweep data in the frequency domain. For futher details on analysis see:
+is applied to the sweep data in the frequency domain. For further details on analysis see:
 
 * Picton, Terence W. Human auditory evoked potentials. Plural Publishing, 2010.
 
@@ -20,6 +20,10 @@ is applied to the sweep data in the frequency domain. For futher details on anal
 
 * Luke, Robert, et al. "Assessing temporal modulation sensitivity using electrically evoked auditory steady state responses." Hearing research 324 (2015): 37-45.
 
+Note: this example demonstrates the existing capabilities of the package.
+General improvements are planned to this package. But before changes are made,
+the existing features and functions will be documented. This will help to highlight
+was has already been implemented, and where improvements need to be made.
 
 
 ## Read data
@@ -62,7 +66,7 @@ datatypes due to the excellent dispatch system in the Julia language.
 channelnames(s)
 ```
 
-Simillarly we can query the sample rate of the measurement:
+Similarly we can query the sample rate of the measurement:
 
 ```@example fileread
 samplingrate(s)
@@ -115,7 +119,7 @@ s = create_sweeps(s, epochsPerSweep = 8)
 
 Standard statistical tests can then be run on the data.
 An ftest will automatically convert the sweeps in to the frequency domain and
-apply the approproate tests with sane default values.
+apply the appropriate tests with sane default values.
 By default, it analyses the modulation frequency.
 The result is stored in the `statistics` processing log by default,
 but this can be specified by the user.
@@ -126,7 +130,7 @@ s = ftest(s)
 s.processing["statistics"]
 ```
 
-## Demonstrate no false postiive at other freqs
+## Demonstrate no false positive at other frequencies
 
 While its interesting to observe a significant response at the modulation rate as expected,
 it is important to ensure that the false detection rate at other frequencies is not too high.
@@ -169,7 +173,15 @@ df = s.processing["statistics"] |>
 
 vline([40], ylims=(0, 0.3), colour="grey", line=:dash, lab="Modulation rate")
 df |> @df StatsPlots.plot!(:AnalysisFrequency, :AverageAmplitude, xlabel="Frequency (Hz)", ylabel="Amplitude (uV)", lab="", color="black")
-df|> @filter(_.AverageStatistic == 1) |> @df StatsPlots.scatter!(:AnalysisFrequency, :AverageAmplitude, color="red", ms=4, lab="Signficant response")
+df|> @filter(_.AverageStatistic == 1) |> @df StatsPlots.scatter!(:AnalysisFrequency, :AverageAmplitude, color="red", ms=4, lab="Significant response")
 current() |> DisplayAs.PNG # hide
 ```
 
+## Conclusion
+
+An analysis pipeline of a steady state response measurement has been demonstrated.
+Importing the file and specifying the required information was described.
+As was preprocessing and statistical analysis.
+The false detection rate of the analysis was quantified.
+Finally, a figure was created to summarise the underlying data and demonstrate the
+increased stimulus locked response at the modulation rate.
