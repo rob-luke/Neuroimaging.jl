@@ -7,7 +7,7 @@ information about your neuroimaging data.
 A number of types are provided to handle different types of data.
 Functions are provided to perform common operations on each type.
 For example, the function `channelnames` would return the correct
-information when called on a general eeg recording or steady state responsedata type.
+information when called on a general eeg recording or steady state response data type.
 Users should interact with types using function, and not address the underlying
 fields directly. This allows the underlying data type to be improved without breaking
 existing code. For example, do not address `sensor.label`, you should use `label(sensor)`.
