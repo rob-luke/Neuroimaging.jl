@@ -11,7 +11,11 @@ s = read_SSR(data_path)
 
 
 # Basic biosemi data file
-data_path = joinpath(datadep"ExampleSSR", "Neuroimaging.jl-example-data-master", "neuroimaingSSR.bdf")
+data_path = joinpath(
+    datadep"ExampleSSR",
+    "Neuroimaging.jl-example-data-master",
+    "neuroimaingSSR.bdf",
+)
 s = read_SSR(data_path)
 @test samplingrate(s) == 8192
 @test length(channelnames(s)) == 7
