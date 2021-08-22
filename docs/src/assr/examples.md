@@ -110,7 +110,6 @@ then concatenated in to sweeps.
 
 ```@example fileread
 s = extract_epochs(s)
-
 s = create_sweeps(s, epochsPerSweep = 8)
 ```
 
@@ -126,11 +125,10 @@ but this can be specified by the user.
 
 ```@example fileread
 s = ftest(s)
-
 s.processing["statistics"]
 ```
 
-## Demonstrate no false positive at other frequencies
+## Quantify the false positive rate of statistical analysis
 
 While its interesting to observe a significant response at the modulation rate as expected,
 it is important to ensure that the false detection rate at other frequencies is not too high.
