@@ -47,7 +47,6 @@ samplingrate(s)
 ## Preprocessing
 
 ```@example fileread
-s = highpass_filter(s)
 s = rereference(s, "Cz")
 remove_channel!(s, "Cz")
 s

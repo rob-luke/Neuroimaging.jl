@@ -62,11 +62,6 @@ epoch_rejection
 peak2peak
 ```
 
-## Statistics
-
-```@docs
-ftest
-```
 
 ## Plotting
 

@@ -10,22 +10,20 @@ a number of functions are provided specifically for the processing of SSR data
 read_EEG
 ```
 
-## Preprocessing
+## General
 
-
-### Filtering
 
 ```@docs
-highpass_filter(::EEG)
-lowpass_filter(::EEG)
+samplingrate(::EEG)
+channelnames(::EEG)
+hcat(::EEG, ::EEG)
+add_channel(::EEG, ::Vector, ::AbstractString)
+remove_channel!()
+keep_channel!()
+trim_channel()
+keep_channel!()
 ```
 
-## Statistics
-
-```@docs
-ftest(::SSR)
-save_results(::EEG)
-```
 
 ## Plotting
 

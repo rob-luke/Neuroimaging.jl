@@ -52,6 +52,7 @@ Wouters
 al
 datatypes
 et
+electrophysiological
 AnalysisType
 DataFrame
 FalseDiscoveryRate

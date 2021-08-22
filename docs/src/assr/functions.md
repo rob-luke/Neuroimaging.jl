@@ -18,6 +18,7 @@ read_SSR
 ```@docs
 highpass_filter(::SSR)
 lowpass_filter(::SSR)
+bandpass_filter(::SSR)
 ```
 
 ## Statistics
