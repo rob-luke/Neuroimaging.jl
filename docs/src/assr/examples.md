@@ -167,9 +167,9 @@ df = s.processing["statistics"] |>
     @orderby_descending(_.AnalysisFrequency) |> 
     DataFrame
 
-vline([40], ylims=(0, 0.3), colour="grey", line=:dash)
-df |> @df StatsPlots.plot!(:AnalysisFrequency, :AverageAmplitude, xlabel="Frequency (Hz)", ylabel="Amplitude (uV)", lab="")
-df|> @filter(_.AverageStatistic == 1) |> @df StatsPlots.scatter!(:AnalysisFrequency, :AverageAmplitude, color="red", ms=4, lab="")
+vline([40], ylims=(0, 0.3), colour="grey", line=:dash, lab="Modulation rate")
+df |> @df StatsPlots.plot!(:AnalysisFrequency, :AverageAmplitude, xlabel="Frequency (Hz)", ylabel="Amplitude (uV)", lab="", color="black")
+df|> @filter(_.AverageStatistic == 1) |> @df StatsPlots.scatter!(:AnalysisFrequency, :AverageAmplitude, color="red", ms=4, lab="Signficant response")
 current() |> DisplayAs.PNG # hide
 ```
 
