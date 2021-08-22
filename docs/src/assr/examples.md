@@ -17,6 +17,12 @@ data_path = joinpath(
 s = read_SSR(data_path)
 ```
 
+We can inform the software of additional information such as the stimulus modulation rate.
+
+```@example fileread
+s.modulationrate = 40.0391u"Hz"
+```
+
 ## Get info
 
 What are the channel names?
@@ -55,7 +61,7 @@ remove_channel!(s, "Cz")
 ## Plot data
 
 ```@example fileread
-plot_timeseries(s, channels="A6")
+plot_timeseries(s, channels="TP7")
 current() |> DisplayAs.PNG # hide
 ```
 
