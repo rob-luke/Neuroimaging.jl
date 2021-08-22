@@ -25,7 +25,6 @@ bandpass_filter(::SSR)
 
 ```@docs
 ftest(::SSR)
-save_results(::SSR)
 ```
 
 ## Plotting

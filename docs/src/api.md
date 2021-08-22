@@ -23,7 +23,6 @@ Neuroimaging
 
 ```@docs
 remove_template
-import_biosemi 
 add_channel
 join_triggers
 keep_channel!
@@ -36,17 +35,6 @@ find_dipoles
 find_location
 ```
 
-## IO
-
-```@docs
-read_elp
-write_avr
-read_avr
-read_evt
-read_sfp
-read_dat
-read_bsa
-```
 
 ## Channels
 
