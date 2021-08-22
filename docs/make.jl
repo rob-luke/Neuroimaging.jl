@@ -18,4 +18,4 @@ makedocs(
     ],
 )
 
-deploydocs(repo = "github.com/rob-luke/EEG.jl.git", push_preview = true, devbranch = "main")
+deploydocs(repo = "github.com/rob-luke/Neuroimaging.jl.git", push_preview = true, devbranch = "main")
