@@ -48,7 +48,7 @@ samplingrate(s)
 
 ```@example fileread
 s = rereference(s, "Cz")
-remove_channel!(s, "Cz")
+remove_channel!(s, ["Cz", "TP7"])
 s
 ```
 
@@ -57,7 +57,7 @@ s
 
 ```@example fileread
 using Plots # hide
-plot_timeseries(s, channels="TP7")
+plot_timeseries(s, channels="F6")
 current() |> DisplayAs.PNG # hide
 ```
 
