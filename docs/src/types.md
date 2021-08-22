@@ -40,7 +40,7 @@ A general type is also provided for each imaging technique.
 For example, if your EEG study design does not fit one of the neuroimaging paradigms implemented in this package you can
 use the `GeneralEEG` type.
 
-TODO: Add resting state type, and add GeneralEEG type that doesn't assume underlying experimental paradigm.
+TODO: Add resting state type.
 
 ```@docs
 EEG
@@ -74,13 +74,3 @@ UnknownCoordinate
 VolumeImage
 Dipole
 ```
-
-
-## To be implemented
-
-* Generic electromagnetic type.
-* Generic EEG type. Then make SSR inherit from this.
-* Generic MEG type.
-* Add evoked response type
-* Add optodes
-* Add MEG sensors
