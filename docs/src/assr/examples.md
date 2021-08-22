@@ -157,7 +157,7 @@ s.processing["statistics"] |>
 
 Finally we can plot the ASSR spectrum.
 We will also mark with red dots the frequency components which
-contained a signficant stimulus locked response according to the f-test.
+contained a significant stimulus locked response according to the f-test.
 And we add a vertical line at the modulation rate.
 
 ```@example fileread
