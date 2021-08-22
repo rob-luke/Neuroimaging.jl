@@ -7,7 +7,7 @@ The function extracts standard steady state parameters from the file name.
 
 ```@example fileread
 using DisplayAs # hide
-using Neuroimaging, DataDeps, Plots
+using Neuroimaging, DataDeps, Plots, Unitful
 data_path = joinpath(
     datadep"ExampleSSR",
     "Neuroimaging.jl-example-data-master",
@@ -69,7 +69,6 @@ current() |> DisplayAs.PNG # hide
 ## Extract SSR at frequency of interest
 
 ```@example fileread
-
 s = extract_epochs(s)
 
 s = create_sweeps(s, epochsPerSweep = 8)
