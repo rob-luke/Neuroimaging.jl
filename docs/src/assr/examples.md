@@ -7,7 +7,7 @@ The function extracts standard steady state parameters from the file name.
 
 ```@example fileread
 using DisplayAs # hide
-using Neuroimaging, DataDeps, Plots, StatsPlots, Unitful
+using Neuroimaging, DataDeps, Unitful
 data_path = joinpath(
     datadep"ExampleSSR",
     "Neuroimaging.jl-example-data-master",
@@ -76,7 +76,6 @@ s = create_sweeps(s, epochsPerSweep = 8)
 s = ftest(s)
 
 s.processing["statistics"]
-
 ```
 
 ## Demonstrate no false postiive at other freqs
@@ -87,5 +86,18 @@ s = ftest(s, freq_of_interest=[10:38; 42:200])
 
 s.processing["statistics"]["Significant"] = Int.(s.processing["statistics"]["Statistic"] .< 0.05)
 
-s.processing["statistics"] |> @df StatsPlots.scatter(:AnalysisFrequency, :SignalAmplitude, colour=:Significant)
+s.processing["statistics"]
+```
+
+## Demonstrate no false postiive at other freqs
+
+```@example fileread
+using DataFrames. StatsPlots, Query, Statistics
+
+s.processing["statistics"] |> 
+    @groupby(_.AnalysisFrequency) |> 
+    @map({AnalysisFrequency=key(_), AverageAmplitude=mean(_.SignalAmplitude)}) |>
+    @orderby_descending(_.AnalysisFrequency) |>
+    @df StatsPlots.plot(:AnalysisFrequency, :AverageAmplitude, xlabel="Frequency (Hz), ylabel="Amplitude (uV))
+current() |> DisplayAs.PNG # hide
 ```
