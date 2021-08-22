@@ -14,7 +14,7 @@ All EEG types support the following functions:
 * `rereference()`
 
 ```julia
-data = # load your EEG data using for example read_SSR()
+data = # load your EEG data using for example read_EEG()
 
 samplingrate(data)  # Returns the sampling rate
 channelnames(data)  # Returns the channel names
@@ -58,7 +58,7 @@ If no type is provided, the sampling rate is returned as a floating point.
 Return the sampling rate of a recording
 
 ```julia
-s = read_SSR(filename)
+s = read_EEG(filename)
 samplingrate(s)
 ```
 """
@@ -72,7 +72,7 @@ Return the names of sensors in EEG measurement.
 #### Example
 
 ```julia
-s = read_SSR(filename)
+s = read_EEG(filename)
 channelnames(s)
 ```
 """
@@ -84,7 +84,7 @@ Change the names of sensors in EEG measurement.
 #### Example
 
 ```julia
-s = read_SSR(filename)
+s = read_EEG(filename)
 channelnames(s, 1, "Fp1")
 ```
 """
@@ -221,14 +221,14 @@ end
 #######################################
 
 """
-Add a channel to the SSR type with specified channel names.
+Add a channel to the EEG type with specified channel names.
 
 #### Example
 
 Add a channel called `Merged`
 
 ```julia
-s = read_SSR(filename)
+s = read_EEG(filename)
 new_channel = mean(s.data, 2)
 s = add_channel(s, new_channel, "Merged")
 ```
@@ -252,10 +252,15 @@ Remove specified channels from EEG.
 Remove channel Cz and those in the set called `EEG_Vanvooren_2014_Right`
 
 ```julia
-a = read_SSR(filename)
+a = read_EEG(filename)
 remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
 ```
 """
+function remove_channel!(a::EEG, channel_name::S; kwargs...) where {S<:AbstractString}
+    @debug("Removing channel $(channel_name)")
+    remove_channel!(a, [channel_name])
+end
+
 function remove_channel!(
     a::EEG,
     channel_names::Array{S};
@@ -266,11 +271,6 @@ function remove_channel!(
         a,
         Int[something(findfirst(isequal(c), channelnames(a)), 0) for c in channel_names],
     )
-end
-
-function remove_channel!(a::EEG, channel_name::S; kwargs...) where {S<:AbstractString}
-    @debug("Removing channel $(channel_name)")
-    remove_channel!(a, [channel_name])
 end
 
 remove_channel!(a::EEG, channel_names::Int; kwargs...) =
@@ -322,8 +322,8 @@ Remove all channels except those requested from EEG.
 Remove all channels except Cz and those in the set called `EEG_Vanvooren_2014_Right`
 
 ```julia
-a = read_SSR(filename)
-keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
+a = read_EEG(filename)
+keep_channel!(a, ["P8", "Cz"])
 ```
 """
 function keep_channel!(a::EEG, channel_names::Array{S}; kwargs...) where {S<:AbstractString}
@@ -350,8 +350,8 @@ Remove all channels except those requested from EEG.
 Remove all channels except Cz and those in the set called `EEG_Vanvooren_2014_Right`
 
 ```julia
-a = read_SSR(filename)
-keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
+a = read_EEG(filename)
+keep_channel!(a, ["O2", "Cz"])
 ```
 """
 function keep_channel!(a::EEG, channel_name::AbstractString; kwargs...)
@@ -468,8 +468,8 @@ end
 
 
 """
-## Read SSR from file or IO stream
-Read a file or IO stream and store the data in an `SSR` type.
+## Read EEG from file or IO stream
+Read a file or IO stream and store the data in an `GeneralEEG` type.
 
 Matching .mat files are read and modulation frequency information extracted.
 Failing that, user passed arguments are used or the modulation frequency is extracted from the file name.
@@ -481,7 +481,6 @@ Failing that, user passed arguments are used or the modulation frequency is extr
 * `max_epoch_length`: Maximum epoch length in samples. Longer epochs will be removed (0 = all)
 * `valid_triggers`: Triggers that are considered valid, others are removed ([1,2])
 * `stimulation_amplitude`: Amplitude of stimulation (NaN)
-* `modulationrate`: Modulation frequency of SSR stimulation (NaN)
 * `remove_first`: Number of epochs to be removed from start of recording (0)
 * `max_epochs`: Maximum number of epochs to retain (0 = all)
 
