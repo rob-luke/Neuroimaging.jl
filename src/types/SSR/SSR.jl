@@ -20,7 +20,9 @@ The following standard names are used when saving data to the processing diction
 Put an example here
 
 ```julia
-s = SSR("filename")
+s = read_SSR("filename")
+s.modulationrate = 40.0391u"Hz"
+s = rereference(s, "Cz")
 ```
 
 """

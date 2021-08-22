@@ -1,13 +1,13 @@
 """
-    plot_timeseries(s::SSR; channels, fs, kwargs)
+    plot_timeseries(s::EEG; channels, fs, kwargs)
     
-Plot an SSR recording.
+Plot an EEG recording.
 
 Plot detailed single channel or general multichanel figure depending on how many channels are requested.
 
 #### Input
 
-* `s`: SSR type
+* `s`: EEG type
 * `channels`: The channels you want to plot, all if not specified
 * `fs`: Sample rate
 * Other optional arguements are passed to the Plots.jl functions
@@ -27,7 +27,7 @@ draw(PDF("timeseries.pdf", 10inch, 6inch), plot1)
 
 """
 function plot_timeseries(
-    s::SSR;
+    s::EEG;
     channels::Union{S,Array{S}} = channelnames(s),
     fs::Number = samplingrate(s),
     kwargs...,

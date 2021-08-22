@@ -9,7 +9,12 @@ makedocs(
     pages = [
         "Home" => "index.md",
         "Types" => "types.md",
-        "Steady State Responses" => Any[
+        "General EEG Processing" => Any[
+            "Overview"=>"eeg/eeg.md",
+            "Example"=>"eeg/examples.md",
+            "API"=>"eeg/functions.md",
+        ],
+        "Steady State Responses (EEG)" => Any[
             "Overview"=>"assr/assr.md",
             "Example"=>"assr/examples.md",
             "API"=>"assr/functions.md",

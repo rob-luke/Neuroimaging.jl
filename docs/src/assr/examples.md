@@ -54,34 +54,6 @@ s
 ```
 
 
-## Get info
-
-Now that the data has been imported, we can query it to ensure the
-requisite information is available. First we query the file channel names.
-Note that we call the function `channelnames`, and do not access properties of the type itself.
-This allows the use of the same functions across multiple 
-datatypes due to the excellent dispatch system in the Julia language.
-
-```@example fileread
-channelnames(s)
-```
-
-Similarly we can query the sample rate of the measurement:
-
-```@example fileread
-samplingrate(s)
-```
-
-Or the trigger information that was imported with the data:
-
-```@example fileread
-s.triggers
-# Note, this will change see 
-# https://github.com/rob-luke/Neuroimaging.jl/issues/123
-# https://github.com/rob-luke/Neuroimaging.jl/issues/101
-```
-
-
 ## Preprocessing
 
 ```@example fileread

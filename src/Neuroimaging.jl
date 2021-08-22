@@ -164,7 +164,7 @@ include("types/Coordinates/Coordinates.jl")
 include("types/Sensors/Sensors.jl")
 
 # Type - SSR
-include("types/EEG.jl")
+include("types/EEG/EEG.jl")
 include("types/SSR/SSR.jl")
 include("types/SSR/Preprocessing.jl")
 include("types/SSR/ReadWrite.jl")
@@ -195,7 +195,7 @@ include("types/VolumeImage/Dipoles.jl")
 include("types/VolumeImage/Operations.jl")
 
 # Plotting functions
-include("types/SSR/plotting.jl")
+include("types/EEG/plotting.jl")
 include("plotting/plots.jl")
 include("types/Dipole/Plotting.jl")
 
