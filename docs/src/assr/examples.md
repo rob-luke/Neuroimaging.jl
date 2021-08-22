@@ -1,9 +1,18 @@
-# Examples
+# Example
 
-## Reading data
+This tutorial demonstrates how to analyse an EEG measurement
+that was acquired while the participant was listening to a modulated
+noise. This stimulus should evoke an Auditory Steady State Response (ASSR)
+that can be observed in the signal.
 
-The following code reads a steady state response recording stored in biosemi data format.
-The function extracts standard steady state parameters from the file name.
+The stimulus was modulated at 40.0391 Hz. As such, the frequency content of
+the signal will be examined. An increase in stimulus locked activity is
+expected at the modulation rate and harmonics, but not other frequencies.
+
+
+## Read data
+
+First we read the measurement data which is stored in biosemi data format.
 
 ```@example fileread
 using DisplayAs # hide
@@ -17,7 +26,11 @@ data_path = joinpath(
 s = read_SSR(data_path)
 ```
 
-We can inform the software of additional information such as the stimulus modulation rate.
+The function will extract the modulation from the function name if available.
+In this case the file name was not meaningful, and so we must inform the software of
+information that is essential to analysis, but not stored in the data.
+When analysing a steady state response a modulation rate is required.
+Which can be set according to:
 
 ```@example fileread
 s.modulationrate = 40.0391u"Hz"
@@ -25,24 +38,29 @@ s.modulationrate = 40.0391u"Hz"
 
 ## Get info
 
-What are the channel names?
+Now that the data has been imported, we can query it to ensure the
+requisite information is available. First we query the file channel names.
+Note that we call the function `channelnames`, and do not access properties of the type itself.
+This allows the use of the same functions across multiple 
+datatypes due to the excellent dispatch system in the Julia language.
 
 ```@example fileread
-println(channelnames(s))
+channelnames(s)
 ```
 
-And the sample rate?
+Simillarly we can query the sample rate of the measurement:
 
 ```@example fileread
 samplingrate(s)
 ```
 
-Trigger info?
-This needs to be changed so it abstracts away from the type.
-It should be a function as in the two examples above.
+Or the trigger information that was imported with the data:
 
 ```@example fileread
 s.triggers
+# Note, this will change see 
+# https://github.com/rob-luke/Neuroimaging.jl/issues/123
+# https://github.com/rob-luke/Neuroimaging.jl/issues/101
 ```
 
 ## Filter data
@@ -61,10 +79,10 @@ remove_channel!(s, "Cz")
 ## Plot data
 
 ```@example fileread
+using Plots # hide
 plot_timeseries(s, channels="TP7")
 current() |> DisplayAs.PNG # hide
 ```
-
 
 ## Extract SSR at frequency of interest
 
@@ -89,7 +107,7 @@ s.processing["statistics"]["Significant"] = Int.(s.processing["statistics"]["Sta
 s.processing["statistics"]
 ```
 
-## Demonstrate no false postiive at other freqs
+## Visualise response amplitude
 
 ```@example fileread
 using DataFrames. StatsPlots, Query, Statistics
@@ -101,3 +119,4 @@ s.processing["statistics"] |>
     @df StatsPlots.plot(:AnalysisFrequency, :AverageAmplitude, xlabel="Frequency (Hz), ylabel="Amplitude (uV))
 current() |> DisplayAs.PNG # hide
 ```
+
