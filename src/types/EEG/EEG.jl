@@ -62,8 +62,8 @@ s = read_SSR(filename)
 samplingrate(s)
 ```
 """
-samplingrate(t, s::EEG) = convert(t, ustrip(s.samplingrate))
 samplingrate(s::EEG) = samplingrate(AbstractFloat, s)
+samplingrate(t, s::EEG) = convert(t, ustrip(s.samplingrate))
 
 
 """
@@ -342,6 +342,18 @@ function keep_channel!(a::EEG, channel_names::Array{S}; kwargs...) where {S<:Abs
     )
 end
 
+"""
+Remove all channels except those requested from EEG.
+
+#### Example
+
+Remove all channels except Cz and those in the set called `EEG_Vanvooren_2014_Right`
+
+```julia
+a = read_SSR(filename)
+keep_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
+```
+"""
 function keep_channel!(a::EEG, channel_name::AbstractString; kwargs...)
     keep_channel!(a, [channel_name]; kwargs...)
 end

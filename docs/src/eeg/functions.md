@@ -18,10 +18,10 @@ samplingrate(::EEG)
 channelnames(::EEG)
 hcat(::EEG, ::EEG)
 add_channel(::EEG, ::Vector, ::AbstractString)
-remove_channel!()
-keep_channel!()
-trim_channel()
-keep_channel!()
+remove_channel!(::EEG, ::AbstractString)
+keep_channel!(::EEG, ::AbstractString)
+trim_channel(::EEG, ::Int)
+keep_channel!(::EEG, ::AbstractString)
 ```
 
 
