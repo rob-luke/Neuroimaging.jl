@@ -16,13 +16,14 @@ abstract type Sensor end
 
 
 """
-
 Electrode sensor type used in EEG measurements.
 
 Each electrode has a label, coordinate position, and info dictionary.
 
-Note: what is usually stored in the dictionary? Can this be added as fields?
-    
+Note: the dictionary field will be depreciated and the fields will
+be moved to the base type in the future. This will be invisible to the
+end user, as all interaction with types should be made using functions
+and not by addressing the fields themselves.
 """
 mutable struct Electrode <: Sensor
     label::AbstractString
@@ -32,24 +33,15 @@ end
 
 
 """
-
 Optode abstract sensor type used in fNIRS measrurements.
-
-Other types inherit from the Sensor type.
-And common functions can be run on all sensors
-(these need to be listed).
-    
 """
 abstract type Optode <: Sensor end 
 
 
 """
-
 Source optode sensor type used in fNIRS measurements.
 
-Each source optode has a label, coordinate position, and info dictionary.
-
-Note: what is usually stored in the dictionary? Can this be added as fields?
+Each source optode has a label, coordinate position.
 """
 mutable struct Source <: Optode
     label::AbstractString
@@ -61,14 +53,11 @@ end
 
 Detector optode sensor type used in fNIRS measurements.
 
-Each detector optode has a label, coordinate position, and info dictionary.
-
-Note: what is usually stored in the dictionary? Can this be added as fields?
+Each detector optode has a label, coordinate position.
 """
 mutable struct Detector <: Optode
     label::AbstractString
     coordinate::Coordinate
-    info::Dict
 end
 
 

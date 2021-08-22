@@ -39,7 +39,7 @@ s = SSR("filename")
 ```
 
 """
-mutable struct SSR
+mutable struct SSR <: EEG
     data::Array
     sensors::Array{Sensor}
     triggers::Dict

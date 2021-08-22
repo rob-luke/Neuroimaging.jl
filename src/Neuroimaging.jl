@@ -74,6 +74,8 @@ export new_processing_key,
     isequal,
     ==,
     # Type - SSR
+    EEG,
+    GeneralEEG,
     SSR,
     samplingrate,
     modulationrate,
@@ -161,6 +163,7 @@ include("types/Coordinates/Coordinates.jl")
 include("types/Sensors/Sensors.jl")
 
 # Type - SSR
+include("types/EEG.jl")
 include("types/SSR/SSR.jl")
 include("types/SSR/Preprocessing.jl")
 include("types/SSR/ReadWrite.jl")
