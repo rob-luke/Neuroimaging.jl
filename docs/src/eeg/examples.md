@@ -64,17 +64,12 @@ current() |> DisplayAs.PNG # hide
 
 ```@example fileread
 using Plots # hide
-plot_mu   (s, channels="TP7")
+plot_timeseries(s)
 current() |> DisplayAs.PNG # hide
 ```
 
-
-
 ## Conclusion
 
-An analysis pipeline of a steady state response measurement has been demonstrated.
-Importing the file and specifying the required information was described.
-As was preprocessing and statistical analysis.
-The false detection rate of the analysis was quantified.
-Finally, a figure was created to summarise the underlying data and demonstrate the
-increased stimulus locked response at the modulation rate.
+A demonstration of how to read in EEG data was provided.
+A brief explanation of how to query the returned data type was discussed.
+Basic signal processing and plotting was demonstrated.
