@@ -130,7 +130,10 @@ export new_processing_key,
     oplot_dipoles,
     SSR_spectrogram,
     plot_filter_response,
-    plot_ftest
+    plot_ftest,
+    Source,
+    Detector,
+    Optode
 
 
 # Helper functions
