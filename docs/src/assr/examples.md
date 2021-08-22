@@ -7,7 +7,7 @@ The function extracts standard steady state parameters from the file name.
 
 ```@example fileread
 using DisplayAs # hide
-using Neuroimaging, DataDeps, Plots, Unitful
+using Neuroimaging, DataDeps, Plots, StatsPlots, Unitful
 data_path = joinpath(
     datadep"ExampleSSR",
     "Neuroimaging.jl-example-data-master",
@@ -83,7 +83,9 @@ s.processing["statistics"]
 
 ```@example fileread
 
-s = ftest(s, freq_of_interest=32.0391)
+s = ftest(s, freq_of_interest=[10:38; 42:200])
 
-s.processing["statistics"]
+s.processing["statistics"]["Significant"] = Int.(s.processing["statistics"]["Statistic"] .< 0.05)
+
+s.processing["statistics"] |> @df StatsPlots.scatter(:AnalysisFrequency, :SignalAmplitude, colour=:Significant)
 ```
