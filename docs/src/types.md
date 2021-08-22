@@ -36,6 +36,9 @@ SSR
 ```@docs
 Sensor
 Electrode
+Optode
+Source
+Detector
 ```
 
 ### Coordinate
