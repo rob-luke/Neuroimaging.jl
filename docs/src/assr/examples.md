@@ -110,13 +110,18 @@ s.processing["statistics"]
 ## Visualise response amplitude
 
 ```@example fileread
-using DataFrames. StatsPlots, Query, Statistics
+using DataFrames, StatsPlots, Query, Statistics
 
-s.processing["statistics"] |> 
+df = s.processing["statistics"] |> 
     @groupby(_.AnalysisFrequency) |> 
-    @map({AnalysisFrequency=key(_), AverageAmplitude=mean(_.SignalAmplitude)}) |>
-    @orderby_descending(_.AnalysisFrequency) |>
-    @df StatsPlots.plot(:AnalysisFrequency, :AverageAmplitude, xlabel="Frequency (Hz), ylabel="Amplitude (uV))
+    @map({AnalysisFrequency=key(_),
+        AverageAmplitude=Statistics.mean(_.SignalAmplitude),
+        AverageStatistic=Int(Statistics.mean(_.Statistic).<0.05)}) |>
+    @orderby_descending(_.AnalysisFrequency) |> 
+    DataFrame
+
+df |> @df StatsPlots.scatter(:AnalysisFrequency, :AverageAmplitude, color=:AverageStatistic, ms=6, lab="")
+df |> @df StatsPlots.plot!(:AnalysisFrequency, :AverageAmplitude, xlabel="Frequency (Hz)", ylabel="Amplitude (uV)", lab="")
 current() |> DisplayAs.PNG # hide
 ```
 
