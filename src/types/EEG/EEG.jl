@@ -322,6 +322,10 @@ a = read_EEG(filename)
 keep_channel!(a, ["P8", "Cz"])
 ```
 """
+function keep_channel!(a::EEG, channel_name::AbstractString; kwargs...)
+    keep_channel!(a, [channel_name]; kwargs...)
+end
+
 function keep_channel!(a::EEG, channel_names::Array{S}; kwargs...) where {S<:AbstractString}
     @info("Keeping channel(s) $(join(channel_names, " "))")
     keep_channel!(
@@ -336,10 +340,6 @@ function keep_channel!(a::EEG, channel_names::Array{S}; kwargs...) where {S<:Abs
             ),
         ),
     )
-end
-
-function keep_channel!(a::EEG, channel_name::AbstractString; kwargs...)
-    keep_channel!(a, [channel_name]; kwargs...)
 end
 
 function keep_channel!(a::EEG, channel_idx::AbstractVector{Int}; kwargs...)
