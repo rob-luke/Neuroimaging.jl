@@ -63,7 +63,7 @@ samplingrate(s)
 ```
 """
 samplingrate(s::EEG) = samplingrate(AbstractFloat, s)
-samplingrate(t, s::EEG) = convert(t, ustrip(s.samplingrate))
+samplingrate(t, s::EEG) = convert(t, s.samplingrate |> u"Hz" |> ustrip)
 
 
 """
