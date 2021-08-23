@@ -16,10 +16,8 @@ All neuroimaing types support the following functions:
 # Examples
 ```julia
 data = # load your neuroimaging data
-
 samplingrate(data)  # Returns the sampling rate
 channelnames(data)  # Returns the channel names
 ```
- 
 """
 abstract type NeuroimagingMeasurement end

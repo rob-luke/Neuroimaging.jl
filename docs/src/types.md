@@ -2,7 +2,7 @@
 
 A feature of the Julia programming language is the strong type system.
 This package exploits that strength and defines various types for storing
-information about your neuroimaging data.
+information about your neuroimaging data. A general hierarchy of neuroimaging types is provided.
 
 A number of types are provided to handle different types of data.
 Functions are provided to perform common operations on each type.
@@ -30,15 +30,22 @@ CurrentModule = Neuroimaging
 
 ### Measurement
 
-This package provides for different neuroimaging techniques such as EEG and fNIRS,
-and these are represented as top level abstract types.
+This package provides for different neuroimaging techniques such as EEG and fNIRS.
+All of these types inherit from the top level abstract `NeuroimagingMeasurement` type.
 
-Within these types support is provided for different types of neuroimaging paradigms
-which are sub types of the top level techniques.
-For example, if you have acquired data of a steady state response using the EEG methodology you would use the SSR type.
-A general type is also provided for each imaging technique.
-For example, if your EEG study design does not fit one of the neuroimaging paradigms implemented in this package you can
-use the `GeneralEEG` type.
+```@docs
+NeuroimagingMeasurement
+```
+
+Within the `NeuroimagingMeasurement` type a sub type is provided for each supported imaging modality.
+Within each imaging modality, types are provided to represent the experimental paradigm used to collect the data.
+Additionaly a `General` type is provided for data that is collected using a paradigm not yet supported in _Neuroimaging.jl_.
+
+!!! note "Support for more types is welcomed"
+
+    If you would like to add support for a different experimental paradigm by adding a sub type
+    then please raise an issue on the GitHub page and we can work through it together.
+    Some additional types that would be good to support are `RestingStateEEG`, `EventRelatedPotential`, etc.
 
 ```@docs
 EEG
@@ -49,8 +56,17 @@ SSR
 
 ### Sensor
 
+Support is provided for the storing of sensor information via the `Sensor` type.
+As with the neuroimaging type, several sub types inherit from this top level type.
+
 ```@docs
 Sensor
+```
+
+Support is currently provided for EEG and fNIRS sensor types.
+Additional types are welcomed.
+
+```@docs
 Electrode
 Optode
 Source
@@ -60,8 +76,15 @@ Detector
 
 ### Coordinate
 
+Support is provided for the storing of coordinate information via the `Coordinate` type.
+
 ```@docs
 Coordinate
+```
+
+Specific coordinate systems available are.
+
+```@docs
 BrainVision 
 Talairach
 SPM
@@ -70,6 +93,8 @@ UnknownCoordinate
 
 
 ### Other
+
+These types need to be better documented.
 
 ```@docs
 VolumeImage
