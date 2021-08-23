@@ -13,6 +13,8 @@ All EEG types support the following functions:
 * `lowpass_filter()`
 * `rereference()`
 
+Examples
+====
 ```julia
 data = # load your EEG data using for example read_EEG()
 
@@ -29,7 +31,7 @@ Type for storing general EEG data without assumption of any experimental paradig
 #### Example
 
 ```julia
-s = GeneralEEG("filename.bdf")
+s = read_EEG(filename)
 s = rereference(s, "Cz")
 s = remove_channel!(s, "Cz")
 ```
@@ -50,14 +52,13 @@ end
 
 
 """
-Return the sampling rate of an EEG type.
+    samplingrate(t::Type, s::EEG)
+    samplingrate(s::EEG)
 
-If no type is provided, the sampling rate is returned as a floating point.
+Return the sampling rate of an EEG type in Hz as the requested type.
+If no type is provided, the sampling rate is returned as a floating point number.
 
-#### Example
-
-Return the sampling rate of a recording
-
+# Examples
 ```julia
 s = read_EEG(filename)
 samplingrate(s)
@@ -560,7 +561,7 @@ function read_EEG(
 
     return a
 end
-
+                                                                                    
 
 function trigger_channel(a::EEG; kwargs...)
 
