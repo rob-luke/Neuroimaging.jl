@@ -50,7 +50,8 @@ end
 
 
 """
-Return the sampling rate of a steady state type.
+Return the sampling rate of an EEG type.
+
 If no type is provided, the sampling rate is returned as a floating point.
 
 #### Example
