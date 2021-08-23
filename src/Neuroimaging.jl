@@ -33,6 +33,7 @@ export new_processing_key,
     channelNames_biosemi_1020,
     create_channel,
     create_events,
+    NeuroimagingMeasurement,
     read_avr,
     read_bsa,
     read_dat,
@@ -156,6 +157,9 @@ include("reshaping/sweeps.jl")
 # Statistics
 include("statistics/ftest.jl")
 include("statistics/gfp.jl")
+
+# Type - Neuroimaging
+include("types/NeuroimagingMeasurement.jl")
 
 # Type - Coordinates
 include("types/Coordinates/Coordinates.jl")

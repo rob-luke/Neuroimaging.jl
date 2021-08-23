@@ -1,41 +1,39 @@
 """
-Abstract type for storing Electroencephalography (EEG) data.
+Abstract type to represent Electroencephalography (EEG) data.
 
-Other types inherit from this EEG type.
-All EEG types support the following functions:
+The following types inherit from the EEG type and can be used to process your data:
 
-* `samplingrate()`
-* `channelnames()`
-* `remove_channel!()`
-* `keep_channel!()`
-* `trim_channel()`
-* `highpass_filter()`
-* `lowpass_filter()`
-* `rereference()`
+- `GeneralEEG`: Used to store data without assumption of any experimental paradigm.
+- `SSR`: Used to store data acquired with a steady state response experiment paradigm.
 
-Examples
-====
+# Examples
 ```julia
 data = # load your EEG data using for example read_EEG()
 
 samplingrate(data)  # Returns the sampling rate
 channelnames(data)  # Returns the channel names
 ```
-    
 """
-abstract type EEG end
+abstract type EEG <: NeuroimagingMeasurement end
+
+import Base.show
+function Base.show(io::IO, a::EEG)
+    time_length = round.(size(a.data, 1) / samplingrate(a) / 60)
+    println(
+        io,
+        "EEG measurement of $time_length mins with $(size(a.data,2)) channels sampled at $(a.samplingrate)",
+    )
+end
 
 """
 Type for storing general EEG data without assumption of any experimental paradigm.
 
-#### Example
-
+# Examples
 ```julia
 s = read_EEG(filename)
 s = rereference(s, "Cz")
 s = remove_channel!(s, "Cz")
 ```
-
 """
 mutable struct GeneralEEG <: EEG
     data::Array
@@ -49,7 +47,7 @@ mutable struct GeneralEEG <: EEG
     processing::Dict
     header::Dict
 end
-
+GeneralEEG(args...; kwargs...) = read_EEG(args...; kwargs...)
 
 """
     samplingrate(t::Type, s::EEG)
@@ -69,10 +67,11 @@ samplingrate(t, s::EEG) = convert(t, s.samplingrate |> u"Hz" |> ustrip)
 
 
 """
+    channelnames(s::EEG)
+
 Return the names of sensors in EEG measurement.
 
-#### Example
-
+# Examples
 ```julia
 s = read_EEG(filename)
 channelnames(s)
@@ -81,10 +80,13 @@ channelnames(s)
 channelnames(s::EEG) = labels(s.sensors)
 
 """
-Change the names of sensors in EEG measurement.
+    channelnames(s::EEG, i::Int, l::AbstractString)
+    channelnames(s::EEG, l::AbstractVector{AbstractString})
 
-#### Example
+Change the names of `i`th sensors in an EEG measurement `s` to `l`.
+Or change the name of all sensors by pass a vector of strings.
 
+# Examples
 ```julia
 s = read_EEG(filename)
 channelnames(s, 1, "Fp1")
@@ -96,6 +98,7 @@ function channelnames(s::EEG, i::Int, l::S) where {S<:AbstractString}
     return s
 end
 function channelnames(s::EEG, l::AbstractVector{S}) where {S<:AbstractString}
+    @assert length(l) == length(channelnames(s))
     for li = 1:length(l)
         s = channelnames(s, li, l[li])
     end
@@ -103,21 +106,9 @@ function channelnames(s::EEG, l::AbstractVector{S}) where {S<:AbstractString}
 end
 
 
-import Base.show
-function Base.show(io::IO, a::EEG)
-    time_length = round.(size(a.data, 1) / samplingrate(a) / 60)
-    println(
-        io,
-        "EEG measurement of $time_length mins with $(size(a.data,2)) channels sampled at $(a.samplingrate)",
-    )
-end
-
-
-
-
 #######################################
 #
-# Operate on type
+# EEG type operations
 #
 #######################################
 
@@ -470,28 +461,27 @@ end
 
 
 """
-## Read EEG from file or IO stream
+    read_EEG(fname::AbstractString)
+    read_EEG(args...)
+
 Read a file or IO stream and store the data in an `GeneralEEG` type.
 
-Matching .mat files are read and modulation frequency information extracted.
-Failing that, user passed arguments are used or the modulation frequency is extracted from the file name.
+# Arguments
 
-#### Arguments
+- `fname`: Name of the file to be read
+- `min_epoch_length`: Minimum epoch length in samples. Shorter epochs will be removed (0)
+- `max_epoch_length`: Maximum epoch length in samples. Longer epochs will be removed (0 = all)
+- `valid_triggers`: Triggers that are considered valid, others are removed ([1,2])
+- `stimulation_amplitude`: Amplitude of stimulation (NaN)
+- `remove_first`: Number of epochs to be removed from start of recording (0)
+- `max_epochs`: Maximum number of epochs to retain (0 = all)
 
-* `fname`: Name of the file to be read
-* `min_epoch_length`: Minimum epoch length in samples. Shorter epochs will be removed (0)
-* `max_epoch_length`: Maximum epoch length in samples. Longer epochs will be removed (0 = all)
-* `valid_triggers`: Triggers that are considered valid, others are removed ([1,2])
-* `stimulation_amplitude`: Amplitude of stimulation (NaN)
-* `remove_first`: Number of epochs to be removed from start of recording (0)
-* `max_epochs`: Maximum number of epochs to retain (0 = all)
+# Supported file formats
 
-#### Supported file formats
-
-* BIOSEMI (.bdf)
+- BIOSEMI (.bdf)
 """
 function read_EEG(
-    fname::String;
+    fname::AbstractString;
     valid_triggers::Array{Int} = [1, 2],
     min_epoch_length::Int = 0,
     max_epoch_length::Int = 0,
