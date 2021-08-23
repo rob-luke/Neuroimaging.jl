@@ -50,7 +50,8 @@ end
 
 
 """
-Return the sampling rate of a steady state type.
+Return the sampling rate of an EEG type.
+
 If no type is provided, the sampling rate is returned as a floating point.
 
 #### Example
@@ -63,7 +64,7 @@ samplingrate(s)
 ```
 """
 samplingrate(s::EEG) = samplingrate(AbstractFloat, s)
-samplingrate(t, s::EEG) = convert(t, ustrip(s.samplingrate))
+samplingrate(t, s::EEG) = convert(t, s.samplingrate |> u"Hz" |> ustrip)
 
 
 """
