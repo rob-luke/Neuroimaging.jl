@@ -24,7 +24,7 @@ In addition to importing the `Neuroimaging.jl` package, the
 which contains an example EEG measurement in the Biosemi data format.
 
 To read the data the function `read_EEG` is used.
-This returns the data as a `GeneralEEG` type which stores EEG measrements that are not associated
+This returns the data as a `GeneralEEG` type which stores EEG measurements that are not associated
 with any particular experimental paradigm.
 
 ```@example fileread
@@ -57,7 +57,9 @@ To list the names of the channels in this measurement call:
 channelnames(s)
 ```
 
-Similarly to query the sample rate of the measurement call:
+Similarly to query the sample rate of the measurement. 
+Internally `Neuroimaging.jl` makes extensive use of the `Uniful` package and stores many values with their associated units.
+To obtain the sampling rate in Hz as a floating point number call:
 
 ```@example fileread
 samplingrate(s)
@@ -93,7 +95,7 @@ And the resulting data structure will now have less channels as the output descr
 
 ## Visualise continuous EEG data
 
-It is also usefult to visualise the EEG data.
+It is also usefull to visualise the EEG data.
 You can view a single channel or subset of channels by passing the string or strings you wish to plot.
 
 ```@example fileread
