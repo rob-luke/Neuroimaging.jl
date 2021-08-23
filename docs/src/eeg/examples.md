@@ -1,6 +1,10 @@
 # Example
 
-This tutorial demonstrates how to analyse an EEG measurement with Neuroimaging.jl`.
+This example demonstrates basic processing of an EEG measurement with Neuroimaging.jl`.
+An example file is imported, and the basic properties of the data structure are reported
+including sampling rate and channel information.
+Simple preprocessing, such as referencing and channel manipulation is demonstrated.
+And the data of a single channel and multiple channels is visualised.
 
 !!! note "Refactoring in progress"
 
@@ -12,13 +16,21 @@ This tutorial demonstrates how to analyse an EEG measurement with Neuroimaging.j
     [project board](https://github.com/rob-luke/Neuroimaging.jl/projects/1).
 
 
-## Read data
+## Import EEG measurement in to Neuroimaging.jl for analysis
 
-First we read the measurement data which is stored in biosemi data format.
+The first step in this example is to import the required packages.
+In addition to importing the `Neuroimaging.jl` package, the
+`DataDeps` package is imported to facilitate access to the example dataset _ExampleSSR_
+which contains an example EEG measurement in the Biosemi data format.
+
+To read the data the function `read_EEG` is used.
+This returns the data as a `GeneralEEG` type which stores EEG measrements that are not associated
+with any particular experimental paradigm.
 
 ```@example fileread
 using DisplayAs # hide
-using Neuroimaging, DataDeps, Unitful
+using Neuroimaging, DataDeps
+
 data_path = joinpath(
     datadep"ExampleSSR",
     "Neuroimaging.jl-example-data-master",
@@ -28,42 +40,69 @@ data_path = joinpath(
 s = read_EEG(data_path)
 ```
 
+To view a summary of the returned data simply call the returned variable.
 
-## Get info
+```@example fileread
+s
+```
 
-Now that the data has been imported, we can query it to ensure the
-requisite information is available. First we query the file channel names.
-Note that we call the function `channelnames`, and do not access properties of the type itself.
-This allows the use of the same functions across multiple 
-datatypes due to the excellent dispatch system in the Julia language.
+
+## Probe information about the EEG measurement
+
+The summary output of the imported data only includes basic information.
+Several functions are provided to access more detailed aspects of the recording.
+To list the names of the channels in this measurement call:
 
 ```@example fileread
 channelnames(s)
 ```
 
-Similarly we can query the sample rate of the measurement:
+Similarly to query the sample rate of the measurement call:
 
 ```@example fileread
 samplingrate(s)
 ```
 
+!!! tip "Accessing data structure fields"
 
-## Preprocessing
+    Note that we call the function `channelnames`, and do not access properties of the type itself.
+    This allows the use of the same functions across multiple datatypes due to the excellent dispatch system in the Julia language.
+    Accessing the fields of data types directly is not supported in `Neuroimaging.jl` and may break at any time.
+    If you wish to access an internal type field and a function is not provided then raise a GitHub issue.
+
+
+## Basic signal processing for EEG data
+
+Once data is imported then standard preprocessing procedures can be applied.
+For example to rereference the data to the `Cz` channel call:
 
 ```@example fileread
 s = rereference(s, "Cz")
+```
+
+After which the Cz channel will not contain meaningful information any longer.
+So you may wish to remove it from further analysis.
+You can remove multiple channels by providing an array of channel names by calling:
+
+```@example fileread
 remove_channel!(s, ["Cz", "TP7"])
 s
 ```
 
+And the resulting data structure will now have less channels as the output describes.
 
-## Visualise processed continuous data
+## Visualise continuous EEG data
+
+It is also usefult to visualise the EEG data.
+You can view a single channel or subset of channels by passing the string or strings you wish to plot.
 
 ```@example fileread
 using Plots # hide
 plot_timeseries(s, channels="F6")
 current() |> DisplayAs.PNG # hide
 ```
+
+Or you can plot all channels by calling `plot_timeseries` with no arguments.
 
 ```@example fileread
 using Plots # hide
