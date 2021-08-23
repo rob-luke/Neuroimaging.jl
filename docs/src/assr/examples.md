@@ -1,4 +1,4 @@
-# Example
+# Auditory Steady State Response Example
 
 This tutorial demonstrates how to analyse an EEG measurement
 that was acquired while the participant was listening to a modulated

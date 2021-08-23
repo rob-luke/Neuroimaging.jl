@@ -1,39 +1,39 @@
 """
-Abstract type for storing Electroencephalography (EEG) data.
+Abstract type to represent Electroencephalography (EEG) data.
 
-Other types inherit from this EEG type.
-All EEG types support the following functions:
+The following types inherit from the EEG type and can be used to process your data:
 
-* `samplingrate()`
-* `channelnames()`
-* `remove_channel!()`
-* `keep_channel!()`
-* `trim_channel()`
-* `highpass_filter()`
-* `lowpass_filter()`
-* `rereference()`
+- `GeneralEEG`: Used to store data without assumption of any experimental paradigm.
+- `SSR`: Used to store data acquired with a steady state response experiment paradigm.
 
+# Examples
 ```julia
 data = # load your EEG data using for example read_EEG()
 
 samplingrate(data)  # Returns the sampling rate
 channelnames(data)  # Returns the channel names
 ```
-    
 """
-abstract type EEG end
+abstract type EEG <: NeuroimagingMeasurement end
+
+import Base.show
+function Base.show(io::IO, a::EEG)
+    time_length = round.(size(a.data, 1) / samplingrate(a) / 60)
+    println(
+        io,
+        "EEG measurement of $time_length mins with $(size(a.data,2)) channels sampled at $(a.samplingrate)",
+    )
+end
 
 """
 Type for storing general EEG data without assumption of any experimental paradigm.
 
-#### Example
-
+# Examples
 ```julia
-s = GeneralEEG("filename.bdf")
+s = read_EEG(filename)
 s = rereference(s, "Cz")
 s = remove_channel!(s, "Cz")
 ```
-
 """
 mutable struct GeneralEEG <: EEG
     data::Array
@@ -47,17 +47,16 @@ mutable struct GeneralEEG <: EEG
     processing::Dict
     header::Dict
 end
-
+GeneralEEG(args...; kwargs...) = read_EEG(args...; kwargs...)
 
 """
-Return the sampling rate of an EEG type.
+    samplingrate(t::Type, s::EEG)
+    samplingrate(s::EEG)
 
-If no type is provided, the sampling rate is returned as a floating point.
+Return the sampling rate of an EEG type in Hz as the requested type.
+If no type is provided, the sampling rate is returned as a floating point number.
 
-#### Example
-
-Return the sampling rate of a recording
-
+# Examples
 ```julia
 s = read_EEG(filename)
 samplingrate(s)
@@ -68,10 +67,11 @@ samplingrate(t, s::EEG) = convert(t, s.samplingrate |> u"Hz" |> ustrip)
 
 
 """
+    channelnames(s::EEG)
+
 Return the names of sensors in EEG measurement.
 
-#### Example
-
+# Examples
 ```julia
 s = read_EEG(filename)
 channelnames(s)
@@ -80,10 +80,13 @@ channelnames(s)
 channelnames(s::EEG) = labels(s.sensors)
 
 """
-Change the names of sensors in EEG measurement.
+    channelnames(s::EEG, i::Int, l::AbstractString)
+    channelnames(s::EEG, l::AbstractVector{AbstractString})
 
-#### Example
+Change the names of `i`th sensors in an EEG measurement `s` to `l`.
+Or change the name of all sensors by pass a vector of strings.
 
+# Examples
 ```julia
 s = read_EEG(filename)
 channelnames(s, 1, "Fp1")
@@ -95,6 +98,7 @@ function channelnames(s::EEG, i::Int, l::S) where {S<:AbstractString}
     return s
 end
 function channelnames(s::EEG, l::AbstractVector{S}) where {S<:AbstractString}
+    @assert length(l) == length(channelnames(s))
     for li = 1:length(l)
         s = channelnames(s, li, l[li])
     end
@@ -102,30 +106,19 @@ function channelnames(s::EEG, l::AbstractVector{S}) where {S<:AbstractString}
 end
 
 
-import Base.show
-function Base.show(io::IO, a::EEG)
-    time_length = round.(size(a.data, 1) / samplingrate(a) / 60)
-    println(
-        io,
-        "EEG measurement of $time_length mins with $(size(a.data,2)) channels sampled at $(a.samplingrate)",
-    )
-end
-
-
-
-
 #######################################
 #
-# Operate on type
+# EEG type operations
 #
 #######################################
 
 import Base.hcat
 """
-Append one EEG type to another, simulating a longer recording.
+    hcat(a::EEG, b::EEG)
 
-#### Example
+Concatenate two EEG measurements together, effectively creating a single long measurement.
 
+# Examples
 ```julia
 hcat(a, b)
 ```
@@ -222,16 +215,15 @@ end
 #######################################
 
 """
+    add_channel(a::EEG, data::Vector, chanLabel::AbstractString)
+
 Add a channel to the EEG type with specified channel names.
 
-#### Example
-
-Add a channel called `Merged`
-
+# Examples
 ```julia
 s = read_EEG(filename)
 new_channel = mean(s.data, 2)
-s = add_channel(s, new_channel, "Merged")
+s = add_channel(s, new_channel, "MeanChannelData")
 ```
 """
 function add_channel(a::EEG, data::Vector, chanLabel::AbstractString; kwargs...)
@@ -246,15 +238,17 @@ end
 
 
 """
-Remove specified channels from EEG.
+    remove_channel!(a::EEG, channelname::AbstractString)
+    remove_channel!(a::EEG, channelnames::Array{AbstractString})
+    remove_channel!(a::EEG, channelidx::Int)
+    remove_channel!(a::EEG, channelidxs::Array{Int})
 
-#### Example
+Remove channel(s) from EEG as specifed by `channelname` or `channelidx`.
 
-Remove channel Cz and those in the set called `EEG_Vanvooren_2014_Right`
-
+# Examples
 ```julia
 a = read_EEG(filename)
-remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
+remove_channel!(a, ["TP8", "Cz"])
 ```
 """
 function remove_channel!(a::EEG, channel_name::S; kwargs...) where {S<:AbstractString}
@@ -316,17 +310,22 @@ end
 
 
 """
+    keep_channel!(a::EEG, channelname::AbstractString)
+    keep_channel!(a::EEG, channelnames::Array{AbstractString})
+    keep_channel!(a::EEG, channelidxs::Array{Int})
+
 Remove all channels except those requested from EEG.
 
-#### Example
-
-Remove all channels except Cz and those in the set called `EEG_Vanvooren_2014_Right`
-
+# Examples
 ```julia
 a = read_EEG(filename)
 keep_channel!(a, ["P8", "Cz"])
 ```
 """
+function keep_channel!(a::EEG, channel_name::AbstractString; kwargs...)
+    keep_channel!(a, [channel_name]; kwargs...)
+end
+
 function keep_channel!(a::EEG, channel_names::Array{S}; kwargs...) where {S<:AbstractString}
     @info("Keeping channel(s) $(join(channel_names, " "))")
     keep_channel!(
@@ -341,22 +340,6 @@ function keep_channel!(a::EEG, channel_names::Array{S}; kwargs...) where {S<:Abs
             ),
         ),
     )
-end
-
-"""
-Remove all channels except those requested from EEG.
-
-#### Example
-
-Remove all channels except Cz and those in the set called `EEG_Vanvooren_2014_Right`
-
-```julia
-a = read_EEG(filename)
-keep_channel!(a, ["O2", "Cz"])
-```
-"""
-function keep_channel!(a::EEG, channel_name::AbstractString; kwargs...)
-    keep_channel!(a, [channel_name]; kwargs...)
 end
 
 function keep_channel!(a::EEG, channel_idx::AbstractVector{Int}; kwargs...)
@@ -379,16 +362,12 @@ end
 #######################################
 
 """
-Trim EEG recording by removing data after `stop` specifed samples.
+    trim_channel(a::EEG, stop::Int; start::Int=1)
 
-#### Optional Parameters
+Trim EEG recording by removing data after `stop` specifed samples
+and optionally before `start` samples.
 
-* `start` Remove samples before this value
-
-#### Example
-
-Remove the first 8192 samples and everything after 8192*300 samples
-
+# Examples
 ```julia
 s = trim_channel(s, 8192*300, start=8192)
 ```
@@ -469,28 +448,27 @@ end
 
 
 """
-## Read EEG from file or IO stream
+    read_EEG(fname::AbstractString)
+    read_EEG(args...)
+
 Read a file or IO stream and store the data in an `GeneralEEG` type.
 
-Matching .mat files are read and modulation frequency information extracted.
-Failing that, user passed arguments are used or the modulation frequency is extracted from the file name.
+# Arguments
 
-#### Arguments
+- `fname`: Name of the file to be read
+- `min_epoch_length`: Minimum epoch length in samples. Shorter epochs will be removed (0)
+- `max_epoch_length`: Maximum epoch length in samples. Longer epochs will be removed (0 = all)
+- `valid_triggers`: Triggers that are considered valid, others are removed ([1,2])
+- `stimulation_amplitude`: Amplitude of stimulation (NaN)
+- `remove_first`: Number of epochs to be removed from start of recording (0)
+- `max_epochs`: Maximum number of epochs to retain (0 = all)
 
-* `fname`: Name of the file to be read
-* `min_epoch_length`: Minimum epoch length in samples. Shorter epochs will be removed (0)
-* `max_epoch_length`: Maximum epoch length in samples. Longer epochs will be removed (0 = all)
-* `valid_triggers`: Triggers that are considered valid, others are removed ([1,2])
-* `stimulation_amplitude`: Amplitude of stimulation (NaN)
-* `remove_first`: Number of epochs to be removed from start of recording (0)
-* `max_epochs`: Maximum number of epochs to retain (0 = all)
+# Supported file formats
 
-#### Supported file formats
-
-* BIOSEMI (.bdf)
+- BIOSEMI (.bdf)
 """
 function read_EEG(
-    fname::String;
+    fname::AbstractString;
     valid_triggers::Array{Int} = [1, 2],
     min_epoch_length::Int = 0,
     max_epoch_length::Int = 0,

@@ -1,10 +1,13 @@
 using Neuroimaging, Test, BDF
 
-@testset "Steady State Responses" begin
+@testset "GeneralEEG" begin
 
     fname = joinpath(dirname(@__FILE__), "..", "data", "test_Hz19.5-testing.bdf")
 
     s = read_EEG(fname)
+
+    @test isa(s, NeuroimagingMeasurement)
+    @test isa(s, EEG)
 
     @testset "Show" begin
         show(s)

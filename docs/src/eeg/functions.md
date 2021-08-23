@@ -10,12 +10,18 @@ a number of functions are provided specifically for the processing of SSR data
 read_EEG
 ```
 
-## General
 
+## Querying data
 
 ```@docs
 samplingrate(::EEG)
 channelnames(::EEG)
+```
+
+
+## Manipulating data
+
+```@docs
 hcat(::EEG, ::EEG)
 add_channel(::EEG, ::Vector, ::AbstractString)
 remove_channel!(::EEG, ::AbstractString)
@@ -29,5 +35,3 @@ trim_channel(::EEG, ::Int)
 ```@docs
 plot_timeseries(::EEG)
 ```
-
-

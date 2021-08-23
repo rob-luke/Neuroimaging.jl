@@ -19,6 +19,7 @@ makedocs(
             "Example"=>"assr/examples.md",
             "API"=>"assr/functions.md",
         ],
+        "Input/Output Support" => "IO.md",
         "Low-Level API" => "api.md",
     ],
 )

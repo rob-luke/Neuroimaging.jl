@@ -21,6 +21,7 @@ bdf
 highpass
 rereference
 channelnames
+resampling
 subtype
 APIs
 optodes
