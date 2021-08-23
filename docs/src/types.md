@@ -37,9 +37,14 @@ All of these types inherit from the top level abstract `NeuroimagingMeasurement`
 NeuroimagingMeasurement
 ```
 
-Within the `NeuroimagingMeasurement` type a sub type is provided for each supported imaging modality.
-Within each imaging modality, types are provided to represent the experimental paradigm used to collect the data.
-Additionaly a `General` type is provided for data that is collected using a paradigm not yet supported in _Neuroimaging.jl_.
+Within the `NeuroimagingMeasurement` type a sub type is provided for each supported imaging modality (e.g., `EEG`).
+Within each imaging modality, types are provided to represent the experimental paradigm used to collect the data (e.g., `SSR` or `RestingStateEEG`).
+Additionaly a `General` type is provided for data that is collected using a paradigm not yet supported in _Neuroimaging.jl_ (e.g., `GeneralEEG`).
+This hierarchical structure allows for specific features to be added to  analysis procedures for specific experimental designs,
+while inheriting generic features and function from the parent types.
+For example, see the [Auditory Steady State Response Example](@ref) which uses the `SSR` type which is a sub type of `EEG`.
+In this example, we see that any EEG function to be run on `SSR` data, such as filtering or resampling,
+but also allows for application specific functions such as specific frequency analysis statistical tests.
 
 !!! note "Support for more types is welcomed"
 

@@ -114,10 +114,11 @@ end
 
 import Base.hcat
 """
-Append one EEG type to another, simulating a longer recording.
+    hcat(a::EEG, b::EEG)
 
-#### Example
+Concatenate two EEG measurements together, effectively creating a single long measurement.
 
+# Examples
 ```julia
 hcat(a, b)
 ```
@@ -214,16 +215,15 @@ end
 #######################################
 
 """
+    add_channel(a::EEG, data::Vector, chanLabel::AbstractString)
+
 Add a channel to the EEG type with specified channel names.
 
-#### Example
-
-Add a channel called `Merged`
-
+# Examples
 ```julia
 s = read_EEG(filename)
 new_channel = mean(s.data, 2)
-s = add_channel(s, new_channel, "Merged")
+s = add_channel(s, new_channel, "MeanChannelData")
 ```
 """
 function add_channel(a::EEG, data::Vector, chanLabel::AbstractString; kwargs...)
@@ -238,15 +238,17 @@ end
 
 
 """
-Remove specified channels from EEG.
+    remove_channel!(a::EEG, channelname::AbstractString)
+    remove_channel!(a::EEG, channelnames::Array{AbstractString})
+    remove_channel!(a::EEG, channelidx::Int)
+    remove_channel!(a::EEG, channelidxs::Array{Int})
 
-#### Example
+Remove channel(s) from EEG as specifed by `channelname` or `channelidx`.
 
-Remove channel Cz and those in the set called `EEG_Vanvooren_2014_Right`
-
+# Examples
 ```julia
 a = read_EEG(filename)
-remove_channel!(a, [EEG_Vanvooren_2014_Right, "Cz"])
+remove_channel!(a, ["TP8", "Cz"])
 ```
 """
 function remove_channel!(a::EEG, channel_name::S; kwargs...) where {S<:AbstractString}
@@ -308,12 +310,13 @@ end
 
 
 """
+    keep_channel!(a::EEG, channelname::AbstractString)
+    keep_channel!(a::EEG, channelnames::Array{AbstractString})
+    keep_channel!(a::EEG, channelidxs::Array{Int})
+
 Remove all channels except those requested from EEG.
 
-#### Example
-
-Remove all channels except Cz and those in the set called `EEG_Vanvooren_2014_Right`
-
+# Examples
 ```julia
 a = read_EEG(filename)
 keep_channel!(a, ["P8", "Cz"])
@@ -335,18 +338,6 @@ function keep_channel!(a::EEG, channel_names::Array{S}; kwargs...) where {S<:Abs
     )
 end
 
-"""
-Remove all channels except those requested from EEG.
-
-#### Example
-
-Remove all channels except Cz and those in the set called `EEG_Vanvooren_2014_Right`
-
-```julia
-a = read_EEG(filename)
-keep_channel!(a, ["O2", "Cz"])
-```
-"""
 function keep_channel!(a::EEG, channel_name::AbstractString; kwargs...)
     keep_channel!(a, [channel_name]; kwargs...)
 end
@@ -371,16 +362,12 @@ end
 #######################################
 
 """
-Trim EEG recording by removing data after `stop` specifed samples.
+    trim_channel(a::EEG, stop::Int; start::Int=1)
 
-#### Optional Parameters
+Trim EEG recording by removing data after `stop` specifed samples
+and optionally before `start` samples.
 
-* `start` Remove samples before this value
-
-#### Example
-
-Remove the first 8192 samples and everything after 8192*300 samples
-
+# Examples
 ```julia
 s = trim_channel(s, 8192*300, start=8192)
 ```

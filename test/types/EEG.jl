@@ -8,7 +8,6 @@ using Neuroimaging, Test, BDF
 
     @test isa(s, NeuroimagingMeasurement)
     @test isa(s, EEG)
-    @test isa(s, GeneralEEG)
 
     @testset "Show" begin
         show(s)
