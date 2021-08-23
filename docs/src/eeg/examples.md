@@ -95,7 +95,7 @@ And the resulting data structure will now have less channels as the output descr
 
 ## Visualise continuous EEG data
 
-It is also usefull to visualise the EEG data.
+It is also useful to visualise the EEG data.
 You can view a single channel or subset of channels by passing the string or strings you wish to plot.
 
 ```@example fileread
