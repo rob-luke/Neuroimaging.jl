@@ -1,10 +1,10 @@
 """
-Type for storing steady state response (SSR) data.
+Type for storing data acquired with a steady state response (SSR) experimental paradigm.
 
 In addition to the functions available for all EEG types,
 the SSR type supports:
 
-* `modulationrate()`: the modulation rate of the stimulus
+* `modulationrate()`
 
 The following standard names are used when saving data to the processing dictionary.
 
