@@ -551,7 +551,7 @@ function read_EEG(
 
     return a
 end
-                                                                                    
+
 
 function trigger_channel(a::EEG; kwargs...)
 

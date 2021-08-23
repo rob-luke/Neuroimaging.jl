@@ -6,6 +6,10 @@
     cp(fname, fname2, force = true)  # So doesnt use .mat file
     s = read_SSR(fname)
 
+    @test isa(s, NeuroimagingMeasurement)
+    @test isa(s, EEG)
+    @test isa(s, SSR)
+
     @testset "Show" begin
 
         show(s)
