@@ -5,12 +5,32 @@
 #######################################
 
 """
+    ftest(s::SSR)
+    ftest(s::SSR; kwargs...)
+
 Run f-test statistics on steady state response measurement.
 
-By default saves information to the key `statistics`,
-but this can be modified by the user.
+# Arguments
 
-TODO: Find a good reference.
+* `freq_of_interest`: Frequency to analyse for presence of a response
+* `side_freq`: Adjacent frequencies above and below the frequency of interest used to quantify the noise
+* `ID`: Participant ID for storage in resulting dataframe
+* `spill_bins`: Number of bins each side of the FFT bin of interes to ignore in noise computation
+* `results_key`: Dictionary key name to store results in `s.processing`
+
+
+# Examples
+```julia
+s = read_SSR(fname)
+s.modulationrate = 33.2u"Hz"
+s = ftest(s)
+println(s.processing['statistics'])
+```
+
+# Reference
+Hofmann, M., Wouters, J. Improved Electrically Evoked Auditory Steady-State Response Thresholds in Humans. JARO 13, 573–589 (2012). https://doi.org/10.1007/s10162-012-0321-8
+
+Luke, Robert, and Jan Wouters. "Kalman filter based estimation of auditory steady state response parameters." IEEE Transactions on Neural Systems and Rehabilitation Engineering 25.3 (2016): 196-204.
 """
 function ftest(
     s::SSR;
