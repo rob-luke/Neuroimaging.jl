@@ -402,12 +402,12 @@ end
 #######################################
 
 """
-Merge `EEG` channels listed in `merge_Chans` and label the averaged channel as `new_name`
+    merge_channels(a::EEG, merge_Chans::Array{S}, new_name::S) where {S<:AbstractString}
+    merge_channels(a::EEG, merge_Chans::S, new_name::S) where {S<:AbstractString}
+                                                        
+Average `EEG` channels listed in `merge_Chans` and label the averaged channel as `new_name`.
 
-If multiple channels are listed then the average of those channels will be added.
-
-#### Example
-
+# Examples
 ```julia
 s = merge_channels(s, ["P6", "P8"], "P68")
 ```
