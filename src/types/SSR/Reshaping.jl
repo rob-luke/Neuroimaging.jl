@@ -1,14 +1,15 @@
 """
-## Extract epoch data from SSR
+    function extract_epochs(a::SSR; valid_triggers::Union{AbstractArray,Int} = [1, 2], remove_first::Int = 0, remove_last::Int = 0, kwargs...)
 
-#### Arguments
+Extract epoch data from SSR
+
+# Arguments
 * `a`: A SSR object
 * `valid_triggers`: Trigger numbers that are considered valid ([1,2])
 * `remove_first`: Remove the first n triggers (0)
 * `remove_last`: Remove the last n triggers (0)
 
-#### Example
-
+# Examples
 ```julia
 epochs = extract_epochs(SSR, valid_triggers=[1,2])
 ```
@@ -33,15 +34,6 @@ function extract_epochs(
             ),
         ),
     )
-
-    return a
-end
-
-
-function epoch_rejection(a::SSR; retain_percentage::Number = 0.95, kwargs...)
-
-    a.processing["epochs"] =
-        epoch_rejection(a.processing["epochs"], retain_percentage; kwargs...)
 
     return a
 end
