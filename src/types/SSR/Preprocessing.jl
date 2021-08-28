@@ -13,12 +13,11 @@ A zero phase high pass filter is applied to the data using `filtfilt`.
 A check is performed to ensure the filter does not affect the modulation rate.
 The filter coefficents are stored in the processing field.
 
-#### Example
-
+# Examples
 ```julia
-a = highpass_filter(a)
-# or
-a = highpass_filter(a, cutOff = 1)
+a = read_SSR(fname)
+b = highpass_filter(a)
+c = highpass_filter(a, cutOff = 1)
 ```
 
 """
@@ -39,7 +38,7 @@ function highpass_filter(
 end
 
 """
-lowpass_filter(a::SSR; cutOff::Real=150, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
+    lowpass_filter(a::SSR; cutOff::Real=150, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
 
 Applly a low pass filter.
 
@@ -47,12 +46,11 @@ A zero phase high pass filter is applied to the data using `filtfilt`.
 A check is performed to ensure the filter does not affect the modulation rate.
 The filter coefficents are stored in the processing field.
 
-#### Example
-
+# Examples
 ```julia
-a = lowpass_filter(a)
-# or
-a = lowpass_filter(a, cutOff = 1)
+a = read_SSR(fname)
+b = lowpass_filter(a)
+c = lowpass_filter(a, cutOff = 1)
 ```
 
 """
@@ -76,17 +74,17 @@ end
 
 
 """
-bandpass_filter(a::SSR; lower::Number=modulationrate(a) - 1, upper::Number=modulationrate(a) + 1, fs::Real=samplingrate(a), n::Int=24, rp::Number = 0.0001, tolerance::Real=0.01, kwargs...)
+    bandpass_filter(a::SSR; lower::Number=modulationrate(a) - 1, upper::Number=modulationrate(a) + 1, fs::Real=samplingrate(a), n::Int=24, rp::Number = 0.0001, tolerance::Real=0.01, kwargs...)
 
 Applly a band pass filter.
+A check is performed to ensure the filter does not affect the modulation rate.
+The filter coefficents are stored in the processing field.
 
-
-#### Example
-
+# Examples
 ```julia
+a = read_SSR(fname)
 a = bandpass_filter(a)
 ```
-
 """
 function bandpass_filter(
     a::SSR;
@@ -150,6 +148,12 @@ end
 #
 #######################################
 
+"""
+    downsample(s::SSR, ratio::Rational)
+
+Downsample signal by specified ratio.
+
+"""
 function downsample(s::SSR, ratio::Rational)
 
     @info("Downsampling SSR by ratio $ratio")
