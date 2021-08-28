@@ -7,7 +7,16 @@ using Statistics
 
 
 """
-Validate trigger channel
+    validate_triggers(t::Dict)
+
+Validate trigger channels have required keys and information.
+
+Trigger information is stored in a dictionary
+containing three fields, all referenced in samples:
+
+* `Index`: Start of trigger
+* `Code`: Code of trigger
+* `Duration`: Duration of trigger
 """
 function validate_triggers(t::Dict)
 
@@ -40,7 +49,12 @@ end
 
 
 """
-Clean trigger channel
+    clean_triggers(t::Dict, valid_triggers::Array{Int}, min_epoch_length::Int, max_epoch_length::Int, remove_first::Int, max_epochs::Int)
+                    
+Clean trigger channel information by removing specified epochs
+if they are too long or short. Can also remove the first trigger which
+often represent the start of a condition or measurement.
+Can also be used to limit the number of total epochs.
 """
 function clean_triggers(
     t::Dict,
