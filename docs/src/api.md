@@ -23,12 +23,10 @@ Neuroimaging
 
 ```@docs
 remove_template
-add_channel
 join_triggers
 keep_channel!
 validate_triggers
 clean_triggers
-remove_channel!
 samplingrate
 extract_epochs
 find_dipoles
@@ -40,10 +38,6 @@ find_location
 
 ```@docs
 match_sensors
-trim_channel
-channelnames
-merge_channels
-channel_rejection
 ```
 
 ## Preprocessing
