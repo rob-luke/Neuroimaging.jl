@@ -1,40 +1,19 @@
 """
-Remove a template signal from each column of an array
+    rereference(signals::Array{T,2}, refChan::Union{Int,Array{Int}}) where {T<:AbstractFloat}
+    rereference(signals::Array{T,2}, refChan::Union{S,Array{S}}, chanNames::Vector{S}) where {S<:AbstractString}
 
-#### Arguments
-
-* `signals`: Original signals to be modified  (samples x channels)
-* `template`: Template to remove from each signal
-
-#### Returns
-Signals with template removed
-"""
-function remove_template(
-    signals::Array{T,2},
-    template::AbstractVector{T},
-) where {T<:AbstractFloat}
-
-    @assert size(signals, 1) == size(template, 1)
-
-    for chan = 1:size(signals)[end]
-        signals[:, chan] -= template
-    end
-
-    return signals
-end
-
-
-"""
-Re reference a signals to specific signal channel by index.
+Re reference a signals to specific signal channel by index,
+or by channel name from supplied list.
 
 If multiple channels are specififed, their average is used as the reference.
 
-#### Arguments
+# Arguments
 
 * `signals`: Original signals to be modified
-* `refChan`: Index of channels to be used as reference
+* `refChan`: Index or name of channels to be used as reference.
+* `chanNames`: List of channel names associated with signals array
 
-#### Returns
+# Returns
 
 Rereferenced signals
 """
@@ -57,22 +36,6 @@ function rereference(
 end
 
 
-"""
-Re-reference a signals to specific signal channel by name.
-
-If multiple channels are specififed, their average is used as the reference.
-Or you can specify to use the `average` reference.
-
-#### Arguments
-
-* `signals`: Original signals to be modified
-* `refChan`: List of channels to be used as reference or `average`
-* `chanNames`: List of channel names associated with signals array
-
-#### Returns
-
-Rereferenced signals
-"""
 function rereference(
     signals::Array{T,2},
     refChan::S,
@@ -111,3 +74,32 @@ function rereference(
 
     rereference(signals, refChan_Idx)
 end
+
+    
+"""
+    remove_template(signals::Array{T,2}, template::AbstractVector{T})
+
+Remove a template signal from each column of an array
+
+# Arguments
+
+* `signals`: Original signals to be modified  (samples x channels)
+* `template`: Template to remove from each signal
+
+# Returns
+Signals with template removed
+"""
+function remove_template(
+    signals::Array{T,2},
+    template::AbstractVector{T},
+) where {T<:AbstractFloat}
+
+    @assert size(signals, 1) == size(template, 1)
+
+    for chan = 1:size(signals)[end]
+        signals[:, chan] -= template
+    end
+
+    return signals
+end
+
