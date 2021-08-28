@@ -7,7 +7,7 @@ a number of functions are provided specifically for the processing of SSR data
 ## Import
 
 ```@docs
-read_SSR(::SSR)
+read_SSR
 ```
 
 ### Filtering
