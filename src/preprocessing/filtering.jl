@@ -134,6 +134,8 @@ end
 
 
 """
+    compensate_for_filter(filter::FilterCoefficients, spectrum::AbstractArray, frequencies::AbstractArray, fs::Real)
+
 Recover the spectrum of signal by compensating for filtering done.
 
 # Arguments
