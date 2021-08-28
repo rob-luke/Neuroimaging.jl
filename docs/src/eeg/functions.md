@@ -27,6 +27,8 @@ add_channel(::EEG, ::Vector, ::AbstractString)
 remove_channel!(::EEG, ::AbstractString)
 keep_channel!(::EEG, ::AbstractString)
 trim_channel(::EEG, ::Int)
+merge_channels
+channel_rejection
 ```
 
 
