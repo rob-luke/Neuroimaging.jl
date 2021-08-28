@@ -10,9 +10,6 @@ a number of functions are provided specifically for the processing of SSR data
 read_SSR
 ```
 
-## Preprocessing
-
-
 ### Filtering
 
 ```@docs
@@ -20,6 +17,12 @@ highpass_filter(::SSR)
 lowpass_filter(::SSR)
 bandpass_filter(::SSR)
 downsample(s::SSR, ratio::Rational)
+```
+
+## Preprocessing
+
+```@docs
+extract_epochs
 ```
 
 ## Statistics
