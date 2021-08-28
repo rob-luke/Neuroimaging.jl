@@ -51,6 +51,8 @@ end
 
 
 """
+    channel_rejection(sigs::Array{T}, threshold_abs::Number, threshold_var::Number) where {T<:Number}
+
 Reject channels with too great a variance.
 
 Rejection can be based on a threshold or dynamicly chosen based on the variation of all channels.
