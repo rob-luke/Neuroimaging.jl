@@ -19,7 +19,7 @@ read_SSR
 highpass_filter(::SSR)
 lowpass_filter(::SSR)
 bandpass_filter(::SSR)
-downsample(s::SSR)
+downsample(s::SSR, ratio::Rational)
 ```
 
 ## Statistics
