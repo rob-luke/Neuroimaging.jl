@@ -8,7 +8,7 @@ Match a set of electrodes to those provided
 lf, valid = match_sensors(electrodes, sensor_labels)
 ```
 """
-function match_sensors(sens::Array{S}, lbls::Array{AS}) where {AS<:AbstractString, S<:Sensor}
+function match_sensors(sens::Array{S}, lbls::Array{AS}) where {AS<:AbstractString,S<:Sensor}
 
     valid_idx = Int[]
     for label in lbls

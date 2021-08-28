@@ -551,8 +551,8 @@ function system_code_channel(a::EEG; kwargs...)
     create_channel(a.system_codes, a.data, samplingrate(a))
 end
 
-                                                                                            
-                                                                                            
+
+
 
 """
     epoch_rejection(a::EEG; retain_percentage::Number = 0.95, kwargs...)
