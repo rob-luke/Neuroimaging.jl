@@ -78,7 +78,19 @@ end
 
 
 """
-Band pass filter
+    bandpass_filter(signals::Array, lower::Number, upper::Number, fs::Number, n::Int, rp::Number)
+
+Bandpass filter applied in forward and reverse direction
+
+Simply a wrapper for the DSP.jl functions
+
+# Returns
+
+* filtered signal
+* filter used on signal
+
+# TODO
+Use filtfilt rather than custom implementation.
 """
 function bandpass_filter(
     signals::Array,
