@@ -75,7 +75,7 @@ function rereference(
     rereference(signals, refChan_Idx)
 end
 
-    
+
 """
     remove_template(signals::Array{T,2}, template::AbstractVector{T})
 
