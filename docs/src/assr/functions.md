@@ -19,6 +19,7 @@ read_SSR
 highpass_filter(::SSR)
 lowpass_filter(::SSR)
 bandpass_filter(::SSR)
+downsample(s::SSR)
 ```
 
 ## Statistics
@@ -29,8 +30,4 @@ ftest(::SSR)
 
 ## Plotting
 
-```@docs
-plot_timeseries(::SSR)
-```
-
-
+TODO: Add a summary figure as in example
