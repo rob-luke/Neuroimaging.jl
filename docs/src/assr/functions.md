@@ -22,7 +22,7 @@ downsample(s::SSR, ratio::Rational)
 ## Preprocessing
 
 ```@docs
-extract_epochs
+extract_epochs(::SSR)
 ```
 
 ## Statistics
