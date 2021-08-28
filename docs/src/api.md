@@ -24,6 +24,7 @@ Neuroimaging
 
 ```@docs
 match_sensors
+channel_rejection
 ```
 
 
