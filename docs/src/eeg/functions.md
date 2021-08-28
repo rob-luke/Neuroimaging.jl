@@ -31,6 +31,13 @@ merge_channels
 ```
 
 
+## Epoching
+
+```@docs
+epoch_rejection(a::EEG)
+```
+
+
 ## Plotting
 
 ```@docs
