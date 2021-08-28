@@ -23,6 +23,7 @@ rereference
 channelnames
 resampling
 subtype
+Epoching
 APIs
 optodes
 neuroimaging
