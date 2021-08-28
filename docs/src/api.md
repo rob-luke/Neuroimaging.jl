@@ -14,25 +14,31 @@ Is there an automated way to list all functions using documenter?
 CurrentModule = Neuroimaging
 ```
 
-## Module
+## Preprocessing
+
+### Filtering
+
 ```@docs
-Neuroimaging
+highpass_filter
+lowpass_filter
+bandpass_filter
+compensate_for_filter
 ```
 
-## To be sorted
+### Referencing
 
 ```@docs
+rereference
 remove_template
-add_channel
-join_triggers
-keep_channel!
-validate_triggers
-clean_triggers
-remove_channel!
-samplingrate
+```
+
+### Epoching
+
+
+```@docs
+epoch_rejection
+peak2peak
 extract_epochs
-find_dipoles
-find_location
 ```
 
 
@@ -40,22 +46,27 @@ find_location
 
 ```@docs
 match_sensors
-trim_channel
-channelnames
-merge_channels
 channel_rejection
 ```
 
-## Preprocessing
+## Triggers
+
+TODO: Make a type subsection similar to EEG and ASSR.
 
 ```@docs
-rereference
-highpass_filter
-lowpass_filter
-bandpass_filter
-compensate_for_filter
-epoch_rejection
-peak2peak
+join_triggers
+validate_triggers
+clean_triggers
+```
+
+
+## Dipoles
+
+TODO: Make a type subsection similar to EEG and ASSR.
+
+```@docs
+find_dipoles
+find_location
 ```
 
 

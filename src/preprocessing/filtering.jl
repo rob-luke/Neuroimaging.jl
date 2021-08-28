@@ -1,16 +1,18 @@
 """
+    highpass_filter(signals::Array{T}, cutOff::Number, fs::Number, order::Int) where {T<:AbstractFloat}
+
 High pass filter applied in forward and reverse direction
 
 Simply a wrapper for the DSP.jl functions
 
-#### Arguments
+# Arguments
 
 * `signals`: Signal data in the format samples x channels
 * `cutOff`: Cut off frequency in Hz
 * `fs`: Sampling rate
 * `order`: Filter orde
 
-#### Returns
+# Returns
 
 * filtered signal
 * filter used on signal
@@ -37,18 +39,20 @@ end
 
 
 """
+    lowpass_filter(signals::Array{T}, cutOff::Number, fs::Number, order::Int) where {T<:AbstractFloat}
+
 Low pass filter applied in forward and reverse direction
 
 Simply a wrapper for the DSP.jl functions
 
-#### Input
+# Arguments
 
 * `signals`: Signal data in the format samples x channels
 * `cutOff`: Cut off frequency in Hz
 * `fs`: Sampling rate
 * `order`: Filter orde
 
-#### Output
+# Returns
 
 * filtered signal
 * filter used on signal
@@ -74,7 +78,19 @@ end
 
 
 """
-Band pass filter
+    bandpass_filter(signals::Array, lower::Number, upper::Number, fs::Number, n::Int, rp::Number)
+
+Bandpass filter applied in forward and reverse direction
+
+Simply a wrapper for the DSP.jl functions
+
+# Returns
+
+* filtered signal
+* filter used on signal
+
+# TODO
+Use filtfilt rather than custom implementation.
 """
 function bandpass_filter(
     signals::Array,
@@ -130,22 +146,20 @@ end
 
 
 """
+    compensate_for_filter(filter::FilterCoefficients, spectrum::AbstractArray, frequencies::AbstractArray, fs::Real)
+
 Recover the spectrum of signal by compensating for filtering done.
 
-#### Arguments
+# Arguments
 
 * `filter`: The filter used on the spectrum
 * `spectrum`: Spectrum of signal
 * `frequencies`: Array of frequencies you want to apply the compensation to
 * `fs`: Sampling rate
 
-#### Returns
+# Returns
 
 Spectrum of the signal after comensating for the filter
-
-#### TODO
-
-Extend this to arbitrary number of dimensions rather than the hard coded 3
 """
 function compensate_for_filter(
     filter::FilterCoefficients,

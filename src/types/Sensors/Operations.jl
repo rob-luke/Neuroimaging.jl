@@ -1,7 +1,12 @@
-@doc """
+"""
+    match_sensors(sens::Array{S}, lbls::Array{AS}) where {AS<:AbstractString, S<:Sensor}
+
 Match a set of electrodes to those provided
 
-usage: lf, valid = match_sensors(electrodes, sensor_labels)
+# Examples
+```julia
+lf, valid = match_sensors(electrodes, sensor_labels)
+```
 """
 function match_sensors(sens::Array{S}, lbls::Array{AS}) where {AS<:AbstractString,S<:Sensor}
 
