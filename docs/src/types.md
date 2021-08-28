@@ -12,10 +12,16 @@ Users should interact with types using function, and not address the underlying
 fields directly. This allows the underlying data type to be improved without breaking
 existing code. For example, do not address `sensor.label`, you should use `label(sensor)`.
 
-Types also exist for storing metadata. For example, electrodes
+Types also exist for storing metadata. For example, `electrodes`
 are a sub type of the `Sensor` type. And the position
 of the sensors may be in the `Talairach` space, which is a subtype of
 the `Coordinate` type.
+This type hierarchy may be more than two levels deep. For example,
+the `source` type inherits from the `optode` type which inherits from the `sensor` type.
+All functions that operate on the top level type will also operate on lower level types,
+but not all functions that operate on low level types would operate on the top level.
+For example, the `SSR` type supports the function `modulationrate()` but the `EEG` type does not,
+as not all EEG measurements were obtained with a modulated stimulus.
 
 A brief description of each type is provided below.
 See the following documentation sections for more details of each type,
