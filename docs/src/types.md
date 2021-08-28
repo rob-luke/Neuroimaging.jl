@@ -1,4 +1,4 @@
-# Types
+# Data Types
 
 A feature of the Julia programming language is the strong type system.
 This package exploits that strength and defines various types for storing
@@ -22,11 +22,16 @@ See the following documentation sections for more details of each type,
 including examples and function APIs.
 
 
-## Available types
+## Supported Data Types
 
 ```@meta
 CurrentModule = Neuroimaging
 ```
+
+```@docs
+Neuroimaging
+```
+
 
 ### Measurement
 
