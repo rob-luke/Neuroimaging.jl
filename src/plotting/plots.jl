@@ -214,13 +214,8 @@ function plot_filter_response(
     sample_points::Int = 1024,
 )
 
-<<<<<<< HEAD
-    frequencies = range(lower, stop = upper, length = sample_points)
-    h = freqz(zpk_filter, frequencies, fs)
-=======
     frequencies = range(lower, stop = upper, length = 1024)
-    h = [freqresp(filter, f * ((2pi) / fs)) for f in frequencies]
->>>>>>> fb3b3b3... DSP
+    h = freqresp(zpk_filter, frequencies * ((2pi) / fs))
     magnitude_dB = 20 * log10.(convert(Array{Float64}, abs.(h)))
     phase_response = (360 / (2 * pi)) * unwrap(convert(Array{Float64}, angle.(h)))
 
