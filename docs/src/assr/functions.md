@@ -33,4 +33,6 @@ ftest(::SSR)
 
 ## Plotting
 
-TODO: Add a summary figure as in example
+```@docs
+plot_spectrum(::SSR, ::Int)
+```

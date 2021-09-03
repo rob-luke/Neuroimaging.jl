@@ -104,6 +104,18 @@ s = ftest(s)
 s.processing["statistics"]
 ```
 
+
+## Visualise spectrum
+
+Next we can visualise the spectral content of the signal.
+As the response statistics have already been computed,
+this will be overlaid on the plot.
+
+```@example fileread
+plot_spectrum(s, 3)
+current() |> DisplayAs.PNG # hide
+```
+
 ## Quantify the false positive rate of statistical analysis
 
 While its interesting to observe a significant response at the modulation rate as expected,
@@ -127,9 +139,14 @@ s.processing["statistics"] |>
     DataFrame
 ```
 
+
 ## Visualise response amplitude
 
 Finally we can plot the ASSR spectrum.
+You can use the same convenient function as above, but here we will demonstrate
+how to do this using the `StatsPlot` library.
+This is possible because the results are stored in the format of a data frame.
+
 We will also mark with red dots the frequency components which
 contained a significant stimulus locked response according to the f-test.
 And we add a vertical line at the modulation rate.
