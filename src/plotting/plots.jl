@@ -1,10 +1,13 @@
-
 #######################################
 #
 # Plot spectrum of signal
 #
 #######################################
+"""
+    plot_spectrum(signal::Vector, fs::Real; kwargs...)
 
+Plot the spectrum of a signal.
+"""
 function plot_spectrum(
     signal::Vector,
     fs::Real;

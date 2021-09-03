@@ -132,6 +132,7 @@ s.processing["statistics"] |>
 
 ```@example fileread
 plot_spectrum(s, 3)
+current() |> DisplayAs.PNG # hide
 ```
 
 
