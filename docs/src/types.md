@@ -1,6 +1,8 @@
 # Data Types
 
 ```@contents
+Pages = ["types.md"]
+Depth = 3
 ```
 
 ## Overview
