@@ -1,9 +1,5 @@
 # Data Types
 
-```@contents
-Pages = ["types.md"]
-Depth = 3
-```
 
 ## Overview
 
@@ -122,4 +118,9 @@ These types need to be better documented.
 ```@docs
 VolumeImage
 Dipole
+```
+
+
+```@autodocs
+Order = [:type]
 ```
