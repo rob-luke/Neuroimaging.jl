@@ -102,11 +102,11 @@ function plot_spectrum(eeg::SSR, chan::Int; targetFreq::Number = 0)
 
     for r = 1:length(result_idx)
         result = get(eeg.processing, collect(keys(eeg.processing))[result_idx[r]], 0)
-        if result[:AnalysisFrequency][1] == targetFreq
+        if result[!, :AnalysisFrequency][1] == targetFreq
 
-            result_snr = result[:SNRdB][chan]
-            signal = result[:SignalAmplitude][chan]^2
-            noise = result[:NoiseAmplitude][chan]^2
+            result_snr = result[!, :SNRdB][chan]
+            signal = result[!, :SignalAmplitude][chan]^2
+            noise = result[!, :NoiseAmplitude][chan]^2
             title = "Channel $(channel_name). SNR = $(round(result_snr, sigdigits=4)) dB"
         end
     end

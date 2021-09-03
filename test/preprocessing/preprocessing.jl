@@ -23,7 +23,7 @@
 
             s1 = deepcopy(s)
             s1.triggers["test"] = [1]
-            validate_triggers(s1.triggers)
+            @test_throws KeyError validate_triggers(s1.triggers)
 
             s1 = deepcopy(s)
             s1.triggers["Duration"] = s1.triggers["Duration"][1:4]
