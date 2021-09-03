@@ -1,5 +1,10 @@
+"""
+    plot_spectrum(eeg::SSR, chan::Int; kwargs...)
+    plot_spectrum(eeg::SSR, chan::AbstractString; kwargs...)
 
-function plot_spectrum(eeg::SSR, chan::Int; targetFreq::Number = 0)
+Plot the spectrum of a steady state response measurement.
+"""
+function plot_spectrum(eeg::SSR, chan::Int; targetFreq::Number = modulationrate(eeg))
 
     channel_name = channelnames(eeg)[1]
 
