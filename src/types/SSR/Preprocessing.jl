@@ -119,7 +119,10 @@ function _filter_check(
     # Ensure that the filter does not alter the modulation frequency greater than a set tolerance
     #
 
-    mod_change = abs.(freqz(f, mod_freq, fs))
+    mod_change = abs.(freqresp(f, mod_freq * ((2pi) / fs)))
+
+    
+
     if mod_change > 1 + tolerance || mod_change < 1 - tolerance
         @warn(
             "Filtering has modified modulation frequency greater than set tolerance: $mod_change"

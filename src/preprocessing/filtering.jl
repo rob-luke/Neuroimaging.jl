@@ -167,7 +167,7 @@ function compensate_for_filter(
     frequencies::AbstractArray,
     fs::Real,
 )
-    filter_response = freqz(filter, frequencies, fs)
+    filter_response = [freqresp(filter, f * ((2pi) / fs)) for f in frequencies]
 
     for f = 1:length(filter_response)
         spectrum[f, :, :] = spectrum[f, :, :] ./ abs.(filter_response[f])^2
