@@ -23,7 +23,7 @@ function validate_triggers(t::Dict)
     @debug("Validating trigger information")
 
     if t.count > 3
-        @error("Trigger channel has extra columns")
+        throw(KeyError("Trigger channel has extra columns"))
     end
 
     if !haskey(t, "Index")
@@ -79,18 +79,17 @@ function clean_triggers(
     @debug("Originally $(length(epochIndex[:Code])) triggers")
 
     # Check for not valid indices and throw a warning
-    if sum([in(i, [0; valid_triggers]) for i in epochIndex[:Code]]) != length(epochIndex[:Code])
-        @warn("Non valid triggers found")
+    if sum([in(i, [0; valid_triggers]) for i in epochIndex[!, :Code]]) != length(epochIndex[!, :Code])
         validity = Bool[]
-        for ep in epochIndex[:Code]
+        for ep in epochIndex[!, :Code]
             push!(validity, in(ep, valid_triggers))
         end
-        non_valid = sort(unique(epochIndex[:Code][.!validity]))
-        @warn("Non valid triggers: $non_valid")
+        non_valid = sort(unique(epochIndex[!, :Code][.!validity]))
+        @info("Non valid triggers found: $non_valid")
     end
 
     # Just take valid indices
-    valid = convert(Array{Bool}, vec([in(i, valid_triggers) for i in epochIndex[:Code]]))
+    valid = convert(Array{Bool}, vec([in(i, valid_triggers) for i in epochIndex[!, :Code]]))
     epochIndex = epochIndex[valid, :]
 
     # Trim values if requested
@@ -99,38 +98,44 @@ function clean_triggers(
         @debug("Trimming first $remove_first triggers")
     end
     if max_epochs != 0
-        epochIndex = epochIndex[1:minimum([max_epochs, length(epochIndex[:Index])]), :]
+        epochIndex = epochIndex[1:minimum([max_epochs, length(epochIndex[!, :Index])]), :]
         @debug("Trimming to $max_epochs triggers")
     end
 
     # Throw out epochs that are the wrong length
-    if length(epochIndex[:Index]) > 2
-        epochIndex[:Length] = [0; diff(epochIndex[:Index])]
+    if length(epochIndex[!, :Index]) > 2
+        epochIndex[!, :Length] = [0; diff(epochIndex[!, :Index])]
         if min_epoch_length > 0
-            epochIndex[:valid_length] = epochIndex[:Length] .> min_epoch_length
-            num_non_valid = sum(.!epochIndex[:valid_length])
+            begin
+                epochIndex[!, :valid_length] = epochIndex[!, :Length] .> min_epoch_length
+                epochIndex
+            end
+            num_non_valid = sum(.!epochIndex[!, :valid_length])
             if num_non_valid > 1    # Don't count the first trigger
                 @debug("Removed $num_non_valid triggers < length $min_epoch_length")
-                epochIndex = epochIndex[epochIndex[:valid_length], :]
+                epochIndex = epochIndex[epochIndex[!, :valid_length], :]
             end
         end
-        epochIndex[:Length] = [0; diff(epochIndex[:Index])]
+        begin
+            epochIndex[!, :Length] = [0; diff(epochIndex[!, :Index])]
+            epochIndex
+        end
         if max_epoch_length != 0
-            epochIndex[:valid_length] = epochIndex[:Length] .< max_epoch_length
-            num_non_valid = sum(.!epochIndex[:valid_length])
+            epochIndex[!, :valid_length] = epochIndex[!, :Length] .< max_epoch_length
+            num_non_valid = sum(.!epochIndex[!, :valid_length])
             if num_non_valid > 0
                 @debug("Removed $num_non_valid triggers > length $max_epoch_length")
-                epochIndex = epochIndex[epochIndex[:valid_length], :]
+                epochIndex = epochIndex[epochIndex[!, :valid_length], :]
             end
         end
 
         # Sanity check
-        if Statistics.std(epochIndex[:Length][2:end]) > 1
-            @warn("Your epoch lengths vary too much")
-            @warn(
+        if Statistics.std(epochIndex[!, :Length][2:end]) > 1
+            @info("Your epoch lengths vary too much")
+            @info(
                 string(
-                    "Length: median=$(median(epochIndex[:Length][2:end])) sd=$(Statistics.std(epochIndex[:Length][2:end])) ",
-                    "min=$(minimum(epochIndex[:Length][2:end]))",
+                    "Length: median=$(median(epochIndex[!, :Length][2:end])) sd=$(Statistics.std(epochIndex[!, :Length][2:end])) ",
+                    "min=$(minimum(epochIndex[!, :Length][2:end]))",
                 )
             )
             @debug(epochIndex)
@@ -140,15 +145,15 @@ function clean_triggers(
 
     # If the trigger has been signalled by 0 status then offset this
     # Otherwise when saving and reading again, nothing will be detected
-    if sum(epochIndex[:Code]) == 0
-        @warn("Trigger status indicated by 0, shifting to 1 for further processing")
-        epochIndex[:Code] = epochIndex[:Code] .+ 1
+    if sum(epochIndex[!, :Code]) == 0
+        @info("Trigger status indicated by 0, shifting to 1 for further processing")
+        epochIndex[!, :Code] = epochIndex[!, :Code] .+ 1
     end
 
     triggers = Dict(
-        "Index" => vec((epochIndex[:Index])'),
-        "Code" => vec(epochIndex[:Code] .+ 252),
-        "Duration" => vec(epochIndex[:Duration])',
+        "Index" => vec((epochIndex[!, :Index])'),
+        "Code" => vec(epochIndex[!, :Code] .+ 252),
+        "Duration" => vec(epochIndex[!, :Duration])',
     )
 
     validate_triggers(triggers)

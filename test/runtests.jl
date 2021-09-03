@@ -7,17 +7,17 @@ using Glob
 using DataDeps
 
 unicodeplots()
-
+logger = SimpleLogger(stdout, Logging.Warn)
 
 #
 # Run all tests
 #
 
-println(pwd())
 tests = glob("**/*.jl")
 tests = tests[.~(tests .== "runtests.jl")]
 
-@info tests
-for t in tests
-    include(t)
+with_logger(logger) do
+    for t in tests
+        include(t)
+    end
 end

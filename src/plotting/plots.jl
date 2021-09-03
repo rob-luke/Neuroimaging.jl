@@ -95,9 +95,6 @@ function plot_spectrum(
 end
 
 
-
-
-
 #######################################
 #
 # Plot time series
