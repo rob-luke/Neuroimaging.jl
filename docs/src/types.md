@@ -1,5 +1,10 @@
 # Data Types
 
+```@contents
+```
+
+## Overview
+
 A feature of the Julia programming language is the strong type system.
 This package exploits that strength and defines various types for storing
 information about your neuroimaging data. A general hierarchy of neuroimaging types is provided.
