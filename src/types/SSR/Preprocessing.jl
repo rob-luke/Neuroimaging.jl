@@ -121,7 +121,7 @@ function _filter_check(
 
     mod_change = abs.(freqresp(f, mod_freq * ((2pi) / fs)))
 
-    
+
 
     if mod_change > 1 + tolerance || mod_change < 1 - tolerance
         @warn(
