@@ -109,7 +109,7 @@ s.processing["statistics"]
 
 Next we can visualise the spectral content of the signal.
 As the response statistics have already been computed,
-this will be overlayed on the plot.
+this will be overlaid on the plot.
 
 ```@example fileread
 plot_spectrum(s, 3)
