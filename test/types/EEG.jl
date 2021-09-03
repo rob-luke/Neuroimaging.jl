@@ -1,4 +1,4 @@
-using Neuroimaging, Test, BDF
+using Neuroimaging, Test
 
 @testset "GeneralEEG" begin
 
