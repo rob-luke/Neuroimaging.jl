@@ -1,10 +1,13 @@
 using Neuroimaging
 using Test
 using Logging
-using MAT, BDF
+using MAT
 using Plots
 using Glob
 using DataDeps
+
+include("../src/external/BDF.jl")
+using .BDF
 
 unicodeplots()
 logger = SimpleLogger(stdout, Logging.Warn)

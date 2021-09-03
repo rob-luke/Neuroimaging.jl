@@ -3,19 +3,17 @@ A Julia package for process neuroimaing data.
 """
 module Neuroimaging
 
-using Logging,  # For user feedback
+using Logging,
     Unitful,
     DataFrames,
     Distances,
     ProgressMeter,
-    BDF,
     CSV,
     DelimitedFiles,
     DSP,
     Distributions,
     Plots,
     Images,
-    BDF,
     MAT,
     Printf,
     Statistics,
@@ -139,6 +137,10 @@ export new_processing_key,
     Detector,
     Optode
 
+
+# External modules included until upstream fixes
+include("external/BDF.jl")
+using .BDF
 
 # Helper functions
 include("miscellaneous/helper.jl")
