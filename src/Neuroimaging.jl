@@ -174,6 +174,7 @@ include("types/SSR/Preprocessing.jl")
 include("types/SSR/ReadWrite.jl")
 include("types/SSR/Reshaping.jl")
 include("types/SSR/Statistics.jl")
+include("types/SSR/Plotting.jl")
 
 # Type - Dipole
 include("types/Dipole/Dipole.jl")

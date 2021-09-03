@@ -127,6 +127,14 @@ s.processing["statistics"] |>
     DataFrame
 ```
 
+
+## Visualise spectrum
+
+```@example fileread
+plot_spectrum(s, 3)
+```
+
+
 ## Visualise response amplitude
 
 Finally we can plot the ASSR spectrum.
