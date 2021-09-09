@@ -10,7 +10,7 @@ For a general overview of coordinate systems in neuroimaging see:
 * https://www.fieldtriptoolbox.org/faq/coordsys/
 
 This package currently supports `SPM`, `BrainVision`, and `Talairach`
-coordinates and conversion. Additionaly, an `Unknown` coordinate system
+coordinates and conversion. Additionally, an `Unknown` coordinate system
 can be used if you don't know how your locations are mapped.
 
 !!! note "Refactoring in progress"
@@ -45,7 +45,7 @@ To convert between different coordinate systems simply call the ``convert`` func
 with the first arguments as the desired coordinate system.
 
 ```@example fileread
-convert(location_1, location_1)
+convert(Talairach, location_1)
 ```
 
 And we can see that the resulting value is similar to what is provided in the Lancaster 2007 article.
