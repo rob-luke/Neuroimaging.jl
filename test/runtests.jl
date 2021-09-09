@@ -17,6 +17,8 @@ logger = SimpleLogger(stdout, Logging.Warn)
 #
 
 tests = glob("**/*.jl")
+append!(tests, glob("**/**/*.jl"))
+append!(tests, glob("**/**/**/*.jl"))
 tests = tests[.~(tests .== "runtests.jl")]
 
 with_logger(logger) do
