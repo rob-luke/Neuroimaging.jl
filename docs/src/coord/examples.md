@@ -1,7 +1,7 @@
 # Coordinate Systems
 
 There are a wide variety of coordinate systems used in Neuroimaging.
-``Neuroimaging.jl`` provides a coordinate data type, and several
+`Neuroimaging.jl` provides a coordinate data type, and several
 subtypes associated with specific systems. Conversion between coordinate
 systems is available.
 For a general overview of coordinate systems in neuroimaging see:
@@ -9,8 +9,9 @@ For a general overview of coordinate systems in neuroimaging see:
 * https://mne.tools/dev/auto_tutorials/forward/20_source_alignment.html
 * https://www.fieldtriptoolbox.org/faq/coordsys/
 
-This package currently supports ``SPM``, ``BrainVision``, and ``Talairach``
-coordinates and conversion.
+This package currently supports `SPM`, `BrainVision`, and `Talairach`
+coordinates and conversion. Additionaly, an `Unknown` coordinate system
+can be used if you don't know how your locations are mapped.
 
 !!! note "Refactoring in progress"
 
@@ -33,12 +34,6 @@ using Neuroimaging
 location_1 = SPM(73.7, -26.0, 7.0)
 ```
 
-To view a summary of the returned data simply call the returned variable.
-
-```@example fileread
-location_1
-```
-
 Note that this position is taken from table IV from:
 
 * Lancaster, Jack L., et al. "Bias between MNI and Talairach coordinates analyzed using the ICBM‐152 brain template." Human brain mapping 28.11 (2007): 1194-1205.
@@ -50,7 +45,7 @@ To convert between different coordinate systems simply call the ``convert`` func
 with the first arguments as the desired coordinate system.
 
 ```@example fileread
-convert(location_1, mni)
+convert(location_1, location_1)
 ```
 
 And we can see that the resulting value is similar to what is provided in the Lancaster 2007 article.
