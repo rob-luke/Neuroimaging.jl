@@ -10,7 +10,6 @@ using LinearAlgebra
 include("../src/external/BDF.jl")
 using .BDF
 
-unicodeplots()
 logger = SimpleLogger(stdout, Logging.Warn)
 
 #
