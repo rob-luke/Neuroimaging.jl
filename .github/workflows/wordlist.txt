@@ -94,3 +94,14 @@ Samuele
 carcagno
 gmail
 sam
+subtypes
+dev
+html
+mne
+coordsys
+faq
+fieldtriptoolbox
+www
+SPM
+MNI
+Talairach
