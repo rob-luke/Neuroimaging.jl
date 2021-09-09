@@ -397,7 +397,7 @@
         @testset "Save results" begin
 
             save_results(s)
-            file_name = string(s.file_name, name_extension, ".csv")
+            file_name = string(s.file_name, name_extension, ".c2sv")
             @test isfile(filename)
         end
     end
