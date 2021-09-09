@@ -30,7 +30,7 @@ UnicodePlots = "b8865327-cd53-5732-bb35-84acbb429228"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 
 [compat]
-CSV = "0.8"
+CSV = "0.8, 0.9"
 DSP = "0.7"
 DataDeps = "0.7"
 DataFrames = "1.2"
