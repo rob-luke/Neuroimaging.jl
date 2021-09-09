@@ -5,6 +5,7 @@ using MAT
 using Plots
 using Glob
 using DataDeps
+using LinearAlgebra
 
 include("../src/external/BDF.jl")
 using .BDF

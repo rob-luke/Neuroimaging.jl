@@ -18,7 +18,8 @@ using Logging,
     Printf,
     Statistics,
     FFTW,
-    DataDeps
+    DataDeps,
+    LinearAlgebra
 
 
 export new_processing_key,

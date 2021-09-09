@@ -385,9 +385,9 @@
         )
 
         s = ftest(s, side_freq = 2.5, Note = "Original channels", Additional_columns = 22)
-        @test isnan(s.processing["statistics"][:SNRdB][1]) == true
+        @test isnan(s.processing["statistics"][!, :SNRdB][1]) == true
         @test isapprox(
-            s.processing["statistics"][:SNRdB][2:end],
+            s.processing["statistics"][!, :SNRdB][2:end],
             [-1.2386, 0.5514, -1.5537, -2.7541, -6.7079];
             atol = 0.001,
         )
@@ -397,8 +397,8 @@
         @testset "Save results" begin
 
             save_results(s)
-            file_name = string(s.file_name, name_extension, ".c2sv")
-            @test isfile(filename)
+            file_name = string(s.file_name, ".csv")
+            @test isfile(file_name)
         end
     end
 

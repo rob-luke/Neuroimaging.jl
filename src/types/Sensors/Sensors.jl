@@ -56,6 +56,7 @@ Detector optode sensor type used in fNIRS measurements.
 mutable struct Detector <: Optode
     label::AbstractString
     coordinate::Coordinate
+    info::Dict
 end
 
 
