@@ -130,7 +130,7 @@ using DataFrames, Query, Statistics
 
 s = ftest(s, freq_of_interest=[10:38; 42:400])
 
-s.processing["statistics"]["Significant"] = Int.(s.processing["statistics"]["Statistic"] .< 0.05)
+s.processing["statistics"][!, "Significant"] = Int.(s.processing["statistics"][!, "Statistic"] .< 0.05)
 
 s.processing["statistics"] |> 
     @groupby(_.AnalysisType) |> 
