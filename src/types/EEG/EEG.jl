@@ -434,7 +434,12 @@ function merge_channels(
     @info("Merging channels $(join(vec(channelnames(a)[keep_idxs,:]), " "))")
     @debug("Merging channels $keep_idxs")
 
-    a = add_channel(a, vec(Statistics.mean(a.data[:, keep_idxs], dims = 2)), new_name; kwargs...)
+    a = add_channel(
+        a,
+        vec(Statistics.mean(a.data[:, keep_idxs], dims = 2)),
+        new_name;
+        kwargs...,
+    )
 end
 
 function merge_channels(
