@@ -19,6 +19,9 @@ makedocs(
             "Example"=>"assr/examples.md",
             "API"=>"assr/functions.md",
         ],
+        "Coordinate Systems" => Any[
+            "Example"=>"coord/examples.md",
+        ],
         "Input/Output Support" => "IO.md",
         "Low-Level API" => "api.md",
     ],
