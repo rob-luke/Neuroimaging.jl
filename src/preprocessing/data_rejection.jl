@@ -90,7 +90,7 @@ function channel_rejection(
 
     # Reject channels outside median + n * std
     variances_median = median(variances[valid_nonzero])    # Use the median as usually not normal
-    variances_std = std(variances[valid_nonzero])       # And ignore the reference channel
+    variances_std = Statistics.std(variances[valid_nonzero])       # And ignore the reference channel
     valid_threshold_var = variances .< (variances_median + threshold_var * variances_std)
     @debug(
         "Dynamic rejection threshold: $(variances_median + threshold_var * variances_std)"

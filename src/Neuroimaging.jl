@@ -7,18 +7,17 @@ using Logging,
     Unitful,
     DataFrames,
     Distances,
-    ProgressMeter,
     CSV,
     DelimitedFiles,
     DSP,
     Distributions,
     Plots,
-    Images,
     MAT,
     Printf,
     Statistics,
     FFTW,
-    DataDeps
+    DataDeps,
+    LinearAlgebra
 
 
 export new_processing_key,

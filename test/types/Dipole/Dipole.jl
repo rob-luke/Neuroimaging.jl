@@ -1,4 +1,4 @@
-using Unitful
+using Unitful, Statistics
 
 @testset "Dipoles" begin
 
@@ -24,7 +24,7 @@ using Unitful
 
     @testset "Mean" begin
 
-        b = mean(dips)
+        b = Neuroimaging.mean(dips)
         @test b.x == 1.0u"m"
         @test b.y == 2.0u"m"
         @test b.z == 2.0u"m"
@@ -32,9 +32,9 @@ using Unitful
 
     @testset "Std" begin
 
-        b = std(dips)
+        b = Neuroimaging.std(dips)
         @test b.x == 0.0u"m"
         @test b.y == 0.0u"m"
-        @test b.z == std([1, 3])u"m"
+        @test b.z == Statistics.std([1, 3])u"m"
     end
 end

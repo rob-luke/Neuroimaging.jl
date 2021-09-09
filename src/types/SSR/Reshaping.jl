@@ -75,7 +75,7 @@ function add_triggers(a::SSR, mod_freq::Number; kwargs...)
 
     epochIndex =
         DataFrame(Code = a.triggers["Code"], Index = [Int(i) for i in a.triggers["Index"]])
-    epochIndex[:Code] = epochIndex[:Code] .- 252
+    epochIndex[!, :Code] = epochIndex[!, :Code] .- 252
 
     add_triggers(a, mod_freq, epochIndex; kwargs...)
 end
@@ -94,7 +94,7 @@ function add_triggers(
     )
 
     # Existing epochs
-    existing_epoch_length = median(diff(epochIndex[:Index]))     # samples
+    existing_epoch_length = median(diff(epochIndex[!, :Index]))     # samples
     existing_epoch_length_s = existing_epoch_length / samplingrate(a)
     @debug("Existing epoch length: $(existing_epoch_length_s)s")
 
@@ -107,8 +107,8 @@ function add_triggers(
     @debug("New # epochs     = $new_epochs_num")
 
     # Place new epoch indices
-    @debug("Was $(length(epochIndex[:Index])) indices")
-    new_indx = epochIndex[:Index][1:end-1] .+ new_epoch_indx'
+    @debug("Was $(length(epochIndex[!, :Index])) indices")
+    new_indx = epochIndex[!, :Index][1:end-1] .+ new_epoch_indx'
     new_indx = reshape(new_indx', length(new_indx), 1)[1:end-1]
     @debug("Now $(length(new_indx)) indices")
 

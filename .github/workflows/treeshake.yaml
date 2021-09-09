@@ -1,0 +1,21 @@
+name: Check for unused dependencies
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  treeshake:
+    runs-on: ubuntu-latest
+    env:
+      DATADEPS_ALWAYS_ACCEPT: true
+    steps:
+      - uses: actions/checkout@v2
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: 1
+      - uses: julia-actions/julia-buildpkg@v1
+      - uses: julia-actions/julia-treeshake@main
