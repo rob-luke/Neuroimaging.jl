@@ -1,98 +1,98 @@
-# @testset "Volume Image" begin
-#     fname = joinpath(dirname(@__FILE__), "../../data", "test-3d.dat")
-#     t = read_VolumeImage(fname)
-#     t2 = read_VolumeImage(fname)
+@testset "Volume Image" begin
+    fname = joinpath(dirname(@__FILE__), "../../data", "test-3d.dat")
+    t = read_VolumeImage(fname)
+    t2 = read_VolumeImage(fname)
 
-#     @testset "Reading" begin
-#         t = read_VolumeImage(fname)
-#         @test isa(t, Neuroimaging.VolumeImage) == true
-#     end
+    @testset "Reading" begin
+        t = read_VolumeImage(fname)
+        @test isa(t, Neuroimaging.VolumeImage) == true
+    end
 
-#     @testset "Create" begin
-#         # Array
-#         n = VolumeImage(
-#             t.data,
-#             t.units,
-#             t.x,
-#             t.y,
-#             t.z,
-#             t.t,
-#             t.method,
-#             t.info,
-#             t.coord_system,
-#         )
-#         @test isa(n, Neuroimaging.VolumeImage) == true
-#         @test isequal(n.data, t.data) == true
+    @testset "Create" begin
+        # Array
+        n = VolumeImage(
+            t.data,
+            t.units,
+            t.x,
+            t.y,
+            t.z,
+            t.t,
+            t.method,
+            t.info,
+            t.coord_system,
+        )
+        @test isa(n, Neuroimaging.VolumeImage) == true
+        @test isequal(n.data, t.data) == true
 
-#         # Vector
-#         d = zeros(length(t.data))
-#         x = zeros(length(t.data))
-#         y = zeros(length(t.data))
-#         z = zeros(length(t.data))
-#         s = zeros(length(t.data))  # t is already taken
-#         i = 1
-#         for xi = 1:length(t.x)
-#             for yi = 1:length(t.y)
-#                 for zi = 1:length(t.z)
-#                     for ti = 1:length(t.t)
-#                         d[i] = ustrip(t.data[xi, yi, zi, ti])
-#                         x[i] = ustrip(t.x[xi])
-#                         y[i] = ustrip(t.y[yi])
-#                         z[i] = ustrip(t.z[zi])
-#                         s[i] = ustrip(t.t[ti])
-#                         i += 1
-#                     end
-#                 end
-#             end
-#         end
-#         n2 = VolumeImage(d, t.units, x, y, z, s, t.method, t.info, t.coord_system)
-#         @test isa(n2, Neuroimaging.VolumeImage) == true
-#         @test isequal(n2.data, t.data) == true
-#         @test isequal(n2.x, t.x) == true
-#         @test isequal(n2.y, t.y) == true
-#         @test isequal(n2.z, t.z) == true
-#         @test isequal(n2.t, t.t) == true
+        # Vector
+        d = zeros(length(t.data))
+        x = zeros(length(t.data))
+        y = zeros(length(t.data))
+        z = zeros(length(t.data))
+        s = zeros(length(t.data))  # t is already taken
+        i = 1
+        for xi = 1:length(t.x)
+            for yi = 1:length(t.y)
+                for zi = 1:length(t.z)
+                    for ti = 1:length(t.t)
+                        d[i] = ustrip(t.data[xi, yi, zi, ti])
+                        x[i] = ustrip(t.x[xi])
+                        y[i] = ustrip(t.y[yi])
+                        z[i] = ustrip(t.z[zi])
+                        s[i] = ustrip(t.t[ti])
+                        i += 1
+                    end
+                end
+            end
+        end
+        n2 = VolumeImage(d, t.units, x, y, z, s, t.method, t.info, t.coord_system)
+        @test isa(n2, Neuroimaging.VolumeImage) == true
+        @test isequal(n2.data, t.data) == true
+        @test isequal(n2.x, t.x) == true
+        @test isequal(n2.y, t.y) == true
+        @test isequal(n2.z, t.z) == true
+        @test isequal(n2.t, t.t) == true
 
-#     end
+    end
 
-#     @testset "Maths" begin
+    @testset "Maths" begin
 
-#         @test isequal(t, t2) == true
+        @test isequal(t, t2) == true
 
-#         @test t + t == t * 2
-#         t4 = t * 4
-#         @test t4 / 2 == t + t
-#         @test t4 / 2 == t4 - t - t
+        @test t + t == t * 2
+        t4 = t * 4
+        @test t4 / 2 == t + t
+        @test t4 / 2 == t4 - t - t
 
-#         t2 = read_VolumeImage(fname)
-#         t2.units = "A/m^3"
-#         # @test_throws t + t2
-#     end
+        t2 = read_VolumeImage(fname)
+        t2.units = "A/m^3"
+        # @test_throws t + t2
+    end
 
-#     @testset "Min/Max" begin
+    @testset "Min/Max" begin
 
-#         @test maximum(t) == 33.2692985535
-#         @test minimum(t) == -7.5189352036
+        @test maximum(t) == 33.2692985535
+        @test minimum(t) == -7.5189352036
 
-#         b = t * 2
+        b = t * 2
 
-#         @test b.data[1, 1, 1] == 2 * b.data[1, 1, 1]
-#         @test b.data[2, 2, 2] == 2 * b.data[2, 2, 2]
+        @test b.data[1, 1, 1] == 2 * b.data[1, 1, 1]
+        @test b.data[2, 2, 2] == 2 * b.data[2, 2, 2]
 
-#         c = mean([b, t])
+        c = Neuroimaging.mean([b, t])
 
-#         @test size(c.data) == size(b.data)
-#         @test c.data[1, 1, 1] == (b.data[1, 1, 1] + t.data[1, 1, 1]) / 2
+        @test size(c.data) == size(b.data)
+        @test c.data[1, 1, 1] == (b.data[1, 1, 1] + t.data[1, 1, 1]) / 2
 
-#         @test maximum([b, t]) == maximum(t) * 2
-#         @test minimum([b, t]) == minimum(b)
+        @test maximum([b, t]) == maximum(t) * 2
+        @test minimum([b, t]) == minimum(b)
 
-#         n = normalise([b, t])
+        n = normalise([b, t])
 
-#         @test maximum(n) <= 1.0
-#         @test minimum(n) >= -1.0
+        @test maximum(n) <= 1.0
+        @test minimum(n) >= -1.0
 
-#     end
+    end
 
 
 #     @testset "Dimension checks" begin
@@ -187,4 +187,4 @@
 
 #         end
 #     end
-# end
+end
