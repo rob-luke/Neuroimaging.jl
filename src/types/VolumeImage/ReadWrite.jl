@@ -31,5 +31,3 @@ function read_VolumeImage(fname::AbstractString)
         coord_system,
     )
 end
-
-
