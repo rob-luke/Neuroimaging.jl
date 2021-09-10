@@ -119,37 +119,39 @@ function read_dat(fid::IO)
         # 4D file
         #
 
-        s = match(r"Sample \d+, (-?\d+.\d+) ms", description)
-        push!(sample_times, float(s.captures[1]))
+        println("4D dat file reading is broken since the Julia 1 update")
 
-        file_still_going = true
-        while file_still_going
-            for zind = 1:length(z)
-                readline(fid)           # Z: z
+        # s = match(r"Sample \d+, (-?\d+.\d+) ms", description)
+        # push!(sample_times, float(s.captures[1]))
 
-                for yind = 1:length(y)
-                    d = readline(fid)       # values
-                    m = collect((m.match for m in eachmatch(r"(-?\d+.\d+)", d)))
-                    complete_data[:, yind, zind, t] = float(m)
-                end
+        # file_still_going = true
+        # while file_still_going
+        #     for zind = 1:length(z)
+        #         readline(fid)           # Z: z
 
-                readline(fid)           # blank or dashed
-            end
+        #         for yind = 1:length(y)
+        #             d = readline(fid)       # values
+        #             m = collect((m.match for m in eachmatch(r"(-?\d+.\d+)", d)))
+        #             complete_data[:, yind, zind, t] = float(m)
+        #         end
 
-            if eof(fid)
-                file_still_going = false
-            else
-                t += 1
-                s = readline(fid)               # Sample n, t.tt ms
-                s = match(r"Sample \d+, (-?\d+.\d+) ms", s)
-                push!(sample_times, float(s.captures[1]))
+        #         readline(fid)           # blank or dashed
+        #     end
 
-                # There is no nice way to grow a multidimensional array
-                temp = complete_data
-                complete_data = Array{Float64}(undef, (length(x), length(y), length(z), t))
-                complete_data[:, :, :, 1:t-1] = temp
-            end
-        end
+        #     if eof(fid)
+        #         file_still_going = false
+        #     else
+        #         t += 1
+        #         s = readline(fid)               # Sample n, t.tt ms
+        #         s = match(r"Sample \d+, (-?\d+.\d+) ms", s)
+        #         push!(sample_times, float(s.captures[1]))
+
+        #         # There is no nice way to grow a multidimensional array
+        #         temp = complete_data
+        #         complete_data = Array{Float64}(undef, (length(x), length(y), length(z), t))
+        #         complete_data[:, :, :, 1:t-1] = temp
+        #     end
+        # end
     else
 
         #
@@ -197,70 +199,70 @@ function read_dat(fid::IO)
 end
 
 
-"""
-Write dat file
-"""
-function write_dat(
-    fname::AbstractString,
-    X::AbstractVector,
-    Y::AbstractVector,
-    Z::AbstractVector,
-    S::Array{DataT,4},
-    T::AbstractVector;
-    data_file::AbstractString = "NA",
-    condition::AbstractString = "NA",
-    method::AbstractString = "NA",
-    regularization::AbstractString = "NA",
-    units::AbstractString = "NA",
-) where {DataT<:AbstractFloat}
+# """
+# Write dat file. Disabled as 4D reading is broken.
+# """
+# function write_dat(
+#     fname::AbstractString,
+#     X::AbstractVector,
+#     Y::AbstractVector,
+#     Z::AbstractVector,
+#     S::Array{DataT,4},
+#     T::AbstractVector;
+#     data_file::AbstractString = "NA",
+#     condition::AbstractString = "NA",
+#     method::AbstractString = "NA",
+#     regularization::AbstractString = "NA",
+#     units::AbstractString = "NA",
+# ) where {DataT<:AbstractFloat}
 
-    if size(S, 1) != length(X)
-        @warn("Data and x sizes do not match")
-    end
-    if size(S, 2) != length(Y)
-        @warn("Data and y sizes do not match")
-    end
-    if size(S, 3) != length(Z)
-        @warn("Data and z sizes do not match")
-    end
-    if size(S, 4) != length(T)
-        @warn("Data and t sizes do not match")
-    end
+#     if size(S, 1) != length(X)
+#         @warn("Data and x sizes do not match")
+#     end
+#     if size(S, 2) != length(Y)
+#         @warn("Data and y sizes do not match")
+#     end
+#     if size(S, 3) != length(Z)
+#         @warn("Data and z sizes do not match")
+#     end
+#     if size(S, 4) != length(T)
+#         @warn("Data and t sizes do not match")
+#     end
 
-    @info("Saving dat to $fname")
+#     @info("Saving dat to $fname")
 
-    open(fname, "w") do fid
-        @printf(fid, "BESA_SA_IMAGE:2.0\n")
-        @printf(fid, "\n")
-        @printf(fid, "Data file:          %s\n", data_file)
-        @printf(fid, "Condition:          %s\n", condition)
-        @printf(fid, "Method:             %s\n", method)
-        @printf(fid, "Regularization:     %s\n", regularization)
-        @printf(fid, "  %s\n", units)
+#     open(fname, "w") do fid
+#         @printf(fid, "BESA_SA_IMAGE:2.0\n")
+#         @printf(fid, "\n")
+#         @printf(fid, "Data file:          %s\n", data_file)
+#         @printf(fid, "Condition:          %s\n", condition)
+#         @printf(fid, "Method:             %s\n", method)
+#         @printf(fid, "Regularization:     %s\n", regularization)
+#         @printf(fid, "  %s\n", units)
 
-        @printf(fid, "\n")
-        @printf(fid, "Grid dimensions ([min] [max] [nr of locations]):\n")
-        @printf(fid, "X:  %2.6f %2.6f %d\n", minimum(X), maximum(X), length(X))
-        @printf(fid, "Y:  %2.6f %2.6f %d\n", minimum(Y), maximum(Y), length(Y))
-        @printf(fid, "Z:  %2.6f %2.6f %d\n", minimum(Z), maximum(Z), length(Z))
-        @printf(
-            fid,
-            "==============================================================================================\n"
-        )
+#         @printf(fid, "\n")
+#         @printf(fid, "Grid dimensions ([min] [max] [nr of locations]):\n")
+#         @printf(fid, "X:  %2.6f %2.6f %d\n", minimum(X), maximum(X), length(X))
+#         @printf(fid, "Y:  %2.6f %2.6f %d\n", minimum(Y), maximum(Y), length(Y))
+#         @printf(fid, "Z:  %2.6f %2.6f %d\n", minimum(Z), maximum(Z), length(Z))
+#         @printf(
+#             fid,
+#             "==============================================================================================\n"
+#         )
 
-        for t = 1:size(S, 4)
-            @printf(fid, "Sample %d, %1.2f ms\n", t - 1, T[t])
-            for z = 1:size(S, 3)
-                @printf(fid, "Z: %d\n", z - 1)
-                for y = 1:size(S, 2)
-                    for x = 1:size(S, 1)
-                        @printf(fid, "%2.10f ", S[x, y, z, t])
-                    end
-                    @printf(fid, "\n")
-                end
-                @printf(fid, "\n")
-            end
-        end
-        @debug("File successfully written")
-    end
-end
+#         for t = 1:size(S, 4)
+#             @printf(fid, "Sample %d, %1.2f ms\n", t - 1, T[t])
+#             for z = 1:size(S, 3)
+#                 @printf(fid, "Z: %d\n", z - 1)
+#                 for y = 1:size(S, 2)
+#                     for x = 1:size(S, 1)
+#                         @printf(fid, "%2.10f ", S[x, y, z, t])
+#                     end
+#                     @printf(fid, "\n")
+#                 end
+#                 @printf(fid, "\n")
+#             end
+#         end
+#         @debug("File successfully written")
+#     end
+# end
