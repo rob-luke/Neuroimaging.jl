@@ -55,7 +55,15 @@
 
     end
 
+    @testset "Querying" begin
+        x, y, z = find_location(t, 0.001, 20, -6)
+        @test x == 16
+        @test y == 36
+        @test z == 1
+    end
+
     @testset "Maths" begin
+
 
         @test isequal(t, t2) == true
 
@@ -66,10 +74,18 @@
 
         t2 = read_VolumeImage(fname)
         t2.units = "A/m^3"
-        # @test_throws t + t2
+
+        tdiv = t
+        tdiv.data = tdiv.data .+ 0.2
+        tdiv = tdiv / tdiv
+        @test minimum(tdiv.data) == 1
+        @test maximum(tdiv.data) == 1
+
     end
 
     @testset "Min/Max" begin
+
+        t = read_VolumeImage(fname)
 
         @test maximum(t) == 33.2692985535
         @test minimum(t) == -7.5189352036
