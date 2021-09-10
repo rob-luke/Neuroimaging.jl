@@ -61,6 +61,17 @@ using Unitful, Statistics
         bd = best_dipole(dip2, dips)
         @test bd == dip5
 
+        # Reduce radius
+        bd = best_dipole(dip2, dips, maxdist = 0.00000001)
+        @test bd == dip2
+
+        # Or when nothing of appropriate size
+        bd = best_dipole(
+            Dipole("Talairach", 10u"mm", 2.01u"mm", 3u"mm", 0, 0, 0, 2, 2, 20),
+            dips,
+            min_dipole_size = 999,
+        )
+        @test isnan(bd)
 
     end
 end
