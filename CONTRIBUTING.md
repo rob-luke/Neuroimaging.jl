@@ -5,13 +5,13 @@ Contributions to this project are warmly welcomed. he project accepts contributi
 ## Contributing code
 
 To contribute code you should submit it as a PR.
-Your code will then be run through the various continous integration (CI) services.
+Your code will then be run through the various continuous integration (CI) services.
 The CI checks for various issues such as spelling mistakes, code errors, documentation errors, code coverage, etc.
 Do not worry if the CI comes back negative the first time, we can work through any issues together.
 
 #### Requirements for code to be accepted
 
-Before any new code is acceped we will need to ensure that:
+Before any new code is accepted we will need to ensure that:
 * The code has unit tests
 * The code is documented
 * The code is demonstrated in an example in the documentation
