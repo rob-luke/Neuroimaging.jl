@@ -37,4 +37,22 @@ using Unitful, Statistics
         @test b.y == 0.0u"m"
         @test b.z == Statistics.std([1, 3])u"m"
     end
+
+    @testset "Closest" begin
+
+        dip1 = Dipole("Talairach", 1u"mm", 2u"mm", 1u"mm", 0, 0, 0, 1, 1, 1)
+        dip2 = Dipole("Talairach", 1u"mm", 2u"mm", 3u"mm", 0, 0, 0, 2, 2, 2)
+        dip3 = Dipole("Talairach", 3u"mm", 2u"mm", 3u"mm", 0, 0, 0, 2, 2, 2)
+        dip4 = Dipole("Talairach", 3u"mm", 4u"mm", 3u"mm", 0, 0, 0, 2, 2, 2)
+
+        dips = Dipole[]
+        dips = push!(dips, dip1)
+        dips = push!(dips, dip2)
+        dips = push!(dips, dip3)
+        dips = push!(dips, dip4)
+
+        bd = best_dipole(dip2, dips)
+
+        @test bd == dip2
+    end
 end
