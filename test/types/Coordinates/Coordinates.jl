@@ -34,19 +34,21 @@
             # Values from table IV in Lancaster et al 2007
             # TODO Find better points to translate
 
-            mni = SPM(73.7, -26.0, 7.0)
-            tal = Talairach(68.3, -26.9, 8.3)
-            @test isapprox(euclidean(convert(Talairach, mni), tal), 0; atol = 2)
+            mni = SPM(73.7u"mm", -26.0u"mm", 7.0u"mm")
+            tal = Talairach(68.3u"mm", -26.9u"mm", 8.3u"mm")
+            mni_converted = convert(Talairach, mni)
+            dist = euclidean(mni_converted, tal)
+            @test isapprox(dist, 0; atol = 2)
 
             # As an electrode
 
             # Test as an electrode
-            e = Electrode("test", SPM(73.7, -26.0, 7.0), Dict())
+            e = Electrode("test", SPM(73.7u"mm", -26.0u"mm", 7.0u"mm"), Dict())
             e = conv_spm_mni2tal(e)
 
-            @test isapprox(e.coordinate.x, tal.x; atol = 1.5)
-            @test isapprox(e.coordinate.y, tal.y; atol = 1.5)
-            @test isapprox(e.coordinate.z, tal.z; atol = 1.5)
+            @test isapprox(e.coordinate.x, tal.x; atol = 1.5u"m")
+            @test isapprox(e.coordinate.y, tal.y; atol = 1.5u"m")
+            @test isapprox(e.coordinate.z, tal.z; atol = 1.5u"m")
             @test isa(e, Neuroimaging.Sensor) == true
             @test isa(e, Neuroimaging.Electrode) == true
             @test isa(e.coordinate, Neuroimaging.Talairach) == true
@@ -58,7 +60,7 @@
             # TODO this just tests it runs, need to check values
 
             bv = BrainVision(0, 0, 0)
-            tal = Talairach(128, 128, 128)
+            tal = Talairach(128u"mm", 128u"mm", 128u"mm")
             @test isapprox(euclidean(convert(Talairach, bv), tal), 0; atol = 1.5)
 
         end

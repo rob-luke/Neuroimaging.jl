@@ -8,17 +8,22 @@ import Base.convert
 
 function convert(::Type{Talairach}, l::BrainVision)
 
-    x, y, z = conv_bv2tal(l.x, l.y, l.z)
+    x, y, z =
+        conv_bv2tal(l.x |> u"mm" |> ustrip, l.y |> u"mm" |> ustrip, l.z |> u"mm" |> ustrip)
 
-    Talairach(x, y, z)
+    Talairach(x * u"mm", y * u"mm", z * u"mm")
 end
 
 
 function convert(::Type{Talairach}, l::SPM)
 
-    x, y, z = conv_spm_mni2tal(l.x, l.y, l.z)
+    x, y, z = conv_spm_mni2tal(
+        l.x |> u"mm" |> ustrip,
+        l.y |> u"mm" |> ustrip,
+        l.z |> u"mm" |> ustrip,
+    )
 
-    Talairach(x[1], y[1], z[1])
+    Talairach(x[1] * u"mm", y[1] * u"mm", z[1] * u"mm")
 end
 
 
@@ -88,9 +93,13 @@ end
 
 function conv_spm_mni2tal(elec::Electrode)
 
-    x, y, z = conv_spm_mni2tal(elec.coordinate.x, elec.coordinate.y, elec.coordinate.z)
+    x, y, z = conv_spm_mni2tal(
+        elec.coordinate.x |> u"mm" |> ustrip,
+        elec.coordinate.y |> u"mm" |> ustrip,
+        elec.coordinate.z |> u"mm" |> ustrip,
+    )
 
-    Electrode(elec.label, Talairach(x[1], y[1], z[1]), elec.info)
+    Electrode(elec.label, Talairach(x[1] * u"mm", y[1] * u"mm", z[1] * u"mm"), elec.info)
 end
 
 
@@ -98,14 +107,17 @@ end
 # Euclidean distance for coordinates and dipoles
 
 function Distances.euclidean(a::Union{Coordinate,Dipole}, b::Union{Coordinate,Dipole})
-    euclidean([float(a.x), float(a.y), float(a.z)], [float(b.x), float(b.y), float(b.z)])
+    euclidean(
+        [float(a.x |> ustrip), float(a.y |> ustrip), float(a.z |> ustrip)],
+        [float(b.x |> ustrip), float(b.y |> ustrip), float(b.z |> ustrip)],
+    )
 end
 
 function Distances.euclidean(a::Union{Coordinate,Dipole}, b::V) where {V<:AbstractVector}
-    euclidean([float(a.x), float(a.y), float(a.z)], b)
+    euclidean([float(a.x |> ustrip), float(a.y |> ustrip), float(a.z |> ustrip)], b)
 end
 
 function Distances.euclidean(a::V, b::Union{Coordinate,Dipole}) where {V<:AbstractVector}
-    euclidean(a, [float(b.x), float(b.y), float(b.z)])
+    euclidean(a, [float(b.x |> ustrip), float(b.y |> ustrip), float(b.z |> ustrip)])
 end
 

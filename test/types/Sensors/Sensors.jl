@@ -27,14 +27,14 @@ using Neuroimaging, Test
         @test labels(s) == ["Fp1", "Fpz", "Fp2"]
         @test labels(s[1]) == "Fp1"
 
-        @test Neuroimaging.x(s) == [-27.747648, -0.085967, 27.676888]
-        @test Neuroimaging.x(s[1]) == -27.747648
+        @test Neuroimaging.x(s) == [-27.747648u"m", -0.085967u"m", 27.676888u"m"]
+        @test Neuroimaging.x(s[1]) == -27.747648u"m"
 
-        @test Neuroimaging.y(s) == [98.803864, 103.555275, 99.133354]
-        @test Neuroimaging.y(s[1]) == 98.803864
+        @test Neuroimaging.y(s) == [98.803864u"m", 103.555275u"m", 99.133354u"m"]
+        @test Neuroimaging.y(s[1]) == 98.803864u"m"
 
-        @test Neuroimaging.z(s) == [34.338360, 34.357265, 34.457005]
-        @test Neuroimaging.z(s[1]) == 34.338360
+        @test Neuroimaging.z(s) == [34.338360u"m", 34.357265u"m", 34.457005u"m"]
+        @test Neuroimaging.z(s[1]) == 34.338360u"m"
     end
 
     @testset "Matching" begin

@@ -163,11 +163,18 @@ function read_dat(fid::IO)
 
                 for yind = 1:length(y)
                     d = readline(fid)       # values
-                    print(d)
-                    m = collect((m.match for m in eachmatch(r"(-?\d+.\d+)", d)))
-                    println(m)
-                    #TODO this is broken in 0.7 to 1.0 fixes
-                    complete_data[:, yind, zind, t] = parse.(Float64, m)
+                    m = collect((m.match for m in eachmatch(r"(-?\d+.\d+e?-?\d*)", d)))
+                    m = parse.(Float64, m)
+                    if size(m) == size(complete_data[:, yind, zind, t])
+                        complete_data[:, yind, zind, t] = m
+                    else
+                        println(d)
+                        println(m)
+                        println(complete_data[:, yind, zind, t])
+                        println(size(m))
+                        println(size(complete_data[:, yind, zind, t]))
+                        complete_data[:, yind, zind, t] = m
+                    end
                 end
 
                 d = readline(fid)           # blank or dashed

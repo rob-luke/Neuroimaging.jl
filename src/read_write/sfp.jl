@@ -33,9 +33,9 @@ function read_sfp(fname::AbstractString; coordinate = Talairach)
             Electrode(
                 replace(local_matches[1], "'" => ""),
                 coordinate(
-                    parse(Float64, local_matches[2]),
-                    parse(Float64, local_matches[3]),
-                    parse(Float64, local_matches[4]),
+                    parse(Float64, local_matches[2]) * u"m",
+                    parse(Float64, local_matches[3]) * u"m",
+                    parse(Float64, local_matches[4]) * u"m",
                 ),
                 Dict(),
             ),

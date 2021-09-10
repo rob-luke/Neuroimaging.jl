@@ -6,6 +6,7 @@ using Plots
 using Glob
 using DataDeps
 using LinearAlgebra
+using Unitful
 
 include("../src/external/BDF.jl")
 using .BDF

@@ -1,5 +1,5 @@
 function Neuroimaging.plot(
-    p,
+    p::Plots.Plot,
     dip::Union{Dipole,Coordinate};
     c = :green,
     m = (8, :rect),
@@ -42,12 +42,7 @@ function Neuroimaging.plot(
 end
 
 
-function Neuroimaging.plot(
-    p,
-    dips::Union{Array{Dipole},Array{Coordinate}};
-    l = "",
-    kwargs...,
-)
+function Neuroimaging.plot(p::Plots.Plot, dips::Vector{Dipole}; l = "", kwargs...)
 
     for dip = 1:length(dips)
         if dip == length(dips)
