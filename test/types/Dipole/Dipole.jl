@@ -38,7 +38,7 @@ using Unitful, Statistics
         @test b.z == Statistics.std([1, 3])u"m"
     end
 
-    @testset "Closest" begin
+    @testset "Best" begin
 
         dip1 = Dipole("Talairach", 1u"mm", 2u"mm", 1u"mm", 0, 0, 0, 1, 1, 1)
         dip2 = Dipole("Talairach", 1u"mm", 2u"mm", 3u"mm", 0, 0, 0, 2, 2, 2)
@@ -51,8 +51,16 @@ using Unitful, Statistics
         dips = push!(dips, dip3)
         dips = push!(dips, dip4)
 
+        # Takes the closest dipole
         bd = best_dipole(dip2, dips)
-
         @test bd == dip2
+
+        # Takes a larger dipole thats further away if within specified radius
+        dip5 = Dipole("Talairach", 1u"mm", 2.01u"mm", 3u"mm", 0, 0, 0, 2, 2, 20)
+        dips = push!(dips, dip5)
+        bd = best_dipole(dip2, dips)
+        @test bd == dip5
+
+
     end
 end
