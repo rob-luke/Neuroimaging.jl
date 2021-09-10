@@ -39,10 +39,7 @@ function read_dat(fid::IO)
     @debug("Version = $version")
 
     # Use @assert here?
-    if version != 2
-        Logging.warn("Unknown dat file version")
-        return
-    end
+    @assert version == 2
 
     # Header info
     readline(fid) # Empty line
@@ -167,16 +164,7 @@ function read_dat(fid::IO)
                     d = readline(fid)       # values
                     m = collect((m.match for m in eachmatch(r"(-?\d+.\d+e?-?\d*)", d)))
                     m = parse.(Float64, m)
-                    if size(m) == size(complete_data[:, yind, zind, t])
-                        complete_data[:, yind, zind, t] = m
-                    else
-                        println(d)
-                        println(m)
-                        println(complete_data[:, yind, zind, t])
-                        println(size(m))
-                        println(size(complete_data[:, yind, zind, t]))
-                        complete_data[:, yind, zind, t] = m
-                    end
+                    complete_data[:, yind, zind, t] = m
                 end
 
                 d = readline(fid)           # blank or dashed
