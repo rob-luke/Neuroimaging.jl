@@ -17,7 +17,9 @@ using Logging,
     Statistics,
     FFTW,
     DataDeps,
-    LinearAlgebra
+    LinearAlgebra,
+    Images
+using Unitful: AbstractQuantity
 
 
 export new_processing_key,

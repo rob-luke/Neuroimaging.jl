@@ -25,13 +25,15 @@ can be used if you don't know how your locations are mapped.
 
 ## Create a coordinate
 
-We can create a coordinate point by calling the appropriate type:
+We can create a coordinate point by calling the appropriate type.
+Internally `Neuroimaging.jl` uses SI units, so meters for these locations.
+But the results are displayed in the more convenient centimeter notation.
 
 ```@example fileread
 using DisplayAs # hide
 using Neuroimaging
 
-location_1 = SPM(73.7, -26.0, 7.0)
+location_1 = SPM(0.737, -0.260, 0.070)
 ```
 
 Note that this position is taken from table IV from:

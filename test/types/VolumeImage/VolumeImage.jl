@@ -95,96 +95,96 @@
     end
 
 
-#     @testset "Dimension checks" begin
-#         t2 = deepcopy(t)
-#         t2.x = t2.x[1:3]
-#         @test_throws KeyError Neuroimaging.dimensions_equal(t, t2)
-#         t2 = deepcopy(t)
-#         t2.y = t2.y[1:3]
-#         @test_throws KeyError Neuroimaging.dimensions_equal(t, t2)
-#         t2 = deepcopy(t)
-#         t2.z = t2.z[1:3]
-#         @test_throws KeyError Neuroimaging.dimensions_equal(t, t2)
-#         t2 = read_VolumeImage(joinpath(dirname(@__FILE__), "../../data", "test-4d.dat"))
-#         @test_throws KeyError Neuroimaging.dimensions_equal(t, t2)
-#     end
+    @testset "Dimension checks" begin
+        t2 = deepcopy(t)
+        t2.x = t2.x[1:3]
+        @test_throws KeyError Neuroimaging.dimensions_equal(t, t2)
+        t2 = deepcopy(t)
+        t2.y = t2.y[1:3]
+        @test_throws KeyError Neuroimaging.dimensions_equal(t, t2)
+        t2 = deepcopy(t)
+        t2.z = t2.z[1:3]
+        @test_throws KeyError Neuroimaging.dimensions_equal(t, t2)
+        # t2 = read_VolumeImage(joinpath(dirname(@__FILE__), "../../data", "test-4d.dat"))
+        # @test_throws KeyError Neuroimaging.dimensions_equal(t, t2)
+    end
 
 
-#     @testset "Average" begin
-#         s = Neuroimaging.mean(t)
-#     end
+    @testset "Average" begin
+        s = Neuroimaging.mean(t)
+    end
 
-#     @testset "Find dipoles" begin
+    @testset "Find dipoles" begin
 
-#         t = read_VolumeImage(fname)
-#         dips = find_dipoles(Neuroimaging.mean(t))
-#         @test size(dips) == (16,)
+        t = read_VolumeImage(fname)
+        dips = find_dipoles(Neuroimaging.mean(t))
+        @test size(dips) == (16,)
 
-#         #dips = Neuroimaging.new_dipole_method(mean(t))
-#         #@test size(dips) == (9,)
+        #dips = Neuroimaging.new_dipole_method(mean(t))
+        #@test size(dips) == (9,)
 
-#         fname = joinpath(dirname(@__FILE__), "../../data", "test-4d.dat")
-#         t2 = read_VolumeImage(fname)
-#         dips = find_dipoles(Neuroimaging.mean(t2))
-#         @test size(dips) == (3,)
+        # fname = joinpath(dirname(@__FILE__), "../../data", "test-4d.dat")
+        # t2 = read_VolumeImage(fname)
+        # dips = find_dipoles(Neuroimaging.mean(t2))
+        # @test size(dips) == (3,)
 
-#         # Test dipoles are returned in order of size
-#         @test issorted([dip.size for dip in dips], rev = true) == true
-#     end
+        # Test dipoles are returned in order of size
+        @test issorted([dip.size for dip in dips], rev = true) == true
+    end
 
-#     @testset "Best Dipole" begin
+    # @testset "Best Dipole" begin
 
-#         # dips = find_dipoles(mean(t))
-#         # # Plots.pyplot(size=(1400, 400))
-#         # # p = plot(t, c = :inferno)
-#         # # p = plot(p, Talairach(-0.04, 0.01, 0.02))
-#         # bd = best_dipole(Talairach(-0.05, 0, 0.01), dips)
-#         # #p = plot(p, Talairach(-0.05, 0, 0.01), c = :red)
-#         #
-#         # @test float(bd.x) == roughly(-0.0525, atol =  0.001)
-#         # @test float(bd.y) == roughly(-0.00378, atol =  0.001)
-#         # @test float(bd.z) == roughly(0.0168099, atol =  0.001)
-#         #
-#         # # Take closest
-#         # bd = best_dipole(Talairach(-0.05, 0, 0.01), dips, maxdist = 0.0015)
-#         # @test float(bd.x) == roughly(-0.0525, atol =  0.001)
-#         # @test float(bd.y) == roughly(-0.00378, atol =  0.001)
-#         # @test float(bd.z) == roughly(0.0168099, atol =  0.001)
-#         #
-#         # # Take only valid dipole
-#         # dists = [euclidean(Talairach(-0.05, 0, 0.01), dip) for dip=dips]
-#         # bd = best_dipole(Talairach(-0.05, 0, 0.01), dips, maxdist = 0.015)
-#         # @test float(bd.x) == roughly(-0.0525, atol =  0.001)
-#         # @test float(bd.y) == roughly(-0.00378, atol =  0.001)
-#         # @test float(bd.z) == roughly(0.0168099, atol =  0.001)
-#         #
-#         # bd = best_dipole(Talairach(-0.05, 0, 0.01), Dipole[])
-#         # @test isnan(bd) == true
+    #     dips = find_dipoles(Neuroimaging.mean(t))
+    #     # Plots.pyplot(size=(1400, 400))
+    #     # p = plot(t, c = :inferno)
+    #     # p = plot(p, Talairach(-0.04, 0.01, 0.02))
+    #     bd = best_dipole(Talairach(-0.05, 0, 0.01), dips)
+    #     #p = plot(p, Talairach(-0.05, 0, 0.01), c = :red)
+        
+    #     @test float(bd.x) ≈ -0.0525 atol =  0.001
+    #     @test float(bd.y) ≈ -0.00378 atol =  0.001
+    #     @test float(bd.z) ≈ 0.0168099 atol =  0.001
+        
+    #     # Take closest
+    #     bd = best_dipole(Talairach(-0.05, 0, 0.01), dips, maxdist = 0.0015)
+    #     @test float(bd.x) ≈ -0.0525 atol =  0.001
+    #     @test float(bd.y) ≈ -0.00378 atol =  0.001
+    #     @test float(bd.z) ≈ 0.0168099 atol =  0.001
+        
+    #     # Take only valid dipole
+    #     dists = [euclidean(Talairach(-0.05, 0, 0.01), dip) for dip=dips]
+    #     bd = best_dipole(Talairach(-0.05, 0, 0.01), dips, maxdist = 0.015)
+    #     @test float(bd.x) ≈ -0.0525 atol =  0.001
+    #     @test float(bd.y) ≈ -0.00378 atol =  0.001
+    #     @test float(bd.z) ≈ 0.0168099 atol =  0.001
+        
+    #     bd = best_dipole(Talairach(-0.05, 0, 0.01), Dipole[])
+    #     @test isnan(bd) == true
 
-#     end
+    # end
 
-#     @testset "Show" begin
-#         show(t)
-#         show(normalise(t))
-#         t.info["Regularisation"] = 1.2
-#         show(t)
-#     end
+    @testset "Show" begin
+        show(t)
+        show(normalise(t))
+        t.info["Regularisation"] = 1.2
+        show(t)
+    end
 
-#     @testset "Plotting" begin
-#         Neuroimaging.plot(Neuroimaging.mean(t))
-#         Neuroimaging.plot(Neuroimaging.mean(t), min_val = 0, max_val = 50)
-#         Neuroimaging.plot(
-#             Neuroimaging.mean(t),
-#             elp = joinpath(dirname(@__FILE__), "../../data", "test.elp"),
-#         )
-#         p = Neuroimaging.plot(Neuroimaging.mean(t), threshold = 24)
+    @testset "Plotting" begin
+        Neuroimaging.plot(Neuroimaging.mean(t))
+        Neuroimaging.plot(Neuroimaging.mean(t), min_val = 0, max_val = 50)
+        Neuroimaging.plot(
+            Neuroimaging.mean(t),
+            elp = joinpath(dirname(@__FILE__), "../../data", "test.elp"),
+        )
+        p = Neuroimaging.plot(Neuroimaging.mean(t), threshold = 24)
 
-#         @testset "Overlay dipole" begin
+        @testset "Overlay dipole" begin
 
-#             dips = find_dipoles(Neuroimaging.mean(t))
-#             p = Neuroimaging.plot(p, dips)
-#             p = Neuroimaging.plot(p, dips[1], c = :red)
+            dips = find_dipoles(Neuroimaging.mean(t))
+            p = Neuroimaging.plot(p, dips)
+            p = Neuroimaging.plot(p, dips[1], c = :red)
 
-#         end
-#     end
+        end
+    end
 end

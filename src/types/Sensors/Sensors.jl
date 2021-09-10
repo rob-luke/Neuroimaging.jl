@@ -80,8 +80,8 @@ labels(s::Array{S}) where {S<:Sensor} = label(s)
 x(s::S) where {S<:Sensor} = s.coordinate.x
 y(s::S) where {S<:Sensor} = s.coordinate.y
 z(s::S) where {S<:Sensor} = s.coordinate.z
-x(s::Array{S}) where {S<:Sensor} = AbstractFloat[si.coordinate.x for si in s]
-y(s::Array{S}) where {S<:Sensor} = AbstractFloat[si.coordinate.y for si in s]
-z(s::Array{S}) where {S<:Sensor} = AbstractFloat[si.coordinate.z for si in s]
+x(s::Array{S}) where {S<:Sensor} = [si.coordinate.x for si in s]
+y(s::Array{S}) where {S<:Sensor} = [si.coordinate.y for si in s]
+z(s::Array{S}) where {S<:Sensor} = [si.coordinate.z for si in s]
 
 

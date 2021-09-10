@@ -44,9 +44,9 @@
             e = Electrode("test", SPM(73.7, -26.0, 7.0), Dict())
             e = conv_spm_mni2tal(e)
 
-            @test isapprox(e.coordinate.x, tal.x; atol = 1.5)
-            @test isapprox(e.coordinate.y, tal.y; atol = 1.5)
-            @test isapprox(e.coordinate.z, tal.z; atol = 1.5)
+            @test isapprox(e.coordinate.x, tal.x; atol = 1.5u"m")
+            @test isapprox(e.coordinate.y, tal.y; atol = 1.5u"m")
+            @test isapprox(e.coordinate.z, tal.z; atol = 1.5u"m")
             @test isa(e, Neuroimaging.Sensor) == true
             @test isa(e, Neuroimaging.Electrode) == true
             @test isa(e.coordinate, Neuroimaging.Talairach) == true

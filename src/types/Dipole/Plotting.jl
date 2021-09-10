@@ -1,5 +1,5 @@
 function Neuroimaging.plot(
-    p,
+    p::Plots.Plot,
     dip::Union{Dipole,Coordinate};
     c = :green,
     m = (8, :rect),
@@ -43,8 +43,8 @@ end
 
 
 function Neuroimaging.plot(
-    p,
-    dips::Union{Array{Dipole},Array{Coordinate}};
+    p::Plots.Plot,
+    dips::Vector{Dipole};
     l = "",
     kwargs...,
 )
