@@ -1,7 +1,8 @@
 """
 Find index of location of coordinate or dipole in leadfield
 """
-find_location(l, d::Union{Dipole,Coordinate}) = find_location(l::Leadfield, d.x |> ustrip, d.y |> ustrip, d.z |> ustrip)
+find_location(l, d::Union{Dipole,Coordinate}) =
+    find_location(l::Leadfield, d.x |> ustrip, d.y |> ustrip, d.z |> ustrip)
 
 
 function find_location(l::Leadfield, x::Number, y::Number, z::Number)

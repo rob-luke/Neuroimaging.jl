@@ -103,7 +103,7 @@ function read_SSR(
     # Create electrodes
     elecs = Electrode[]
     for e in header["chanLabels"]
-        push!(elecs, Electrode(e, Talairach(NaN*u"m", NaN*u"m", NaN*u"m"), Dict()))
+        push!(elecs, Electrode(e, Talairach(NaN * u"m", NaN * u"m", NaN * u"m"), Dict()))
     end
 
     # Create SSR type

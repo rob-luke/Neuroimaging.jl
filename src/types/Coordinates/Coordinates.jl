@@ -18,8 +18,9 @@ mutable struct BrainVision <: Coordinate
     x::typeof(1.0u"m")
     y::typeof(1.0u"m")
     z::typeof(1.0u"m")
-    BrainVision(x::AbstractQuantity, y::AbstractQuantity, z::AbstractQuantity) = new(x, y, z)
-    BrainVision(x::Number, y::Number, z::Number) = new(x*u"m", y*u"m", z*u"m")
+    BrainVision(x::AbstractQuantity, y::AbstractQuantity, z::AbstractQuantity) =
+        new(x, y, z)
+    BrainVision(x::Number, y::Number, z::Number) = new(x * u"m", y * u"m", z * u"m")
 end
 
 """
@@ -30,7 +31,7 @@ mutable struct Talairach <: Coordinate
     y::typeof(1.0u"m")
     z::typeof(1.0u"m")
     Talairach(x::AbstractQuantity, y::AbstractQuantity, z::AbstractQuantity) = new(x, y, z)
-    Talairach(x::Number, y::Number, z::Number) = new(x*u"m", y*u"m", z*u"m")
+    Talairach(x::Number, y::Number, z::Number) = new(x * u"m", y * u"m", z * u"m")
 end
 
 """
@@ -41,7 +42,7 @@ mutable struct SPM <: Coordinate
     y::typeof(1.0u"m")
     z::typeof(1.0u"m")
     SPM(x::AbstractQuantity, y::AbstractQuantity, z::AbstractQuantity) = new(x, y, z)
-    SPM(x::Number, y::Number, z::Number) = new(x*u"m", y*u"m", z*u"m")
+    SPM(x::Number, y::Number, z::Number) = new(x * u"m", y * u"m", z * u"m")
 end
 
 """
@@ -51,12 +52,15 @@ mutable struct UnknownCoordinate <: Coordinate
     x::typeof(1.0u"m")
     y::typeof(1.0u"m")
     z::typeof(1.0u"m")
-    UnknownCoordinate(x::AbstractQuantity, y::AbstractQuantity, z::AbstractQuantity) = new(x, y, z)
-    UnknownCoordinate(x::Number, y::Number, z::Number) = new(x*u"m", y*u"m", z*u"m")
+    UnknownCoordinate(x::AbstractQuantity, y::AbstractQuantity, z::AbstractQuantity) =
+        new(x, y, z)
+    UnknownCoordinate(x::Number, y::Number, z::Number) = new(x * u"m", y * u"m", z * u"m")
 end
 
 
 import Base.show
 function show(c::S) where {S<:Coordinate}
-    println("Coordinate: $(typeof(c)) - ($(c.x), $(c.y), $(c.z))")
+    println(
+        "Coordinate: $(typeof(c)) - ($(c.x |> u"cm"), $(c.y |> u"cm"), $(c.z |> u"cm"))",
+    )
 end

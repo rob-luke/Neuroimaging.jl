@@ -140,24 +140,24 @@
     #     # p = plot(p, Talairach(-0.04, 0.01, 0.02))
     #     bd = best_dipole(Talairach(-0.05, 0, 0.01), dips)
     #     #p = plot(p, Talairach(-0.05, 0, 0.01), c = :red)
-        
+
     #     @test float(bd.x) ≈ -0.0525 atol =  0.001
     #     @test float(bd.y) ≈ -0.00378 atol =  0.001
     #     @test float(bd.z) ≈ 0.0168099 atol =  0.001
-        
+
     #     # Take closest
     #     bd = best_dipole(Talairach(-0.05, 0, 0.01), dips, maxdist = 0.0015)
     #     @test float(bd.x) ≈ -0.0525 atol =  0.001
     #     @test float(bd.y) ≈ -0.00378 atol =  0.001
     #     @test float(bd.z) ≈ 0.0168099 atol =  0.001
-        
+
     #     # Take only valid dipole
     #     dists = [euclidean(Talairach(-0.05, 0, 0.01), dip) for dip=dips]
     #     bd = best_dipole(Talairach(-0.05, 0, 0.01), dips, maxdist = 0.015)
     #     @test float(bd.x) ≈ -0.0525 atol =  0.001
     #     @test float(bd.y) ≈ -0.00378 atol =  0.001
     #     @test float(bd.z) ≈ 0.0168099 atol =  0.001
-        
+
     #     bd = best_dipole(Talairach(-0.05, 0, 0.01), Dipole[])
     #     @test isnan(bd) == true
 

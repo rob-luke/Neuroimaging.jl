@@ -42,12 +42,7 @@ function Neuroimaging.plot(
 end
 
 
-function Neuroimaging.plot(
-    p::Plots.Plot,
-    dips::Vector{Dipole};
-    l = "",
-    kwargs...,
-)
+function Neuroimaging.plot(p::Plots.Plot, dips::Vector{Dipole}; l = "", kwargs...)
 
     for dip = 1:length(dips)
         if dip == length(dips)

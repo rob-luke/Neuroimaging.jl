@@ -88,7 +88,11 @@ end
 
 function conv_spm_mni2tal(elec::Electrode)
 
-    x, y, z = conv_spm_mni2tal(elec.coordinate.x |> ustrip, elec.coordinate.y |> ustrip, elec.coordinate.z |> ustrip)
+    x, y, z = conv_spm_mni2tal(
+        elec.coordinate.x |> ustrip,
+        elec.coordinate.y |> ustrip,
+        elec.coordinate.z |> ustrip,
+    )
 
     Electrode(elec.label, Talairach(x[1], y[1], z[1]), elec.info)
 end
@@ -98,7 +102,10 @@ end
 # Euclidean distance for coordinates and dipoles
 
 function Distances.euclidean(a::Union{Coordinate,Dipole}, b::Union{Coordinate,Dipole})
-    euclidean([float(a.x |> ustrip), float(a.y |> ustrip), float(a.z |> ustrip)], [float(b.x |> ustrip), float(b.y |> ustrip), float(b.z |> ustrip)])
+    euclidean(
+        [float(a.x |> ustrip), float(a.y |> ustrip), float(a.z |> ustrip)],
+        [float(b.x |> ustrip), float(b.y |> ustrip), float(b.z |> ustrip)],
+    )
 end
 
 function Distances.euclidean(a::Union{Coordinate,Dipole}, b::V) where {V<:AbstractVector}

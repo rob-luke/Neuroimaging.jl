@@ -215,7 +215,12 @@ function plot_src(
         plotlist = ["Iz", "Oz", "POz", "Pz", "CPz", "Cz", "FCz", "Fz", "AFz", "Fpz"]
         for elec in e
             if something(findfirst(isequal(elec.label), plotlist), 0) > 0
-                annotate!(p2, (elec.coordinate.y |> u"cm" |> ustrip) - 5, elec.coordinate.z |> u"cm" |> ustrip, elec.label)
+                annotate!(
+                    p2,
+                    (elec.coordinate.y |> u"cm" |> ustrip) - 5,
+                    elec.coordinate.z |> u"cm" |> ustrip,
+                    elec.label,
+                )
             end
         end
     end
