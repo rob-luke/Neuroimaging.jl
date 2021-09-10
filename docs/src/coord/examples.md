@@ -29,13 +29,22 @@ We can create a coordinate point by calling the appropriate type.
 Internally `Neuroimaging.jl` uses SI units, so meters for these locations.
 But the results are displayed in the more convenient centimeter notation.
 
+By default everything is SI units, so if you pass in a distance without
+specifying the unit it will be in meters.
+
 ```@example fileread
 using DisplayAs # hide
-using Neuroimaging
+using Neuroimaging, Unitful
 
-location_1 = SPM(0.737, -0.260, 0.070)
+SPM(0.0737, -0.0260, 0.0070)
 ```
 
+However, it is clearer and less prone to error if you specify the unit
+at construction, and let the internals handle the conversion.
+
+```@example fileread
+location_1 = SPM(73.7u"mm", -26u"mm", 7u"mm")
+```
 Note that this position is taken from table IV from:
 
 * Lancaster, Jack L., et al. "Bias between MNI and Talairach coordinates analyzed using the ICBM‐152 brain template." Human brain mapping 28.11 (2007): 1194-1205.
@@ -43,11 +52,12 @@ Note that this position is taken from table IV from:
 
 ## Conversion between coordinates
 
-To convert between different coordinate systems simply call the ``convert`` function
-with the first arguments as the desired coordinate system.
+To convert between different coordinate systems simply call the `convert` function
+with the first arguments as the desired coordinate system. The `show` function
+displays the passed type nicely with domain appropriate units.
 
 ```@example fileread
-convert(Talairach, location_1)
+show(convert(Talairach, location_1))
 ```
 
 And we can see that the resulting value is similar to what is provided in the Lancaster 2007 article.

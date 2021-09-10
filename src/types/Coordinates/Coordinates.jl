@@ -61,6 +61,6 @@ end
 import Base.show
 function show(c::S) where {S<:Coordinate}
     println(
-        "Coordinate: $(typeof(c)) - ($(c.x |> u"cm"), $(c.y |> u"cm"), $(c.z |> u"cm"))",
+        "Coordinate: $(typeof(c)) - ($(c.x |> u"mm"), $(c.y |> u"mm"), $(c.z |> u"mm"))",
     )
 end
