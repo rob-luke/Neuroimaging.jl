@@ -11,8 +11,8 @@ pwd()
 
 
 ```@example fileread
-using DisplayAs # hide
-using Neuroimaging, DataDeps, Unitful
+using DisplayAs, Plots # hide
+using Neuroimaging
 data_path = joinpath("..", "..", "..", "test", "data", "test-3d.dat")
 
 t = read_VolumeImage(data_path)
