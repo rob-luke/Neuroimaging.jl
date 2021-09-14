@@ -62,3 +62,47 @@ show(convert(Talairach, location_1))
 
 And we can see that the resulting value is similar to what is provided in the Lancaster 2007 article.
 Although not exact, there is some loss in the transformations.
+
+
+## Sensors
+
+Sensors contain location information stored as coordinate types.
+So if we load an EEG measurement...
+
+```@example fileread
+using Neuroimaging, DataDeps
+data_path = joinpath(
+    datadep"ExampleSSR",
+    "Neuroimaging.jl-example-data-master",
+    "neuroimaingSSR.bdf",
+)
+
+s = read_SSR(data_path)
+```
+
+we can then query the sensors by calling...
+
+```@example fileread
+sensors(s)
+```
+
+And we can see that there are 7 electrodes with standard 10-20 names.
+However, they do not have positions encoded by default.
+
+!!! note "Great first issue"
+
+    A mapping for standard position names like 10-20 or 10-05 to coordinates
+    would be a great improvement to the project.
+
+We can query the coordinate positions for the electrodes. For example,
+to obtain the x locations for all sensors in the EEG measurement use...
+
+```@example fileread
+x(sensors(s))
+```
+
+or to get all the labels use...
+
+```@example fileread
+labels(sensors(s))
+```
