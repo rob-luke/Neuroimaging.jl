@@ -10,12 +10,11 @@ using DisplayAs # hide
 using Neuroimaging, DataDeps, Unitful
 data_path = joinpath("..", "test", "data", "test-3d.dat")
 
-s = read_VolumeImage(data_path)
+t = read_VolumeImage(data_path)
 ```
 
 
 ## Plotting
-
 
 
 ```@example fileread
