@@ -106,6 +106,22 @@ function channelnames(s::EEG, l::AbstractVector{S}) where {S<:AbstractString}
 end
 
 
+
+"""
+    sensors(s::EEG)
+    channelnames(s::EEG, l::AbstractVector{AbstractString})
+
+Returns the sensors for an EEG recording.
+
+# Examples
+```julia
+s = read_EEG(filename)
+sensors(s)
+```
+"""
+sensors(s::EEG) = s.sensors
+electrodes(s::EEG) = s.sensors
+
 #######################################
 #
 # EEG type operations

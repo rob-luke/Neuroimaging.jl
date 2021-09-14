@@ -16,6 +16,7 @@ read_EEG
 ```@docs
 samplingrate(::EEG)
 channelnames(::EEG)
+sensors(::EEG)
 ```
 
 

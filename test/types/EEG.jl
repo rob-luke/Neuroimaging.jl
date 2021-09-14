@@ -45,6 +45,16 @@ using Neuroimaging, Test
     end
 
 
+    @testset "Sensors" begin
+
+        s1 = sensors(deepcopy(s))
+        @test length(s1) == 6
+        @test length(x(s1)) == 6
+        @test length(labels(s1)) == 6
+
+    end
+
+
     @testset "Channel names" begin
 
         s1 = deepcopy(s)
