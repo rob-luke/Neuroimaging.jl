@@ -6,9 +6,14 @@ exported by the BESA software.
 
 
 ```@example fileread
+pwd()
+```
+
+
+```@example fileread
 using DisplayAs # hide
 using Neuroimaging, DataDeps, Unitful
-data_path = joinpath("..", "test", "data", "test-3d.dat")
+data_path = joinpath("..", "..", "..", "test", "data", "test-3d.dat")
 
 t = read_VolumeImage(data_path)
 ```

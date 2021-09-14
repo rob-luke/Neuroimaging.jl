@@ -48,6 +48,7 @@ function plot_src(
     title::S = "",
     elp::AbstractString = "",
     colorbar::Bool = true,
+    figure_size=(1000,400),
     kwargs...,
 ) where {A<:AbstractFloat,S<:AbstractString}
 
@@ -291,5 +292,5 @@ function plot_src(
     end
 
     l = @layout([a b c])
-    return plot(p1, p2, p3, layout = l)
+    return plot(p1, p2, p3, layout = l, size=figure_size)
 end
