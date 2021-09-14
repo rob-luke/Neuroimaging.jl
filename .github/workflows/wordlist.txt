@@ -21,6 +21,15 @@ bdf
 highpass
 rereference
 channelnames
+VolumeImage
+BESA
+Hoechstetter
+Jordanov
+LORETA
+Scherg
+BESA
+dat
+nAm
 resampling
 subtype
 Epoching
