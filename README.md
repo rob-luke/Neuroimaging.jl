@@ -11,7 +11,7 @@ The general plan is:
   - [x] Ensure current code base runs with the latest version of Julia (1.6)
   - [x] Remove code warnings and update dependency packages
   - [x] Document existing code and raise issues for known shortcomings. I.e., note all code that needs to be modernised
-  - [x] Add help on how to contribute to the documentation 
+  - [x] Add help on how to contribute to the documentation (see [CONTRIBUTING.md](https://github.com/rob-luke/Neuroimaging.jl/blob/main/CONTRIBUTING.md))
 - [ ] 2. Improve the package
   - [ ] Modernise the code base to meet Julia 1 best practices
   - [ ] Generalise many of the concepts and add new analysis types and examples
