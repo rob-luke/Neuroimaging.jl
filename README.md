@@ -17,6 +17,10 @@ The general plan is:
   - [ ] Generalise many of the concepts and add new analysis types and examples
   - [ ] Start chipping away at improvements! Pull requests are appreciated for any aspect of the code base
 
+**In general I am pleased to welcome contributions and improvements to all aspects of this project.**
+The current code base is a starting point, but I am happy to integrate improvements to any aspect of the code.
+Any code changes must allow for the existing examples analysis to work (but its ok to change API etc).
+
 
 # Neuroimaging
 
