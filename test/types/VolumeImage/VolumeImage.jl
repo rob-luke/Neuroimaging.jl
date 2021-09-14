@@ -55,10 +55,10 @@
 
         # 4D array
         da = zeros(2, 3, 4, 5)
-        xa = [1., 2]
-        ya = [1., 2, 3]
-        za = [1., 2, 3, 4]
-        ta = [1., 2, 3, 4, 5]
+        xa = [1.0, 2]
+        ya = [1.0, 2, 3]
+        za = [1.0, 2, 3, 4]
+        ta = [1.0, 2, 3, 4, 5]
         VolumeImage(da, "s", xa, ya, za, ta, "m", Dict(), "unkonwn")
 
     end

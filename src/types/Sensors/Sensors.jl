@@ -73,7 +73,7 @@ end
 
 
 label(s::S) where {S<:Sensor} = s.label
-label(s::Array{S,1}) where {S<:Sensor} = AbstractString[si.label for si in s]
+label(s::Array{S,1}) where {S<:Sensor} = [si.label for si in s]
 labels(s::S) where {S<:Sensor} = label(s)
 labels(s::Array{S}) where {S<:Sensor} = label(s)
 
