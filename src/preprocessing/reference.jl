@@ -50,8 +50,8 @@ function rereference(
         refChan_Idx = something(findfirst(isequal(refChan), chanNames), 0)
     end
 
-    if refChan == 0
-        error("Requested channel is not in the provided list of channels")
+    if refChan_Idx == 0
+        throw(ArgumentError("Requested channel is not in the provided list of channels"))
     end
 
     rereference(signals, refChan_Idx)
@@ -68,8 +68,8 @@ function rereference(
 
     refChan_Idx = [something(findfirst(isequal(i), chanNames), 0) for i in refChan]
 
-    if refChan == 0
-        error("Requested channel is not in the provided list of channels")
+    if 0 in refChan_Idx
+        throw(ArgumentError("Requested channel is not in the provided list of channels"))
     end
 
     rereference(signals, refChan_Idx)

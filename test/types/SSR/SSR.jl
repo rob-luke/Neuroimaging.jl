@@ -226,6 +226,10 @@
         s2 = rereference(deepcopy(s), "Cz")
 
         @test size(s2.data, 1) == 237568
+
+        @test_throws ArgumentError rereference(deepcopy(s), "C5")
+        @test_throws ArgumentError rereference(deepcopy(s), ["t3", "old"])
+        @test_throws ArgumentError rereference(deepcopy(s), ["Cz", "old"])
     end
 
 

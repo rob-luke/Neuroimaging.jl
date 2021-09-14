@@ -195,9 +195,9 @@ a = rereference(a, ["P9", "P10"])
 """
 function rereference(
     a::EEG,
-    refChan::Union{AbstractString,Array{AbstractString}};
+    refChan::Union{S,Array{S}};
     kwargs...,
-)
+) where {S<:AbstractString}
 
     a.data = rereference(a.data, refChan, channelnames(a))
 
