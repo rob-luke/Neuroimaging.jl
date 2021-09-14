@@ -4,6 +4,7 @@ authors = ["Robert Luke <mail@robertluke.net>"]
 version = "1.1.1"
 
 [deps]
+BDF = "4de61398-0c94-11ec-1711-35c2ab39c271"
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
 DataDeps = "124859b0-ceae-595e-8997-d05f6a7a8dfe"
