@@ -1,4 +1,4 @@
-# Neuromaging.jl
+# Neuroimaging.jl
 
 [![Documentation](https://img.shields.io/badge/Documentation-Dev-blue)](https://rob-luke.github.io/Neuroimaging.jl/)
 [![Tests Julia 1](https://github.com/rob-luke/Neuroimaging.jl/actions/workflows/runtests.yml/badge.svg)](https://github.com/rob-luke/Neuroimaging.jl/actions/workflows/runtests.yml)
