@@ -26,6 +26,7 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 
 [compat]
+BDF = "0.5"
 CSV = "0.8, 0.9"
 DSP = "0.7"
 DataDeps = "0.7"
