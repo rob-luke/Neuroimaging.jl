@@ -16,6 +16,6 @@ See https://rob-luke.github.io/Neuroimaging.jl
 
 This package has been around since Julia v0.1!
 The Julia language has evolved since the early days,
-and there are many places in the codebase that should be bought up to date with the latest Julia standards.
+and there are many places in the codebase that should be brought up to date with the latest Julia standards.
 We are currently trying to revitalise this project, so if you have any feedback or suggestions please let us know.
 See [CONTRIBUTING.md](https://github.com/rob-luke/Neuroimaging.jl/blob/main/CONTRIBUTING.md) for details on how to get involved.
