@@ -1,7 +1,7 @@
 name = "Neuroimaging"
 uuid = "70dcca16-fae7-5c11-a923-39bcb60edd10"
 authors = ["Robert Luke <mail@robertluke.net>"]
-version = "1.1.1"
+version = "1.1.2"
 
 [deps]
 BDF = "0f5c7595-fa0c-55c8-9031-265ea63f34cf"
