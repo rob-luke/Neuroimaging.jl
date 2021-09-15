@@ -1,13 +1,10 @@
-# Neuroimaging
+# Neuromaging.jl
 
 [![Documentation](https://img.shields.io/badge/Documentation-Dev-blue)](https://rob-luke.github.io/Neuroimaging.jl/)
 [![Tests Julia 1](https://github.com/rob-luke/Neuroimaging.jl/actions/workflows/runtests.yml/badge.svg)](https://github.com/rob-luke/Neuroimaging.jl/actions/workflows/runtests.yml)
 [![codecov](https://codecov.io/gh/rob-luke/Neuroimaging.jl/branch/main/graph/badge.svg?token=8IY5Deklvg)](https://codecov.io/gh/rob-luke/Neuroimaging.jl)
 
-
-Process neuroimaging data in [Julia](http://julialang.org/).  
-
-
+Process neuroimaging data using the [Julia](http://julialang.org/) language.
 
 
 ## Documentation
