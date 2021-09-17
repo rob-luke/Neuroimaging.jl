@@ -9,17 +9,19 @@
 	
 	# Modality independent filtering
 	function filter(
-			obj::NeuroimagingMeasurement ,
+			obj::NeuroimagingMeasurement,
 			responsetype::FilterType,
 			designmethod;kwargs...
 			)		
 		
 		fobj = digitalfilter(responsetype,designmethod)
-		obj.data = filter(obj.data,fobj;kwargs...)
-		return obj
+        obj2 = deepcopy(obj) # TODO: Not sure if this is the proper way to make sure data is not overwritten inplace
+		obj2.data = filter(obj2.data,fobj;kwargs...)
+		return obj2
 	end
 		
 	function filter(s,fobj; filtfilt=false)
+        
 		if filtfilt
 			#filtfilt automatically compensates for grpdelay
 			s = DSP.filtfilt(fobj,s)
