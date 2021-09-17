@@ -46,9 +46,10 @@ export new_processing_key,
     # Pre-processing
     epoch_rejection,
     channel_rejection,
-    highpass_filter,
-    lowpass_filter,
-    bandpass_filter,
+    filter_highpass,
+    filter_lowpass,
+    filter_bandpass,
+    filter,
     compensate_for_filter,
     remove_template,
     rereference,
@@ -174,6 +175,7 @@ include("types/Sensors/Sensors.jl")
 
 # Type - SSR
 include("types/EEG/EEG.jl")
+include("types/EEG/Preprocessing.jl")
 include("types/SSR/SSR.jl")
 include("types/SSR/Preprocessing.jl")
 include("types/SSR/ReadWrite.jl")
