@@ -18,7 +18,8 @@ using Logging,
     FFTW,
     DataDeps,
     LinearAlgebra,
-    Images
+    Images,
+    BDF
 using Unitful: AbstractQuantity
 
 
@@ -142,6 +143,9 @@ export new_processing_key,
     Optode
 
 
+
+
+
 # Type - Neuroimaging
 include("types/NeuroimagingMeasurement.jl")
 
@@ -187,6 +191,7 @@ include("types/VolumeImage/Operations.jl")
 # External modules included until upstream fixes
 include("external/BDF.jl")
 using .BDF
+
 
 # Helper functions
 include("miscellaneous/helper.jl")

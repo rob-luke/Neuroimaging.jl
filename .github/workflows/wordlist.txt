@@ -15,6 +15,9 @@ github
 https
 io
 dataset
+socio
+sexualized
+robertluke
 luke
 Cz
 bdf
@@ -116,3 +119,5 @@ www
 SPM
 MNI
 Talairach
+md
+ok

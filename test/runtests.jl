@@ -8,8 +8,6 @@ using DataDeps
 using LinearAlgebra
 using Unitful
 
-include("../src/external/BDF.jl")
-using .BDF
 
 logger = SimpleLogger(stdout, Logging.Warn)
 

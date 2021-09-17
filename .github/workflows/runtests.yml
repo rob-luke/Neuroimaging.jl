@@ -1,4 +1,4 @@
-name: Tests Julia 1
+name: Tests
 
 on:
   pull_request:
