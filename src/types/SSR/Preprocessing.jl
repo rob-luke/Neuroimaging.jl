@@ -4,6 +4,16 @@
 #
 #######################################
 
+function filter(
+    obj::SSR,
+    responsetype::FilterType;
+    designmethod=Butterworth(6),
+    kwargs...
+)
+return filter(obj,responsetype,designmethod;kwargs...)
+end
+
+
 """
     highpass_filter(a::SSR; cutOff::Real=2, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
 
