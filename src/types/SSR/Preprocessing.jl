@@ -10,7 +10,7 @@ function filter(
     designmethod=Butterworth(6),
     kwargs...
 )
-return filter(obj,responsetype,designmethod;kwargs...)
+return filter(obj,responsetype,designmethod;filtfilt=true,kwargs...)
 end
 
 
