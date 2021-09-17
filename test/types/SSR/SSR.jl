@@ -192,23 +192,9 @@
     end
 
 
-    @testset "Low pass filter" begin
+    @testset "filter" begin
 
-        s2 = lowpass_filter(deepcopy(s))
-
-    end
-
-
-    @testset "High pass filter" begin
-
-        s2 = highpass_filter(deepcopy(s))
-
-    end
-
-
-    @testset "Band pass filter" begin
-
-        s2 = bandpass_filter(deepcopy(s))
+        s2 = filter(deepcopy(s),5)
 
     end
 

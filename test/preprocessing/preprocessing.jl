@@ -67,3 +67,23 @@ end
 
     end
 end
+
+@testset "Filter" begin
+    s = sin.(0:0.1:10*π)
+	designmethod = FIRWindow(hamming(60+1))
+    fs = 10.0u"Hz"
+	responsetype = Highpass(2,fs=fs)
+	fobj = digitalfilter(responsetype,designmethod)
+    function generate_dummyeeg(data;fs=1.0u"Hz")
+        return GeneralEEG(data,[],Dict(),Dict(),fs,[],"","",Dict(),Dict()) 
+    end
+    eeg = generate_dummyeeg(s,fs=fs)
+    
+    @testset "Custom Filter" begin
+        @test all(filter(s,fobj,filtfilt=true) .<= 0.1)
+        @test all(filter(s,fobj,filtfilt=false) .<= 0.1)
+        @test all(filter(eeg,responsetype,designmethod).data .<= 0.1)
+        
+    end
+
+end

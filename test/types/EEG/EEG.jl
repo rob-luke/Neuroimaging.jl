@@ -95,5 +95,27 @@ using Neuroimaging, Test
 
     end
 
+    @testset "Filter" begin
+        @testset "Filter" begin
+            fs = 10.0u"Hz"
+            s = sin.(0:(1. /convert(Float64,fs)):10*π)            
+            
 
-end
+            function generate_dummyeeg(data;fs=1.0u"Hz")
+                return GeneralEEG(data,[],Dict(),Dict(),fs,[],"","",Dict(),Dict()) 
+            end
+            eeg = generate_dummyeeg(s,fs=fs)
+            
+            @testset "Custom Filter" begin
+                @test all(filter_lowpass(eeg,0.5).data .<= 0.1)
+                @test all(filter_highpass(eeg,2).data .<= 0.1)
+                @test all(filter(s,fobj,filtfilt=false) .<= 0.1)
+                @test all(filter(eeg,responsetype,designmethod).data .<= 0.1)
+                
+            end
+        
+        end
+        
+        
+    end
+end 
