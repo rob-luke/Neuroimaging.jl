@@ -142,28 +142,6 @@ export new_processing_key,
     Optode
 
 
-# External modules included until upstream fixes
-include("external/BDF.jl")
-using .BDF
-
-# Helper functions
-include("miscellaneous/helper.jl")
-include("datasets/datasets.jl")
-
-# Pre-processing
-include("preprocessing/data_rejection.jl")
-include("preprocessing/filtering.jl")
-include("preprocessing/reference.jl")
-include("preprocessing/triggers.jl")
-
-# Reshaping of data
-include("reshaping/epochs.jl")
-include("reshaping/sweeps.jl")
-
-# Statistics
-include("statistics/ftest.jl")
-include("statistics/gfp.jl")
-
 # Type - Neuroimaging
 include("types/NeuroimagingMeasurement.jl")
 
@@ -192,7 +170,7 @@ include("types/Sensors/Operations.jl")
 include("types/Sensors/Sets.jl")
 include("types/Coordinates/Operations.jl")
 
-# Source analysis
+# Type - Source analysis
 include("source_analysis/dipoles.jl")
 
 # Type - Leadfield
@@ -205,6 +183,29 @@ include("types/VolumeImage/ReadWrite.jl")
 include("types/VolumeImage/Plotting.jl")
 include("types/VolumeImage/Dipoles.jl")
 include("types/VolumeImage/Operations.jl")
+
+# External modules included until upstream fixes
+include("external/BDF.jl")
+using .BDF
+
+# Helper functions
+include("miscellaneous/helper.jl")
+include("datasets/datasets.jl")
+
+# Pre-processing
+include("preprocessing/data_rejection.jl")
+include("preprocessing/filtering.jl")
+include("preprocessing/reference.jl")
+include("preprocessing/triggers.jl")
+
+# Reshaping of data
+include("reshaping/epochs.jl")
+include("reshaping/sweeps.jl")
+
+# Statistics
+include("statistics/ftest.jl")
+include("statistics/gfp.jl")
+
 
 # Plotting functions
 include("types/EEG/plotting.jl")
