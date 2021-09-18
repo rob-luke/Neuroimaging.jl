@@ -106,6 +106,31 @@ function channelnames(s::EEG, l::AbstractVector{S}) where {S<:AbstractString}
 end
 
 
+"""
+    data(s::EEG)
+    data(s::EEG, channel::AbstractString)
+    data(s::EEG, channels::AbstractVector{AbstractString})
+
+Return the data stored in the type object.
+This may be useful for integration with custom processing.
+
+# Examples
+```julia
+s = read_EEG(filename)
+data(s)
+data(s, "Cz")
+data(s, ["Cz", "P2"])
+```
+"""
+data(s::EEG) = s.data
+data(s::EEG, channel::AbstractString) = data(s, [channel])
+function data(s::EEG, channels::AbstractVector{S}) where {S<:AbstractString}
+    return data(s, _channel_indices(s, channels))
+end
+function data(s::EEG, channels::AbstractVector{S}) where {S<:Int}
+    return deepcopy(s.data)[:, channels]
+end
+
 
 """
     sensors(s::EEG)
@@ -278,10 +303,7 @@ function remove_channel!(
     kwargs...,
 ) where {S<:AbstractString}
     @debug("Removing channels $(join(channel_names, " "))")
-    remove_channel!(
-        a,
-        Int[something(findfirst(isequal(c), channelnames(a)), 0) for c in channel_names],
-    )
+    remove_channel!(a, _channel_indices(a, channel_names))
 end
 
 remove_channel!(a::EEG, channel_names::Int; kwargs...) =
@@ -342,20 +364,13 @@ function keep_channel!(a::EEG, channel_name::AbstractString; kwargs...)
     keep_channel!(a, [channel_name]; kwargs...)
 end
 
-function keep_channel!(a::EEG, channel_names::Array{S}; kwargs...) where {S<:AbstractString}
+function keep_channel!(
+    a::EEG,
+    channel_names::AbstractVector{S};
+    kwargs...,
+) where {S<:AbstractString}
     @info("Keeping channel(s) $(join(channel_names, " "))")
-    keep_channel!(
-        a,
-        vec(
-            round.(
-                Int,
-                [
-                    something(findfirst(isequal(c), channelnames(a)), 0) for
-                    c in channel_names
-                ],
-            ),
-        ),
-    )
+    keep_channel!(a, _channel_indices(a, channel_names))
 end
 
 function keep_channel!(a::EEG, channel_idx::AbstractVector{Int}; kwargs...)
@@ -437,8 +452,7 @@ function merge_channels(
 
     @debug("Number of original channels: $(length(channelnames(a)))")
 
-    keep_idxs =
-        vec([something(findfirst(isequal(i), channelnames(a)), 0) for i in merge_Chans])
+    keep_idxs = _channel_indices(a, merge_Chans)
 
     if sum(keep_idxs .== 0) > 0
         @warn(
@@ -586,4 +600,29 @@ function epoch_rejection(a::EEG; retain_percentage::Number = 0.95, kwargs...)
         epoch_rejection(a.processing["epochs"], retain_percentage; kwargs...)
 
     return a
+end
+
+
+#######################################
+#
+# Internal functions
+#
+#######################################
+
+
+"""
+Internal function to find indices for channel names
+"""
+function _channel_indices(
+    s::EEG,
+    channels::AbstractVector{S};
+    warn_on_missing = true,
+) where {S<:AbstractString}
+    c_idx = Int[something(findfirst(isequal(c1), channelnames(s)), 0) for c1 in channels]
+    if warn_on_missing
+        if any(c_idx .== 0)
+            throw(KeyError("Requested channel does not exist in $(channelnames(s))"))
+        end
+    end
+    return c_idx
 end
