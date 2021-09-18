@@ -9,6 +9,7 @@ makedocs(
     pages = [
         "Home" => "index.md",
         "Types" => "types.md",
+        "Usage/Implementation Details" => Any["Accessing data"=>"usage/access.md",],
         "General EEG Processing" => Any[
             "Overview"=>"eeg/eeg.md",
             "Example"=>"eeg/examples.md",

@@ -18,7 +18,7 @@ abstract type EEG <: NeuroimagingMeasurement end
 
 import Base.show
 function Base.show(io::IO, a::EEG)
-    time_length = round.(size(a.data, 1) / samplingrate(a) / 60)
+    time_length = round.(size(a.data, 1) / samplingrate(Float64, a) / 60)
     println(
         io,
         "EEG measurement of $time_length mins with $(size(a.data,2)) channels sampled at $(a.samplingrate)",
@@ -62,7 +62,7 @@ s = read_EEG(filename)
 samplingrate(s)
 ```
 """
-samplingrate(s::EEG) = samplingrate(AbstractFloat, s)
+samplingrate(s::EEG) = s.samplingrate |> u"Hz"
 samplingrate(t, s::EEG) = convert(t, s.samplingrate |> u"Hz" |> ustrip)
 
 
@@ -563,13 +563,13 @@ end
 
 function trigger_channel(a::EEG; kwargs...)
 
-    create_channel(a.triggers, a.data, samplingrate(a))
+    create_channel(a.triggers, a.data, samplingrate(Float64, a))
 end
 
 
 function system_code_channel(a::EEG; kwargs...)
 
-    create_channel(a.system_codes, a.data, samplingrate(a))
+    create_channel(a.system_codes, a.data, samplingrate(Float64, a))
 end
 
 

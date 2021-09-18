@@ -12,7 +12,7 @@
         p = plot_spectrum(s, "20Hz_SWN_70dB_R", targetFreq = 3.0)
         #= display(p) =#
 
-        p = plot_spectrum(vec(s.data[:, 1]), Int(samplingrate(s)), dBPlot = false)
+        p = plot_spectrum(vec(s.data[:, 1]), samplingrate(Int, s), dBPlot = false)
         #= display(p) =#
 
         p = plot_spectrum(s, 3, targetFreq = 40.0390625)
@@ -21,7 +21,7 @@
 
     @testset "Filter reponse" begin
 
-        p = plot_filter_response(s.processing["filter1"], Int(samplingrate(s)))
+        p = plot_filter_response(s.processing["filter1"], samplingrate(Int, s))
         #= display(p) =#
     end
 
