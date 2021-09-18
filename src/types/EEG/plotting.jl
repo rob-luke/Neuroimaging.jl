@@ -29,7 +29,7 @@ draw(PDF("timeseries.pdf", 10inch, 6inch), plot1)
 function plot_timeseries(
     s::EEG;
     channels::Union{S,Array{S}} = channelnames(s),
-    fs::Number = samplingrate(s),
+    fs::Number = samplingrate(Float64, s),
     kwargs...,
 ) where {S<:AbstractString}
 
@@ -41,7 +41,7 @@ function plot_timeseries(
 
         fig = plot_single_channel_timeseries(
             vec(keep_channel!(deepcopy(s), channels).data),
-            samplingrate(s);
+            samplingrate(Float64, s);
             kwargs...,
         )
 
@@ -57,7 +57,7 @@ function plot_timeseries(
         @debug("Plotting multi channel waveform for channels $(channelnames(s)[idx])")
         fig = plot_multi_channel_timeseries(
             s.data[:, idx],
-            samplingrate(s),
+            samplingrate(Float64, s),
             channelnames(s)[idx];
             kwargs...,
         )

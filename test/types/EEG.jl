@@ -35,11 +35,9 @@ using Neuroimaging, Test, BDF
 
         s = read_EEG(fname)
 
-        @info samplingrate(s)
-        @test samplingrate(s) == 8192.0
-        @info samplingrate(s)
+        @test samplingrate(s) == 8192.0u"Hz"
         @test samplingrate(Int, s) == 8192
-        @test isa(samplingrate(s), AbstractFloat) == true
+        @test isa(samplingrate(Float64, s), AbstractFloat) == true
         @test isa(samplingrate(Int, s), Int) == true
 
         @test isapprox(maximum(s.data[:, 2]), 54.5939; atol = 0.1)
@@ -58,7 +56,7 @@ using Neuroimaging, Test, BDF
         @test length(s.triggers["Index"]) == 12
 
         s = read_EEG(fname)
-        s.triggers = extra_triggers(s.triggers, 1, 7, 0.7, samplingrate(s))
+        s.triggers = extra_triggers(s.triggers, 1, 7, 0.7, samplingrate(Float64, s))
         @test length(s.triggers["Index"]) == 56
     end
 
