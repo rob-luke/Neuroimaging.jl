@@ -125,7 +125,7 @@ data(s)
 Or to access a subset of channels call:
 
 ```@example fileread
-data(s, ["F6", "F5])
+data(s, ["F6", "F5"])
 ```
 
 ## Conclusion
