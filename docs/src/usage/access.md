@@ -4,7 +4,7 @@ The `Neuroimaging.jl` library uses functions to access underlying
 properties of the data structures. This is to enable a consistent
 API to users, while allowing flexibility in the underlying design.
 
-To minimise the risk of making errors when specifyig values, passing
+To minimise the risk of making errors when specifying values, passing
 arguments, and scaling values, the `Neuroimaging.jl` library uses
 units wherever possible. The `Unitful.jl` package provides a convenient
 interface for handling unitful data.
@@ -13,7 +13,7 @@ interface for handling unitful data.
 ## Handling of units
 
 Many of the underlying components of this package store values with units.
-For example, coordinates are stored interally in the unit of meters,
+For example, coordinates are stored internally in the unit of meters,
 and sampling rates are stored in hertz. This minimises errors in two ways.
 First, if you pass arguments in the wrong order to a function it may be caught.
 Second, if you accidentally pass kHz as a sample rate this will be correctly
@@ -72,7 +72,7 @@ and in SI units. This makes it easy to keep track of everything
 when programming. However, when we report data these units may
 not be appropriate. For example, fNIRS data is usually reported in micro
 Mol, it would be inconvenient to report and plot values with six leading zeros.
-Simillarly locations of neuroimaging coordinates are often reported in milimeters.
+Similarly locations of neuroimaging coordinates are often reported in millimeters.
 So the `show` functions will report the data in the typical scale for the
 area of research.
 
