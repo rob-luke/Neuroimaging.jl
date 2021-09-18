@@ -17,6 +17,7 @@ read_EEG
 samplingrate(::EEG)
 channelnames(::EEG)
 sensors(::EEG)
+data(::EEG)
 ```
 
 

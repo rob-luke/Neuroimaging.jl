@@ -106,6 +106,33 @@ function channelnames(s::EEG, l::AbstractVector{S}) where {S<:AbstractString}
 end
 
 
+"""
+    data(s::EEG)
+    data(s::EEG, channel::AbstractString)
+    data(s::EEG, channels::AbstractVector{AbstractString})
+
+Return the data stored in the type object.
+This may be useful for integration with custom processing.
+
+# Examples
+```julia
+s = read_EEG(filename)
+data(s)
+```
+"""
+data(s::EEG) = s.data
+data(s::EEG, channel::AbstractString) = data(s, [channel])
+function data(s::EEG, channels::AbstractVector{S}) where {S<:AbstractString}
+
+    c_idx = Int[something(findfirst(isequal(c1), channelnames(s)), 0) for c1 in channels]
+
+    if any(c_idx .== 0)
+        throw(KeyError("Requested channel does not exist in $(channelnames(s))"))
+    end
+
+    return deepcopy(s.data)[:, c_idx]
+end
+
 
 """
     sensors(s::EEG)

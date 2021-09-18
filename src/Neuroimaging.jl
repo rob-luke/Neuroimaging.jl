@@ -74,11 +74,12 @@ export new_processing_key,
     mean,
     isequal,
     ==,
-    # Type - SSR
+    # Type - EEG
     EEG,
     GeneralEEG,
     SSR,
     samplingrate,
+    data,
     modulationrate,
     channelnames,
     read_SSR,

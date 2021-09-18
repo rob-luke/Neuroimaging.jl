@@ -112,6 +112,22 @@ plot_timeseries(s)
 current() |> DisplayAs.PNG # hide
 ```
 
+
+## Extract underlying data for custom analysis
+
+You may wish to run your own analysis on the underlying raw data array.
+To access the raw data call:
+
+```@example fileread
+data(s)
+```
+
+Or to access a subset of channels call:
+
+```@example fileread
+data(s, ["F6", "F5])
+```
+
 ## Conclusion
 
 A demonstration of how to read in EEG data was provided.
