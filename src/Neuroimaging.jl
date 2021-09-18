@@ -143,9 +143,6 @@ export new_processing_key,
     Optode
 
 
-
-
-
 # Type - Neuroimaging
 include("types/NeuroimagingMeasurement.jl")
 
@@ -187,11 +184,6 @@ include("types/VolumeImage/ReadWrite.jl")
 include("types/VolumeImage/Plotting.jl")
 include("types/VolumeImage/Dipoles.jl")
 include("types/VolumeImage/Operations.jl")
-
-# External modules included until upstream fixes
-include("external/BDF.jl")
-using .BDF
-
 
 # Helper functions
 include("miscellaneous/helper.jl")

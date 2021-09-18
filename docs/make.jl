@@ -9,7 +9,9 @@ makedocs(
     pages = [
         "Home" => "index.md",
         "Types" => "types.md",
-        "Filter" => "filter.md",
+        "Usage Details" => Any[
+            "Filtering"=>"usage/filter.md",
+        ],
         "General EEG Processing" => Any[
             "Overview"=>"eeg/eeg.md",
             "Example"=>"eeg/examples.md",
