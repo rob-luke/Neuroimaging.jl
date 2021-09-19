@@ -5,6 +5,7 @@ The following types inherit from the EEG type and can be used to process your da
 
 - `GeneralEEG`: Used to store data without assumption of any experimental paradigm.
 - `SSR`: Used to store data acquired with a steady state response experiment paradigm.
+- `TR`: Used to store data acquired with a transient response experiment paradigm.
 
 # Examples
 ```julia
