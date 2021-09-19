@@ -1,12 +1,12 @@
 """
-Type for storing data acquired with a transient response (SSR) experimental paradigm.
+Type for storing data acquired with a transient response (TR) experimental paradigm.
 
 #### Example
 
 Put an example here
 
 ```julia
-s = read_eeg("filename")
+s = read_TR("filename")
 s = rereference(s, "Cz")
 ```
 
@@ -53,7 +53,7 @@ end
     read_TR(fname::AbstractString)
     read_TR(args...)
 
-Read a file or IO stream and store the data in an `GeneralEEG` type.
+Read a file or IO stream and store the data in an `TR` type.
 
 # Arguments
 
@@ -140,5 +140,3 @@ function read_TR(
 
     return a
 end
-
-
