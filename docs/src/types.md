@@ -67,6 +67,7 @@ but also allows for application specific functions such as specific frequency an
 EEG
 GeneralEEG
 SSR
+TR
 ```
 
 
