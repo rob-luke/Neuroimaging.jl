@@ -20,6 +20,10 @@ makedocs(
             "Example"=>"assr/examples.md",
             "API"=>"assr/functions.md",
         ],
+        "Transient Responses (EEG)" => Any[
+            "Overview"=>"tr/transient.md",
+            "Example"=>"tr/examples.md",
+        ],
         "Coordinate Systems" => Any["Example"=>"coord/examples.md",],
         "Source Modelling" => Any["Example"=>"source/examples.md",],
         "Input/Output Support" => "IO.md",
