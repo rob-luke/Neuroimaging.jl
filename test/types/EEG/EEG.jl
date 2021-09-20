@@ -2,7 +2,7 @@ using Neuroimaging, Test, BDF
 
 @testset "GeneralEEG" begin
 
-    fname = joinpath(dirname(@__FILE__), "..","..", "data", "test_Hz19.5-testing.bdf")
+    fname = joinpath(dirname(@__FILE__), "..", "..", "data", "test_Hz19.5-testing.bdf")
 
     s = read_EEG(fname)
 
@@ -84,6 +84,37 @@ using Neuroimaging, Test, BDF
 
     end
 
+
+    @testset "Low pass filter" begin
+        s = read_EEG(fname)
+        s2 = filter_lowpass(deepcopy(s))
+        s2 = filter_lowpass(deepcopy(s))
+        s2 = filter_lowpass(deepcopy(s), cutOff = 3u"Hz")
+        @test_throws ArgumentError filter_lowpass(deepcopy(s), phase = "bad")
+
+    end
+
+
+    @testset "High pass filter" begin
+        s = read_EEG(fname)
+        s2 = filter_highpass(deepcopy(s))
+        s2 = filter_highpass(deepcopy(s), cutOff = 3u"Hz")
+        @test_throws ArgumentError filter_highpass(deepcopy(s), phase = "bad")
+    end
+
+
+    @testset "Band pass filter" begin
+        s = read_EEG(fname)
+        s2 = filter_bandpass(deepcopy(s), 3u"Hz", 200u"Hz")
+        @test_throws ArgumentError filter_bandpass(
+            deepcopy(s),
+            3u"Hz",
+            200u"Hz",
+            phase = "bad",
+        )
+
+    end
+
     @testset "Triggers" begin
 
         dats, evtTab, trigs, statusChan = readBDF(fname)
@@ -111,27 +142,5 @@ using Neuroimaging, Test, BDF
 
     end
 
-    @testset "Filter" begin
-        @testset "Filter" begin
-            fs = 10.0u"Hz"
-            s = sin.(0:(1. /convert(Float64,fs)):10*π)            
-            
 
-            function generate_dummyeeg(data;fs=1.0u"Hz")
-                return GeneralEEG(data,[],Dict(),Dict(),fs,[],"","",Dict(),Dict()) 
-            end
-            eeg = generate_dummyeeg(s,fs=fs)
-            
-            @testset "Custom Filter" begin
-                @test all(filter_lowpass(eeg,0.5).data .<= 0.1)
-                @test all(filter_highpass(eeg,2).data .<= 0.1)
-                @test all(filter(s,fobj,filtfilt=false) .<= 0.1)
-                @test all(filter(eeg,responsetype,designmethod).data .<= 0.1)
-                
-            end
-        
-        end
-        
-        
-    end
-end 
+end

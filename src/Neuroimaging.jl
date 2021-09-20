@@ -47,6 +47,8 @@ export new_processing_key,
     # Pre-processing
     epoch_rejection,
     channel_rejection,
+    filterdelay,
+    default_fir_filterorder,
     filter_highpass,
     filter_lowpass,
     filter_bandpass,
@@ -146,6 +148,24 @@ export new_processing_key,
     Optode
 
 
+# Helper functions
+include("miscellaneous/helper.jl")
+include("datasets/datasets.jl")
+
+# Pre-processing
+include("preprocessing/data_rejection.jl")
+include("preprocessing/filtering.jl")
+include("preprocessing/reference.jl")
+include("preprocessing/triggers.jl")
+
+# Reshaping of data
+include("reshaping/epochs.jl")
+include("reshaping/sweeps.jl")
+
+# Statistics
+include("statistics/ftest.jl")
+include("statistics/gfp.jl")
+
 # Type - Neuroimaging
 include("types/NeuroimagingMeasurement.jl")
 
@@ -155,9 +175,11 @@ include("types/Coordinates/Coordinates.jl")
 # Type - Sensors
 include("types/Sensors/Sensors.jl")
 
-# Type - SSR
+# Type - EEG
 include("types/EEG/EEG.jl")
 include("types/EEG/Preprocessing.jl")
+
+# Type - SSR
 include("types/SSR/SSR.jl")
 include("types/SSR/Preprocessing.jl")
 include("types/SSR/ReadWrite.jl")
@@ -177,7 +199,7 @@ include("types/Sensors/Operations.jl")
 include("types/Sensors/Sets.jl")
 include("types/Coordinates/Operations.jl")
 
-# Type - Source analysis
+# Source analysis
 include("source_analysis/dipoles.jl")
 
 # Type - Leadfield
@@ -190,25 +212,6 @@ include("types/VolumeImage/ReadWrite.jl")
 include("types/VolumeImage/Plotting.jl")
 include("types/VolumeImage/Dipoles.jl")
 include("types/VolumeImage/Operations.jl")
-
-# Helper functions
-include("miscellaneous/helper.jl")
-include("datasets/datasets.jl")
-
-# Pre-processing
-include("preprocessing/data_rejection.jl")
-include("preprocessing/filtering.jl")
-include("preprocessing/reference.jl")
-include("preprocessing/triggers.jl")
-
-# Reshaping of data
-include("reshaping/epochs.jl")
-include("reshaping/sweeps.jl")
-
-# Statistics
-include("statistics/ftest.jl")
-include("statistics/gfp.jl")
-
 
 # Plotting functions
 include("types/EEG/plotting.jl")

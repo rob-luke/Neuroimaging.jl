@@ -3,7 +3,7 @@
     fname = joinpath(dirname(@__FILE__), "../data", "test_Hz19.5-testing.bdf")
     s = read_SSR(fname)
     s = rereference(s, "Cz")
-    s = filter_highpass(s,1.)
+    s = filter_highpass(s)
     s = extract_epochs(s)
     s = create_sweeps(s, epochsPerSweep = 2)
     s = ftest(s)
@@ -21,9 +21,7 @@
 
     @testset "Filter reponse" begin
 
-        # TODO Fix this once filtering is reimplemented
-        #p = plot_filter_response(s.processing["filter1"], Int(samplingrate(s)))
-
+        p = plot_filter_response(s.processing["filter1"], samplingrate(Int, s))
         #= display(p) =#
     end
 

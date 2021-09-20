@@ -190,9 +190,32 @@
     end
 
 
-    @testset "filter" begin
+    @testset "Low pass filter" begin
 
-        s2 = filter(deepcopy(s),5)
+        s2 = filter_lowpass(deepcopy(s))
+
+        s2 = filter_lowpass(deepcopy(s))
+        s2 = filter_lowpass(deepcopy(s), cutOff = 3u"Hz")
+        @test_throws ArgumentError filter_lowpass(deepcopy(s), phase = "bad")
+
+    end
+
+
+    @testset "High pass filter" begin
+
+        s2 = filter_highpass(deepcopy(s))
+        s2 = filter_highpass(deepcopy(s), cutOff = 3u"Hz")
+        @test_throws ArgumentError filter_highpass(deepcopy(s), phase = "bad")
+    end
+
+
+    @testset "Band pass filter" begin
+
+        s2 = filter_bandpass(deepcopy(s))
+        s2 = filter_bandpass(deepcopy(s), lower = 3u"Hz")
+        s2 = filter_bandpass(deepcopy(s), upper = 300u"Hz")
+        s2 = filter_bandpass(deepcopy(s), upper = 300u"Hz", lower = 3u"Hz")
+        @test_throws ArgumentError filter_bandpass(deepcopy(s), phase = "bad")
 
     end
 
