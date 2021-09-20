@@ -25,7 +25,6 @@ function filter_highpass(
     a::EEG;
     cutOff::Union{typeof(1.0u"Hz"),typeof(1u"Hz")} = 2u"Hz",
     order::Int = 3,
-    tolerance::Real = 0.01,
     phase::AbstractString = "zero-double",
     kwargs...,
 )
@@ -56,7 +55,6 @@ function filter_lowpass(
     a::EEG;
     cutOff::Union{typeof(1.0u"Hz"),typeof(1u"Hz")} = 150u"Hz",
     order::Int = 3,
-    tolerance::Real = 0.01,
     phase::AbstractString = "zero-double",
     kwargs...,
 )
@@ -86,7 +84,6 @@ function filter_bandpass(
     upper::Union{typeof(1.0u"Hz"),typeof(1u"Hz")};
     n::Int = 24,
     rp::Number = 0.0001,
-    tolerance::Number = 0.01,
     phase::AbstractString = "zero-double",
     kwargs...,
 )

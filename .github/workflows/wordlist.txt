@@ -28,6 +28,10 @@ DSP
 designmethod
 digitalfilter
 fs
+StatsBase
+lowpass
+cutOff
+lp
 responsetype
 samplingrate
 zpg

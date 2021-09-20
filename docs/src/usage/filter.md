@@ -56,7 +56,7 @@ plot!(data(s_lp, "F5"), label="lowpass")
 current() |> DisplayAs.PNG # hide
 ```
 
-You can also use a bandpass `filter_bandpass`, which first applys a lowpass and then a highpass. Because data are filtered twice, this takes twice as much time. If you need the speed, we recommend creating your own bandpass and then apply a custom defined filter for now.
+You can also use a bandpass `filter_bandpass`, which first applies a lowpass and then a highpass. Because data are filtered twice, this takes twice as much time. If you need the speed, we recommend creating your own bandpass and then apply a custom defined filter for now.
 
 ## 2) Custom defined filter
 
