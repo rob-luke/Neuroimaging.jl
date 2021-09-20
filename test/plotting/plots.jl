@@ -21,12 +21,9 @@
 
     @testset "Filter reponse" begin
 
-<<<<<<< HEAD
         # TODO Fix this once filtering is reimplemented
         #p = plot_filter_response(s.processing["filter1"], Int(samplingrate(s)))
-=======
-        p = plot_filter_response(s.processing["filter1"], samplingrate(Int, s))
->>>>>>> origin/main
+
         #= display(p) =#
     end
 
