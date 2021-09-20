@@ -38,7 +38,7 @@ merge_channels
 ```@docs
 filter_highpas(::EEG)
 filter_lowpass(::EEG)
-filter_bandpass_(::EEG)
+filter_bandpass(::EEG)
 ```
 ```
 
