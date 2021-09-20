@@ -13,9 +13,9 @@ read_SSR
 ### Filtering
 
 ```@docs
-highpass_filter(::SSR)
-lowpass_filter(::SSR)
-bandpass_filter(::SSR)
+filter_highpas(::SSR)
+filter_lowpass(::SSR)
+filter_bandpass_(::SSR)
 downsample(s::SSR, ratio::Rational)
 ```
 

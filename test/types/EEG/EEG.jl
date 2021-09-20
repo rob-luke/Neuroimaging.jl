@@ -2,7 +2,7 @@ using Neuroimaging, Test, BDF
 
 @testset "GeneralEEG" begin
 
-    fname = joinpath(dirname(@__FILE__), "..", "data", "test_Hz19.5-testing.bdf")
+    fname = joinpath(dirname(@__FILE__), "..", "..", "data", "test_Hz19.5-testing.bdf")
 
     s = read_EEG(fname)
 
@@ -81,6 +81,37 @@ using Neuroimaging, Test, BDF
         s1 = channelnames(s1, 5, "A17")
         s1 = channelnames(s1, 6, "B17")
         @test channelnames(s1) == ["A01", "A05", "A11", "B03", "A17", "B17"]
+
+    end
+
+
+    @testset "Low pass filter" begin
+        s = read_EEG(fname)
+        s2 = filter_lowpass(deepcopy(s))
+        s2 = filter_lowpass(deepcopy(s))
+        s2 = filter_lowpass(deepcopy(s), cutOff = 3u"Hz")
+        @test_throws ArgumentError filter_lowpass(deepcopy(s), phase = "bad")
+
+    end
+
+
+    @testset "High pass filter" begin
+        s = read_EEG(fname)
+        s2 = filter_highpass(deepcopy(s))
+        s2 = filter_highpass(deepcopy(s), cutOff = 3u"Hz")
+        @test_throws ArgumentError filter_highpass(deepcopy(s), phase = "bad")
+    end
+
+
+    @testset "Band pass filter" begin
+        s = read_EEG(fname)
+        s2 = filter_bandpass(deepcopy(s), 3u"Hz", 200u"Hz")
+        @test_throws ArgumentError filter_bandpass(
+            deepcopy(s),
+            3u"Hz",
+            200u"Hz",
+            phase = "bad",
+        )
 
     end
 

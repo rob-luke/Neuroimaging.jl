@@ -1,120 +1,41 @@
-"""
-    highpass_filter(signals::Array{T}, cutOff::Number, fs::Number, order::Int) where {T<:AbstractFloat}
-
-High pass filter applied in forward and reverse direction
-
-Simply a wrapper for the DSP.jl functions
-
-# Arguments
-
-* `signals`: Signal data in the format samples x channels
-* `cutOff`: Cut off frequency in Hz
-* `fs`: Sampling rate
-* `order`: Filter orde
-
-# Returns
-
-* filtered signal
-* filter used on signal
-"""
-function highpass_filter(
-    signals::Array{T},
-    cutOff::Number,
-    fs::Number,
-    order::Int,
-) where {T<:AbstractFloat}
-    @debug("Highpass filtering $(size(signals)[end]) channels.  Pass band > $(cutOff) Hz")
-    Wn = cutOff / (fs / 2)
-    highpass_filter(signals, Wn, order)
+function filterdelay(fobj::Vector)
+    return (length(fobj) - 1) ÷ 2
+end
+function filterdelay(fobj::ZeroPoleGain)
+    # Todo: This is unsatisfactory, but maybe necessary?
+    error("Butterworth has non-linear phase, use filtfilt=true to compensate delay")
 end
 
+function default_fir_filterorder(responsetype::FilterType, samplingrate::Number)
+    # filter settings are the same as firfilt eeglab plugin (Andreas Widmann) and MNE Python. 
+    # filter order is set to 3.3 times the reciprocal of the shortest transition band 
+    # transition band is set to either
+    # min(max(l_freq * 0.25, 2), l_freq)
+    # or 
+    # min(max(h_freq * 0.25, 2.), nyquist - h_freq)
+    # 
+    # That is, 0.25 times the frequency, but maximally 2Hz
+    %
 
-function highpass_filter(signals::Array{T}, Wn::Number, order::Int) where {T<:AbstractFloat}
-    @debug("Filter order = $order, Wn = $Wn")
-    f = digitalfilter(Highpass(Wn), Butterworth(order))
-    signals = filtfilt(f, signals)
-    return signals, f
-end
+    transwidthratio = 0.25 # magic number from firfilt eeglab plugin
+    fNyquist = samplingrate ./ 2
+    cutOff = responsetype.w * samplingrate
+    # what is the maximal filter width we can have
+    if typeof(responsetype) <: Highpass
+        maxDf = cutOff
 
+        df = minimum([maximum([maxDf * transwidthratio, 2]), maxDf])
 
+    elseif typeof(responsetype) <: Lowpass
+        #for lowpass we have to look back from nyquist
+        maxDf = fNyquist - cutOff
+        df = minimum([maximum([cutOff * transwidthratio, 2]), maxDf])
 
-"""
-    lowpass_filter(signals::Array{T}, cutOff::Number, fs::Number, order::Int) where {T<:AbstractFloat}
+    end
 
-Low pass filter applied in forward and reverse direction
-
-Simply a wrapper for the DSP.jl functions
-
-# Arguments
-
-* `signals`: Signal data in the format samples x channels
-* `cutOff`: Cut off frequency in Hz
-* `fs`: Sampling rate
-* `order`: Filter orde
-
-# Returns
-
-* filtered signal
-* filter used on signal
-"""
-function lowpass_filter(
-    signals::Array{T},
-    cutOff::Number,
-    fs::Number,
-    order::Int,
-) where {T<:AbstractFloat}
-    @debug("Lowpass filtering $(size(signals)[end]) channels.  Pass band < $(cutOff) Hz")
-    Wn = cutOff / (fs / 2)
-    lowpass_filter(signals, Wn, order)
-end
-
-
-function lowpass_filter(signals::Array{T}, Wn::Number, order::Int) where {T<:AbstractFloat}
-    @debug("Filter order = $order, Wn = $Wn")
-    f = digitalfilter(Lowpass(Wn), Butterworth(order))
-    signals = filtfilt(f, signals)
-    return signals, f
-end
-
-
-"""
-    bandpass_filter(signals::Array, lower::Number, upper::Number, fs::Number, n::Int, rp::Number)
-
-Bandpass filter applied in forward and reverse direction
-
-Simply a wrapper for the DSP.jl functions
-
-# Returns
-
-* filtered signal
-* filter used on signal
-
-# TODO
-Use filtfilt rather than custom implementation.
-"""
-function bandpass_filter(
-    signals::Array,
-    lower::Number,
-    upper::Number,
-    fs::Number,
-    n::Int,
-    rp::Number,
-)
-    # Type 1 Chebychev filter
-    # TODO filtfilt does not work. Why not?
-
-    signals = convert(Array{Float64}, signals)
-
-    f = digitalfilter(Bandpass(lower, upper, fs = fs), Chebyshev1(n, rp))
-
-    @info("Bandpass filtering $(size(signals)[end]) channels.     $lower < Hz < $upper")
-    @debug("Filter order = $n, fs = $fs")
-
-    signals = filt(f, signals)
-    signals = filt(f, reverse(signals, dims = 1))
-    signals = reverse(signals, dims = 1)
-
-    return signals, f
+    filterorder = 3.3 ./ (df ./ samplingrate)
+    filterorder = Int(filterorder ÷ 2 * 2) # we need even filter order
+    return filterorder
 end
 
 
