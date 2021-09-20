@@ -9,6 +9,9 @@ NONINFRINGEMENT
 sublicense
 biosemi
 SSR
+brainstem
+midbrain
+neurophysiological
 s
 codebase
 github
@@ -19,6 +22,8 @@ socio
 sexualized
 robertluke
 luke
+unitful
+samplerate
 Cz
 bdf
 md
@@ -35,10 +40,12 @@ Scherg
 BESA
 dat
 nAm
+mHz
 resampling
 subtype
 Epoching
 APIs
+Mol
 optodes
 neuroimaging
 fNIRS

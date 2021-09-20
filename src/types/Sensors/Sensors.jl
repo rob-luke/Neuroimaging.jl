@@ -63,7 +63,7 @@ end
 import Base.show
 function show(s::S) where {S<:Sensor}
     println(
-        "Sensor: $(s.label) $(typeof(s)) - ($(s.coordinate.x), $(s.coordinate.y), $(s.coordinate.z)) ($(typeof(s.coordinate)))",
+        "Sensor: $(s.label) $(typeof(s)) - ($(s.coordinate.x |> u"mm"), $(s.coordinate.y |> u"mm"), $(s.coordinate.z |> u"mm")) ($(typeof(s.coordinate)))",
     )
 end
 

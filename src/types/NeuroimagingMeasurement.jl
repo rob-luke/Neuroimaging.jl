@@ -11,7 +11,7 @@ All neuroimaing types support the following functions:
 * `trim_channel()`
 * `highpass_filter()`
 * `lowpass_filter()`
-* `rereference()`
+* `data()`
 
 # Examples
 ```julia

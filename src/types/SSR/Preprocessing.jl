@@ -34,7 +34,7 @@ c = highpass_filter(a, cutOff = 1)
 function highpass_filter(
     a::SSR;
     cutOff::Real = 2,
-    fs::Real = samplingrate(a),
+    fs::Real = samplingrate(Float64, a),
     order::Int = 3,
     tolerance::Real = 0.01,
     kwargs...,
@@ -67,7 +67,7 @@ c = lowpass_filter(a, cutOff = 1)
 function lowpass_filter(
     a::SSR;
     cutOff::Real = 150,
-    fs::Real = samplingrate(a),
+    fs::Real = samplingrate(Float64, a),
     order::Int = 3,
     tolerance::Real = 0.01,
     kwargs...,
@@ -111,9 +111,9 @@ function bandpass_filter(
     # TODO filter check does not work here. Why not?
     # TODO automatic minimum filter order selection
 
-    a.data, f = bandpass_filter(a.data, lower, upper, samplingrate(a), n, rp)
+    a.data, f = bandpass_filter(a.data, lower, upper, samplingrate(Float64, a), n, rp)
 
-    _filter_check(f, modulationrate(a), samplingrate(a), tolerance)
+    _filter_check(f, modulationrate(a), samplingrate(Float64, a), tolerance)
 
     _append_filter(a, f)
 end
@@ -188,7 +188,7 @@ function downsample(s::SSR, ratio::Rational)
         s.triggers["Index"][1] = 1
     end
 
-    s.samplingrate = float(samplingrate(s) * ratio) * 1.0u"Hz"
+    s.samplingrate = float(samplingrate(Float64, s) * ratio) * 1.0u"Hz"
 
     return s
 end

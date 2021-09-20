@@ -13,15 +13,31 @@ using Neuroimaging, Test, BDF
         show(s)
     end
 
+    @testset "Data" begin
+
+        d = data(s)
+        @test size(d) == (237568, 6)
+
+        d = data(s, "Cz")
+        @test size(d) == (237568, 1)
+        s2 = read_EEG(fname)
+        @test data(keep_channel!(s2, "Cz")) == data(s, "Cz")
+
+        d = data(s, ["Cz", "10Hz_SWN_70dB_R"])
+        @test size(d) == (237568, 2)
+        @test data(keep_channel!(read_EEG(fname), ["Cz", "10Hz_SWN_70dB_R"])) ==
+              data(s, ["Cz", "10Hz_SWN_70dB_R"])
+
+        @test_throws KeyError data(s, ["Czghdf", "10Hz_SWN_70dB_R"])
+    end
+
     @testset "Read file" begin
 
         s = read_EEG(fname)
 
-        @info samplingrate(s)
-        @test samplingrate(s) == 8192.0
-        @info samplingrate(s)
+        @test samplingrate(s) == 8192.0u"Hz"
         @test samplingrate(Int, s) == 8192
-        @test isa(samplingrate(s), AbstractFloat) == true
+        @test isa(samplingrate(Float64, s), AbstractFloat) == true
         @test isa(samplingrate(Int, s), Int) == true
 
         @test isapprox(maximum(s.data[:, 2]), 54.5939; atol = 0.1)
@@ -40,7 +56,7 @@ using Neuroimaging, Test, BDF
         @test length(s.triggers["Index"]) == 12
 
         s = read_EEG(fname)
-        s.triggers = extra_triggers(s.triggers, 1, 7, 0.7, samplingrate(s))
+        s.triggers = extra_triggers(s.triggers, 1, 7, 0.7, samplingrate(Float64, s))
         @test length(s.triggers["Index"]) == 56
     end
 

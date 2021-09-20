@@ -75,14 +75,17 @@ export new_processing_key,
     mean,
     isequal,
     ==,
-    # Type - SSR
+    # Type - EEG
     EEG,
     GeneralEEG,
     SSR,
     samplingrate,
+    data,
     modulationrate,
     channelnames,
     read_SSR,
+    TR,
+    read_TR,
     trim_channel,
     add_triggers,
     remove_channel!,
@@ -161,6 +164,9 @@ include("types/SSR/ReadWrite.jl")
 include("types/SSR/Reshaping.jl")
 include("types/SSR/Statistics.jl")
 include("types/SSR/Plotting.jl")
+
+# Type - TR
+include("types/TransientResponse/TR.jl")
 
 # Type - Dipole
 include("types/Dipole/Dipole.jl")

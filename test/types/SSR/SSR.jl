@@ -20,11 +20,9 @@
 
         s = read_SSR(fname2)
 
-        @info samplingrate(s)
-        @test samplingrate(s) == 8192.0
-        @info samplingrate(s)
+        @test samplingrate(s) == 8192.0u"Hz"
         @test samplingrate(Int, s) == 8192
-        @test isa(samplingrate(s), AbstractFloat) == true
+        @test isa(samplingrate(Float64, s), AbstractFloat) == true
         @test isa(samplingrate(Int, s), Int) == true
 
         @info modulationrate(s)
@@ -47,7 +45,7 @@
         @test length(s.triggers["Index"]) == 12
 
         s = read_SSR(fname)
-        s.triggers = extra_triggers(s.triggers, 1, 7, 0.7, samplingrate(s))
+        s.triggers = extra_triggers(s.triggers, 1, 7, 0.7, samplingrate(Float64, s))
         @test length(s.triggers["Index"]) == 56
     end
 
@@ -222,7 +220,7 @@
     @testset "Merge channels" begin
 
         s2 = merge_channels(deepcopy(s), "Cz", "MergedCz")
-        s2 = merge_channels(deepcopy(s), ["Cz" "10Hz_SWN_70dB_R"], "Merged")
+        s2 = merge_channels(deepcopy(s), ["Cz", "10Hz_SWN_70dB_R"], "Merged")
 
     end
 
@@ -234,7 +232,7 @@
         @test size(s2.data, 1) == 2 * size(s.data, 1)
         @test size(s2.data, 2) == size(s.data, 2)
 
-        keep_channel!(s2, ["Cz" "10Hz_SWN_70dB_R"])
+        keep_channel!(s2, ["Cz", "10Hz_SWN_70dB_R"])
 
         @test_throws ArgumentError hcat(s, s2)
 
