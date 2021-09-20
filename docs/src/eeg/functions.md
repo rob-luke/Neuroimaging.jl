@@ -33,6 +33,16 @@ merge_channels
 ```
 
 
+## Filtering
+
+```@docs
+filter_highpas(::EEG)
+filter_lowpass(::EEG)
+filter_bandpass_(::EEG)
+```
+```
+
+
 ## Epoching
 
 ```@docs

@@ -80,6 +80,7 @@ s_custom_filt = trim_channel(s_custom_filt, 10000)
 plot(data(s, "F5"), label="raw")
 plot!(data(s_custom_filtfilt, "F5"), label="filtfilt")
 plot!(data(s_custom_filt, "F5"), label="filt")
+current() |> DisplayAs.PNG # hide
 ```
 
 
