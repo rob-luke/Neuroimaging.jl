@@ -17,6 +17,8 @@ this is achieved by providing a light wrapper over the `DSP.jl` backend.
 
 To demonstrate the filtering capabilities of this package we first
 import some example data.
+For simplicity, we will simply process one channel of data in this
+example.
 
 
 ```@example filter
@@ -31,11 +33,12 @@ data_path = joinpath(
 
 s = read_SSR(data_path)
 s.data = s.data .- StatsBase.mean(s.data, dims=1) # remove DC offset for easier plotting
+keep_channel!(s, "F5")
 s
 ```
 
 
-## 1) Modality specific filter
+## Modality specific filter
 
 `Neuroimaging.jl` provides standard filter functions for each data type
 and experimental design type. This allows you to quickly get started with
@@ -58,8 +61,8 @@ using Plots
 
 s_hp = filter_highpass(s)
 
-plot(data(s, "F5"), label="Original Signal")
-plot!(data(s_hp, "F5"), label="Filtered Signal")
+plot(data(s), label="Original Signal")
+plot!(data(s_hp), label="Filtered Signal")
 current() |> DisplayAs.PNG # hide
 ```
 
@@ -74,18 +77,19 @@ filter.
 ```@example filter
 s2 = read_EEG(data_path)
 s2.data = s2.data .- StatsBase.mean(s2.data, dims=1) # remove DC offset for better plotting
+keep_channel!(s2, "F5")
 
 s_hp = filter_highpass(s2, cutOff = 2u"Hz")
 s_lp = filter_lowpass(s2, cutOff = 5u"Hz") # extreme value to show LP effect in plot
 
-plot(data(s2, "F5"), label="raw")
-plot!(data(s_hp, "F5"), label="highpass")
-plot!(data(s_lp, "F5"), label="lowpass")
+plot(data(s2), label="raw")
+plot!(data(s_hp), label="highpass")
+plot!(data(s_lp), label="lowpass")
 current() |> DisplayAs.PNG # hide
 ```
 
 
-## 2) Custom defined filter
+## Custom defined filter
 
 In addition to the default filtering above, `Neuroimaging.jl` provides the user
 completely flexibility in filtering the data by allowing standard `DSP.jl`
@@ -103,18 +107,17 @@ responsetype =  Highpass(3, fs = samplingrate(Float64, s))
 designmethod =  Butterworth(6)
 zpg = digitalfilter(responsetype, designmethod)
 
+# Apply filtering using each exposed method
 s_custom_filtfilt = Neuroimaging.filtfilt(s, zpg) 
-
 s_custom_filt = Neuroimaging.filt(s, zpg) 
 
 s = trim_channel(s, 10000)
-s.data = s.data .- StatsBase.mean(s.data,dims=1) # remove DC offset for better plotting
 s_custom_filtfilt = trim_channel(s_custom_filtfilt, 10000)
 s_custom_filt = trim_channel(s_custom_filt, 10000)
 
-plot(data(s, "F5"), label="raw")
-plot!(data(s_custom_filtfilt, "F5"), label="filtfilt")
-plot!(data(s_custom_filt, "F5"), label="filt")
+plot(data(s), label="raw")
+plot!(data(s_custom_filtfilt), label="filtfilt")
+plot!(data(s_custom_filt), label="filt")
 current() |> DisplayAs.PNG # hide
 ```
 
