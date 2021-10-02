@@ -12,24 +12,24 @@ data_path = joinpath(
 s = read_SSR(data_path)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">SSR measurement of 5.0 mins with 7 channels sampled at 8192.0 Hz
   Modulation frequency: NaN Hz
 </code></pre><p>we can then query the sensors by calling...</p><pre><code class="language-julia hljs">sensors(s)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">7-element Vector{Sensor}:
- Electrode(&quot;F5&quot;, Talairach(NaN m, NaN m, NaN m), Dict{Any, Any}())
- Electrode(&quot;TP7&quot;, Talairach(NaN m, NaN m, NaN m), Dict{Any, Any}())
- Electrode(&quot;O1&quot;, Talairach(NaN m, NaN m, NaN m), Dict{Any, Any}())
- Electrode(&quot;F6&quot;, Talairach(NaN m, NaN m, NaN m), Dict{Any, Any}())
- Electrode(&quot;Cz&quot;, Talairach(NaN m, NaN m, NaN m), Dict{Any, Any}())
- Electrode(&quot;TP8&quot;, Talairach(NaN m, NaN m, NaN m), Dict{Any, Any}())
- Electrode(&quot;O2&quot;, Talairach(NaN m, NaN m, NaN m), Dict{Any, Any}())</code></pre><p>And we can see that there are 7 electrodes with standard 10-20 names. However, they do not have positions encoded by default.</p><div class="admonition is-info"><header class="admonition-header">Great first issue</header><div class="admonition-body"><p>A mapping for standard position names like 10-20 or 10-05 to coordinates would be a great improvement to the project.</p></div></div><p>We can query the coordinate positions for the electrodes. For example, to obtain the x locations for all sensors in the EEG measurement use...</p><pre><code class="language-julia hljs">x(sensors(s))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">7-element Vector{Unitful.Quantity{Float64, 𝐋, Unitful.FreeUnits{(m,), 𝐋, nothing}}}:
- NaN m
- NaN m
- NaN m
- NaN m
- NaN m
- NaN m
- NaN m</code></pre><p>or to get all the labels use...</p><pre><code class="language-julia hljs">labels(sensors(s))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">7-element Vector{String}:
+ Electrode(&quot;F5&quot;, Talairach(-0.06560941273964613 m, 0.039533392370485365 m, 0.023293714059226867 m), Dict{Any, Any}())
+ Electrode(&quot;TP7&quot;, Talairach(-0.08554294425259022 m, -0.04529458746142005 m, -0.003140954703225086 m), Dict{Any, Any}())
+ Electrode(&quot;O1&quot;, Talairach(-0.027794587461420057 m, -0.10304294425259022 m, -0.003140954703225086 m), Dict{Any, Any}())
+ Electrode(&quot;F6&quot;, Talairach(0.06560941273964613 m, 0.039533392370485365 m, 0.023293714059226867 m), Dict{Any, Any}())
+ Electrode(&quot;Cz&quot;, Talairach(0.0 m, -0.0175 m, 0.09 m), Dict{Any, Any}())
+ Electrode(&quot;TP8&quot;, Talairach(0.08554294425259022 m, -0.04529458746142005 m, -0.003140954703225086 m), Dict{Any, Any}())
+ Electrode(&quot;O2&quot;, Talairach(0.027794587461420057 m, -0.10304294425259022 m, -0.003140954703225086 m), Dict{Any, Any}())</code></pre><p>And we can see that there are 7 electrodes with standard 10-20 names. However, they do not have positions encoded by default.</p><div class="admonition is-info"><header class="admonition-header">Great first issue</header><div class="admonition-body"><p>A mapping for standard position names like 10-20 or 10-05 to coordinates would be a great improvement to the project.</p></div></div><p>We can query the coordinate positions for the electrodes. For example, to obtain the x locations for all sensors in the EEG measurement use...</p><pre><code class="language-julia hljs">x(sensors(s))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">7-element Vector{Unitful.Quantity{Float64, 𝐋, Unitful.FreeUnits{(m,), 𝐋, nothing}}}:
+  -0.06560941273964613 m
+  -0.08554294425259022 m
+ -0.027794587461420057 m
+   0.06560941273964613 m
+                   0.0 m
+   0.08554294425259022 m
+  0.027794587461420057 m</code></pre><p>or to get all the labels use...</p><pre><code class="language-julia hljs">labels(sensors(s))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">7-element Vector{String}:
  &quot;F5&quot;
  &quot;TP7&quot;
  &quot;O1&quot;
  &quot;F6&quot;
  &quot;Cz&quot;
  &quot;TP8&quot;
- &quot;O2&quot;</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../tr/examples/">« Example</a><a class="docs-footer-nextpage" href="../../source/examples/">Example »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.7 on <span class="colophon-date" title="Saturday 2 October 2021 11:32">Saturday 2 October 2021</span>. Using Julia version 1.6.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+ &quot;O2&quot;</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../tr/examples/">« Example</a><a class="docs-footer-nextpage" href="../../source/examples/">Example »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.7 on <span class="colophon-date" title="Saturday 2 October 2021 12:58">Saturday 2 October 2021</span>. Using Julia version 1.6.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
