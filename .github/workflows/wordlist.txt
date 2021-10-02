@@ -128,3 +128,17 @@ MNI
 Talairach
 md
 ok
+backend
+StatsBase
+Butterworth
+filtfilt
+lowpass
+cutOff
+Butterworth
+DSP
+designmethod
+digitalfilter
+fs
+responsetype
+samplingrate
+zpg
