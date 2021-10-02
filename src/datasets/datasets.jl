@@ -25,7 +25,7 @@ function __init__()
             "ELP containing location of 64 channel biosemi sensors",
             [
                 "https://raw.githubusercontent.com/rob-luke/NeuroimagingFiles/main/biosemi64.elp",
-            ];,
+            ],
         ),
     )
 end

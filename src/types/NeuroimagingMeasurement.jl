@@ -127,11 +127,12 @@ plot(measurement, ["TP7", "Cz"])
 
     if size(data(s), 2) == 1
 
+        labs = pop!(plotattributes, :label, channelnames(s)[1])
+
         RecipesBase.@series begin
-            linecolor := :black
             xguide := "Time (s)"
             yguide := "Amplitude (uV)"
-            label := channelnames(s)[1]
+            label := labs
 
             time_s, data(s)
         end
