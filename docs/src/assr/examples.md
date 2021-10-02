@@ -72,7 +72,7 @@ s
 
 ```@example fileread
 using Plots # hide
-plot(s, "TP7")
+Neuroimaging.plot(s, "TP7")
 current() |> DisplayAs.PNG # hide
 ```
 
