@@ -9,6 +9,13 @@ using Neuroimaging, Test, BDF
     @test isa(s, NeuroimagingMeasurement)
     @test isa(s, EEG)
 
+    @testset "Plot" begin
+        plot(s)
+        Neuroimaging.plot(s, "Cz")
+        Neuroimaging.plot(s, ["Cz"])
+        Neuroimaging.plot(s, ["Cz", "10Hz_SWN_70dB_R"])
+    end
+
     @testset "Show" begin
         show(s)
     end

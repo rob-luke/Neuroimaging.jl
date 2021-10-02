@@ -12,6 +12,8 @@ All neuroimaing types support the following functions:
 * `highpass_filter()`
 * `lowpass_filter()`
 * `data()`
+* `plot()`
+
 
 # Examples
 ```julia
@@ -103,22 +105,25 @@ end
 #######################################
 
 
-function plot(s::NeuroimagingMeasurement, c::S) where {S<:AbstractString}
-    s_copy = deepcopy(s)
-    keep_channel!(s_copy, [c])
-    plot(s_copy)
-end
+"""
+    plot(n::NeuroimagingMeasurement)
+    plot(n::NeuroimagingMeasurement, c::AbstractString)
+    plot(n::NeuroimagingMeasurement, c::AbstractVector{AbstractString})
 
-function plot(s::NeuroimagingMeasurement, c::AbstractVector{S}) where {S<:AbstractString}
-    s_copy = deepcopy(s)
-    keep_channel!(s_copy, c)
-    plot(s_copy)
-end
+Plot the time series of the neuroimaing measurement.
+If specified, only a selection of channels will be plotted.
 
-
+# Examples
+```julia
+measurement = # load your neuroimaging data
+plot(measurement)
+plot(measurement, "TP7")
+plot(measurement, ["TP7", "Cz"])
+```
+"""
 @recipe function plot(s::NeuroimagingMeasurement)
 
-    time_s = collect(1:size(data(s), 1)) / samplingrate(Float64, s)
+    time_s = times(Float64, s)
 
     if size(data(s), 2) == 1
 
@@ -127,7 +132,6 @@ end
             xguide := "Time (s)"
             yguide := "Amplitude (uV)"
             label := channelnames(s)[1]
-
 
             time_s, data(s)
         end
@@ -142,7 +146,6 @@ end
             signals[:, c] = signals[:, c] ./ (mean_variance ./ 4) .+ (c - 1)
         end
 
-
         RecipesBase.@series begin
             seriestype := :path
             xguide := "Time (s)"
@@ -156,6 +159,16 @@ end
     end
 end
 
+@recipe function plot(s::NeuroimagingMeasurement, c::S) where {S<:AbstractString}
+    keep_channel!(deepcopy(s), [c])
+end
+
+@recipe function plot(
+    s::NeuroimagingMeasurement,
+    c::AbstractVector{S},
+) where {S<:AbstractString}
+    keep_channel!(deepcopy(s), c)
+end
 
 #######################################
 #

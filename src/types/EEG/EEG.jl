@@ -68,6 +68,22 @@ samplingrate(t, s::EEG) = convert(t, s.samplingrate |> u"Hz" |> ustrip)
 
 
 """
+    times(t::Type, s::EEG)
+    times(s::EEG)
+
+Return the times associated with each sample in seconds.
+
+# Examples
+```julia
+s = read_EEG(filename)
+times(s)
+```
+"""
+times(s::EEG) = collect(1:size(data(s), 1)) ./ samplingrate(Float64, s) .* u"s"
+times(t, s::EEG) = convert.(t, times(s) |> ustrip)
+
+
+"""
     channelnames(s::EEG)
 
 Return the names of sensors in EEG measurement.

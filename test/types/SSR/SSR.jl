@@ -16,6 +16,13 @@
 
     end
 
+    @testset "Plot" begin
+        Neuroimaging.plot(s)
+        Neuroimaging.plot(s, "Cz")
+        Neuroimaging.plot(s, ["Cz"])
+        Neuroimaging.plot(s, ["Cz", "10Hz_SWN_70dB_R"])
+    end
+
     @testset "Read file" begin
 
         s = read_SSR(fname2)
