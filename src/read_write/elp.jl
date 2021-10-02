@@ -46,7 +46,7 @@ function read_elp(fname::AbstractString; coordinate = Talairach, r::Real = 90)
             elecs,
             Electrode(
                 replace(local_matches[1], "'" => ""),
-                coordinate(x * u"m", y * u"m", z * u"m"),
+                coordinate(x * u"mm", y * u"mm", z * u"mm"),
                 Dict(),
             ),
         )
