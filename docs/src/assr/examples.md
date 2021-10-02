@@ -61,7 +61,7 @@ s
 ## Preprocessing
 
 ```@example fileread
-s = highpass_filter(s)
+s = filter_highpass(s)
 s = rereference(s, "Cz")
 remove_channel!(s, "Cz")
 s

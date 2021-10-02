@@ -19,6 +19,7 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 DataDeps = "124859b0-ceae-595e-8997-d05f6a7a8dfe"
 DisplayAs = "0b91fe84-8a4c-11e9-3e1d-67c38462b6d6"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 Query = "1a8c2f83-1ff3-5112-b086-8aa67b057ba1"
 
 [compat]

@@ -19,9 +19,6 @@ CurrentModule = Neuroimaging
 ### Filtering
 
 ```@docs
-highpass_filter
-lowpass_filter
-bandpass_filter
 compensate_for_filter
 ```
 

@@ -3,7 +3,7 @@
     fname = joinpath(dirname(@__FILE__), "../data", "test_Hz19.5-testing.bdf")
     s = read_SSR(fname)
     s = rereference(s, "Cz")
-    s = highpass_filter(s)
+    s = filter_highpass(s)
     s = extract_epochs(s)
     s = create_sweeps(s, epochsPerSweep = 2)
     s = ftest(s)

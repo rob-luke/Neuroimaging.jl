@@ -5,7 +5,7 @@
 #######################################
 
 """
-    highpass_filter(a::SSR; cutOff::Real=2, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
+    filter_highpass(a::SSR; cutOff::Real=2, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
 
 Applly a high pass filter.
 
@@ -16,29 +16,29 @@ The filter coefficents are stored in the processing field.
 # Examples
 ```julia
 a = read_SSR(fname)
-b = highpass_filter(a)
-c = highpass_filter(a, cutOff = 1)
+b = filter_highpass(a)
+c = filter_highpass(a, cutOff = 1)
 ```
 
 """
-function highpass_filter(
+function filter_highpass(
     a::SSR;
-    cutOff::Real = 2,
-    fs::Real = samplingrate(Float64, a),
+    cutOff::Union{typeof(1.0u"Hz"),typeof(1u"Hz")} = 2u"Hz",
     order::Int = 3,
     tolerance::Real = 0.01,
+    phase::AbstractString = "zero-double",
     kwargs...,
 )
-
-    a.data, f = highpass_filter(a.data, cutOff, fs, order)
-
-    _filter_check(f, modulationrate(a), fs, tolerance)
-
+    Wn = (cutOff |> u"Hz" |> ustrip) / (samplingrate(Float64, a) / 2)
+    f = digitalfilter(Highpass(Wn), Butterworth(order))
+    _filter_check(f, modulationrate(a), samplingrate(Float64, a), tolerance)
+    a = filter(a, f, phase)
     _append_filter(a, f)
 end
 
+
 """
-    lowpass_filter(a::SSR; cutOff::Real=150, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
+    filter_lowpass(a::SSR; cutOff::Real=150, fs::Real=samplingrate(a), order::Int=3, tolerance::Real=0.01, kwargs...)
 
 Applly a low pass filter.
 
@@ -49,32 +49,30 @@ The filter coefficents are stored in the processing field.
 # Examples
 ```julia
 a = read_SSR(fname)
-b = lowpass_filter(a)
-c = lowpass_filter(a, cutOff = 1)
+b = filter_lowpass(a)
+c = filter_lowpass(a, cutOff = 1)
 ```
 
 """
-function lowpass_filter(
+function filter_lowpass(
     a::SSR;
-    cutOff::Real = 150,
-    fs::Real = samplingrate(Float64, a),
+    cutOff::Union{typeof(1.0u"Hz"),typeof(1u"Hz")} = 150u"Hz",
     order::Int = 3,
     tolerance::Real = 0.01,
+    phase::AbstractString = "zero-double",
     kwargs...,
 )
-
-    a.data, f = lowpass_filter(a.data, cutOff, fs, order)
-
-    _filter_check(f, modulationrate(a), fs, tolerance)
-
-    #= _append_filter(a, f) =#
-
-    return a
+    Wn = (cutOff |> u"Hz" |> ustrip) / (samplingrate(Float64, a) / 2)
+    f = digitalfilter(Lowpass(Wn), Butterworth(order))
+    _filter_check(f, modulationrate(a), samplingrate(Float64, a), tolerance)
+    a = filter(a, f, phase)
+    _append_filter(a, f)
 end
 
 
+
 """
-    bandpass_filter(a::SSR; lower::Number=modulationrate(a) - 1, upper::Number=modulationrate(a) + 1, fs::Real=samplingrate(a), n::Int=24, rp::Number = 0.0001, tolerance::Real=0.01, kwargs...)
+    filter_bandpass(a::SSR; lower::Number=modulationrate(a) - 1, upper::Number=modulationrate(a) + 1, fs::Real=samplingrate(a), n::Int=24, rp::Number = 0.0001, tolerance::Real=0.01, kwargs...)
 
 Applly a band pass filter.
 A check is performed to ensure the filter does not affect the modulation rate.
@@ -83,28 +81,26 @@ The filter coefficents are stored in the processing field.
 # Examples
 ```julia
 a = read_SSR(fname)
-a = bandpass_filter(a)
+a = filter_bandpass(a)
 ```
 """
-function bandpass_filter(
+function filter_bandpass(
     a::SSR;
-    lower::Number = modulationrate(a) - 1,
-    upper::Number = modulationrate(a) + 1,
+    lower::Union{typeof(1.0u"Hz"),typeof(1u"Hz")} = (modulationrate(a) - 1) * 1.0u"Hz",
+    upper::Union{typeof(1.0u"Hz"),typeof(1u"Hz")} = (modulationrate(a) + 1) * 1.0u"Hz",
     n::Int = 24,
     rp::Number = 0.0001,
     tolerance::Number = 0.01,
+    phase::AbstractString = "zero-double",
     kwargs...,
 )
 
-    # Type 1 Chebychev filter
-    # The default options here are optimised for modulation frequencies 4, 10, 20, 40, 80
-    # TODO filter check does not work here. Why not?
-    # TODO automatic minimum filter order selection
+    Wn_lower = (lower |> u"Hz" |> ustrip) / (samplingrate(Float64, a) / 2)
+    Wn_upper = (upper |> u"Hz" |> ustrip) / (samplingrate(Float64, a) / 2)
 
-    a.data, f = bandpass_filter(a.data, lower, upper, samplingrate(Float64, a), n, rp)
-
+    f = digitalfilter(Bandpass(Wn_lower, Wn_upper), Chebyshev1(n, rp))
     _filter_check(f, modulationrate(a), samplingrate(Float64, a), tolerance)
-
+    a = filter(a, f, phase)
     _append_filter(a, f)
 end
 
