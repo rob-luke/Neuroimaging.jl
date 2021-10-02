@@ -600,4 +600,3 @@ function epoch_rejection(a::EEG; retain_percentage::Number = 0.95, kwargs...)
 
     return a
 end
-
