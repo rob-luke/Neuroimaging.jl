@@ -1,9 +1,14 @@
 function filterdelay(fobj::Vector)
     return (length(fobj) - 1) ÷ 2
 end
+
 function filterdelay(fobj::ZeroPoleGain)
-    # Todo: This is unsatisfactory, but maybe necessary?
-    error("Butterworth has non-linear phase, use filtfilt=true to compensate delay")
+    # TODO: Better handling and errors required
+    throw(
+        ArgumentError(
+            "Filter delay not defined for Zero Pole Gain object. Use filtfilt instead. You passed in $fobj",
+        ),
+    )
 end
 
 function default_fir_filterorder(responsetype::FilterType, samplingrate::Number)
