@@ -65,11 +65,3 @@ TODO: Make a type subsection similar to EEG and ASSR.
 find_dipoles
 find_location
 ```
-
-
-## Plotting
-
-```@docs
-plot_single_channel_timeseries
-plot_multi_channel_timeseries
-```
