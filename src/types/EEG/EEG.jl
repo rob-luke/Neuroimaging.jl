@@ -588,8 +588,6 @@ function system_code_channel(a::EEG; kwargs...)
 end
 
 
-
-
 """
     epoch_rejection(a::EEG; retain_percentage::Number = 0.95, kwargs...)
 
@@ -603,27 +601,3 @@ function epoch_rejection(a::EEG; retain_percentage::Number = 0.95, kwargs...)
     return a
 end
 
-
-#######################################
-#
-# Internal functions
-#
-#######################################
-
-
-"""
-Internal function to find indices for channel names
-"""
-function _channel_indices(
-    s::EEG,
-    channels::AbstractVector{S};
-    warn_on_missing = true,
-) where {S<:AbstractString}
-    c_idx = Int[something(findfirst(isequal(c1), channelnames(s)), 0) for c1 in channels]
-    if warn_on_missing
-        if any(c_idx .== 0)
-            throw(KeyError("Requested channel does not exist in $(channelnames(s))"))
-        end
-    end
-    return c_idx
-end

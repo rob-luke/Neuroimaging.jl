@@ -90,3 +90,93 @@ function filter(
     end
     return s
 end
+
+
+#######################################
+#
+# Plotting
+#
+# Use recipes for plotting.
+# Here a base recipe is defined.
+# Specific types can overide this.
+#
+#######################################
+
+
+function plot(s::NeuroimagingMeasurement, c::S) where {S<:AbstractString}
+    s_copy = deepcopy(s)
+    keep_channel!(s_copy, [c])
+    plot(s_copy)
+end
+
+function plot(s::NeuroimagingMeasurement, c::AbstractVector{S}) where {S<:AbstractString}
+    s_copy = deepcopy(s)
+    keep_channel!(s_copy, c)
+    plot(s_copy)
+end
+
+
+@recipe function plot(s::NeuroimagingMeasurement)
+
+    time_s = collect(1:size(data(s), 1)) / samplingrate(Float64, s)
+
+    if size(data(s), 2) == 1
+
+        RecipesBase.@series begin
+            linecolor := :black
+            xguide := "Time (s)"
+            yguide := "Amplitude (uV)"
+            label := channelnames(s)[1]
+
+
+            time_s, data(s)
+        end
+
+    else
+
+        signals = data(deepcopy(s))
+        variances = var(signals, dims = 1)
+        mean_variance = Statistics.mean(variances)
+        for c = 1:size(signals, 2)
+            signals[:, c] = signals[:, c] .- Statistics.mean(signals[:, c])
+            signals[:, c] = signals[:, c] ./ (mean_variance ./ 4) .+ (c - 1)
+        end
+
+
+        RecipesBase.@series begin
+            seriestype := :path
+            xguide := "Time (s)"
+            yguide := "Amplitude (uV)"
+            label := false
+            yformatter := y -> ""
+            yticks := (0:length(channelnames(s))-1, channelnames(s))
+
+            time_s, signals
+        end
+    end
+end
+
+
+#######################################
+#
+# Internal functions
+#
+#######################################
+
+
+"""
+Internal function to find indices for channel names
+"""
+function _channel_indices(
+    s::NeuroimagingMeasurement,
+    channels::AbstractVector{S};
+    warn_on_missing = true,
+) where {S<:AbstractString}
+    c_idx = Int[something(findfirst(isequal(c1), channelnames(s)), 0) for c1 in channels]
+    if warn_on_missing
+        if any(c_idx .== 0)
+            throw(KeyError("Requested channel does not exist in $(channelnames(s))"))
+        end
+    end
+    return c_idx
+end
