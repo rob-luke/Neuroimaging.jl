@@ -53,7 +53,7 @@ function plot_spectrum(
         if dBPlot
             noise_level = 10 * log10.(noise_level)
         end
-        p = plot!(
+        p = Plots.plot!(
             [Fmin, targetFreq + 2],
             [noise_level, noise_level],
             lab = "Noise",
@@ -66,7 +66,7 @@ function plot_spectrum(
         if dBPlot
             signal_level = 10 * log10.(signal_level)
         end
-        plot!(
+        Plots.plot!(
             [Fmin, targetFreq],
             [signal_level, signal_level],
             lab = "Signal",
@@ -83,7 +83,7 @@ function plot_spectrum(
         targetFreq = frequencies[targetFreqIdx]
         targetResults = spectrum[targetFreqIdx]
         #TODO remove label for circle rather than make it empty
-        p = plot!(
+        p = Plots.plot!(
             [targetFreq],
             [targetResults],
             marker = (:circle, 5, 0.1, :green),
@@ -190,9 +190,9 @@ function plot_multi_channel_timeseries(
     for c = 1:size(signals, 2)                                  # Plot each channel
         signals[:, c] = signals[:, c] .- Statistics.mean(signals[:, c])      # Remove mean
         signals[:, c] = signals[:, c] ./ (mean_variance ./ 4) .+ (c - 1)     # Rescale and shift so all chanels are visible
-        p = plot!(time_s, signals[:, c], c = :black, lab = "")
+        p = Plots.plot!(time_s, signals[:, c], c = :black, lab = "")
     end
-    p = plot!(yticks = (0:length(channels)-1, channels))
+    p = Plots.plot!(yticks = (0:length(channels)-1, channels))
 
     return p
 end
@@ -219,10 +219,10 @@ function plot_filter_response(
     magnitude_dB = 20 * log10.(convert(Array{Float64}, abs.(h)))
     phase_response = (360 / (2 * pi)) * unwrap(convert(Array{Float64}, angle.(h)))
 
-    p1 = plot(frequencies, magnitude_dB, lab = "")
-    p2 = plot(frequencies, phase_response, lab = "")
+    p1 = Plots.plot(frequencies, magnitude_dB, lab = "")
+    p2 = Plots.plot(frequencies, phase_response, lab = "")
 
-    p = plot(
+    p = Plots.plot(
         p1,
         p2,
         ylabel = ["Magnitude (dB)" "Phase (degrees)"],
