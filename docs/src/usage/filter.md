@@ -82,9 +82,9 @@ keep_channel!(s2, "F5")
 s_hp = filter_highpass(s2, cutOff = 2u"Hz")
 s_lp = filter_lowpass(s2, cutOff = 5u"Hz") # extreme value to show LP effect in plot
 
-plot(times(Float64, s), data(s2), label="raw")
-plot!(times(Float64, s), data(s_hp), label="highpass")
-plot!(times(Float64, s), data(s_lp), label="lowpass")
+plot(times(Float64, s2), data(s2), label="raw")
+plot!(times(Float64, s_hp), data(s_hp), label="highpass")
+plot!(times(Float64, s_lp), data(s_lp), label="lowpass")
 current() |> DisplayAs.PNG # hide
 ```
 
