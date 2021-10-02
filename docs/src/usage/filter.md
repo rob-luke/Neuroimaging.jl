@@ -59,7 +59,7 @@ using Plots
 s_hp = filter_highpass(s)
 
 plot(data(s, "F5"), label="Original Signal")
-plot!(data(s_hp, "F5"), label="Highpassed Signal")
+plot!(data(s_hp, "F5"), label="Filtered Signal")
 current() |> DisplayAs.PNG # hide
 ```
 
