@@ -61,8 +61,8 @@ using Plots
 
 s_hp = filter_highpass(s)
 
-plot(times(Float64, s), data(s), label="Original Signal")
-plot!(times(Float64, s), data(s_hp), label="Filtered Signal")
+plot(s, label="Original Signal")
+plot!(s_hp, label="Filtered Signal")
 current() |> DisplayAs.PNG # hide
 ```
 
@@ -82,9 +82,9 @@ keep_channel!(s2, "F5")
 s_hp = filter_highpass(s2, cutOff = 2u"Hz")
 s_lp = filter_lowpass(s2, cutOff = 5u"Hz") # extreme value to show LP effect in plot
 
-plot(times(Float64, s2), data(s2), label="raw")
-plot!(times(Float64, s_hp), data(s_hp), label="highpass")
-plot!(times(Float64, s_lp), data(s_lp), label="lowpass")
+plot(s2, label="raw")
+plot!(s_hp, label="highpass")
+plot!(s_lp, label="lowpass")
 current() |> DisplayAs.PNG # hide
 ```
 
@@ -115,9 +115,9 @@ s = trim_channel(s, 10000)
 s_custom_filtfilt = trim_channel(s_custom_filtfilt, 10000)
 s_custom_filt = trim_channel(s_custom_filt, 10000)
 
-plot(times(Float64, s), data(s), label="raw")
-plot!(times(Float64, s), data(s_custom_filtfilt), label="filtfilt")
-plot!(times(Float64, s), data(s_custom_filt), label="filt")
+plot(s, label="raw")
+plot!(s_custom_filtfilt, label="filtfilt")
+plot!(s_custom_filt, label="filt")
 current() |> DisplayAs.PNG # hide
 ```
 
