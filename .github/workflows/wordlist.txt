@@ -142,3 +142,9 @@ fs
 responsetype
 samplingrate
 zpg
+Widmann
+lp
+eeglab
+filt
+firfilt
+bandpass
