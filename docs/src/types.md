@@ -61,7 +61,7 @@ but also allows for application specific functions such as specific frequency an
 
     If you would like to add support for a different experimental paradigm by adding a sub type
     then please raise an issue on the GitHub page and we can work through it together.
-    Some additional types that would be good to support are `RestingStateEEG`, `EventRelatedPotential`, etc.
+    Some additional types that would be good to support are `RestingStateEEG`, `P300`, etc.
 
 ```@docs
 EEG
