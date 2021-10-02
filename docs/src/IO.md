@@ -28,5 +28,4 @@ In addition to reading EEG data the following file reading functions are availab
 
 ```@docs
 write_avr
-write_dat
 ```

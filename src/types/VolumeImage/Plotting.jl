@@ -102,7 +102,7 @@ function plot_src(
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
-    p1 = plot(
+    p1 = Plots.plot(
         x_tmp,
         y_tmp,
         zcolor = c_tmp,
@@ -195,7 +195,7 @@ function plot_src(
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
-    p2 = plot(
+    p2 = Plots.plot(
         x_tmp,
         y_tmp,
         zcolor = c_tmp,
@@ -266,7 +266,7 @@ function plot_src(
         push!(x_tmp, -200)
         push!(y_tmp, -200)
     end
-    p3 = plot(
+    p3 = Plots.plot(
         x_tmp,
         y_tmp,
         zcolor = c_tmp,
@@ -292,5 +292,5 @@ function plot_src(
     end
 
     l = @layout([a b c])
-    return plot(p1, p2, p3, layout = l, size = figure_size)
+    return Plots.plot(p1, p2, p3, layout = l, size = figure_size)
 end

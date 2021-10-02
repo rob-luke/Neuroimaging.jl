@@ -13,6 +13,7 @@ using Logging,
     Distributions,
     Plots,
     MAT,
+    RecipesBase,
     Printf,
     Statistics,
     FFTW,
@@ -20,6 +21,8 @@ using Logging,
     LinearAlgebra,
     Images,
     BDF
+
+
 using Unitful: AbstractQuantity
 
 
@@ -83,6 +86,7 @@ export new_processing_key,
     SSR,
     samplingrate,
     data,
+    times,
     modulationrate,
     channelnames,
     read_SSR,
@@ -136,9 +140,6 @@ export new_processing_key,
     oplot,
     plot_dat,
     plot_spectrum,
-    plot_timeseries,
-    plot_single_channel_timeseries,
-    plot_multi_channel_timeseries,
     oplot_dipoles,
     SSR_spectrogram,
     plot_filter_response,
@@ -214,7 +215,6 @@ include("types/VolumeImage/Dipoles.jl")
 include("types/VolumeImage/Operations.jl")
 
 # Plotting functions
-include("types/EEG/plotting.jl")
 include("plotting/plots.jl")
 include("types/Dipole/Plotting.jl")
 

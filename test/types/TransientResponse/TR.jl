@@ -49,4 +49,13 @@
 
     end
 
+    @testset "Plot" begin
+        s = read_TR(fname)
+        Neuroimaging.plot(s)
+        Neuroimaging.plot(s, "Cz")
+        Neuroimaging.plot(s, ["Cz"])
+        Neuroimaging.plot(s, ["Cz", "10Hz_SWN_70dB_R"])
+    end
+
+
 end

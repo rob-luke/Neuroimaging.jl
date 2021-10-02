@@ -68,6 +68,22 @@ samplingrate(t, s::EEG) = convert(t, s.samplingrate |> u"Hz" |> ustrip)
 
 
 """
+    times(t::Type, s::EEG)
+    times(s::EEG)
+
+Return the times associated with each sample in seconds.
+
+# Examples
+```julia
+s = read_EEG(filename)
+times(s)
+```
+"""
+times(s::EEG) = collect(1:size(data(s), 1)) ./ samplingrate(Float64, s) .* u"s"
+times(t, s::EEG) = convert.(t, times(s) |> ustrip)
+
+
+"""
     channelnames(s::EEG)
 
 Return the names of sensors in EEG measurement.
@@ -588,8 +604,6 @@ function system_code_channel(a::EEG; kwargs...)
 end
 
 
-
-
 """
     epoch_rejection(a::EEG; retain_percentage::Number = 0.95, kwargs...)
 
@@ -601,29 +615,4 @@ function epoch_rejection(a::EEG; retain_percentage::Number = 0.95, kwargs...)
         epoch_rejection(a.processing["epochs"], retain_percentage; kwargs...)
 
     return a
-end
-
-
-#######################################
-#
-# Internal functions
-#
-#######################################
-
-
-"""
-Internal function to find indices for channel names
-"""
-function _channel_indices(
-    s::EEG,
-    channels::AbstractVector{S};
-    warn_on_missing = true,
-) where {S<:AbstractString}
-    c_idx = Int[something(findfirst(isequal(c1), channelnames(s)), 0) for c1 in channels]
-    if warn_on_missing
-        if any(c_idx .== 0)
-            throw(KeyError("Requested channel does not exist in $(channelnames(s))"))
-        end
-    end
-    return c_idx
 end

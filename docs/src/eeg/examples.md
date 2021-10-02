@@ -100,15 +100,15 @@ You can view a single channel or subset of channels by passing the string or str
 
 ```@example fileread
 using Plots # hide
-plot_timeseries(s, channels="F6")
+plot(s, "F6")
 current() |> DisplayAs.PNG # hide
 ```
 
-Or you can plot all channels by calling `plot_timeseries` with no arguments.
+Or you can plot all channels by calling `plot` with no arguments.
 
 ```@example fileread
 using Plots # hide
-plot_timeseries(s)
+plot(s)
 current() |> DisplayAs.PNG # hide
 ```
 

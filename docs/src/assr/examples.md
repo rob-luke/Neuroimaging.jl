@@ -72,7 +72,7 @@ s
 
 ```@example fileread
 using Plots # hide
-plot_timeseries(s, channels="TP7")
+plot(s, "TP7")
 current() |> DisplayAs.PNG # hide
 ```
 
