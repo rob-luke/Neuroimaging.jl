@@ -138,5 +138,13 @@ function read_TR(
         max_epochs,
     )
 
+    # Try and match sensor names to known locations
+    locs = read_elp(joinpath(datadep"BioSemi64Locations", "biosemi64.elp"))
+    new_sens, idx = match_sensors(locs, labels(sensors(a)))
+    if length(new_sens) == length(sensors(a))
+        @debug("Sucsessfully matches location of all sensors, using new locations")
+        a.sensors = new_sens
+    end
+
     return a
 end
