@@ -168,7 +168,7 @@ include("statistics/ftest.jl")
 include("statistics/gfp.jl")
 
 # Type - Neuroimaging
-include("types/NeuroimagingMeasurement.jl")
+include("types/NeuroimagingMeasurement/NeuroimagingMeasurement.jl")
 
 # Type - Coordinates
 include("types/Coordinates/Coordinates.jl")
@@ -177,19 +177,19 @@ include("types/Coordinates/Coordinates.jl")
 include("types/Sensors/Sensors.jl")
 
 # Type - EEG
-include("types/EEG/EEG.jl")
-include("types/EEG/Preprocessing.jl")
+include("types/NeuroimagingMeasurement/EEG/EEG.jl")
+include("types/NeuroimagingMeasurement/EEG/Preprocessing.jl")
 
 # Type - SSR
-include("types/SSR/SSR.jl")
-include("types/SSR/Preprocessing.jl")
-include("types/SSR/ReadWrite.jl")
-include("types/SSR/Reshaping.jl")
-include("types/SSR/Statistics.jl")
-include("types/SSR/Plotting.jl")
+include("types/NeuroimagingMeasurement/EEG/SSR/SSR.jl")
+include("types/NeuroimagingMeasurement/EEG/SSR/Preprocessing.jl")
+include("types/NeuroimagingMeasurement/EEG/SSR/ReadWrite.jl")
+include("types/NeuroimagingMeasurement/EEG/SSR/Reshaping.jl")
+include("types/NeuroimagingMeasurement/EEG/SSR/Statistics.jl")
+include("types/NeuroimagingMeasurement/EEG/SSR/Plotting.jl")
 
 # Type - TR
-include("types/TransientResponse/TR.jl")
+include("types/NeuroimagingMeasurement/EEG/TransientResponse/TR.jl")
 
 # Type - Dipole
 include("types/Dipole/Dipole.jl")
