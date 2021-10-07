@@ -2,14 +2,6 @@ function filterdelay(fobj::Vector)
     return (length(fobj) - 1) ÷ 2
 end
 
-function filterdelay(fobj::ZeroPoleGain)
-    # TODO: Better handling and errors required
-    throw(
-        ArgumentError(
-            "Filter delay not defined for Zero Pole Gain object. Use filtfilt instead. You passed in $fobj",
-        ),
-    )
-end
 
 function default_fir_filterorder(responsetype::FilterType, samplingrate::Number)
     # filter settings are the same as firfilt eeglab plugin (Andreas Widmann) and MNE Python. 
