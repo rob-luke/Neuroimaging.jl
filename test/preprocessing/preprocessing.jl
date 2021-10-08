@@ -67,18 +67,4 @@ end
 
     end
 
-    @testset "Filtering" begin
-
-        @testset "Warnings" begin
-
-            s1 = deepcopy(s)
-            using DSP
-            responsetype = Highpass(3, fs = samplingrate(Float64, s1))
-            designmethod = Butterworth(6)
-            zpg = digitalfilter(responsetype, designmethod)
-            @test_throws ArgumentError filterdelay(zpg)
-
-        end
-    end
-
 end
