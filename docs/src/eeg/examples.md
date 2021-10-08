@@ -6,15 +6,6 @@ including sampling rate and channel information.
 Simple preprocessing, such as referencing and channel manipulation is demonstrated.
 And the data of a single channel and multiple channels is visualised.
 
-!!! note "Refactoring in progress"
-
-    This example demonstrates the existing capabilities of the package.
-    General improvements are planned to this package. But before changes are made,
-    the existing features and functions will be documented. This will help to highlight
-    was has already been implemented, and where improvements need to be made.
-    For a rough plan of how the package is being redeveloped see the GitHub issues and
-    [project board](https://github.com/rob-luke/Neuroimaging.jl/projects/1).
-
 
 ## Import EEG measurement in to Neuroimaging.jl for analysis
 

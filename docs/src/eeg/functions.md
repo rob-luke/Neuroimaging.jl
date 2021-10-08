@@ -38,7 +38,6 @@ merge_channels
 ```@docs
 filter_highpass(::EEG)
 filter_lowpass(::EEG)
-filter_bandpass(::EEG)
 ```
 
 
@@ -46,11 +45,4 @@ filter_bandpass(::EEG)
 
 ```@docs
 epoch_rejection(a::EEG)
-```
-
-
-## Plotting
-
-```@docs
-plot_timeseries(::EEG)
 ```

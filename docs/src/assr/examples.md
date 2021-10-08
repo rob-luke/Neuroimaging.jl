@@ -20,15 +20,6 @@ is applied to the sweep data in the frequency domain. For further details on ana
 
 * Luke, Robert, et al. "Assessing temporal modulation sensitivity using electrically evoked auditory steady state responses." Hearing research 324 (2015): 37-45.
 
-!!! note "Refactoring in progress"
-
-    This example demonstrates the existing capabilities of the package.
-    General improvements are planned to this package. But before changes are made,
-    the existing features and functions will be documented. This will help to highlight
-    was has already been implemented, and where improvements need to be made.
-    For a rough plan of how the package is being redeveloped see the GitHub issues and
-    [project board](https://github.com/rob-luke/Neuroimaging.jl/projects/1).
-
 
 ## Read data
 
