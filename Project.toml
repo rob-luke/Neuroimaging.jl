@@ -28,7 +28,7 @@ Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 
 [compat]
 BDF = "0.5"
-CSV = "0.8, 0.9"
+CSV = "0.8, 0.9, 0.10"
 DSP = "0.7"
 DataDeps = "0.7"
 DataFrames = "1.2"
